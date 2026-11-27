@@ -100,6 +100,26 @@
     ]
   },
   {
+    "id": "game-066",
+    "mode": "track_switch",
+    "zone": "toy",
+    "local_index": 6,
+    "arcade": true,
+    "name": "軌道換軌",
+    "goal": "紅、藍、黃三色的玩具火車開過來，扳道岔讓每一輛開進同色的車站；開錯站會翻進玩具箱。",
+    "instructions": "↑ → ↓、W D S 或手把十字鍵：把道岔扳向上、中、下的車站；空白鍵輪流切換。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助送火車回站拿到金牌",
+    "ordinary": "扳道岔讓火車開進同色的車站，拿到銅牌",
+    "attraction_tag": "玩具鐵道",
+    "island_invitation": "紅車進紅站、藍車進藍站！道岔扳錯了，小火車會一頭栽進玩具箱，嘟嘟嘟地冒星星。",
+    "retake_props": [
+      "mascot",
+      "lantern",
+      "bench"
+    ]
+  },
+  {
     "id": "game-068",
     "mode": "top_sumo",
     "zone": "toy",

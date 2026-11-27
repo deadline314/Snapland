@@ -21,6 +21,8 @@ const STANDS := {
 			"stand": Vector3(7.6, 0.2, 6.1), "point": Vector3(6.35, 0.2, 7.5), "prop": "bridge", "paint": Color("#4f8f86")},
 		{"id": "game-065", "title": "彈簧青蛙", "prompt": "彈簧青蛙 · 按住上發條跳積木",
 			"stand": Vector3(-6.2, 0.2, -2.5), "point": Vector3(-7.15, 0.2, -1.05), "prop": "frog", "paint": Color("#5f7d4a")},
+		{"id": "game-066", "title": "軌道換軌", "prompt": "軌道換軌 · 扳道岔送火車回站",
+			"stand": Vector3(2.9, 0.2, -6.4), "point": Vector3(1.85, 0.2, -5.0), "prop": "rails", "paint": Color("#4f79a8")},
 		{"id": "game-068", "title": "陀螺相撲", "prompt": "陀螺相撲 · 方向鍵撞陀螺",
 			"stand": Vector3(-7.3, 0.2, 5.7), "point": Vector3(-6.15, 0.2, 6.85), "prop": "tops", "paint": Color("#8a4a3e")},
 		{"id": "game-070", "title": "敲敲玩具兵", "prompt": "敲敲玩具兵 · 方向鍵敲回去",
@@ -62,6 +64,7 @@ static func build(world: Node3D, region: String) -> void:
 			"soldier": _soldier_prop(sculpt)
 			"magnet": _magnet_prop(sculpt)
 			"bridge": _bridge_prop(sculpt)
+			"rails": _rails_prop(sculpt)
 			"camera": _camera_prop(sculpt)
 			"lily": _lily_prop(sculpt)
 			"mushroom": _mushroom_prop(sculpt)
@@ -315,3 +318,22 @@ static func _bridge_prop(sculpt: Kit.Sculpt) -> void:
 	sculpt.box(Vector3(-0.08, 1.31, 0.1), Vector3(0.22, 0.12, 0.14), paints[0])
 	sculpt.box(Vector3(-0.15, 1.42, 0.1), Vector3(0.06, 0.1, 0.06), Color("#4a4e57"))
 	sculpt.box(Vector3(0.12, 1.3, 0.1), Vector3(0.14, 0.1, 0.14), paints[2])
+
+
+## A railway signal with three coloured lamps on the roof, and a wooden toy
+## track splitting three ways on the counter with a little engine at the points.
+static func _rails_prop(sculpt: Kit.Sculpt) -> void:
+	var lamps: Array[Color] = [Color("#c0503f"), Color("#4f79a8"), Color("#e0b04a")]
+	var pine := Color("#d2a46a")
+	sculpt.box(Vector3(0.0, 2.72, -0.3), Vector3(0.08, 0.68, 0.08), DARK)
+	sculpt.box(Vector3(0.0, 3.0, -0.25), Vector3(0.26, 0.6, 0.1), DARK.lightened(0.15))
+	for lamp in 3:
+		sculpt.tube(Vector3(0.0, 3.2 - lamp * 0.19, -0.19), 0.07, 0.07, 0.03, lamps[lamp], 8, Basis(Vector3.RIGHT, PI * 0.5))
+	sculpt.box(Vector3(0.24, 2.92, -0.3), Vector3(0.36, 0.06, 0.04), CREAM, Basis(Vector3.BACK, 0.5))
+	sculpt.box(Vector3(-0.3, 0.98, 0.1), Vector3(0.5, 0.03, 0.12), pine)
+	for branch in 3:
+		var turn := (branch - 1) * 0.45
+		sculpt.box(Vector3(0.15 + 0.1 * cos(turn), 0.98, 0.1 + 0.18 * sin(turn)), Vector3(0.36, 0.03, 0.12), pine.darkened(0.08), Basis(Vector3.UP, -turn))
+	sculpt.box(Vector3(-0.32, 1.06, 0.1), Vector3(0.2, 0.12, 0.1), lamps[0])
+	sculpt.box(Vector3(-0.25, 1.15, 0.1), Vector3(0.04, 0.08, 0.04), Color("#4a4e57"))
+	sculpt.box(Vector3(-0.42, 1.09, 0.1), Vector3(0.08, 0.16, 0.1), lamps[0].darkened(0.2))
