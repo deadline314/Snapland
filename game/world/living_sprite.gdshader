@@ -1,6 +1,8 @@
 shader_type spatial;
 render_mode cull_disabled, depth_draw_opaque;
 
+#include "res://game/world/wind.gdshaderinc"
+
 uniform sampler2D texture_albedo : source_color, filter_nearest, repeat_disable;
 uniform vec4 tint : source_color = vec4(1.0);
 uniform vec4 uv_rect = vec4(0.0, 0.0, 1.0, 1.0);
@@ -38,12 +40,24 @@ void vertex() {
 	// directional and point lights instead of inheriting the unbillboarded axes.
 	MODELVIEW_NORMAL_MATRIX = transpose(inverse(mat3(MODELVIEW_MATRIX)));
 
-	float time = TIME;
 	vec2 local_uv = (UV - uv_rect.xy) / max(uv_rect.zw, vec2(0.000001));
 	float top_weight = 1.0 - smoothstep(0.05, 0.95, local_uv.y);
 	float root_safe_weight = top_weight * top_weight;
 	if (motion_kind == 0) {
-		VERTEX.x += sin(time * 0.72 + phase + local_uv.y * 0.35) * wind_strength * motion * root_safe_weight;
+		// Foliage rides the shared gust field: a light flutter when calm, a
+		// lean with a faster flutter while a gust front passes over its root.
+		vec2 root = MODEL_MATRIX[3].xz;
+		float gust = wind_gust(root);
+		float calm = sin(snapland_wind_time * 0.9 + phase + local_uv.y * 0.35);
+		float brisk = sin(snapland_wind_time * 2.4 + phase * 1.7 + local_uv.y * 0.6);
+		float flutter = mix(calm, brisk, gust);
+		float sway = (flutter * (0.55 + gust * 1.4) + gust * 2.6) * wind_strength;
+		// Walking past pushes it away from the walker, with a quick rustle.
+		vec2 away = root - snapland_walker.xz;
+		float brushed = walker_brush(root, 1.7);
+		float side = clamp(dot(vec3(away.x, 0.0, away.y), camera_right) * 4.0, -1.0, 1.0);
+		sway += brushed * (side * 3.6 + sin(snapland_wind_time * 13.0 + phase) * 0.7) * wind_strength;
+		VERTEX.x += sway * motion * root_safe_weight;
 	}
 	NORMAL = vec3(0.0, 0.0, 1.0);
 }

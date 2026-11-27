@@ -13,6 +13,11 @@ const CRITTER_SHADER := "res://game/world/ambience_critter.gdshader"
 const CLOUD_WIND := Vector2(0.62, 0.34)
 const CLOUD_MAX_SLOPE := 1.2
 const SHADOW_LIFT := 0.025
+## Shared by the lawn and foliage shaders (see wind.gdshaderinc).
+const WIND_TIME := &"snapland_wind_time"
+const WIND_WALKER := &"snapland_walker"
+## Parked far below the world so nothing is brushed when no walker is reported.
+const NO_WALKER := Vector3(0.0, -1000.0, 0.0)
 
 var critters: Critters
 var cloud: MeshInstance3D
@@ -22,6 +27,7 @@ var _world: Node3D
 var _profile: Dictionary = {}
 var _phase := ""
 var _reduced_motion := false
+var _wind_time := 0.0
 var _cloud_shade_enabled := true
 var _air_particles_enabled := true
 var _cloud_material: ShaderMaterial
@@ -82,7 +88,11 @@ func advance(delta: float) -> void:
 	if not is_instance_valid(_world) or not is_instance_valid(_world.player):
 		return
 	var focus: Vector3 = _world.player.global_position
+	# Wind stands still and nothing reacts to the walker under reduced motion.
+	RenderingServer.global_shader_parameter_set(WIND_WALKER, NO_WALKER if _reduced_motion else focus)
 	if not _reduced_motion:
+		_wind_time += delta
+		RenderingServer.global_shader_parameter_set(WIND_TIME, _wind_time)
 		if cloud != null and cloud.visible:
 			_cloud_drift += CLOUD_WIND * delta
 			_cloud_material.set_shader_parameter("drift", _cloud_drift)
