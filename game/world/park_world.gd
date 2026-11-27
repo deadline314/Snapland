@@ -30,6 +30,7 @@ signal district_changed(region: String)
 signal gate_opened(region: String)
 const DistrictSites = preload("res://game/world/district_sites.gd")
 const DistrictHostScript = preload("res://game/world/district_host.gd")
+const SceneryKit = preload("res://game/world/scenery_kit.gd")
 const CoastalCircuit = preload("res://game/world/coastal_circuit.gd")
 const CoastalPlay = preload("res://game/world/coastal_play.gd")
 const IslandShape = preload("res://game/world/island_shape.gd")
@@ -2141,7 +2142,6 @@ func _build_lighthouse_lookout(district: Node3D) -> void:
 	tower_wall.get_child(0).name="LighthouseWallCollision"
 	tower_wall.material_override = _coastal_surface(4,1.8,Color("#ddcda8"))
 	var tower_band := _cylinder(Vector3(tower_x,0.82,tower_z),0.72,0.18,Color("#3f7776"),0.84)
-	tower_band.material_override = _mat(Color("#3f7776"))
 	for side: float in [-1.0,1.0]:
 		var rail_post := _box(Vector3(tower_x+side*1.02,0.75,tower_z+0.35),Vector3(0.08,0.92,1.55),Color("#67503b"))
 		rail_post.material_override = _wood_material(Color("#67503b"))
@@ -2455,12 +2455,14 @@ func _zone_crown(index: int, pos: Vector3, color: Color) -> void:
 			_cylinder(pos+Vector3(0,3.82,0),0.5,0.08,GOLD)
 		3: # Night market pagoda roof and hanging lanterns.
 			for row in range(2):
-				var eave := _mesh(CylinderMesh.new(),pos+Vector3(0,3.42+row*0.38,0),_mat(color if row==0 else Color("#8d4f4c")))
-				eave.scale=Vector3(1.32-row*0.19,0.14,0.55)
+				var eave_size := Vector3(1.32-row*0.19,0.28,0.55)
+				var eave := _mesh(CylinderMesh.new(),pos+Vector3(0,3.42+row*0.38,0),_finish(color if row==0 else Color("#8d4f4c"),eave_size))
+				eave.scale=eave_size*Vector3(1,0.5,1)
 			for side in [-1,1]: _lantern(pos+Vector3(side*0.88,3.45,0.5))
 		4: # Circus tent peak and striped paper canopy.
 			var tent := _cone(pos+Vector3(0,3.75,0),color)
 			tent.scale=Vector3(1.25,1.15,0.62)
+			_set_registered_surface(tent,_finish(color,tent.scale))
 			for side in [-1,1]:
 				var stripe := _box(pos+Vector3(side*0.38,3.4,0.31),Vector3(0.14,0.72,0.06),CREAM)
 				stripe.rotation.z=side*0.24
@@ -2492,9 +2494,18 @@ func _zone_crown(index: int, pos: Vector3, color: Color) -> void:
 			var portal := _mesh(TorusMesh.new(),pos+Vector3(0,3.83,0),_mat(Color("#b9d9d8")))
 			portal.scale=Vector3(0.72,1.05,0.22)
 			portal.rotation_degrees.x=90
-			var mirror := _box(pos+Vector3(0,3.8,-0.06),Vector3(1.08,1.62,0.06),Color("#6c8790"))
-			mirror.material_override=_mat(Color("#90b5b4"),true)
+			_gate_mirror(pos+Vector3(0,3.8,-0.06))
 			_cylinder(pos+Vector3(0,4.91,0),0.16,0.4,GOLD)
+
+## An oval looking-glass with two diagonal glints, filling the cinema gate's portal.
+func _gate_mirror(at: Vector3) -> void:
+	var glass := SceneryKit.Sculpt.new()
+	glass.tube(Vector3.ZERO,1.0,1.0,0.06,Color("#6f9aa2"),20,Basis.from_scale(Vector3(0.54,0.81,1.0))*Basis(Vector3.RIGHT,PI*0.5))
+	for glint: Vector4 in [Vector4(-0.4,-0.1,0.14,0.5),Vector4(-0.18,-0.25,0.06,0.45)]:
+		var a := Vector3(glint.x,glint.y,0.035)
+		var rise := Vector3(glint.w,glint.w,0)
+		glass.quad(a,a+rise,a+rise+Vector3(glint.z,0,0),a+Vector3(glint.z,0,0),Color("#d6ecea"))
+	_mesh(glass.mesh(),at,_vertex_color_material("gate-mirror",0.25))
 
 func _fit_npc_rest_texture(texture: Texture2D) -> Texture2D:
 	var source := texture.get_image() if texture != null else null

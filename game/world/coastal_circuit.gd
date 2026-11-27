@@ -203,6 +203,16 @@ static func _star_court(world: Node3D, p: Vector3) -> void:
 		world._box(p+Vector3(float(side)*2.35,0.6,0.6),Vector3(0.6,0.14,1.7),Color("#92764e"),true)
 		world._box(p+Vector3(float(side)*2.65,1.0,0.6),Vector3(0.1,0.6,1.7),Color("#92764e"))
 
+## Tinted greenhouse glass you can half see through.
+static func _glass(world: Node3D) -> StandardMaterial3D:
+	if world.material_cache.has("coastal-glass"): return world.material_cache["coastal-glass"]
+	var glass := StandardMaterial3D.new()
+	glass.albedo_color = Color("#5f948a", 0.55)
+	glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	glass.roughness = 0.15
+	world.material_cache["coastal-glass"] = glass
+	return glass
+
 static func _glasshouse(world: Node3D, p: Vector3) -> void:
 	var base: MeshInstance3D = world._box(p+Vector3(0,0.35,0),Vector3(3.7,0.7,4.4),Color("#9c967e"),true)
 	base.name = "CoastalGlasshouse"
@@ -211,7 +221,7 @@ static func _glasshouse(world: Node3D, p: Vector3) -> void:
 		for z in [-1.9,0.0,1.9]:
 			world._box(p+Vector3(x,1.7,z),Vector3(0.14,2.7,0.14),Color("#506f65"))
 		var panel: MeshInstance3D = world._box(p+Vector3(x,1.8,0),Vector3(0.05,2.1,3.8),Color("#80b1a2"))
-		panel.material_override=world._mat(Color("#426e65"))
+		panel.material_override=_glass(world)
 	for side in [-1,1]:
 		var roof: MeshInstance3D = world._box(p+Vector3(float(side)*0.95,3.1,0),Vector3(2.2,0.09,4.6),Color("#4c7c72"))
 		roof.rotation.z = -float(side)*0.57

@@ -36,7 +36,7 @@
 		"primitive_shadow": 0
 	},
 	"welcome": {
-		"flat_block": 10,
+		"flat_block": 0,
 		"floating_sprite": 0,
 		"node_budget": 0,
 		"primitive_shadow": 0

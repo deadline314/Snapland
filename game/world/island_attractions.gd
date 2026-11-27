@@ -96,6 +96,7 @@ func _build_coastal_boardwalk() -> void:
 		var float_pos := Vector3(shell_posts[index],0.35,7.55)
 		var shell := _sphere(float_pos,0.6,Color("#d7c7a3") if index==0 else Color("#d77e64"))
 		shell.scale=Vector3(1.35,0.52,0.8)
+		shell.material_override = _surface(3,0.8,shell.material_override.albedo_color)
 		var lip := _mesh(TorusMesh.new(),float_pos+Vector3(0,0.23,0),_mat(Color("#f3e5c3")))
 		lip.scale=Vector3(0.62,0.62,0.25)
 		lip.rotation_degrees.x=90
@@ -127,7 +128,7 @@ func _build_tide_carousel() -> void:
 	_add_cylinder_collision(foundation,2.6,0.18,"CarouselFoundationCollision")
 	var inlay := _cylinder(Vector3(0,0.13,0),2.25,0.09,Color("#477d7b"),2.25)
 	inlay.material_override = _surface(5,1.0,Color("#d8ece1"))
-	_cylinder(Vector3(0,0.21,0),1.18,0.16,Color("#ead8b0"),1.18)
+	_cylinder(Vector3(0,0.21,0),1.18,0.16,Color("#ead8b0"),1.18).material_override = _surface(6,1.0,Color("#ead8b0"))
 	var spindle := _cylinder(Vector3(0,1.52,0),0.19,2.6,Color("#765c42"),0.27)
 	spindle.name = "ShellCarouselSpindle"
 	spindle.material_override = _surface(1,1.2,Color("#d4b27a"))
