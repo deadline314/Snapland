@@ -9,7 +9,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 FIELDS = ("goal", "input", "success")
-MAX_CHARS = 40
+# Measured: fields up to 46 characters fit the 800x450 tutorial page.
+MAX_CHARS = 46
 
 
 def arcade_ids() -> set[str]:
