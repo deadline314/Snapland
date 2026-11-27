@@ -31,6 +31,7 @@ func _run() -> void:
 	if mode != "read":
 		Progress.reset_progress()
 		Progress.intro_seen = true
+		preload("res://game/tests/calm_daily_picks.gd").settle(Progress)
 		Progress.prologue_seen = true
 		Progress.settings.ui_scale = 1.25 if requested.x == 800 else 1.0
 		Progress.settings.reduced_motion = requested.x == 800
@@ -49,8 +50,8 @@ func _run() -> void:
 		return
 	# Controlled actor placement to test the real nearest/E route, never claimed as walking.
 	print("CONTROLLED FIXTURE ACTOR PLACEMENT: (7,GROUND_Y,-6), not walked")
-	main.world.player.position = Vector3(7,main.world.GROUND_Y,-6)
-	main.world.player.velocity = Vector3.ZERO
+	var candy: Node3D = main.region_world("candy")
+	candy.place_player(Vector3(7,candy.GROUND_Y,-6))
 	for i in 4: await get_tree().physics_frame
 	check(main.world.nearest.get("id", "") == "game-027", "real physical entrance nearest")
 	await capture("factory-entrance")
@@ -71,7 +72,7 @@ func _run() -> void:
 	await frames(3)
 	await capture("map")
 	await activate(main.overlay,"RegionGamesButton")
-	check(main.overlay.find_child("RegionalGameEntriesGrid",true,false).get_child_count() == 3,"real map lists exactly3 factory games")
+	check(main.overlay.find_child("RegionalGameEntriesGrid",true,false).get_child_count() == Catalog.definitions("candy").size(),"real map lists all factory games")
 	await capture("map-entries")
 	await activate(main.overlay,"HarborGamegame-027")
 	check(main.modal_kind == "game_info", "real regional map callback opens027")

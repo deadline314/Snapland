@@ -61,27 +61,27 @@ func _run() -> void:
 
 func _check_entries() -> void:
 	var world: Node3D = main.world
+	var candy: Node3D = main.region_world("candy")
 	var capsule := world.player.get_child(0) as CollisionShape3D
 	var shape := capsule.shape as CapsuleShape3D
 	var stations := [Vector2(0, -9), Vector2(-5, 2), Vector2(7, -6), Vector2(7, -1), Vector2(10.5, -0.8), Vector2(6.5, 10)]
 	for index in stations.size():
 		var id := "game-%03d" % (25 + index)
 		var point: Vector2 = stations[index]
-		var expected := Vector3(point.x, world.GROUND_Y, point.y)
-		check(world._point_by_id(id).get("position") == expected, "factory preserves station coordinates for " + id)
-		world.player.position = expected
-		world.player.velocity = Vector3.ZERO
+		var expected := Vector3(point.x, candy.GROUND_Y, point.y)
+		check(candy._point_by_id(id).get("position") == expected, "factory preserves station coordinates for " + id)
+		candy.place_player(expected)
 		for frame in 4:
 			await get_tree().physics_frame
 		var feet := capsule.global_position - Vector3.UP * shape.height * 0.5
-		check(world.player.is_on_floor() and feet.distance_to(expected) < 0.02 and world.nearest.get("id") == id,
+		check(world.player.is_on_floor() and feet.distance_to(candy.to_global(expected)) < 0.02 and world.nearest.get("id") == id,
 			"real physics supports controlled footing and the nearest E point at " + id)
-	var query := PhysicsRayQueryParameters3D.create(Vector3(6.5, 0.8, 10), Vector3(6.5, -1.0, 10))
+	var query := PhysicsRayQueryParameters3D.create(candy.to_global(Vector3(6.5, 0.8, 10)), candy.to_global(Vector3(6.5, -1.0, 10)))
 	query.exclude = [world.player.get_rid()]
 	var hit := world.get_world_3d().direct_space_state.intersect_ray(query)
-	check(not hit.is_empty() and absf(hit.position.y - world.GROUND_Y) < 0.001, "real floor collision under the cotton station")
+	check(not hit.is_empty() and absf(hit.position.y - candy.to_global(Vector3(0, candy.GROUND_Y, 0)).y) < 0.001, "real floor collision under the cotton station")
 	print("COTTON CONTROLLED STATION placement=(6.5,0.2,10) body_origin=%s feet=%s collision=%s nearest=%s" %
-		[world.player.position, capsule.global_position - Vector3.UP * shape.height * 0.5, hit.get("position"), world.nearest.get("id")])
+		[candy.player_spot(), capsule.global_position - Vector3.UP * shape.height * 0.5, hit.get("position"), world.nearest.get("id")])
 	await Keys.key(get_viewport(), KEY_E)
 	check(_invitation(), "a viewport E event at the real selected station opens its invitation")
 

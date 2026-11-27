@@ -21,6 +21,7 @@ func _run() -> void:
 	if not OS.get_environment("SNAPLAND_SAVE_PATH").is_absolute_path(): get_tree().quit(1); return
 	Progress.reset_progress()
 	Progress.intro_seen = true
+	preload("res://game/tests/calm_daily_picks.gd").settle(Progress)
 	main = load("res://game/main.tscn").instantiate()
 	get_tree().root.add_child(main)
 	await get_tree().process_frame

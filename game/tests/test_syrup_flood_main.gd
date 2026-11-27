@@ -25,6 +25,7 @@ func _run() -> void:
 	get_window().size = Vector2i(1280, 720)
 	Progress.reset_progress()
 	Progress.intro_seen = true
+	preload("res://game/tests/calm_daily_picks.gd").settle(Progress)
 	main = load("res://game/main.tscn").instantiate()
 	get_tree().root.add_child(main)
 	await _frames()
@@ -43,8 +44,8 @@ func _run() -> void:
 	check(main._can_access_game("game-027"), "saved current candy region retains legacy recovery without six cards")
 	Progress.photos = admission_cards
 	check(main.world._point_by_id("game-027").get("id", "") == "game-027" and main.world._point_by_id("game-026").get("id", "") == "game-026" and main.world._point_by_id("game-025").get("id", "") == "game-025", "factory preserves all three actual entrances")
-	main.world.player.position = Vector3(7, main.world.GROUND_Y, -6)
-	main.world.player.velocity = Vector3.ZERO
+	var candy: Node3D = main.region_world("candy")
+	candy.place_player(Vector3(7, candy.GROUND_Y, -6))
 	for i in 3: await get_tree().physics_frame
 	check(main.world.nearest.get("id", "") == "game-027", "actual factory footing selects the physical third entrance")
 	main.world.interact()
@@ -118,6 +119,7 @@ func _retake_after_reset(devil: bool) -> void:
 	var other_id := "photo-candy-game-3" if devil else "photo-candy-devil-3"
 	Progress.reset_progress()
 	Progress.intro_seen = true
+	preload("res://game/tests/calm_daily_picks.gd").settle(Progress)
 	for i in range(1, 7): Progress.grant_photo("photo-welcome-game-%d" % i)
 	main._close()
 	await _frames()

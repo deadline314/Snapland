@@ -31,6 +31,7 @@ func _run() -> void:
 	if mode != "read":
 		Progress.reset_progress()
 		Progress.intro_seen = true
+		preload("res://game/tests/calm_daily_picks.gd").settle(Progress)
 		Progress.prologue_seen = true
 		Progress.settings.ui_scale = 1.25 if requested.x == 800 else 1.0
 		Progress.settings.reduced_motion = requested.x == 800
@@ -49,16 +50,15 @@ func _run() -> void:
 		return
 	# Controlled sign setup separately verifies distance-gated visible text, not walking.
 	print("CONTROLLED FIXTURE SIGN PLACEMENT: (0,GROUND_Y,-10.8), not walked")
-	main.world.player.position = Vector3(0,main.world.GROUND_Y,-10.8)
-	main.world.player.velocity = Vector3.ZERO
+	var candy: Node3D = main.region_world("candy")
+	candy.place_player(Vector3(0,candy.GROUND_Y,-10.8))
 	for i in 4: await get_tree().physics_frame
-	var signs: Array = main.world.local_sign_labels.filter(func(label: Label3D): return label.text.begins_with("工廠遊戲 "))
+	var signs: Array = candy.local_sign_labels.filter(func(label: Label3D): return label.text.begins_with("工廠遊戲 "))
 	check(signs.size() == 1 and signs[0].is_visible_in_tree() and signs[0].text == "工廠遊戲 %d／12" % Catalog.definitions("candy").size(),"current catalog-derived visible world sign")
 	await capture("factory-visible-sign")
 	# Controlled actor placement to test the real nearest/E route, never claimed as walking.
 	print("CONTROLLED FIXTURE ACTOR PLACEMENT: (7,GROUND_Y,-1), not walked")
-	main.world.player.position = Vector3(7,main.world.GROUND_Y,-1)
-	main.world.player.velocity = Vector3.ZERO
+	candy.place_player(Vector3(7,candy.GROUND_Y,-1))
 	for i in 4: await get_tree().physics_frame
 	check(main.world.nearest.get("id", "") == "game-028", "real physical entrance nearest")
 	await capture("factory-entrance")

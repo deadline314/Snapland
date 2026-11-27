@@ -38,6 +38,7 @@ func _run() -> void:
 	if mode != "read":
 		Progress.reset_progress()
 		Progress.intro_seen = true
+		preload("res://game/tests/calm_daily_picks.gd").settle(Progress)
 		Progress.prologue_seen = true
 		var large := OS.get_environment("TUG_LARGE_TEXT") == "1"
 		Progress.settings["ui_scale"] = 1.25 if large else 1.0

@@ -70,6 +70,7 @@ func _run() -> void:
 	if mode != "read":
 		Progress.reset_progress()
 		Progress.intro_seen = true
+		preload("res://game/tests/calm_daily_picks.gd").settle(Progress)
 		Progress.prologue_seen = true
 		Progress.settings.ui_scale = 1.25 if requested.x == 800 else 1.0
 		Progress.settings.reduced_motion = requested.x == 800
@@ -145,7 +146,7 @@ func enter_station() -> bool:
 	if mode == "suite":
 		print("CONTROLLED ACTOR PLACEMENT: (0,GROUND_Y,-10.8) sign")
 		await place_actor(Vector2(0, -10.8))
-		var signs: Array = main.world.local_sign_labels.filter(func(label: Label3D): return label.text.begins_with("工廠遊戲 "))
+		var signs: Array = main.region_world("candy").local_sign_labels.filter(func(label: Label3D): return label.text.begins_with("工廠遊戲 "))
 		check(signs.size() == 1 and signs[0].is_visible_in_tree() and signs[0].text == "工廠遊戲 %d／12" % Catalog.definitions("candy").size(), "real current physical factory sign")
 		await capture("factory-visible-sign")
 	print("CONTROLLED ACTOR PLACEMENT: (10.5,GROUND_Y,-0.8) station")
@@ -186,8 +187,8 @@ func start_first_entry(all_pages: bool) -> bool:
 	return await bind_session()
 
 func place_actor(point: Vector2) -> void:
-	main.world.player.position = Vector3(point.x, main.world.GROUND_Y, point.y)
-	main.world.player.velocity = Vector3.ZERO
+	var candy: Node3D = main.region_world("candy")
+	candy.place_player(Vector3(point.x, candy.GROUND_Y, point.y))
 	for i in 4:
 		await get_tree().physics_frame
 

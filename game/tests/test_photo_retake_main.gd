@@ -30,6 +30,7 @@ func _ready() -> void:
 func _run() -> void:
 	Progress.reset_progress()
 	Progress.intro_seen = true
+	preload("res://game/tests/calm_daily_picks.gd").settle(Progress)
 	get_window().size = Vector2i(1280,720)
 	main = ObservedMain.new()
 	get_tree().root.add_child(main)

@@ -25,6 +25,7 @@ func _run() -> void:
 		return
 	Progress.reset_progress()
 	Progress.intro_seen = true
+	preload("res://game/tests/calm_daily_picks.gd").settle(Progress)
 	main = load("res://game/main.tscn").instantiate()
 	get_tree().root.add_child(main)
 	await get_tree().process_frame
@@ -134,6 +135,7 @@ func _failure_contract() -> void:
 func _failure_child() -> void:
 	Progress.reset_progress()
 	Progress.intro_seen = true
+	preload("res://game/tests/calm_daily_picks.gd").settle(Progress)
 	for i in range(1, 7): Progress.grant_photo("photo-welcome-game-%d" % i)
 	Progress.set_current_region("harbor")
 	main = ObservedMain.new()
