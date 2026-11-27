@@ -85,10 +85,10 @@ const GAMES := {
 		{
 			"id": "harbor-crate-stack", "script": "res://game/world/field/games/crate_stack.gd",
 			"type": "疊高", "title": "搖晃疊貨", "prompt": "玩搖晃疊貨", "hint": "吊鉤擺到船上方時按 E 放貨！", "glyph": "箱", "color": Color("#da705c"),
-			"at": Vector3(-12.6, 0, -7.4), "arena": Vector3(-12.0, 0, -5.6), "radius": 4.5, "seconds": 35.0,
+			"at": Vector3(-32.6, 0, 12.4), "arena": Vector3(-30.2, 0, 12.6), "radius": 4.5, "seconds": 35.0,
 			"medals": [6, 12, 18],
 			"lines": ["貨箱全進了海，螃蟹撿到寶", "疊了幾層，船長勉強點頭", "穩穩一座小貨山", "這艘船可以直接出航了"],
-			"boat": Vector2(5.0, 0.2),
+			"boat": Vector2(5.4, 0.0),
 		},
 	],
 	"candy": [
@@ -198,27 +198,27 @@ const TOYS := {
 	],
 	"harbor": [
 		{"id": "harbor-bell", "kind": "ship_bell", "prompt": "敲一下船鐘", "at": Vector3(-28.0, 0, -1.0)},
-		{"id": "harbor-crab-pot", "kind": "crab_pot", "prompt": "掀開蟹簍", "at": Vector3(-30.0, 0, 12.0)},
+		{"id": "harbor-crab-pot", "kind": "crab_pot", "prompt": "掀開蟹簍", "at": Vector3(-28.4, 0, -15.8)},
 	],
 	"candy": [
-		{"id": "candy-gumball-machine", "kind": "gumball_machine", "prompt": "轉一顆糖球", "at": Vector3(-41.0, 0, 24.0)},
+		{"id": "candy-gumball-machine", "kind": "gumball_machine", "prompt": "轉一顆糖球", "at": Vector3(-50.0, 0, 5.0)},
 		{"id": "candy-jelly", "kind": "jelly_pad", "prompt": "踩一下果凍", "at": Vector3(12.0, 0, 31.0)},
 	],
 	"nightmarket": [
-		{"id": "night-lanterns", "kind": "lantern_string", "prompt": "搖一搖燈籠", "at": Vector3(-30.0, 0, 0.0)},
-		{"id": "night-lucky-cat", "kind": "lucky_cat", "prompt": "摸摸招財貓", "at": Vector3(28.0, 0, 4.0)},
+		{"id": "night-lanterns", "kind": "lantern_string", "prompt": "搖一搖燈籠", "at": Vector3(-25.0, 0, 17.0)},
+		{"id": "night-lucky-cat", "kind": "lucky_cat", "prompt": "摸摸招財貓", "at": Vector3(26.0, 0, 19.0)},
 	],
 	"circus": [
-		{"id": "circus-jack-box", "kind": "jack_box", "prompt": "轉轉驚喜盒", "at": Vector3(26.0, 0, 0.0)},
-		{"id": "circus-horn", "kind": "horn", "prompt": "按一下喇叭", "at": Vector3(-28.0, 0, 10.0)},
+		{"id": "circus-jack-box", "kind": "jack_box", "prompt": "轉轉驚喜盒", "at": Vector3(24.0, 0, 30.0)},
+		{"id": "circus-horn", "kind": "horn", "prompt": "按一下喇叭", "at": Vector3(-27.0, 0, 30.0)},
 	],
 	"toy": [
 		{"id": "toy-top", "kind": "spinning_top", "prompt": "轉一下陀螺", "at": Vector3(-35.0, 0, 0.0)},
-		{"id": "toy-horse", "kind": "rocking_horse", "prompt": "推推搖搖馬", "at": Vector3(37.0, 0, -10.0)},
+		{"id": "toy-horse", "kind": "rocking_horse", "prompt": "推推搖搖馬", "at": Vector3(-30.0, 0, 32.0)},
 	],
 	"garden": [
-		{"id": "garden-dandelion", "kind": "dandelion", "prompt": "吹蒲公英", "at": Vector3(-21.0, 0, 5.0)},
-		{"id": "garden-sunflower", "kind": "sunflower", "prompt": "和向日葵打招呼", "at": Vector3(21.0, 0, 24.0)},
+		{"id": "garden-dandelion", "kind": "dandelion", "prompt": "吹蒲公英", "at": Vector3(19.0, 0, 29.0)},
+		{"id": "garden-sunflower", "kind": "sunflower", "prompt": "和向日葵打招呼", "at": Vector3(-11.0, 0, 27.0)},
 	],
 }
 

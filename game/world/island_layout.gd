@@ -124,6 +124,7 @@ const STRUCTURES := [Vector3(45.2,-31.4,5.0), Vector3(-56.5,22.6,2.5)]
 const LANDMARK_CLEARANCE := 4.8
 const FIELD_GAME_CLEARANCE := 5.5
 const FIELD_TOY_CLEARANCE := 2.6
+const DISTRICT_FIELD_MARGIN := 2.2
 ## Step-on windmills along the first stretch of the promenade: x, z, and the
 ## side (-1 west, 1 east) its windmill stands on.
 const WINDMILL_PADS := [Vector3(-1.4,-16,-1), Vector3(1.4,-23,1), Vector3(-3.3,-30,-1), Vector3(-3.6,-41,1)]
@@ -267,9 +268,12 @@ static func keeps_clear(point: Vector2, margin := 0.0) -> bool:
 		if point.distance_to(Vector2(landmark.x, landmark.z)) < LANDMARK_CLEARANCE + margin: return true
 	# Instant map games need open ground to play on; small toys a little room.
 	# The palm toy shakes a palm that grows at its own spot, so it clears nothing.
+	# District rows sit in the woods of the edge bands, so trees keep further off.
 	for game: Dictionary in FieldRegistry.placed_games():
 		var arena: Vector3 = game.get("arena", game.at)
-		if point.distance_to(Vector2(arena.x, arena.z)) < FIELD_GAME_CLEARANCE + margin or point.distance_to(Vector2(game.at.x, game.at.z)) < FIELD_TOY_CLEARANCE + margin: return true
+		var extra := DISTRICT_FIELD_MARGIN if game.has("region") else 0.0
+		if point.distance_to(Vector2(arena.x, arena.z)) < FIELD_GAME_CLEARANCE + extra + margin or point.distance_to(Vector2(game.at.x, game.at.z)) < FIELD_TOY_CLEARANCE + extra + margin: return true
 	for toy: Dictionary in FieldRegistry.placed_toys():
-		if toy.kind != "palm" and point.distance_to(Vector2(toy.at.x, toy.at.z)) < FIELD_TOY_CLEARANCE + margin: return true
+		var extra := DISTRICT_FIELD_MARGIN if toy.has("region") else 0.0
+		if toy.kind != "palm" and point.distance_to(Vector2(toy.at.x, toy.at.z)) < FIELD_TOY_CLEARANCE + extra + margin: return true
 	return false

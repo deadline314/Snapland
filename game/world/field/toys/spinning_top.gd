@@ -11,7 +11,7 @@ var _body: Node3D
 
 
 func build() -> void:
-	Kit.cylinder(self, ground + Vector3(0, 0.02, 0), 0.9, 0.04, world._coastal_surface(Kit.TILE_CANVAS, 0.9, Color("#e6d9b8")), -1.0, 18).cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	Kit.cylinder(self, ground + Vector3(0, 0.02, 0), 0.9, 0.04, Kit.sand_material(world), -1.0, 18).cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_top = Node3D.new()
 	_top.position = ground + Vector3(0, 0.04, 0)
 	add_child(_top)

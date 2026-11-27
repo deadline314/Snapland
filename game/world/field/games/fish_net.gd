@@ -19,7 +19,7 @@ const STUN_SECONDS := 1.0
 const SEA_REACH := 6.0
 const PUFFER_FROM := 0.35
 const PUFFER_TINT := Color(1.45, 1.05, 0.55)
-const FISH_SIZE := 1.6
+const FISH_SIZE := 2.6
 
 var spots := PackedVector3Array()
 var state := PackedInt32Array()
@@ -54,14 +54,14 @@ func build() -> void:
 		spots.append(spot(offset) + Vector3(0, 0.05, 0))
 	# One flat ring per fish in the air, drawn as a single batch.
 	var ring := TorusMesh.new()
-	ring.inner_radius = CATCH_REACH - 0.12
+	ring.inner_radius = CATCH_REACH - 0.2
 	ring.outer_radius = CATCH_REACH
 	ring.rings = 16
 	ring.ring_segments = 4
 	var hidden: Array[Transform3D] = []
 	for index in range(POOL):
 		hidden.append(Transform3D(Basis.from_scale(Vector3.ZERO), middle))
-	var rings := Kit.batch(self, ring, hidden, Kit.clear_material(world, Color(1.0, 0.95, 0.75, 0.85), 0.5), [Color.WHITE])
+	var rings := Kit.batch(self, ring, hidden, Kit.clear_material(world, Color(1.0, 0.92, 0.55, 0.95), 0.9), [Color.WHITE])
 	rings.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_rings = rings.multimesh
 	# A fish crate beside the stand keeps the tally.

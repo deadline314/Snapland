@@ -66,10 +66,11 @@ var _hop_repeats := 1
 var _pennant: ArrayMesh
 
 
-## Adds the layer to a world whose region has rows in the registry.
+## Adds the layer to the island world. District rows join as each district is
+## built on the island (add_district); a district world standing alone gets none.
 static func attach(owner_world: Node3D) -> Node3D:
 	var owner_region := AmbienceProfiles.region_for(owner_world)
-	if not Registry.has_region(owner_region):
+	if owner_region != Registry.HOME or not Registry.has_region(owner_region):
 		return null
 	var layer: Node3D = new()
 	layer.name = "FieldGames"
@@ -126,6 +127,11 @@ func add_district(node: Node3D) -> void:
 	for point: Dictionary in world.points:
 		if ids.has(String(point.id)) and DistrictSites.ruling(Vector2(point.position.x, point.position.z)) != owner_region:
 			point.erase("region")
+	# The district's own list feeds its regional map of stalls and stories;
+	# the island's list (above) is the one the walker and the island map use.
+	for index in range(node.points.size() - 1, -1, -1):
+		if ids.has(String(node.points[index].id)):
+			node.points.remove_at(index)
 	root.tree_exiting.connect(_drop_district.bind(owner_region), CONNECT_ONE_SHOT)
 	_refresh_pips()
 

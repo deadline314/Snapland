@@ -35,7 +35,7 @@ var _flop := false
 
 func build() -> void:
 	_middle = centre()
-	var ring := Kit.cylinder(self, _middle + Vector3(0, 0.025, 0), STAGE_RADIUS + 0.3, 0.05, world._coastal_surface(Kit.TILE_CANVAS, 1.2, Color("#c9a774")), -1.0, 30)
+	var ring := Kit.cylinder(self, _middle + Vector3(0, 0.025, 0), STAGE_RADIUS + 0.3, 0.05, Kit.sand_material(world), -1.0, 30)
 	ring.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	var kerb := BoxMesh.new()
 	kerb.size = Vector3(0.7, 0.22, 0.2)

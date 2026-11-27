@@ -207,8 +207,10 @@ func _draw() -> void:
 		for index in range(order.size()):
 			shown += "✓" if index < done else "？"
 		Kit.write(_bubble, shown, Color("#fff6de"))
-	elif not _sulk and _show <= 0.0:
+	elif mode == SERVED and not _sulk and _show <= 0.0:
 		Kit.write(_bubble, "" if _smoke_time > 0.0 else "好吃！", Color("#f2c75a"))
+	elif _show <= 0.0:
+		Kit.write(_bubble, "", Color("#f2c75a"))
 	for index in range(_smoke.instance_count):
 		if _smoke_time <= 0.0:
 			_smoke.set_instance_transform(index, Transform3D(Basis.from_scale(Vector3.ZERO), _smoke_at))
