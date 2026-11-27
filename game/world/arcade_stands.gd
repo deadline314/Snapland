@@ -15,6 +15,8 @@ const STANDS := {
 			"stand": Vector3(-2.9, 0.2, 1.0), "point": Vector3(-1.95, 0.2, 2.45), "prop": "windup", "paint": Color("#ad6356")},
 		{"id": "game-062", "title": "整點咕咕", "prompt": "整點咕咕 · 數滴答開門",
 			"stand": Vector3(-2.4, 0.2, -5.2), "point": Vector3(-1.3, 0.2, -3.75), "prop": "cuckoo", "paint": Color("#567f77")},
+		{"id": "game-065", "title": "彈簧青蛙", "prompt": "彈簧青蛙 · 按住上發條跳積木",
+			"stand": Vector3(-6.2, 0.2, -2.5), "point": Vector3(-7.15, 0.2, -1.05), "prop": "frog", "paint": Color("#5f7d4a")},
 	],
 	"garden": [
 		{"id": "game-073", "title": "螢火蟲長曝光", "prompt": "螢火蟲長曝光 · 忍住別按",
@@ -47,6 +49,7 @@ static func build(world: Node3D, region: String) -> void:
 		match str(row.prop):
 			"windup": _windup_prop(sculpt)
 			"cuckoo": _cuckoo_prop(sculpt)
+			"frog": _frog_prop(sculpt)
 			"camera": _camera_prop(sculpt)
 			"lily": _lily_prop(sculpt)
 			"mushroom": _mushroom_prop(sculpt)
@@ -188,3 +191,25 @@ static func _code_prop(sculpt: Kit.Sculpt) -> void:
 	sculpt.box(Vector3(-0.3, 1.27, 0.2), Vector3(0.08, 0.06, 0.02), Color("#ffe7a0"))
 	sculpt.tube(Vector3(-0.3, 1.37, 0.1), 0.16, 0.02, 0.1, stone, 6)
 	sculpt.box(Vector3(0.3, 1.0, 0.1), Vector3(0.4, 0.06, 0.3), CREAM)
+
+
+## A tin frog crouched on a little belt of letter blocks, with its butterfly key, and a big key on the roof.
+static func _frog_prop(sculpt: Kit.Sculpt) -> void:
+	var facing := Basis(Vector3.RIGHT, PI * 0.5)
+	var tin := Color("#7fa25a")
+	sculpt.box(Vector3(0, 0.99, 0.08), Vector3(1.24, 0.06, 0.36), Color("#3b3135"))
+	for roller: float in [-0.56, 0.56]:
+		sculpt.tube(Vector3(roller, 0.99, 0.08), 0.05, 0.05, 0.38, DARK, 8, Basis(Vector3.BACK, PI * 0.5))
+	for block: Array in [[-0.36, Color("#ad573f")], [0.02, Color("#c4904a")], [0.38, Color("#5b8f80")]]:
+		sculpt.box(Vector3(block[0], 1.12, 0.08), Vector3(0.22, 0.2, 0.22), block[1])
+		sculpt.box(Vector3(block[0], 1.12, 0.195), Vector3(0.12, 0.12, 0.01), CREAM)
+	sculpt.box(Vector3(0.02, 1.32, 0.08), Vector3(0.3, 0.17, 0.22), tin)
+	sculpt.box(Vector3(0.16, 1.41, 0.08), Vector3(0.14, 0.12, 0.18), tin)
+	for eye: float in [-0.06, 0.06]:
+		sculpt.box(Vector3(0.18, 1.49, 0.08 + eye), Vector3(0.06, 0.06, 0.05), CREAM)
+	sculpt.box(Vector3(-0.15, 1.45, 0.08), Vector3(0.03, 0.12, 0.03), BRASS)
+	for side: float in [-1.0, 1.0]:
+		sculpt.tube(Vector3(-0.15, 1.53, 0.08 + side * 0.06), 0.05, 0.05, 0.02, BRASS, 6, facing)
+	sculpt.box(Vector3(0, 2.52, -0.3), Vector3(0.1, 0.3, 0.1), BRASS)
+	for side: float in [-1.0, 1.0]:
+		sculpt.tube(Vector3(side * 0.2, 2.8, -0.3), 0.2, 0.2, 0.09, tin, 8, facing)

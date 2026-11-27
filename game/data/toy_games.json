@@ -38,5 +38,25 @@
       "lantern",
       "sign"
     ]
+  },
+  {
+    "id": "game-065",
+    "mode": "spring_frog",
+    "zone": "toy",
+    "local_index": 5,
+    "arcade": true,
+    "name": "彈簧青蛙",
+    "goal": "按住替發條青蛙上發條，放開跳上輸送帶上的積木；落在積木正中間分數最高。",
+    "instructions": "按住空白鍵、E 或手把 A 鈕上發條，放開就跳；按越久跳越遠。點住畫面也可以。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助跳積木拿到金牌",
+    "ordinary": "按住上發條跳上積木，拿到銅牌",
+    "attraction_tag": "積木輸送帶",
+    "island_invitation": "積木一直往玩具箱跑，按住上發條、放開就跳。跳空了，青蛙的發條會鬆掉喔。",
+    "retake_props": [
+      "mascot",
+      "bench",
+      "sign"
+    ]
   }
 ]
