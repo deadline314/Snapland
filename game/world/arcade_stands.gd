@@ -39,6 +39,8 @@ const STANDS := {
 			"stand": Vector3(-6.6, 0.2, 6.2), "point": Vector3(-5.5, 0.2, 7.5), "prop": "dew", "paint": Color("#4f7f5a")},
 		{"id": "game-075", "title": "藤蔓編路", "prompt": "藤蔓編路 · 引導藤蔓穿棚架",
 			"stand": Vector3(8.2, 0.2, -10.6), "point": Vector3(7.1, 0.2, -9.3), "prop": "vine", "paint": Color("#5a7a3a")},
+		{"id": "game-076", "title": "蒲公英落郵", "prompt": "蒲公英落郵 · 按住往上飄去投信",
+			"stand": Vector3(-7.0, 0.2, -6.6), "point": Vector3(-5.6, 0.2, -5.4), "prop": "post", "paint": Color("#b5553c")},
 		{"id": "game-077", "title": "睡蓮踏浪", "prompt": "睡蓮踏浪 · 踩葉過池",
 			"stand": Vector3(-2.6, 0.2, -7.7), "point": Vector3(-1.55, 0.2, -6.35), "prop": "lily", "paint": Color("#3f6f5a")},
 		{"id": "game-079", "title": "蘑菇撐傘", "prompt": "蘑菇撐傘 · 替幼苗接雨",
@@ -81,6 +83,7 @@ static func build(world: Node3D, region: String) -> void:
 			"code": _code_prop(sculpt)
 			"dew": _dew_prop(sculpt)
 			"vine": _vine_prop(sculpt)
+			"post": _post_prop(sculpt)
 		var stand: MeshInstance3D = world._mesh(sculpt.mesh(), Vector3.ZERO, world._vertex_color_material("arcade-stand"))
 		stand.name = "ArcadeStand_" + str(row.id)
 		var body := StaticBody3D.new()
@@ -442,3 +445,24 @@ static func _dice_prop(sculpt: Kit.Sculpt) -> void:
 		sculpt.tube(Vector3(-0.3 + cup * 0.3, 1.06, 0.12), 0.07, 0.09, 0.1, Color("#d2a46a"), 8)
 	for die: Vector3 in [Vector3(-0.15, 1.06, 0.22), Vector3(0.16, 1.06, 0.02)]:
 		sculpt.box(die, Vector3(0.08, 0.08, 0.08), ivory, Basis(Vector3.UP, die.x * 3.0))
+
+
+## A big dandelion clock on a tall stem above the sign with a letter tucked
+## under it, and a little red mailbox with its flag up on the counter.
+static func _post_prop(sculpt: Kit.Sculpt) -> void:
+	var stem := Color("#7a9a4a")
+	var seed := Color("#f6f1e2")
+	var tin := Color("#c8483e")
+	sculpt.box(Vector3(0.35, 2.75, -0.3), Vector3(0.04, 0.8, 0.04), stem, Basis(Vector3.BACK, -0.15))
+	sculpt.ball(Vector3(0.42, 3.2, -0.3), 0.26, seed, Color("#d8d2c0"), 10, 5, 1.0)
+	sculpt.ball(Vector3(0.42, 3.2, -0.3), 0.06, Color("#a89f88"), Color.TRANSPARENT, 6, 3)
+	for drift in 3:
+		var at := Vector3(-0.1 - drift * 0.22, 3.0 + drift * 0.12, -0.25)
+		sculpt.box(at, Vector3(0.012, 0.12, 0.012), Color("#d8ccb0"))
+		sculpt.ball(at + Vector3(0, 0.08, 0), 0.04, seed, Color.TRANSPARENT, 5, 2)
+	sculpt.box(Vector3(0.12, 2.62, -0.24), Vector3(0.2, 0.13, 0.02), Color("#f4e6c4"), Basis(Vector3.BACK, 0.25))
+	sculpt.box(Vector3(-0.28, 1.08, 0.1), Vector3(0.28, 0.16, 0.18), tin)
+	sculpt.tube(Vector3(-0.28, 1.16, 0.1), 0.09, 0.09, 0.18, tin.darkened(0.1), 8, Basis(Vector3.RIGHT, PI * 0.5))
+	sculpt.box(Vector3(-0.1, 1.24, 0.12), Vector3(0.02, 0.2, 0.02), Color("#5a4a3a"))
+	sculpt.box(Vector3(-0.05, 1.3, 0.12), Vector3(0.1, 0.07, 0.02), Color("#ffd166"))
+	sculpt.box(Vector3(0.3, 1.0, 0.1), Vector3(0.4, 0.06, 0.3), CREAM)

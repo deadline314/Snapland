@@ -60,6 +60,26 @@
     ]
   },
   {
+    "id": "game-076",
+    "mode": "dandelion_post",
+    "zone": "garden",
+    "local_index": 4,
+    "arcade": true,
+    "name": "蒲公英落郵",
+    "goal": "抓著蒲公英在溫室裡飄，按住往上、放開往下，碰到揮旗的信箱就把信投進去；撞到仙人掌、吊籃、地板或屋頂會打大噴嚏。",
+    "instructions": "按住空白鍵、↑ 或手把 A 鈕往上飄，放開就往下。按住畫面也可以。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助投信拿到金牌",
+    "ordinary": "飄到揮旗的信箱投信，拿到銅牌",
+    "attraction_tag": "蒲公英郵路",
+    "island_invitation": "抓緊蒲公英，一路飄過溫室送信！暖氣會把你往上推、灑水器會把你往下壓，撞到東西的話……哈啾！",
+    "retake_props": [
+      "flower_horn",
+      "lantern",
+      "bench"
+    ]
+  },
+  {
     "id": "game-077",
     "mode": "lily_hop",
     "zone": "garden",

@@ -64,6 +64,7 @@ func _run() -> void:
 const STAND_ROUTES := {
 	"game-077": [Vector2(0, 4.65), Vector2(4.0, 4.65), Vector2(4.0, -6.15)],
 	"game-080": [Vector2(0, 4.65), Vector2(4.0, 4.65), Vector2(4.0, -6.15)],
+	"game-076": [Vector2(0, 4.65), Vector2(-7.2, 4.65), Vector2(-7.2, -5.4)],
 	"game-075": [Vector2(0, 4.65), Vector2(4.0, 4.65), Vector2(4.0, -6.15), Vector2(4.0, -9.3)],
 }
 
