@@ -96,13 +96,17 @@ static func _build_trail(world: Node3D) -> void:
 			var p := a+tangent*float(distance)
 			# Deliberately spaced planting, never a wall of repeated sprites.
 			var side := -1.0 if index%2 == 0 else 1.0
-			var tree_pos := p+normal*side*4.1
-			var near_stop := false
-			for stop in STOPS:
-				var stop_pos: Vector3 = stop.position
-				if tree_pos.distance_to(Vector2(stop_pos.x,stop_pos.z)) < 7.5: near_stop = true
-			if not near_stop and absf(tree_pos.x)<34 and tree_pos.y>-74:
-				world._tree(Vector3(tree_pos.x,0,tree_pos.y),index*19+distance)
+			# Step toward the trail when the usual spot would leave the open lawn;
+			# a tree with no clear spot (the beach side of the south trail) is left out.
+			for offset: float in [4.1, 3.3]:
+				var tree_pos := p+normal*side*offset
+				var near_stop := false
+				for stop in STOPS:
+					var stop_pos: Vector3 = stop.position
+					if tree_pos.distance_to(Vector2(stop_pos.x,stop_pos.z)) < 7.5: near_stop = true
+				if not near_stop and world.tree_site_clear(Vector3(tree_pos.x,0,tree_pos.y)):
+					world._tree(Vector3(tree_pos.x,0,tree_pos.y),index*19+distance)
+					break
 
 static func _trail_segment(world: Node3D, a: Vector2, b: Vector2) -> void:
 	var mid := (a+b)*0.5

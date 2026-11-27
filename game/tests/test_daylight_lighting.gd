@@ -52,6 +52,7 @@ func _run() -> void:
 				var candidate_distance := world.player.global_position.distance_squared_to(world.lamps[candidate_index].global_position)
 				if candidate_distance + 0.0001 < active_distance:
 					_fail("The %s phase skipped a closer local lamp." % phase_id)
+		_check_foliage_phase(world, phase_id)
 	if world.avatar.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
 		_fail("The avatar billboard still casts a card shadow.")
 	if world.contact_shadows.size() != 4:
@@ -100,25 +101,7 @@ func _run() -> void:
 				_fail("A moving NPC's contact cue is not kept at its feet.")
 	moving_npc.position = saved_npc_position
 	world._update_sprite_grounding()
-	# Painted billboards keep their card out of the shadow map, but each tall kind
-	# owns hidden volumes so lamps, planters and shrubs shade like trees and actors.
-	for kind in world.SPRITE_SHADOW_VOLUMES:
-		for spec: Dictionary in world.SPRITE_SHADOW_VOLUMES[kind]:
-			var part_name := str(kind).capitalize() + "Shadow" + str(spec.part)
-			var volumes := world.find_children(part_name + "*", "MeshInstance3D", true, false)
-			if volumes.is_empty():
-				_fail("No %s volume was built for %s billboards." % [spec.part, kind])
-			for volume: MeshInstance3D in volumes:
-				if volume.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY:
-					_fail("%s is visible in the camera pass." % volume.name)
-				if volume.find_children("*", "CollisionObject3D", true, false).size() > 0:
-					_fail("%s adds collision." % volume.name)
-				if bool(spec.get("grounded", false)):
-					# A grounded part may sink into the ground, but never hover above it.
-					var bottom: float = (volume.global_transform * volume.get_aabb()).position.y
-					var lift := bottom - world._ground_surface_y(volume.global_position)
-					if lift > 0.05:
-						_fail("%s floats %.2fm above the ground." % [volume.name, lift])
+	_check_foliage_shadows(world)
 	# The lawn's top face must face the sky, or it ignores the key light and hides
 	# every cast shadow that falls on grass.
 	var lawn_found := false
@@ -161,6 +144,128 @@ func _run() -> void:
 ## above has (b-a)x(c-a) pointing down.
 func _front_faces_up(a: Vector3, b: Vector3, c: Vector3) -> bool:
 	return (b - a).cross(c - a).y < 0.0
+
+
+## Painted scenery (trees, shrubs, planters, lamps, rocks) casts its own
+## silhouette from a static card standing on its visible base, and rests on one
+## batched contact shadow. No sphere, capsule, cylinder or box stands in for it.
+func _check_foliage_shadows(world: Node) -> void:
+	var kind_by_texture := {}
+	for kind in world.foliage_textures:
+		kind_by_texture[world.foliage_textures[kind]] = kind
+	var painted: Array[Sprite3D] = []
+	for node in world.find_children("*", "Sprite3D", true, false):
+		if kind_by_texture.has((node as Sprite3D).texture): painted.append(node)
+	if painted.size() < 40:
+		_fail("Only %d painted scenery billboards were found." % painted.size())
+	if world.foliage_shadow_casters.size() != painted.size():
+		_fail("%d painted billboards share %d silhouette casters; each needs exactly one." % [painted.size(), world.foliage_shadow_casters.size()])
+	var camera: Camera3D = world.camera
+	var view_up := camera.global_basis.y
+	var view_forward := -camera.global_basis.z
+	var seen_sources := {}
+	var seen_kinds := {}
+	for caster: MeshInstance3D in world.foliage_shadow_casters:
+		var sprite := caster.get("source") as Sprite3D
+		if sprite == null or not painted.has(sprite) or seen_sources.has(sprite):
+			_fail("%s does not belong to exactly one painted billboard." % caster.name)
+			continue
+		seen_sources[sprite] = true
+		var kind := str(kind_by_texture[sprite.texture])
+		seen_kinds[kind] = true
+		var art := sprite.texture as AtlasTexture
+		var quad := caster.mesh as QuadMesh
+		var material := caster.material_override as StandardMaterial3D
+		if sprite.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
+			_fail("The %s billboard card itself still casts a shadow." % kind)
+		if (sprite.layers & world.sun.light_cull_mask) != 0 or (sprite.layers & camera.cull_mask) == 0:
+			_fail("The %s billboard would receive its own silhouette from the key light, or is hidden from the camera." % kind)
+		if (caster.layers & world.sun.light_cull_mask) == 0:
+			_fail("The %s silhouette is hidden from the key light and cannot cast." % kind)
+		if caster.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY or not caster.visible:
+			_fail("The %s silhouette must be an active shadow-only caster." % kind)
+		if quad == null or material == null:
+			_fail("The %s shadow is not a textured silhouette card." % kind)
+			continue
+		var atlas_size := art.atlas.get_size()
+		if material.albedo_texture != art.atlas or material.transparency != BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR \
+				or not Vector2(material.uv1_scale.x, material.uv1_scale.y).is_equal_approx(art.region.size / atlas_size) \
+				or not Vector2(material.uv1_offset.x, material.uv1_offset.y).is_equal_approx(art.region.position / atlas_size):
+			_fail("The %s shadow is not cut from that sprite's own painted outline." % kind)
+		if material != world.material_cache.get("foliage-shadow:" + kind):
+			_fail("The %s silhouette material is not the cached one shared by its kind." % kind)
+		if caster.is_processing() or caster.is_physics_processing():
+			_fail("The static %s silhouette costs per-frame work." % kind)
+		if caster.find_children("*", "CollisionObject3D", true, false).size() > 0:
+			_fail("The %s silhouette adds collision." % kind)
+		var sprite_size := art.region.size * sprite.pixel_size
+		if not is_equal_approx(quad.size.x, sprite_size.x) or absf(quad.size.y * view_up.y - sprite_size.y) > 0.01:
+			_fail("The %s silhouette does not cover the billboard as seen by the camera." % kind)
+		# The card stands where the painted base visibly meets the ground.
+		var bottom := sprite.global_position - view_up * sprite_size.y * 0.5
+		var card_base := caster.global_position - Vector3.UP * quad.size.y * 0.5
+		var ground_y: float = world._ground_surface_y(card_base)
+		var visible_base := bottom + view_forward * ((ground_y - bottom.y) / view_forward.y)
+		if Vector2(card_base.x - visible_base.x, card_base.z - visible_base.z).length() > 0.05:
+			_fail("The %s shadow starts %.2f m away from its painted base." % [kind, Vector2(card_base.x - visible_base.x, card_base.z - visible_base.z).length()])
+		if absf(card_base.y - ground_y) > 0.05:
+			_fail("The %s shadow source floats or sinks %.2f m at the ground." % [kind, card_base.y - ground_y])
+		for parameter in ["outline_soften", "ground_blend"]:
+			if float((sprite.material_override as ShaderMaterial).get_shader_parameter(parameter)) <= 0.0:
+				_fail("The %s billboard keeps its heavy outline or cut base line (%s)." % [kind, parameter])
+	for kind in ["oak", "palm", "pine", "shrub", "planter", "lamp", "rocks"]:
+		if not seen_kinds.has(kind):
+			_fail("No silhouette caster was built for %s billboards." % kind)
+	# Counter-example for the rule above: the former sphere/cylinder/box stand-ins.
+	for node in world.find_children("*", "MeshInstance3D", true, false):
+		var mesh := node as MeshInstance3D
+		if mesh.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY or mesh.mesh is QuadMesh: continue
+		if mesh.is_visible_in_tree():
+			_fail("%s casts a substitute shape instead of a painted silhouette." % mesh.name)
+	var contacts := world.get_node_or_null("FoliageContactShadows") as MultiMeshInstance3D
+	if contacts == null or contacts.multimesh.instance_count != painted.size():
+		_fail("Painted billboards do not each rest on one batched contact shadow.")
+	elif contacts.material_override != world.contact_shadow_material or contacts.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
+		_fail("The scenery contact shadows must reuse the soft contact material and cast nothing.")
+	elif world._foliage_contact_transforms.size() != painted.size():
+		_fail("The batched contact shadows were not built from every painted billboard.")
+	else:
+		# The headless renderer does not store instance transforms; read the
+		# placements the batch was built from.
+		for placement: Transform3D in world._foliage_contact_transforms:
+			var lift: float = placement.origin.y - world._ground_surface_y(placement.origin)
+			if lift < 0.0 or lift > 0.05:
+				_fail("A scenery contact shadow at %s sits %.2f m off the ground." % [placement.origin, lift])
+
+
+## Each phase change regrades the painted scenery and turns its shadow cards to
+## the light, so the cast shape keeps the painted outline at any hour.
+func _check_foliage_phase(world: Node, phase_id: String) -> void:
+	var tint: Color = world.FOLIAGE_PHASE_TINT[phase_id]
+	for material: ShaderMaterial in world.foliage_materials:
+		if material.get_shader_parameter("tint") != tint:
+			_fail("Painted scenery ignores the %s light." % phase_id)
+			break
+	# The grade multiplies the ambient light, the only sky light scenery receives.
+	var graded: Color = world.environment.ambient_light_color * world.environment.ambient_light_energy * tint
+	var noon_profile: Dictionary = TimeOfDayScript.phase_for_id("noon")
+	var noon_graded: Color = noon_profile.ambient_color * float(noon_profile.ambient_energy) * 0.58 * (world.FOLIAGE_PHASE_TINT["noon"] as Color)
+	if graded.get_luminance() > noon_graded.get_luminance() + 0.001:
+		_fail("Painted scenery is brighter in the %s light than at noon." % phase_id)
+	if phase_id == "night" and graded.get_luminance() > noon_graded.get_luminance() * 0.6:
+		_fail("Painted scenery stays near daytime brightness at night.")
+	if graded.get_luminance() < 0.12:
+		_fail("Painted scenery is too dark to read in the %s light." % phase_id)
+	var light: Vector3 = -world.sun.global_basis.z
+	var light_flat := Vector3(light.x, 0.0, light.z).normalized()
+	for caster: MeshInstance3D in world.foliage_shadow_casters:
+		var card := caster.global_basis
+		if absf(card.x.dot(light_flat)) > 0.01 or absf(card.y.y - 1.0) > 0.001:
+			_fail("A scenery silhouette is not upright and facing the %s light." % phase_id)
+			break
+		if card.x.dot(world.camera.global_basis.x) <= 0.0:
+			_fail("A scenery silhouette is mirrored against its billboard in the %s light." % phase_id)
+			break
 
 
 func _fail(message: String) -> void:

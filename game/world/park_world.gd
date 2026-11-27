@@ -148,6 +148,9 @@ var bubble_material: StandardMaterial3D
 var foliage_textures: Dictionary = {}
 var foliage_atlas_loaded := false
 var foliage_warnings: Dictionary = {}
+var foliage_materials: Array[ShaderMaterial] = []
+var foliage_shadow_casters: Array[ActorShadowSilhouette] = []
+var _foliage_contact_transforms: Array[Transform3D] = []
 var facing := "front"
 ## Phase span of one walk cycle. Real travel per cycle comes from the measured artwork
 ## (walk_stride_for), so the planted foot keeps pace with the body instead of gliding.
@@ -251,6 +254,7 @@ func _build_region_geometry() -> void:
 	_build_gates()
 	_build_wayfinding()
 	CoastalCircuit.build(self)
+	_build_foliage_contact_shadows()
 	story_landmarks = StoryLandmarksScript.new()
 	add_child(story_landmarks)
 	story_landmarks.configure(self)
@@ -371,6 +375,7 @@ func _build_lighting() -> void:
 	sun.directional_shadow_max_distance = 70.0
 	sun.light_color = Color("#f4e4c3")
 	sun.light_energy = 1.08
+	sun.light_cull_mask &= ~SCENERY_RENDER_LAYER
 	add_child(sun)
 	contact_shadow_material = _make_contact_shadow_material()
 
@@ -1049,7 +1054,19 @@ func _sea_grass(pos: Vector3, seed_value: int) -> void:
 	if seed_value % 2 == 0:
 		_sphere(pos+Vector3(0,0.82,0),0.12,CORAL)
 
+## Trees keep to open lawn: clear of paths and decks, and far enough inland that
+## the trunk stays off the beach and its noon shadow stays out of the bay.
+const TREE_SHORE_MARGIN := 1.2
+
+static func tree_site_clear(pos: Vector3) -> bool:
+	if not CoastalCircuit.on_lawn(Vector2(pos.x,pos.z),TREE_SHORE_MARGIN): return false
+	# The painted base meets the ground about 0.64 m in front of the anchor.
+	for offset in [Vector3.ZERO, Vector3(0,0,0.64), Vector3(0.9,0,0.64), Vector3(-0.9,0,0.64), Vector3(0,0,1.2)]:
+		if _ground_surface_y(pos+offset) > 0.06: return false
+	return true
+
 func _tree(pos: Vector3, seed_value: int) -> void:
+	if not tree_site_clear(pos): return
 	# Give each avenue band a coherent canopy instead of cycling through a
 	# repeated random-looking row of unrelated tree silhouettes.
 	var key := "oak"
@@ -1065,7 +1082,6 @@ func _tree(pos: Vector3, seed_value: int) -> void:
 		tree_height = 4.3
 	if _foliage_has(key):
 		_foliage_sprite(key,pos,tree_height)
-		_add_tree_shadow_proxy(pos,tree_height,key)
 		return
 	_cylinder(pos+Vector3(0,1.15,0),0.2,2.3,Color("#76583f"))
 	for root in [-1,1]:
@@ -1099,57 +1115,10 @@ func _tree(pos: Vector3, seed_value: int) -> void:
 	if seed_value % 3 == 0:
 		_lantern(pos+Vector3(0.4,2,0.7))
 
-func _add_tree_shadow_proxy(ground: Vector3, height: float, kind: String) -> void:
-	# A billboard must not cast a camera-facing rectangle. Small hidden volumes
-	# give its trunk/canopy a stable shadow from the real scene lights instead.
-	var trunk := _cylinder(ground+Vector3(0,height*0.25,0),0.16,height*0.5,Color("#645843"))
-	trunk.name="TreeShadowTrunk"
-	trunk.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
-	var crown := _sphere(ground+Vector3(0,height*0.68,0),1.0,Color("#42674f"))
-	crown.name="TreeShadowCrown"
-	crown.scale=Vector3(1.25,height*0.25,0.8) if kind=="palm" else Vector3(1.12,height*0.28,0.82)
-	crown.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
-
-## Hidden volumes that give a painted billboard the same real-light shadow as
-## trees and actors. Sizes are fractions of the sprite height, measured from the
-## painted silhouette in tidal-foliage-v2 (x offsets follow the drawn pole/head).
-const SPRITE_SHADOW_VOLUMES := {
-	"lamp": [
-		{"part": "Pole", "grounded": true, "shape": "cylinder", "radius": 0.035, "height": 0.95, "offset": Vector3(0.075, 0.475, 0.0)},
-		{"part": "Lantern", "shape": "box", "size": Vector3(0.15, 0.32, 0.15), "offset": Vector3(-0.11, 0.72, 0.0)},
-		{"part": "Arm", "shape": "box", "size": Vector3(0.2, 0.03, 0.03), "offset": Vector3(-0.02, 0.93, 0.0)},
-		{"part": "Bed", "grounded": true, "shape": "ellipsoid", "radii": Vector3(0.25, 0.12, 0.18), "offset": Vector3(0.0, 0.1, 0.0)},
-	],
-	"planter": [
-		{"part": "Pot", "grounded": true, "shape": "cylinder", "radius": 0.23, "top": 0.3, "height": 0.6, "offset": Vector3(0.0, 0.3, 0.0)},
-		{"part": "Foliage", "shape": "ellipsoid", "radii": Vector3(0.48, 0.2, 0.33), "offset": Vector3(0.0, 0.8, 0.0)},
-	],
-	"shrub": [
-		{"part": "Dome", "grounded": true, "shape": "ellipsoid", "radii": Vector3(0.64, 0.5, 0.4), "offset": Vector3(0.0, 0.42, 0.0)},
-	],
-}
-
-func _add_sprite_shadow_proxy(kind: String, ground: Vector3, height: float) -> void:
-	var volumes: Array = SPRITE_SHADOW_VOLUMES.get(kind, [])
-	for spec: Dictionary in volumes:
-		var center: Vector3 = ground + Vector3(spec.offset) * height
-		var volume: MeshInstance3D
-		match str(spec.shape):
-			"cylinder":
-				volume = _cylinder(center, float(spec.radius) * height, float(spec.height) * height, Color.WHITE, float(spec.get("top", spec.radius)) * height)
-			"box":
-				volume = _box(center, Vector3(spec.size) * height, Color.WHITE)
-			_:
-				volume = _sphere(center, 1.0, Color.WHITE)
-				volume.scale = Vector3(spec.radii) * height
-		volume.name = "%sShadow%s" % [kind.capitalize(), str(spec.part)]
-		volume.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
-
 func _flowerbed(pos: Vector3, seed_value: int) -> void:
 	if _foliage_has("planter"):
 		var planter_height := 1.75+fmod(float(seed_value)*0.07,0.25)
 		_foliage_sprite("planter",pos,planter_height)
-		_add_sprite_shadow_proxy("planter",pos,planter_height)
 		return
 	_box(pos+Vector3(0,0.3,0),Vector3(1.7,0.5,1.3),Color("#ccba92"),true)
 	_box(pos+Vector3(0,0.58,0),Vector3(1.5,0.12,1.1),Color("#425c42"))
@@ -1189,12 +1158,86 @@ func _foliage_sprite(kind: String, ground: Vector3, world_height: float) -> Spri
 	sprite.alpha_cut=SpriteBase3D.ALPHA_CUT_DISCARD
 	sprite.alpha_scissor_threshold=0.45
 	sprite.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	sprite.layers=SCENERY_RENDER_LAYER
 	sprite.position=ground+Vector3(0,world_height*0.5,0)
 	var phase := fposmod(ground.x * 0.713 + ground.z * 0.391, TAU)
-	_set_living_sprite_material(sprite, 0, phase, 0.72)
+	var material := _set_living_sprite_material(sprite, 0, phase, 0.72)
+	material.set_shader_parameter("outline_soften",float(FOLIAGE_OUTLINE_SOFTEN.get(kind,FOLIAGE_OUTLINE_SOFTEN_DEFAULT)))
+	material.set_shader_parameter("ground_blend",FOLIAGE_GROUND_BLEND)
+	material.set_shader_parameter("saturation",FOLIAGE_SATURATION)
+	foliage_materials.append(material)
 	add_child(sprite)
 	component_motion.register_component(sprite,"foliage",phase/TAU)
+	_ground_foliage_sprite(kind,sprite,world_height)
 	return sprite
+
+## Painted scenery has its own render layer, which the key light skips: lit by
+## it, a billboard would show its own silhouette card printed back across the
+## paint whenever the sun or moon is in front of it. Ambient and lamp light still
+## reach it, and this grade (applied once per phase) stands in for the key light.
+const SCENERY_RENDER_LAYER := 1 << 1
+const FOLIAGE_PHASE_TINT := {
+	"dawn": Color(1.3, 1.18, 1.12),
+	"noon": Color(1.0, 0.97, 0.90),
+	"dusk": Color(1.55, 1.42, 1.22),
+	"night": Color(1.5, 1.6, 1.8),
+}
+## The heavy atlas outline is lifted toward the neighbouring colour, and the base
+## dissolves into the ground instead of ending in a cut line.
+const FOLIAGE_OUTLINE_SOFTEN_DEFAULT := 0.85
+## Wrought iron is meant to stay dark; only its hardest edge is eased.
+const FOLIAGE_OUTLINE_SOFTEN := {"lamp": 0.15}
+const FOLIAGE_GROUND_BLEND := 0.055
+const FOLIAGE_SATURATION := 0.9
+## Share of the sprite's width that touches the ground, for the contact shadow.
+const FOLIAGE_BASE_WIDTH := {"lamp": 0.5, "planter": 0.7, "shrub": 0.85, "rocks": 0.9}
+const FOLIAGE_TRUNK_BASE_WIDTH := 0.45
+## The fixed follow camera's orientation; billboards and their shadows share it.
+var _view_basis := Basis.looking_at(Vector3.UP - CAMERA_OFFSET)
+
+func _ground_foliage_sprite(kind: String, sprite: Sprite3D, world_height: float) -> void:
+	# A billboard leans back from the camera, so its painted base meets the ground
+	# a little in front of its anchor. Both shadows start from that visible base;
+	# the cast one is the sprite's own silhouette on a card that never processes.
+	var bottom := sprite.position - _view_basis.y * world_height * 0.5
+	var view_forward := -_view_basis.z
+	var base := sprite.position
+	# The surface under the visible base can differ from the one under the anchor.
+	for refinement in 3:
+		base = bottom + view_forward * ((_ground_surface_y(base) - bottom.y) / view_forward.y)
+	var surface_y := base.y
+	var caster := ActorShadowSilhouette.new()
+	caster.name = "%sAlphaShadow" % kind.capitalize()
+	add_child(caster)
+	var cache_key := "foliage-shadow:" + kind
+	# A vertical card must be taller than the tilted billboard to cover it on screen.
+	if caster.configure_static(sprite, base, world_height / _view_basis.y.y, material_cache.get(cache_key)):
+		material_cache[cache_key] = caster.silhouette_material
+	foliage_shadow_casters.append(caster)
+	mesh_count += 1
+	var region: Rect2 = foliage_textures[kind].region
+	var contact_width := world_height * region.size.x / region.size.y * float(FOLIAGE_BASE_WIDTH.get(kind, FOLIAGE_TRUNK_BASE_WIDTH))
+	_foliage_contact_transforms.append(Transform3D(Basis().scaled(Vector3(contact_width, 1.0, contact_width * 0.5)), Vector3(base.x, surface_y + 0.012, base.z)))
+
+func _build_foliage_contact_shadows() -> void:
+	# One batched draw grounds every painted prop; nothing here updates per frame.
+	if _foliage_contact_transforms.is_empty(): return
+	var colors: Array[Color] = []
+	colors.resize(_foliage_contact_transforms.size())
+	colors.fill(Color.WHITE)
+	var blob := PlaneMesh.new()
+	blob.size = Vector2.ONE
+	var contacts := _multi_mesh(blob, Vector3.ZERO, _foliage_contact_transforms, colors, contact_shadow_material)
+	contacts.name = "FoliageContactShadows"
+	contacts.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+
+func _apply_foliage_phase() -> void:
+	var tint: Color = FOLIAGE_PHASE_TINT[active_time_phase]
+	for material in foliage_materials:
+		material.set_shader_parameter("tint", tint)
+	var light_travel := -sun.basis.z
+	for caster in foliage_shadow_casters:
+		caster.face_light(light_travel, _view_basis.x)
 
 
 func _set_living_sprite_material(sprite: Sprite3D, kind: int, phase: float, breath_rate: float, idle_role := 0, animate_shader := true) -> ShaderMaterial:
@@ -1404,7 +1447,6 @@ func _bench(pos: Vector3) -> void:
 func _shrub_cluster(pos: Vector3, seed_value: float) -> void:
 	if _foliage_has("shrub"):
 		_foliage_sprite("shrub",pos,2.05)
-		_add_sprite_shadow_proxy("shrub",pos,2.05)
 		return
 	var branch := _cylinder(pos+Vector3(0,0.34,0),0.07,0.68,Color("#806143"))
 	var leaves: Array[Transform3D]=[]
@@ -1477,7 +1519,6 @@ func _kiosk(pos: Vector3, title: String, color: Color) -> void:
 func _lamppost(pos: Vector3) -> void:
 	if _foliage_has("lamp"):
 		_foliage_sprite("lamp",pos,2.85)
-		_add_sprite_shadow_proxy("lamp",pos,2.85)
 		var decorative_light := OmniLight3D.new()
 		decorative_light.position=pos+Vector3(0,2.18,0)
 		decorative_light.light_color=Color("#ffd79a")
@@ -3052,6 +3093,7 @@ func set_time_of_day(phase_id: Variant) -> void:
 		welcome_sea_material.set_shader_parameter("dock_glow", lamp_energy_for_phase)
 	_update_lamp_selection(true)
 	if is_instance_valid(ambience): ambience.set_phase(active_time_phase)
+	_apply_foliage_phase()
 	for record in contact_shadows:
 		var shadow := record.get("node") as Node3D
 		if not is_instance_valid(shadow): continue

@@ -12,6 +12,12 @@ uniform float breath_rate : hint_range(0.1, 3.0) = 0.75;
 uniform float wind_strength : hint_range(0.0, 0.1) = 0.035;
 uniform float breath_pixels : hint_range(0.0, 1.0) = 0.65;
 uniform float gesture_pixels : hint_range(0.0, 1.0) = 0.65;
+// Scenery grading. The defaults leave actor sprites exactly as authored.
+uniform float outline_soften : hint_range(0.0, 1.0) = 0.0;
+uniform float ground_blend : hint_range(0.0, 0.3) = 0.0;
+uniform float saturation : hint_range(0.0, 1.5) = 1.0;
+
+const vec3 LUMA = vec3(0.299, 0.587, 0.114);
 
 void vertex() {
 	// Sprite3D's generated quad keeps its authored scale and position while
@@ -86,7 +92,39 @@ void fragment() {
 		float cloth_sway = sin(TIME * 1.05 + phase + local_uv.y) * gesture_pixels * motion * hem_weight;
 		sample_uv.x += cloth_sway / max(1.0, texture_size.x);
 	}
-	vec4 texel = texture(texture_albedo, sample_uv) * tint;
+	vec4 texel = texture(texture_albedo, sample_uv);
+	if (outline_soften > 0.0) {
+		// Near-black outline and shadow texels take a shaded copy of the nearest
+		// painted colour, so the line stays readable without outweighing the scene.
+		float dark = 1.0 - smoothstep(0.02, 0.05, dot(texel.rgb, LUMA));
+		if (dark > 0.0) {
+			vec3 local = vec3(0.0);
+			float found = 0.0;
+			vec2 region_end = uv_rect.xy + uv_rect.zw - atlas_texel;
+			for (int ring = 1; ring <= 2; ring++) {
+				for (int corner = 0; corner < 4; corner++) {
+					vec2 reach = vec2(corner < 2 ? 6.0 : -6.0, corner % 2 == 0 ? 6.0 : -6.0) * float(ring);
+					vec4 nearby = texture(texture_albedo, clamp(sample_uv + reach * atlas_texel, uv_rect.xy + atlas_texel, region_end));
+					float weight = nearby.a * smoothstep(0.03, 0.09, dot(nearby.rgb, LUMA)) / float(ring);
+					local += nearby.rgb * weight;
+					found += weight;
+				}
+			}
+			vec3 shade = found > 0.0 ? local / found * 0.36 : texel.rgb * 1.6 + vec3(0.006, 0.014, 0.014);
+			texel.rgb = mix(texel.rgb, shade, dark * outline_soften);
+		}
+	}
+	if (ground_blend > 0.0) {
+		// The lowest rows darken and break up into the ground instead of ending
+		// in a straight painted edge.
+		float rise = (1.0 - local_uv.y) / ground_blend;
+		vec2 art_cell = floor(local_uv * uv_rect.zw * texture_size / 6.0);
+		float keep = fract(sin(dot(art_cell, vec2(12.9898, 78.233))) * 43758.5453);
+		texel.a *= step(keep * 0.9, rise * rise);
+		texel.rgb *= mix(0.62, 1.0, smoothstep(0.0, 2.5, rise));
+	}
+	texel.rgb = mix(vec3(dot(texel.rgb, LUMA)), texel.rgb, saturation);
+	texel *= tint;
 	ALBEDO = texel.rgb;
 	ALPHA = texel.a;
 	ALPHA_SCISSOR_THRESHOLD = 0.5;

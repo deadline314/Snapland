@@ -136,54 +136,24 @@ func _plaza_casters() -> Array[Dictionary]:
 			if child is GeometryInstance3D and child.visible: geometry.append(child)
 		casters.append({"name": "actor-" + str(record.role), "geometry": geometry, "base": proxy.global_position, "height": 1.5})
 	var view_center: Vector3 = world.player.global_position
-	var best_trunk: MeshInstance3D = null
-	for node in world.find_children("TreeShadowTrunk*", "MeshInstance3D", true, false):
-		var screen: Vector2 = world.camera.unproject_position(node.global_position)
-		if not get_viewport().get_visible_rect().grow(-140).has_point(screen): continue
-		if best_trunk == null or node.global_position.distance_to(view_center) < best_trunk.global_position.distance_to(view_center):
-			best_trunk = node
-	if best_trunk != null:
-		var trunk_height := float((best_trunk.mesh as CylinderMesh).height)
-		var tree_base := best_trunk.global_position - Vector3(0, trunk_height * 0.5, 0)
-		var tree_geometry: Array[GeometryInstance3D] = [best_trunk]
-		for crown in world.find_children("TreeShadowCrown*", "MeshInstance3D", true, false):
-			if Vector2(crown.global_position.x, crown.global_position.z).distance_to(Vector2(tree_base.x, tree_base.z)) < 0.05:
-				tree_geometry.append(crown)
-		casters.append({"name": "tree", "geometry": tree_geometry, "base": tree_base, "height": trunk_height * 2.0})
-		var trunk_only: Array[GeometryInstance3D] = [best_trunk]
-		casters.append({"name": "tree-trunk", "geometry": trunk_only, "base": tree_base, "height": trunk_height})
-	var nearest_lamp: Light3D = null
-	for lamp in world.lamps:
-		var screen: Vector2 = world.camera.unproject_position(lamp.global_position)
-		if not get_viewport().get_visible_rect().grow(-140).has_point(screen): continue
-		if nearest_lamp == null or lamp.global_position.distance_to(view_center) < nearest_lamp.global_position.distance_to(view_center):
-			nearest_lamp = lamp
-	if nearest_lamp != null:
-		var lamp_xz := Vector2(nearest_lamp.global_position.x, nearest_lamp.global_position.z)
-		var lamp_geometry: Array[GeometryInstance3D] = []
-		for mesh in world.find_children("*", "MeshInstance3D", true, false):
-			var mesh_instance := mesh as MeshInstance3D
-			if mesh_instance.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_OFF or not mesh_instance.is_visible_in_tree(): continue
-			var center: Vector3 = mesh_instance.global_transform * mesh_instance.get_aabb().get_center()
-			if Vector2(center.x, center.z).distance_to(lamp_xz) < 0.4 and center.y < nearest_lamp.global_position.y + 0.6:
-				lamp_geometry.append(mesh_instance)
-		var lamp_base := Vector3(lamp_xz.x, world._ground_surface_y(nearest_lamp.global_position), lamp_xz.y)
-		casters.append({"name": "lamp-post", "geometry": lamp_geometry, "base": lamp_base, "height": nearest_lamp.global_position.y - lamp_base.y})
-	for kind_part in [["Planter", "Pot"], ["Shrub", "Dome"]]:
-		var kind: String = kind_part[0]
-		var best_volume: MeshInstance3D = null
-		for node in world.find_children(kind + "Shadow" + str(kind_part[1]) + "*", "MeshInstance3D", true, false):
-			var screen: Vector2 = world.camera.unproject_position(node.global_position)
+	# Painted scenery casts from one silhouette card per billboard.
+	var scenery := {"tree": ["oak", "ginkgo", "palm", "pine"], "lamp-post": ["lamp"], "planter": ["planter"], "shrub": ["shrub"]}
+	for caster_name: String in scenery:
+		var best: MeshInstance3D = null
+		for card: MeshInstance3D in world.foliage_shadow_casters:
+			var art: Texture2D = (card.get("source") as Sprite3D).texture
+			var kind_matches := false
+			for kind in scenery[caster_name]:
+				if world.foliage_textures.get(kind) == art: kind_matches = true
+			if not kind_matches: continue
+			var screen: Vector2 = world.camera.unproject_position(card.global_position)
 			if not get_viewport().get_visible_rect().grow(-140).has_point(screen): continue
-			if best_volume == null or node.global_position.distance_to(view_center) < best_volume.global_position.distance_to(view_center):
-				best_volume = node
-		if best_volume == null: continue
-		var volume_xz := Vector2(best_volume.global_position.x, best_volume.global_position.z)
-		var volumes: Array[GeometryInstance3D] = []
-		for node in world.find_children(kind + "Shadow*", "MeshInstance3D", true, false):
-			if Vector2(node.global_position.x, node.global_position.z).distance_to(volume_xz) < 0.05: volumes.append(node)
-		var volume_base := Vector3(volume_xz.x, world._ground_surface_y(best_volume.global_position), volume_xz.y)
-		casters.append({"name": kind.to_lower(), "geometry": volumes, "base": volume_base, "height": 1.8})
+			if best == null or card.global_position.distance_to(view_center) < best.global_position.distance_to(view_center):
+				best = card
+		if best == null: continue
+		var card_height := (best.mesh as QuadMesh).size.y
+		var card_geometry: Array[GeometryInstance3D] = [best]
+		casters.append({"name": caster_name, "geometry": card_geometry, "base": best.global_position - Vector3(0, card_height * 0.5, 0), "height": card_height})
 	var kiosk_center := Vector3(8, 0, 5)
 	var kiosk_geometry: Array[GeometryInstance3D] = []
 	for mesh in world.find_children("*", "MeshInstance3D", true, false):

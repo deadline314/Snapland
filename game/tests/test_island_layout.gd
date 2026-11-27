@@ -331,6 +331,23 @@ func _check_ground_layers(world: Node) -> void:
 			var edge := mesh.to_global(corner)
 			_check(_land_inset(land, Vector2(edge.x, edge.z)) >= 0.3, "coastal paving stays on land, clear of the waterline")
 	_check(trails >= 14, "the coastal loop paving is unchanged")
+	# Planting keeps off the wet sand line and the paths: every painted plant's
+	# anchor is at least 1.5 m from the water, and trees stand on open lawn.
+	var world_script: GDScript = world.get_script()
+	var trees := 0
+	for kind in ["oak", "ginkgo", "palm", "pine", "shrub", "planter"]:
+		if not world.foliage_textures.has(kind): continue
+		for sprite: Sprite3D in world.find_children("*", "Sprite3D", true, false):
+			if sprite.texture != world.foliage_textures[kind]: continue
+			var height := sprite.pixel_size * sprite.texture.get_height()
+			var anchor := sprite.global_position - Vector3(0, height * 0.5, 0)
+			_check(_land_inset(land, Vector2(anchor.x, anchor.z)) >= 1.5, "%s at %s keeps 1.5 m back from the waterline" % [kind, anchor])
+			if kind in ["shrub", "planter"]: continue
+			trees += 1
+			_check(world_script.tree_site_clear(anchor), "%s at %s stands on open lawn, off paths, decks and the beach" % [kind, anchor])
+	_check(trees >= 24, "the avenue and coastal loop keep their tree cover (%d trees)" % trees)
+	_check(not world_script.tree_site_clear(Vector3(-2, 0, 20.1)) and not world_script.tree_site_clear(Vector3(17.07, 0, 5.5)) and world_script.tree_site_clear(Vector3(16.2, 0, -8)),
+		"the planting rule rejects the former palm in the bay and the one on the east path")
 
 ## Distance from `point` to the nearest land edge: positive on land.
 func _land_inset(land: Rect2, point: Vector2) -> float:
