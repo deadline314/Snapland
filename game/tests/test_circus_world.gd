@@ -25,12 +25,15 @@ func _run() -> void:
 		and _world.npc_activity == null, "original tent art loads without inheriting Welcome activities")
 	_check(_world.current_area == "馬戲團入口" and _world.player.is_on_floor(), "spawn lands on the physical entry")
 	var initial_map: Dictionary = _world.map_snapshot()
-	_check(initial_map.areas.size() == 5 and initial_map.points.size() == 7
+	_check(initial_map.areas.size() == 5 and initial_map.points.size() == 8
 		and _world._point_by_id("circus:story").get("position") == World.STORY_POINT,
 		"five physical areas and the on-duty welcome station appear in the floor plan")
 	_check(_world._point_by_id("game-049").get("position") == World.PHOTO_BOOTH_POINT
 		and _world._area_at_position(World.PHOTO_BOOTH_POINT) == "馬戲團入口" and _world._safe_footing(World.PHOTO_BOOTH_POINT),
 		"the photo booth game has a reachable stand in the entry foyer")
+	_check(_world._point_by_id("game-050").get("position") == World.REFLECTION_POINT
+		and _world._area_at_position(World.REFLECTION_POINT) == "鏡廊" and _world._safe_footing(World.REFLECTION_POINT),
+		"the fake reflection game has a reachable stand in the mirror hall")
 	for room: Dictionary in _world.map_snapshot().areas:
 		var floor_mesh := _world.get_node_or_null("CircusFloor_" + String(room.id)) as MeshInstance3D
 		var footprint: Rect2 = room.rect
@@ -41,6 +44,7 @@ func _run() -> void:
 			_check(Vector2(size.x, size.z).is_equal_approx(footprint.size), "chart and floor widths match each other")
 
 	await _reach([Vector2(0, 4.65), Vector2(-8.1, 4.65), Vector2(-8.1, 0.85)], "circus:mirrors", "鏡廊")
+	await _reach([Vector2(-8.1, 4.85), Vector2(World.REFLECTION_POINT.x, World.REFLECTION_POINT.z)], "game-050", "鏡廊")
 	await _reach([Vector2(-4.25, 0.85), Vector2(-4.25, -6.40), Vector2(0, -6.40), Vector2(0, -8.80)],
 		"circus:mats", "砲彈安全墊")
 	await _reach([Vector2(0, 0.20)], "circus:auditorium", "觀眾席")

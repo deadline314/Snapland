@@ -40,7 +40,8 @@ var verdicts: Array[String] = ["", "", "", ""]
 ## At least two parameter sets ({"id", "label", ...}); one is picked per round.
 var variants: Array[Dictionary] = [{"id": "standard", "label": "標準"}]
 var score_label := "得分"
-## Control script extending arcade_view.gd; null keeps the game headless.
+## Control script extending arcade_view.gd (preload it as a constant so it
+## stays loaded with the driver); null keeps the game headless.
 var view_script: Script
 
 # --- Round state the hooks may read -----------------------------------------

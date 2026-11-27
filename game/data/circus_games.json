@@ -18,5 +18,25 @@
       "visitor",
       "lantern"
     ]
+  },
+  {
+    "id": "game-050",
+    "mode": "fake_reflection",
+    "zone": "circus",
+    "local_index": 2,
+    "arcade": true,
+    "name": "誰是假倒影",
+    "goal": "用方向鍵擺姿勢，找出動作不一樣的那面鏡子。",
+    "instructions": "左右鍵移動聚光燈並伸手，上鍵原地舉手；空白鍵、E 或手把 A 鈕指認。手把可用十字鍵或左搖桿。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助抓假倒影拿到金牌",
+    "ordinary": "找出動作不一樣的假倒影，拿到銅牌",
+    "attraction_tag": "鏡廊偵探社",
+    "island_invitation": "每面鏡子都學你，只有一面是假的。擺個姿勢，看誰露出馬腳。",
+    "retake_props": [
+      "visitor",
+      "lantern",
+      "sign"
+    ]
   }
 ]

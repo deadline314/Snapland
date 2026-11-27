@@ -17,6 +17,8 @@ const MATS := Vector3(0, GROUND_Y, -8.8)
 const PHOTO_BOOTH := Vector3(-3.30, GROUND_Y, 6.25)
 ## Stands 1.2 m clear of the cabinet and the foyer lamp post.
 const PHOTO_BOOTH_POINT := Vector3(-2.50, GROUND_Y, 7.85)
+const REFLECTION_STAND := Vector3(-10.90, GROUND_Y, 3.20)
+const REFLECTION_POINT := Vector3(-10.90, GROUND_Y, 4.85)
 const BOUNDS := Rect2(-12.25, -12.0, 24.5, 21.5)
 const AREAS: Array[Dictionary] = [
 	{"id": "entry", "label": "馬戲團入口", "rect": Rect2(-4, 4.8, 8, 4.7), "tile": 0, "tint": Color("#827686")},
@@ -76,6 +78,8 @@ func _build_region_geometry() -> void:
 	_point(RegionalVisit.CIRCUS_POINT, "馬戲團迎賓 · 和小角合照", STORY_POINT)
 	_build_photo_booth()
 	_point("game-049", "哈哈鏡大頭貼 · 按一下停一格", PHOTO_BOOTH_POINT)
+	_build_reflection_stand()
+	_point("game-050", "誰是假倒影 · 擺姿勢抓假的", REFLECTION_POINT)
 	current_area = _area_at_position(ENTRY)
 
 
@@ -162,6 +166,28 @@ func _build_photo_booth() -> void:
 	# The stand steps out of the welcome group photo, like the plaques do.
 	_story_photo_signs.append_array(parts)
 	_plaque("哈哈鏡大頭貼", at + Vector3(0, 2.44, 0.30), 2.05, BRASS)
+
+
+## Entry stand of game-050: a tall "wanted" mirror at the west end of the mirror hall.
+func _build_reflection_stand() -> void:
+	var at := REFLECTION_STAND
+	var crest := _box(at + Vector3(0, 2.12, 0.02), Vector3(1.20, 0.12, 0.54), BRASS.darkened(0.25))
+	# A tipped crest keeps the stand from reading as a plain slab.
+	crest.rotation.z = 0.12
+	var gleam := _emblem_strip(at + Vector3(-0.14, 1.26, 0.215), Vector3(0.07, 0.74, 0.012), Color("#e2f6f6"))
+	gleam.rotation.z = -0.2
+	var parts: Array[Node3D] = [
+		_box(at + Vector3(0, 0.09, 0), Vector3(1.24, 0.18, 0.80), Color("#4f3551")),
+		_box(at + Vector3(0, 1.10, 0), Vector3(1.00, 1.84, 0.34), Color("#5d4a78"), true),
+		crest,
+		_box(at + Vector3(0, 1.24, 0.18), Vector3(0.78, 0.98, 0.04), BRASS),
+		_emblem_strip(at + Vector3(0, 1.24, 0.205), Vector3(0.64, 0.84, 0.02), Color("#a9dbe2")),
+		gleam,
+		_emblem_strip(at + Vector3(0.10, 1.06, 0.222), Vector3(0.16, 0.20, 0.012), Color("#ff6f9c")),
+		_emblem_strip(at + Vector3(0, 0.42, 0.19), Vector3(0.34, 0.20, 0.03), PARCHMENT),
+	]
+	_story_photo_signs.append_array(parts)
+	_plaque("誰是假倒影", at + Vector3(0, 2.50, 0.12), 1.90, GLASS)
 
 
 func _build_mirrors() -> void:

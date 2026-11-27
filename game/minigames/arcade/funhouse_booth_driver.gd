@@ -4,6 +4,7 @@ extends "res://game/minigames/arcade/arcade_driver.gd"
 ## picture lives in funhouse_booth_view.gd.
 
 const Faces = preload("res://game/minigames/arcade/funhouse_faces.gd")
+const View = preload("res://game/minigames/arcade/funhouse_booth_view.gd")
 const REELS := 3
 const OPTIONS := Faces.OPTIONS
 const PART_POINTS := 10
@@ -54,7 +55,7 @@ func _init() -> void:
 		{"id": "peek", "label": "只看一眼", "reverse": false, "peek": 1.6},
 	]
 	score_label = "大頭貼得分"
-	view_script = load("res://game/minigames/arcade/funhouse_booth_view.gd")
+	view_script = View
 
 
 func _begin_round(chosen: Dictionary) -> void:

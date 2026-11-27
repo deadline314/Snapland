@@ -355,8 +355,8 @@ func _candy_ui() -> void:
 		_check(book._region==Routes.ORDER[index] and book._entries().size()==ordinary_slots[index], "regional album retains its delivered sources")
 		if book._region == "circus":
 			var circus_ids: Array = book._entries().map(func(entry: Dictionary) -> String: return entry.id)
-			_check(circus_ids == ["photo-circus-game-1", "photo-circus-story-1"] and book._entries()[1].story_region == "circus"
-				and _labels(book).contains("哈哈鏡大頭貼"), "Circus lists its delivered game and its regional story source")
+			_check(circus_ids == ["photo-circus-game-1", "photo-circus-game-2", "photo-circus-story-1"] and book._entries()[2].story_region == "circus"
+				and _labels(book).contains("哈哈鏡大頭貼") and _labels(book).contains("誰是假倒影"), "Circus lists its delivered games and its regional story source")
 		elif book._region == "toy":
 			_check(book._entries().size() == 1 and book._entries()[0].id == "photo-toy-story-1"
 				and book._entries()[0].story_region == "toy" and _labels(book).contains("阿浪"),

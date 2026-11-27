@@ -91,6 +91,7 @@ static var _prop_textures: Dictionary = {}
 static var _props_checked := false
 static var _props_available := false
 static var _props_warning_emitted := false
+static var _arcade_scripts: Dictionary = {}
 
 var game_id := ""
 var mode := ""
@@ -252,6 +253,14 @@ var flower_cells: Array[int] = []
 static func definitions(zone: String = "welcome") -> Array:
 	return GameCatalog.definitions(zone)
 
+## Arcade games need no table row: game/minigames/arcade/<mode>_driver.gd.
+## Found scripts stay loaded, like the preloaded drivers above.
+static func _arcade_driver_script(arcade_mode: String) -> Script:
+	if not _arcade_scripts.has(arcade_mode):
+		var path := "res://game/minigames/arcade/%s_driver.gd" % arcade_mode
+		_arcade_scripts[arcade_mode] = load(path) as Script if ResourceLoader.exists(path) else null
+	return _arcade_scripts[arcade_mode]
+
 func start(id: String, assisted_mode: bool = false) -> void:
 	_launch_notice=""
 	_launch_notice_until_msec=0
@@ -283,11 +292,9 @@ func start(id: String, assisted_mode: bool = false) -> void:
 		if DRIVERS.has(mode):
 			active_driver = DRIVERS[mode].new()
 		elif bool(item.get("arcade", false)):
-			# Arcade games need no table row: game/minigames/arcade/<mode>_driver.gd.
-			var arcade_path := "res://game/minigames/arcade/%s_driver.gd" % mode
-			var arcade_script := load(arcade_path) as Script if ResourceLoader.exists(arcade_path) else null
+			var arcade_script := _arcade_driver_script(mode)
 			if arcade_script == null:
-				push_warning("Arcade game %s has no driver at %s." % [game_id, arcade_path])
+				push_warning("Arcade game %s has no driver script." % game_id)
 				game_id = ""
 			else:
 				active_driver = arcade_script.new()
