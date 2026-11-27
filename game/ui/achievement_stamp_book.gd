@@ -2,6 +2,7 @@ extends VBoxContainer
 ## Read-only stamp catalogue backed by the stable Progress achievement and photo IDs.
 
 const Paper = preload("res://game/ui/paper_ui.gd")
+const Collage = preload("res://game/ui/collage_kit.gd")
 const TimeOfDay = preload("res://game/core/time_of_day.gd")
 const GameCatalog = preload("res://game/core/game_catalog.gd")
 const ProgressScript = preload("res://game/core/progress.gd")
@@ -9,23 +10,26 @@ const ProgressScript = preload("res://game/core/progress.gd")
 class StampMark extends Control:
 	var number := "01"
 	var unlocked := false
+	## A perforated postage stamp: inked coral with a cancellation ring once
+	## earned, an empty pencilled outline until then.
 	func _draw() -> void:
-		var inset := 4.0
-		var bounds := Rect2(Vector2(inset,inset),size-Vector2(inset*2.0,inset*2.0))
-		var tint := Paper.GOLD if unlocked else Paper.TEAL.darkened(0.52)
-		draw_rect(Rect2(bounds.position+Vector2(0,3),bounds.size),Paper.DEEP)
-		draw_rect(bounds,Paper.FRAME)
-		draw_rect(bounds.grow(-3),tint,false,2.0)
-		# Tiny square notches give the seal a printed pixel edge at every scale.
-		for x in range(8, maxi(8, int(size.x)-8), 7):
-			draw_rect(Rect2(Vector2(x,1),Vector2(2,2)),tint)
-			draw_rect(Rect2(Vector2(x,size.y-3),Vector2(2,2)),tint)
-		var center := size*0.5
-		draw_string(ThemeDB.fallback_font,center+Vector2(-13,6),number,HORIZONTAL_ALIGNMENT_CENTER,-1,15,Paper.INK)
+		var bounds := Rect2(Vector2(4, 4), size - Vector2(8, 8))
+		var edge: PackedVector2Array = Collage.stamp_shape(bounds)
+		var center := size * 0.5
 		if unlocked:
-			draw_rect(Rect2(center+Vector2(10,-15),Vector2(4,4)),Paper.GOLD)
-			draw_rect(Rect2(center+Vector2(14,-11),Vector2(4,4)),Paper.GOLD)
-			draw_rect(Rect2(center+Vector2(18,-19),Vector2(4,8)),Paper.GOLD)
+			draw_set_transform(Vector2(2, 3))
+			draw_colored_polygon(edge, Color(Paper.SHADOW, 0.6))
+			draw_set_transform(Vector2.ZERO)
+			draw_colored_polygon(edge, Paper.CORAL)
+			Collage.outline(self, edge, Collage.INK_CORAL, 2.0)
+			draw_rect(bounds.grow(-7.0), Color(Collage.CREAM, 0.9), false, 2.0)
+		else:
+			Collage.outline(self, edge, Color(Collage.CREAM, 0.35), 2.0)
+		draw_string(ThemeDB.fallback_font, center + Vector2(-13, 6), number, HORIZONTAL_ALIGNMENT_CENTER, -1, 15, Collage.CREAM if unlocked else Color(Collage.CREAM, 0.6))
+		if unlocked:
+			draw_arc(center + Vector2(10, -8), 11.0, 0.0, TAU, 18, Color(Collage.INK, 0.55), 2.0)
+			draw_line(center + Vector2(-2, -12), center + Vector2(22, -12), Color(Collage.INK, 0.45), 2.0)
+			draw_line(center + Vector2(-2, -6), center + Vector2(22, -6), Color(Collage.INK, 0.45), 2.0)
 
 var _progress: Node
 var _games: Array = []
@@ -345,6 +349,7 @@ func _set_section(section: String) -> void:
 	if not is_instance_valid(_game_section) or not is_instance_valid(_milestone_section):
 		return
 	var show_games := section != "milestones"
+	if show_games != _game_section.visible: Collage.turn_leaf(self)
 	_game_section.visible=show_games
 	_milestone_section.get_parent().visible=not show_games
 	_game_tab.button_pressed=show_games
@@ -354,6 +359,7 @@ func _set_section(section: String) -> void:
 
 func _change_page(delta: int) -> void:
 	var pages := _page_count()
+	if clampi(_page+delta,0,pages-1) != _page: Collage.turn_leaf(self)
 	_page=clampi(_page+delta,0,pages-1)
 	_update_pages()
 

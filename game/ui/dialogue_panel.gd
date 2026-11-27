@@ -5,6 +5,7 @@ signal advance_requested
 signal finished
 
 const Paper := preload("res://game/ui/paper_ui.gd")
+const Collage := preload("res://game/ui/collage_kit.gd")
 
 const ADVANCE_REVEAL_TEXT := "顯示整句  ›"
 const ADVANCE_NEXT_TEXT := "下一句  ›"
@@ -33,9 +34,17 @@ func _ready() -> void:
 	plaque.name = "DialoguePlaque"
 	plaque.custom_minimum_size = Vector2(0, 194)
 	plaque.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	plaque.add_theme_stylebox_override("panel", Paper.signboard())
+	# A torn note of dialogue taped over the scene; same padding as the old board.
+	var face := StyleBoxEmpty.new()
+	face.content_margin_left = 14
+	face.content_margin_right = 14
+	face.content_margin_top = 10
+	face.content_margin_bottom = 14
+	plaque.add_theme_stylebox_override("panel", face)
 	plaque.mouse_filter = Control.MOUSE_FILTER_STOP
 	center.add_child(plaque)
+	Collage.backing(plaque, "note", 9, Collage.CREAM)
+	Collage.paperize(plaque)
 	var margin := MarginContainer.new()
 	for side in ["left", "right"]: margin.add_theme_constant_override("margin_" + side, 18)
 	for side in ["top", "bottom"]: margin.add_theme_constant_override("margin_" + side, 10)
@@ -48,6 +57,7 @@ func _ready() -> void:
 	portrait.custom_minimum_size = Vector2(96, 96)
 	portrait.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	columns.add_child(portrait)
+	Collage.backing(portrait, "snapshot", 4, Color("#fbf7ec"), 6.0)
 	var copy := VBoxContainer.new()
 	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	copy.add_theme_constant_override("separation", 3)
@@ -55,11 +65,20 @@ func _ready() -> void:
 	var heading := HBoxContainer.new()
 	copy.add_child(heading)
 	speaker_label = Paper.label("", 22, Paper.TEAL)
-	speaker_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	speaker_label.add_theme_color_override("font_color", Collage.INK)
+	speaker_label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	speaker_label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	heading.add_child(speaker_label)
+	# The speaker's name is a coloured sticker slapped on the note.
+	Collage.backing(speaker_label, "chip", 1, Collage.RIM, 4.0)
+	var gap := Control.new()
+	gap.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	gap.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	heading.add_child(gap)
 	cancel_button = Paper.button("結束對話", _request_cancel, heading)
 	cancel_button.name = "DialogueCancel"
 	text_label = Paper.label("", 22, Paper.INK)
+	text_label.add_theme_color_override("font_color", Collage.INK)
 	text_label.name = "DialogueSubtitle"
 	text_label.custom_minimum_size = Vector2(0, 80)
 	text_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL

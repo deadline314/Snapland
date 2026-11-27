@@ -11,6 +11,7 @@ signal close_requested()
 
 const Paper = preload("res://game/ui/paper_ui.gd")
 const CatalogScript = preload("res://game/ui/tutorial_catalog.gd")
+const Collage = preload("res://game/ui/collage_kit.gd")
 const DIM_COLOR := Color(0.04, 0.10, 0.14, 0.74)
 
 # A ScrollContainer normally reports the entire document's height as its own
@@ -96,6 +97,10 @@ func _ready() -> void:
 	focus_mode = Control.FOCUS_ALL
 	theme = Paper.theme()
 	_build_ui()
+	# The lesson card is a journal sheet like the park menus; its own margin
+	# container already pads the content.
+	Collage.sheet(_card)
+	Collage.paperize(self)
 	visible = false
 	get_viewport().size_changed.connect(_queue_responsive_layout)
 	call_deferred("_apply_responsive_layout")
@@ -644,6 +649,7 @@ func _set_step(index: int) -> void:
 	if next_index == current_step: return
 	current_step = next_index
 	_render_step()
+	Collage.turn_leaf(_content)
 	step_changed.emit(target_id, current_step, steps.size())
 
 func _render_step() -> void:

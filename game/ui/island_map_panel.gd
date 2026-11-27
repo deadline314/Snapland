@@ -7,6 +7,8 @@ const GameCatalog = preload("res://game/core/game_catalog.gd")
 const IslandShape = preload("res://game/world/island_shape.gd")
 const IslandLayout = preload("res://game/world/island_layout.gd")
 const DistrictSites = preload("res://game/world/district_sites.gd")
+const Collage = preload("res://game/ui/collage_kit.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
 
 class StationIcon extends Control:
 	var station := 0
@@ -73,6 +75,12 @@ class MapSurface extends Control:
 	const PLAZA := Color("#946745")
 	const YOU := Color("#63dbed")
 	const TARGET := Color("#ffcb65")
+	const CHART_PAPER := Color("#f1e4c3")
+	const SEA_WASH := Color("#a5d5cc")
+	const STATION_PAPER := Color("#2f7470")
+	const OVERVIEW_PAPER := Color("#6a5068")
+	const STICKER := Color("#fffaf0")
+	const INK := Color("#3a2f24")
 
 	var player := Vector3.INF
 	var dock := Vector3.INF
@@ -124,15 +132,40 @@ class MapSurface extends Control:
 	func _draw() -> void:
 		if _scale <= 0.0:
 			return
-		draw_rect(Rect2(Vector2.ZERO, size), Color("#214655"))
-		draw_rect(walk_chart, WATER)
-		draw_rect(station_index, Color("#47675e"))
-		draw_rect(region_overview, Color("#4f5f68"))
-		for panel in [walk_chart, station_index, region_overview]:
-			draw_rect(panel, Color("#91a990"), false, _unit)
+		# A folded guide map and two index cards, cut from different stock and
+		# taped onto the journal page; nothing below them is painted.
+		_paper(walk_chart, CHART_PAPER, 3)
+		var sea := walk_chart.grow(-7.0 * _unit)
+		draw_rect(sea, SEA_WASH)
+		Collage.fill(self, _corners(sea), Collage.halftone(1), Color(WATER, 0.35))
+		for fold in [0.34, 0.67]:
+			var x := roundf(sea.position.x + sea.size.x * fold)
+			draw_rect(Rect2(x, sea.position.y, 2.0, sea.size.y), Color(1, 1, 1, 0.16))
+			draw_rect(Rect2(x + 2.0, sea.position.y, 2.0, sea.size.y), Color(0, 0, 0, 0.08))
+		_paper(station_index, STATION_PAPER, 5)
+		_paper(region_overview, OVERVIEW_PAPER, 7)
 		_draw_terrain()
 		_draw_markers()
 		_draw_headings()
+
+	## One taped piece of paper with a hard shadow and a torn edge.
+	func _paper(rect: Rect2, tone: Color, salt: int) -> void:
+		var points: PackedVector2Array = Collage.torn(rect, salt, 2.0, 9.0)
+		draw_set_transform(Vector2(5, 6) * _unit)
+		draw_colored_polygon(points, Color(0.02, 0.07, 0.1, 0.5))
+		draw_set_transform(Vector2.ZERO)
+		Collage.fill(self, points, Props.material_tile("paper", tone), Color.WHITE)
+		Collage.outline(self, points, Props.deepen(tone, 0.55), 2.0)
+		Collage.tape(self, Vector2(rect.position.x + rect.size.x * 0.5, rect.position.y + 2.0), minf(72.0, rect.size.x * 0.35), deg_to_rad(-4.0 + salt))
+
+	static func _corners(rect: Rect2) -> PackedVector2Array:
+		return PackedVector2Array([rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y)])
+
+	## A sticker backing: cream die-cut disc with a hard shadow.
+	func _sticker(point: Vector2, radius: float) -> void:
+		draw_circle(point + Vector2(2, 3) * _unit, radius, Color(0.02, 0.07, 0.1, 0.45), true, -1.0, true)
+		draw_circle(point, radius, STICKER, true, -1.0, true)
+		draw_arc(point, radius, 0.0, TAU, 24, INK, 1.2 * _unit, true)
 
 	## The island's coastline in chart pixels: the shape the chart fills.
 	func terrain_outline() -> PackedVector2Array:
@@ -153,20 +186,29 @@ class MapSurface extends Control:
 		for lawn in IslandShape.lawns():
 			draw_colored_polygon(_projected(lawn), LAWN)
 		coast.append(coast[0])
-		draw_polyline(coast, Color("#b49b75"), _unit, true)
+		# Hand-inked coast with an off-register second pass, like a cheap print.
+		draw_set_transform(Vector2(2.0, 1.0) * _unit)
+		draw_polyline(coast, Color(WATER, 0.6), _unit, true)
+		draw_set_transform(Vector2.ZERO)
+		draw_polyline(coast, INK, 1.6 * _unit, true)
 		for region: String in DistrictSites.regions():
 			var plot := district_plot(region)
 			draw_rect(plot, (DistrictSites.SITES[region].ground as Color).lerp(SHORE, 0.25))
-			draw_rect(plot, Color("#5d5140"), false, _unit)
+			Collage.fill(self, _corners(plot), Collage.halftone(0), Color(INK, 0.12))
+			draw_rect(plot, INK, false, 1.4 * _unit)
 		for pond: Vector3 in IslandLayout.PONDS:
 			draw_circle(_project_xz(Vector2(pond.x, pond.y)), pond.z * _scale, WATER, true, -1.0, true)
 		# Lanes first, then the coastal loop, then the promenade on top.
 		for path in IslandLayout.paths():
 			if path.id in ["spine", IslandLayout.COAST_ROUTE_ID]: continue
-			draw_polyline(_projected(path.line), LANE, 1.6 * _unit, true)
+			# Footpaths are pencilled dashes; the routes are inked over.
+			var lane := _projected(path.line)
+			for index in range(1, lane.size()):
+				draw_dashed_line(lane[index - 1], lane[index], LANE, 1.6 * _unit, 5.0 * _unit)
 		draw_polyline(_projected(IslandLayout.coast_route()), COAST, 2.4 * _unit, true)
 		for path in IslandLayout.paths():
 			if path.id == "spine":
+				draw_polyline(_projected(path.line), INK, 5.5 * _unit, true)
 				draw_polyline(_projected(path.line), AVENUE, 3.5 * _unit, true)
 		var plaza := _project_xz(Vector2.ZERO)
 		draw_circle(plaza, 5.0 * _scale, PLAZA, false, 1.4 * _unit, true)
@@ -176,7 +218,7 @@ class MapSurface extends Control:
 			var pier_top := _project_xz(Vector2(dock.x - 2.5, dock.z - 9.5))
 			draw_rect(Rect2(pier_top, Vector2(5, 13) * _scale), PLAZA)
 		var font := Paper.font()
-		draw_string(font, plaza + Vector2(8, 4) * _unit, "廣場", HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(12.0 * _unit), Color("#27474b"))
+		draw_string(font, plaza + Vector2(8, 4) * _unit, "廣場", HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(12.0 * _unit), INK)
 		for region: String in DistrictSites.regions():
 			var plot := district_plot(region)
 			draw_string(font, plot.position + Vector2(3, 13) * _unit, RegionRoutes.title(region), HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(11.0 * _unit), Color("#2b2620"))
@@ -196,18 +238,21 @@ class MapSurface extends Control:
 		if destination.is_finite():
 			var point := project(destination)
 			var radius := 9.0 * _unit
+			_sticker(point, radius + 3.0 * _unit)
 			var diamond := PackedVector2Array([point - Vector2(0, radius), point + Vector2(radius, 0), point + Vector2(0, radius), point - Vector2(radius, 0)])
 			draw_colored_polygon(diamond, TARGET)
 			diamond.append(diamond[0])
 			draw_polyline(diamond, Color("#453c30"), 1.8 * _unit, true)
 		if player.is_finite():
 			var point := project(player)
+			_sticker(point, 8.0 * _unit)
 			draw_circle(point, 5.5 * _unit, Color("#18475b"), true, -1.0, true)
 			draw_circle(point, 3.7 * _unit, YOU, true, -1.0, true)
 
 	## A resident errand's next stop: a soft ring (it is only roughly there) and a coral flag.
 	func _draw_errand(point: Vector2) -> void:
 		draw_circle(point, 11.0 * _unit, Color(0.91, 0.45, 0.38, 0.22), true, -1.0, true)
+		_sticker(point + Vector2(1, -2) * _unit, 7.5 * _unit)
 		draw_line(point + Vector2(-2, 6) * _unit, point + Vector2(-2, -8) * _unit, Color("#453c30"), 1.6 * _unit, true)
 		draw_colored_polygon(PackedVector2Array([point + Vector2(-2, -8) * _unit, point + Vector2(7, -5) * _unit, point + Vector2(-2, -2) * _unit]), Paper.CORAL)
 	## A warm ring and a small eight-point star where an island event happens.
@@ -215,6 +260,7 @@ class MapSurface extends Control:
 		radius = maxf(radius, 10.0 * _unit)
 		draw_circle(point, radius, Color(1.0, 0.80, 0.40, 0.16), true, -1.0, true)
 		draw_arc(point, radius, 0.0, TAU, 32, Color(1.0, 0.80, 0.40, 0.7), 1.4 * _unit, true)
+		_sticker(point, 9.0 * _unit)
 		var star := PackedVector2Array()
 		for index in range(16):
 			var reach := (8.0 if index % 2 == 0 else 3.4) * _unit
@@ -231,6 +277,11 @@ class MapSurface extends Control:
 			draw_circle(point, radius * (1.0 - ring * 0.22), Color(0.62, 0.23, 0.35, 0.13), true, -1.0, true)
 		draw_arc(point, radius, 0.0, TAU, 32, Color(0.62, 0.23, 0.35, 0.55), 1.2 * _unit, true)
 		var u := _unit
+		draw_set_transform(point + Vector2(2, 3) * u, 0.0, Vector2(1.25, 0.75))
+		draw_circle(Vector2.ZERO, 9.0 * u, Color(0.02, 0.07, 0.1, 0.45), true, -1.0, true)
+		draw_set_transform(point, 0.0, Vector2(1.25, 0.75))
+		draw_circle(Vector2.ZERO, 9.0 * u, STICKER, true, -1.0, true)
+		draw_set_transform(Vector2.ZERO)
 		var mask := PackedVector2Array([point + Vector2(-9, -2) * u, point + Vector2(-4, -4.5) * u, point + Vector2(0, -2.5) * u,
 			point + Vector2(4, -4.5) * u, point + Vector2(9, -2) * u, point + Vector2(7, 3.5) * u, point + Vector2(2, 3) * u,
 			point + Vector2(0, 1) * u, point + Vector2(-2, 3) * u, point + Vector2(-7, 3.5) * u])
@@ -240,17 +291,29 @@ class MapSurface extends Control:
 		draw_circle(point + Vector2(-4, -0.5) * u, 1.6 * u, Color("#fff7e8"), true, -1.0, true)
 		draw_circle(point + Vector2(4, -0.5) * u, 1.6 * u, Color("#fff7e8"), true, -1.0, true)
 
+	## Each card's name on a stuck-on label strip; a compass inked on the chart.
 	func _draw_headings() -> void:
+		var at := Vector2(12.0, 8.0) * _unit
+		_label_strip(walk_chart.position + at, "迎賓步行圖", Collage.SWATCHES[1], -2.0)
+		_label_strip(station_index.position + at, "迎賓站點", Collage.CREAM, 1.5)
+		_label_strip(region_overview.position + at, "園區總覽", Collage.CREAM, -1.5)
+		var north := Vector2(walk_chart.end.x - 23.0 * _unit, walk_chart.position.y + 16.0 * _unit)
+		draw_arc(north + Vector2(0, 6) * _unit, 9.0 * _unit, 0.0, TAU, 20, INK, 1.2 * _unit, true)
+		draw_colored_polygon(PackedVector2Array([north, north + Vector2(-4, 8) * _unit, north + Vector2(4, 8) * _unit]), Paper.CORAL)
+		draw_colored_polygon(PackedVector2Array([north + Vector2(0, 12) * _unit, north + Vector2(-4, 8) * _unit, north + Vector2(4, 8) * _unit]), INK)
+		draw_string(Paper.font(), north + Vector2(-6, 30) * _unit, "北", HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(13.0 * _unit), INK)
+
+	func _label_strip(at: Vector2, words: String, tone: Color, angle: float) -> void:
 		var font := Paper.font()
-		var ink := Color("#fff0d5")
 		var font_size := ceili(16.0 * Paper.text_scale() * _unit)
-		var baseline := Vector2(10.0, 27.0) * _unit
-		draw_string(font, walk_chart.position + baseline, "迎賓步行圖", HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, ink)
-		draw_string(font, station_index.position + baseline, "迎賓站點", HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, ink)
-		draw_string(font, region_overview.position + baseline, "園區總覽", HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, ink)
-		var north := Vector2(walk_chart.end.x - 23.0 * _unit, walk_chart.position.y + 12.0 * _unit)
-		draw_colored_polygon(PackedVector2Array([north, north + Vector2(-4, 8) * _unit, north + Vector2(4, 8) * _unit]), TARGET)
-		draw_string(font, north + Vector2(-6, 23) * _unit, "北", HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(13.0 * _unit), ink)
+		var extent := font.get_string_size(words, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
+		var strip := Rect2(Vector2.ZERO, Vector2(extent.x + 16.0 * _unit, font.get_height(font_size) + 8.0 * _unit))
+		draw_set_transform(at, deg_to_rad(angle))
+		draw_rect(Rect2(strip.position + Vector2(3, 3) * _unit, strip.size), Color(0.02, 0.07, 0.1, 0.45))
+		draw_rect(strip, tone)
+		draw_rect(strip, INK, false, 1.4 * _unit)
+		draw_string(font, Vector2(8.0 * _unit, 4.0 * _unit + font.get_ascent(font_size)), words, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Collage.INK)
+		draw_set_transform(Vector2.ZERO)
 
 
 ## Today's recommended booths; their station buttons wear a star.
@@ -325,6 +388,7 @@ func _ready() -> void:
 	_canvas.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_canvas.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_canvas.clip_contents = true
+	_canvas.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	_canvas.player = _player_position
 	_canvas.dock = _position("arrival")
 	_canvas.thief_area = thief_area
@@ -366,7 +430,11 @@ func _ready() -> void:
 	var legend := Paper.label("藍點：你的位置　金菱：目的地　珊瑚線：迎賓大道　青綠線：海岸環線" + ("　面具：怪盜出沒" if not thief_area.is_empty() else "") + ("　小旗：委託目標" if not errand_marks.is_empty() else "") + ("　星星：島上活動" if not event_area.is_empty() else ""), 15, Paper.INK)
 	legend.name = "IslandMapLegend"
 	legend.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	legend.add_theme_color_override("font_color", Collage.INK)
+	# Drawn above the focused back stub's rim, which reaches up past the footer.
+	legend.z_index = 2
 	add_child(legend)
+	Collage.backing(legend, "chip", 2, Collage.CREAM, 4.0)
 	_select_hub()
 	_layout_map_buttons()
 

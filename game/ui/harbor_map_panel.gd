@@ -1,5 +1,7 @@
 extends VBoxContainer
 const Paper = preload("res://game/ui/paper_ui.gd")
+const Collage = preload("res://game/ui/collage_kit.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
 var snapshot: Dictionary = {}
 
 class TerrainChart extends Control:
@@ -30,6 +32,29 @@ class TerrainChart extends Control:
 		"lost": Color("#7a6450"), "dream": Color("#5a4f8a"),
 	}
 	var data: Dictionary
+	## Cream guide sheet showing round each printed plan (the compass sits on it).
+	const SHEET_MARGIN := 16.0
+
+	## The printed plan is a cut-out stuck onto a cream guide sheet: hard
+	## shadow, torn edge and two strips of tape at its upper corners.
+	func _paper_under(plan: Rect2) -> void:
+		var sheet := plan.grow(SHEET_MARGIN)
+		var points: PackedVector2Array = Collage.torn(sheet, 23, 2.0, 9.0)
+		draw_set_transform(Vector2(5, 6))
+		draw_colored_polygon(points, Color(0.02, 0.07, 0.1, 0.5))
+		draw_set_transform(Vector2.ZERO)
+		Collage.fill(self, points, Props.material_tile("paper", Collage.CREAM), Color.WHITE)
+		Collage.outline(self, points, Props.deepen(Collage.CREAM, 0.55), 2.0)
+
+	func _tape_over(plan: Rect2) -> void:
+		var sheet := plan.grow(SHEET_MARGIN)
+		Collage.tape(self, sheet.position + Vector2(6, 4), minf(56.0, sheet.size.x * 0.3), deg_to_rad(-38.0))
+		Collage.tape(self, Vector2(sheet.end.x - 6.0, sheet.position.y + 4.0), minf(56.0, sheet.size.x * 0.3), deg_to_rad(36.0))
+
+	## A die-cut cream sticker under a pin, so markers read as stuck on.
+	func _sticker(pin: Vector2, radius: float) -> void:
+		draw_circle(pin + Vector2(1.5, 2.0), radius, Color(0.02, 0.07, 0.1, 0.45), true, -1.0, true)
+		draw_circle(pin, radius, Collage.CREAM, true, -1.0, true)
 
 	## A gold ring and ribbon tails around today's recommended booths.
 	func _draw_pick(pin: Vector2, radius: float, id: String) -> void:
@@ -50,11 +75,15 @@ class TerrainChart extends Control:
 		if region in ["circus", "toy", "garden", "hotel"]:
 			_draw_room_plan(bounds, region)
 			return
-		var scale_factor := minf(size.x/bounds.size.x,size.y/bounds.size.y)
+		var scale_factor := minf((size.x-SHEET_MARGIN*2.0)/bounds.size.x,(size.y-SHEET_MARGIN*2.0)/bounds.size.y)
+		if scale_factor<=0.0: return
 		var origin := (size-bounds.size*scale_factor)*0.5
 		var background := Color("#543849") if region=="candy" else Color("#246477")
 		var walkable := Color("#d8a4a1") if region=="candy" else Color("#d4c4a0")
-		draw_rect(Rect2(origin,bounds.size*scale_factor),background)
+		var plate := Rect2(origin,bounds.size*scale_factor)
+		_paper_under(plate)
+		draw_rect(plate,background)
+		Collage.fill(self,PackedVector2Array([plate.position,Vector2(plate.end.x,plate.position.y),plate.end,Vector2(plate.position.x,plate.end.y)]),Collage.halftone(1),Color(1,1,1,0.12))
 		for rect: Rect2 in data.land:
 			draw_rect(Rect2(origin+(rect.position-bounds.position)*scale_factor,rect.size*scale_factor),walkable)
 		if data.has("sandbar"):
@@ -64,13 +93,18 @@ class TerrainChart extends Control:
 			var position: Vector3=data.points[index].position
 			var marker := origin+(Vector2(position.x,position.z)-bounds.position)*scale_factor
 			_draw_pick(marker,5.0,str(data.points[index].get("id","")))
+			_sticker(marker,7.0)
 			draw_circle(marker,5.0,Paper.CORAL)
 			draw_string(Paper.font(),marker+Vector2(7,5),str(index+1),HORIZONTAL_ALIGNMENT_LEFT,-1,roundi(14.0*Paper.text_scale()/Paper.physical_scale(self)),Paper.INK)
 		var player: Vector3=data.player
-		draw_circle(origin+(Vector2(player.x,player.z)-bounds.position)*scale_factor,6.0,Paper.GOLD)
+		var you := origin+(Vector2(player.x,player.z)-bounds.position)*scale_factor
+		_sticker(you,9.0)
+		draw_circle(you,6.0,Paper.GOLD)
+		draw_arc(you,6.0,0.0,TAU,14,Collage.INK,1.4,true)
+		_tape_over(plate)
 
 	func _draw_room_plan(bounds: Rect2, region: String) -> void:
-		var unit := minf((size.x - 42.0) / bounds.size.x, (size.y - 18.0) / bounds.size.y)
+		var unit := minf((size.x - 42.0 - SHEET_MARGIN * 2.0) / bounds.size.x, (size.y - 18.0 - SHEET_MARGIN * 2.0) / bounds.size.y)
 		if unit <= 0.0:
 			return
 		var plan_size := bounds.size * unit
@@ -78,6 +112,7 @@ class TerrainChart extends Control:
 		var origin := plan.position - bounds.position * unit
 		var panel := plan.grow(7.0)
 		var backing: Color = {"garden": Color("#253d37"), "toy": Color("#302b31"), "hotel": Color("#2a2340")}.get(region, Color("#291f36"))
+		_paper_under(panel)
 		draw_rect(panel, backing)
 		var border: Color = {"garden": Color("#77958c"), "toy": Color("#7e6a5c"), "hotel": Color("#9d8cc8")}.get(region, Color("#72556b"))
 		draw_rect(panel, border, false, 1.0)
@@ -104,6 +139,7 @@ class TerrainChart extends Control:
 			var location: Vector3 = point.position
 			var pin := origin + Vector2(location.x, location.z) * unit
 			_draw_pick(pin, radius, str(point.get("id", "")))
+			_sticker(pin, radius + 2.0)
 			draw_circle(pin, radius, Color("#2e243a"), true, -1.0, true)
 			draw_circle(pin, radius * 0.38, ROOM_PLAN_INK, true, -1.0, true)
 			draw_string(Paper.font(), pin + Vector2(radius + 2.0, font_size * 0.34), str(index + 1),
@@ -112,13 +148,16 @@ class TerrainChart extends Control:
 			# Stops outside the floor plan (games on the meadow) sit on the plan's rim.
 			var target: Vector3 = data.errand.position
 			var flag := (origin + Vector2(target.x, target.z) * unit).clamp(panel.position, panel.end)
+			_sticker(flag + Vector2(0, -radius * 0.5), radius * 1.3)
 			draw_circle(flag, radius * 1.7, Color(Paper.CORAL, 0.28), true, -1.0, true)
 			draw_line(flag + Vector2(-1.5, radius), flag + Vector2(-1.5, -radius * 1.6), ROOM_PLAN_INK, 1.4, true)
 			draw_colored_polygon(PackedVector2Array([flag + Vector2(-1.5, -radius * 1.6), flag + Vector2(radius * 1.3, -radius), flag + Vector2(-1.5, -radius * 0.4)]), Paper.CORAL)
 		var player: Vector3 = data.player
 		var traveler := origin + Vector2(player.x, player.z) * unit
+		_sticker(traveler, radius * 1.05)
 		draw_circle(traveler, radius * 0.63, backing, true, -1.0, true)
 		draw_arc(traveler, radius * 0.74, 0.0, TAU, 14, Paper.GOLD, 1.8, true)
+		_tape_over(panel)
 		_draw_market_north(panel.position - Vector2(13.0, -8.0))
 
 	func _draw_garden_terrain(origin: Vector2, unit: float) -> void:
@@ -227,12 +266,13 @@ class TerrainChart extends Control:
 	func _draw_market(bounds: Rect2) -> void:
 		# Keep north up while shortening depth, like a small raised street model.
 		var footprint := bounds.size*Vector2(1.48,1.0)
-		var unit := minf((size.x-36.0)/footprint.x,(size.y-18.0)/footprint.y)
+		var unit := minf((size.x-36.0-SHEET_MARGIN*2.0)/footprint.x,(size.y-18.0-SHEET_MARGIN*2.0)/footprint.y)
 		if unit<=0.0: return
 		var scale := Vector2(1.48,1.0)*unit
 		var origin := (size-footprint*unit)*0.5-bounds.position*scale
 		var plan := Rect2(origin+bounds.position*scale,bounds.size*scale)
 		var frame := plan.grow(7.0)
+		_paper_under(frame)
 		draw_rect(frame,MARKET_FRAME)
 		draw_rect(frame,Color("#534868"),false,1.0)
 		for column in range(1,ceili(frame.size.x/15.0)):
@@ -260,6 +300,7 @@ class TerrainChart extends Control:
 			var at: Vector3 = point.position
 			var pin := origin+Vector2(at.x,at.z)*scale
 			_draw_pick(pin,radius,str(point.id))
+			_sticker(pin,radius+2.0)
 			_draw_market_pin(pin,radius,str(point.id))
 			var font_size := mini(roundi(2.0*radius),roundi(14.0*Paper.text_scale()/Paper.physical_scale(self)))
 			var number := str(index+1)
@@ -269,8 +310,10 @@ class TerrainChart extends Control:
 			draw_string(Paper.font(),pin+Vector2(dx,font_size*0.34),number,HORIZONTAL_ALIGNMENT_LEFT,-1,font_size,MARKET_LETTERS)
 		var player: Vector3 = data.player
 		var player_pin := origin+Vector2(player.x,player.z)*scale
+		_sticker(player_pin,radius*0.95)
 		draw_circle(player_pin,radius*0.48,MARKET_LANTERN)
-		draw_arc(player_pin,radius*0.67,0.0,TAU,12,Paper.INK,1.4)
+		draw_arc(player_pin,radius*0.67,0.0,TAU,12,Collage.INK,1.4)
+		_tape_over(frame)
 		_draw_market_north(frame.position-Vector2(13.0,-8.0))
 
 	func _market_rect(rect: Rect2,origin: Vector2,scale: Vector2) -> Rect2:
@@ -379,7 +422,7 @@ class TerrainChart extends Control:
 				draw_circle(center,u*0.6,ink)
 
 	func _draw_market_north(anchor: Vector2) -> void:
-		draw_string(Paper.font(),anchor+Vector2(-3,0),"N",HORIZONTAL_ALIGNMENT_LEFT,-1,10,MARKET_LETTERS)
+		draw_string(Paper.font(),anchor+Vector2(-3,0),"N",HORIZONTAL_ALIGNMENT_LEFT,-1,10,Collage.INK)
 		draw_colored_polygon(PackedVector2Array([anchor+Vector2(0,3),anchor+Vector2(-3,10),anchor+Vector2(0,8),anchor+Vector2(3,10)]),MARKET_MINT)
 
 func setup(value: Dictionary) -> void:
@@ -408,12 +451,20 @@ func _ready() -> void:
 	chart.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	chart.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	chart.resized.connect(chart.queue_redraw)
+	chart.texture_repeat=CanvasItem.TEXTURE_REPEAT_ENABLED
 	add_child(chart)
 	var legend := Paper.label(_legend_text(region),16,Paper.INK)
 	legend.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+	legend.add_theme_color_override("font_color",Collage.INK)
 	add_child(legend)
+	Collage.backing(legend,"chip",2,Collage.CREAM,4.0)
 	var locations := HFlowContainer.new()
 	locations.name=prefix+"Locations"
+	# Drawn above the focused back stub's rim, which reaches up past the footer.
+	locations.z_index=2
+	# Each place is a small paper label; the gap keeps the labels apart.
+	locations.add_theme_constant_override("h_separation",14)
+	locations.add_theme_constant_override("v_separation",8)
 	add_child(locations)
 	for index in range(snapshot.points.size()):
 		var point: Dictionary=snapshot.points[index]
@@ -421,7 +472,10 @@ func _ready() -> void:
 		var label := Paper.label("%s%d %s" % ["★" if picked else "",index+1,str(point.label)],14,Paper.GOLD if picked else Paper.DEEP_TEAL)
 		label.autowrap_mode=TextServer.AUTOWRAP_OFF
 		label.tooltip_text=str(point.label)+("｜今日推薦" if picked else "")
+		label.add_theme_color_override("font_color",Collage.INK_BRASS if picked else Collage.INK)
+		label.size_flags_horizontal=Control.SIZE_SHRINK_BEGIN
 		locations.add_child(label)
+		Collage.backing(label,"chip",index,Collage.PAPERS[index%Collage.PAPERS.size()],3.0)
 
 func _status_text(region: String) -> String:
 	match region:

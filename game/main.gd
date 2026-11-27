@@ -618,6 +618,7 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	panel.add_theme_stylebox_override("panel",menu_face)
 	center.add_child(panel)
 	if collage: Collage.sheet(panel,market_menu)
+	if Collage.PAPER_KINDS.has(kind): Collage.paperize(panel)
 	_layout_open_panel(panel)
 	var margin := MarginContainer.new()
 	margin.name="AdaptiveMenuMargin"
@@ -2270,6 +2271,7 @@ func _request_retake(id: String, devil: bool) -> void:
 	world.blocked=true
 	hud.hide()
 	ui.add_child(retake_panel)
+	PaperMotion.page_turn(retake_panel)
 
 func _dispose_retake() -> void:
 	retake_generation+=1

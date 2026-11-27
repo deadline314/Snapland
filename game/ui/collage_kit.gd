@@ -23,7 +23,13 @@ const Pixels = preload("res://game/minigames/arcade/arcade_pixels.gd")
 const Objects = preload("res://game/ui/collage_objects.gd")
 
 ## Menu kinds the shared modal shell dresses as a collage.
-const KINDS := ["pause", "ticket", "album", "result"]
+const KINDS := ["pause", "ticket", "album", "result", "map", "region_games", "settings", "wardrobe", "time", "achievements", "region_tutorials", "controls", "retake_practice"]
+## Of those, the pages whose own controls are re-cut as paper (`paperize`).
+const PAPER_KINDS := ["map", "region_games", "settings", "wardrobe", "time", "achievements", "region_tutorials", "controls", "retake_practice"]
+## Button faces whose text colour is checked against them.
+const FACE_STATES := ["normal", "hover", "pressed", "hover_pressed", "disabled"]
+const INK_FACES := {"font_color": "normal", "font_focus_color": "normal", "font_hover_color": "hover", "font_pressed_color": "pressed", "font_hover_pressed_color": "hover_pressed", "font_disabled_color": "disabled"}
+const DISABLED_INK := Color("#3f4b4b")
 const CREAM := Color("#f6ecd0")
 const INK := Color("#12303b")
 const RIM := Color("#ffc66d")
@@ -41,6 +47,7 @@ const INK_CORAL := Color("#8d3c33")
 const INK_BRASS := Color("#6e4614")
 
 const FLY_SECONDS := 0.3
+const LEAF_SECONDS := 0.26
 const LIFT_SECONDS := 0.14
 
 
@@ -145,7 +152,7 @@ static func headline(label: Label, eyebrow: Label, market := false, dip := 0.0) 
 
 
 ## The journal sheet behind a whole menu: torn edge, halftone wash, washi tape.
-static func sheet(panel: PanelContainer, market := false) -> Item:
+static func sheet(panel: Control, market := false) -> Item:
 	var face := StyleBoxEmpty.new()
 	panel.add_theme_stylebox_override("panel", face)
 	var item := Item.new()
@@ -156,6 +163,7 @@ static func sheet(panel: PanelContainer, market := false) -> Item:
 	item.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	panel.add_child(item)
 	panel.move_child(item, 0)
+	item.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	return item
 
 
@@ -198,6 +206,64 @@ static func pin(board: Board, control: Control, slot: Rect2) -> void:
 	if control.get_parent() == null:
 		board.add_child(control)
 	board.queue_sort()
+
+
+## Re-cut every painted board under `root` as paper (Paper.Board.collage_twin),
+## now and whenever the page adds controls or a control changes role. Text on
+## a face that turned light is re-inked dark (and back), so contrast holds.
+static func paperize(root: Node) -> void:
+	if root.has_meta(&"collage_paper"):
+		return
+	root.set_meta(&"collage_paper", true)
+	if root is Control:
+		var control := root as Control
+		control.theme_changed.connect(func() -> void: _paper_faces(control))
+		_paper_faces(control)
+	root.child_entered_tree.connect(func(child: Node) -> void: paperize(child))
+	for child in root.get_children():
+		paperize(child)
+
+
+static func _paper_faces(control: Control) -> void:
+	if not control.is_inside_tree():
+		return
+	var states: Array = FACE_STATES if control is Button else (["panel"] if control is PanelContainer else (["normal"] if control is Label else []))
+	for state: String in states:
+		var face := control.get_theme_stylebox(state) as Paper.Board
+		if face != null and not face.collage and face.kind != Paper.Board.Kind.RING:
+			control.add_theme_stylebox_override(state, face.collage_twin())
+	if not control is Button:
+		return
+	for ink_key: String in INK_FACES:
+		var face := control.get_theme_stylebox(INK_FACES[ink_key]) as Paper.Board
+		var ink := control.get_theme_color(ink_key)
+		if face == null or not face.collage or ink.a < 0.5:
+			continue
+		var light_face := face.bg_color.get_luminance() > 0.45
+		if light_face == (ink.get_luminance() > 0.45):
+			control.add_theme_color_override(ink_key, (DISABLED_INK if ink_key == "font_disabled_color" else INK) if light_face else Paper.PAPER)
+
+
+## A leaf of paper sweeps across `control` from its left edge, as if the page
+## underneath had just been turned (tabs, steps). It ignores input, frees
+## itself, and is skipped with reduced motion or without a display.
+static func turn_leaf(control: Control, tone := CREAM) -> void:
+	if not PaperMotion.enabled() or not is_instance_valid(control) or not control.is_inside_tree() or control.size.x < 8.0:
+		return
+	var leaf := Item.new()
+	leaf.name = "CollageLeaf"
+	leaf.kind = "leaf"
+	leaf.swatch = tone
+	leaf.salt = 13
+	leaf.top_level = true
+	control.add_child(leaf)
+	leaf.global_position = control.global_position
+	leaf.size = control.size
+	leaf.pivot_offset = Vector2(0.0, control.size.y * 0.5)
+	var tween := leaf.create_tween().set_parallel(true)
+	tween.tween_property(leaf, "scale:x", 0.0, LEAF_SECONDS).from(1.0).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	tween.tween_property(leaf, "modulate:a", 0.0, LEAF_SECONDS).from(0.9).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.chain().tween_callback(leaf.queue_free)
 
 
 ## Halftone dots, `level` 0 (fine) to 3 (heavy), one cached 8 px tile each.
@@ -432,12 +498,14 @@ class Item extends Control:
 				_draw_object()
 			"polaroid":
 				_draw_polaroid()
-			"note", "photo", "snapshot", "window":
+			"note", "photo", "snapshot", "window", "chip":
 				_draw_backing()
 			"headline":
 				_draw_headline()
 			"sheet":
 				_draw_sheet()
+			"leaf":
+				_draw_leaf()
 
 	## How far the outline steps in from the left and right at row `y` (pixels
 	## from the top of `rect`): chamfered tag corners, half-moon stub notches or
@@ -578,7 +646,7 @@ class Item extends Control:
 			draw_rect(body, Color("#2b5f63"), false, 2.0)
 			draw_set_transform(Vector2.ZERO)
 			return
-		var points: PackedVector2Array = Kit.torn(body, salt, 2.0 if kind == "note" else (0.0 if kind == "snapshot" else 1.0), 8.0)
+		var points: PackedVector2Array = Kit.torn(body, salt, 2.0 if kind in ["note", "chip"] else (0.0 if kind == "snapshot" else 1.0), 8.0)
 		draw_set_transform(pose[0] + Vector2(6, 8), pose[1], Vector2.ONE)
 		draw_colored_polygon(points, Color(Paper.SHADOW, 0.45))
 		draw_set_transform(pose[0], pose[1], Vector2.ONE)
@@ -601,6 +669,8 @@ class Item extends Control:
 			draw_rect(face.grow(-8.0), Color(CREAM, 0.9), false, 2.0)
 			Props.icon(self, "shell", Vector2.ZERO, CREAM, 3.0)
 		draw_set_transform(Vector2.ZERO)
+		if kind == "chip":
+			return
 		if kind == "snapshot":
 			# Pinned up with two strips of tape.
 			Kit.tape(self, Vector2(10.0, -bleed + 6.0), 64.0, deg_to_rad(-40.0))
@@ -741,12 +811,23 @@ class Item extends Control:
 		# Stay below the top of the window and inside the header's width.
 		var top_room := origin.y + label.get_global_rect().position.y - 8.0
 		var side_room := size.x - origin.x - stickers - 54.0
+		# Short of headroom (compact windows, tall panels), the title first
+		# levels out, then may drop a little below the header size, so the burst
+		# behind it stays on screen.
+		var least := base
+		var cap := INF
+		var reach_up := per.y * 1.45
+		if top_room > 0.0 and (reach_up + per.x * absf(sin(angle))) * base > top_room:
+			angle = -asin(clampf((top_room / base - reach_up) / per.x, 0.0, absf(sin(angle))))
+			rise = per.y * 0.95 * cos(angle) + per.x * absf(sin(angle))
+			least = base * 0.8
+			cap = maxf(least, top_room / (reach_up + per.x * absf(sin(angle))))
 		var big := base * (4.4 if bleed > 0.0 else 3.2)
 		if top_room > 0.0:
 			big = minf(big, top_room / rise)
 		if side_room > 0.0:
 			big = minf(big, side_room / (per.x * cos(angle)))
-		big = maxf(base, floorf(big))
+		big = minf(cap, maxf(least, floorf(big)))
 		var text_size := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, int(big))
 		var away := 1.0 - enter
 		var slam := 1.0 + 0.7 * away
@@ -826,6 +907,13 @@ class Item extends Control:
 		_draw_postmark(Vector2(body.position.x + body.size.x * 0.47, body.end.y - 58.0))
 		Kit.tape(self, body.position + Vector2(18, 10), 76.0, deg_to_rad(-38.0))
 		Kit.tape(self, Vector2(body.end.x - 18.0, body.position.y + 10.0), 76.0, deg_to_rad(36.0))
+
+	## The turning page: plain stock with a darker fold line at its free edge.
+	func _draw_leaf() -> void:
+		var points: PackedVector2Array = Kit.torn(Rect2(Vector2.ZERO, size), salt, 2.0, 10.0)
+		Kit.fill(self, points, Props.material_tile("paper", swatch), Color.WHITE)
+		draw_rect(Rect2(size.x - 6.0, 0.0, 6.0, size.y), Color(Paper.SHADOW, 0.5))
+		Kit.outline(self, points, Props.deepen(swatch, 0.5), 2.0)
 
 	## Faint cancellation mark printed on the sheet: ring, star and bars.
 	func _draw_postmark(at: Vector2) -> void:

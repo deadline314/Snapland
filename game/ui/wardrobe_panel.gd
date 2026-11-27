@@ -3,6 +3,7 @@ extends RefCounted
 
 const Paper = preload("res://game/ui/paper_ui.gd")
 const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
+const Collage = preload("res://game/ui/collage_kit.gd")
 
 var host: Node
 var body: VBoxContainer
@@ -155,6 +156,7 @@ func _build() -> void:
 	_apply_responsive_profile(Paper.physical_scale(body))
 
 func _show_tab(tab_id: String) -> void:
+	var turned := tab_id!=current_tab
 	_item_page_revision+=1
 	current_tab=tab_id
 	selected_item_id=""
@@ -240,6 +242,8 @@ func _show_tab(tab_id: String) -> void:
 		shop_cancel_button.name="CancelWardrobe"
 		Paper.set_button_role(shop_cancel_button,"secondary")
 	_refresh_preview()
+	# After the refill: clearing the page would also clear the leaf.
+	if turned: Collage.turn_leaf(content)
 	# Tabs replace their controls after the initial menu layout. Reapply the
 	# idempotent physical sizing before the next frame is presented.
 	host.call_deferred("_adapt_open_menu")

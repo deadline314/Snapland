@@ -18,6 +18,20 @@ func _check(condition: bool, message: String) -> void:
 		push_error("UI motion: " + message)
 
 
+## WCAG contrast ratio on linearised sRGB.
+func _contrast(a: Color, b: Color) -> float:
+	var light := maxf(_luminance(a), _luminance(b))
+	var dark := minf(_luminance(a), _luminance(b))
+	return (light + 0.05) / (dark + 0.05)
+
+
+func _luminance(color: Color) -> float:
+	var linear := []
+	for value: float in [color.r, color.g, color.b]:
+		linear.append(value / 12.92 if value <= 0.04045 else pow((value + 0.055) / 1.055, 2.4))
+	return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2]
+
+
 func _initialize() -> void:
 	_run.call_deferred()
 
@@ -105,6 +119,31 @@ func _run() -> void:
 	cards[1].grab_focus()
 	var album_art := cards[1].get_node("CollageArt") as Collage.Item
 	_check(is_equal_approx(album_art.lift, 1.0), "a focused card lifts and straightens at once")
+
+	# Collage pages re-cut their painted boards as paper and keep text readable.
+	var page := VBoxContainer.new()
+	page.theme = Paper.theme()
+	host.add_child(page)
+	Collage.paperize(page)
+	var tag := Paper.button("聲音", func() -> void: pass, page)
+	var tag_face := tag.get_theme_stylebox("normal") as Paper.Board
+	_check(tag_face != null and tag_face.collage and tag_face.bg_color.get_luminance() > 0.45, "a button added to a collage page becomes a light paper tag")
+	var disabled_face := tag.get_theme_stylebox("disabled") as Paper.Board
+	_check(_contrast(tag.get_theme_color("font_color"), tag_face.bg_color) >= 4.5 and disabled_face != null and _contrast(tag.get_theme_color("font_disabled_color"), disabled_face.bg_color) >= 4.5, "text on a light tag is re-inked dark and stays readable")
+	Paper.set_button_role(tag, "tab_selected")
+	var chosen := tag.get_theme_stylebox("normal") as Paper.Board
+	_check(chosen != null and chosen.collage and chosen.bg_color == Paper.DEEP_TEAL and tag.get_theme_color("font_color") == Paper.PAPER, "a later role change is re-cut and a chosen tab keeps its dark face and light ink")
+	Paper.set_button_role(tag, "tab_idle")
+	var twin := tag.get_theme_stylebox("normal")
+	Paper.set_button_role(tag, "tab_selected")
+	Paper.set_button_role(tag, "tab_idle")
+	_check(is_same(twin, tag.get_theme_stylebox("normal")), "paper faces are made once per style and reused")
+	var scrap := Paper.card(page)
+	_check((scrap.get_parent().get_theme_stylebox("panel") as Paper.Board).collage, "a card nested later is cut as paper too")
+	var faces := page.get_child_count()
+	Collage.turn_leaf(page)
+	_check(page.get_child_count() == faces, "a page leaf is skipped without motion")
+	page.queue_free()
 
 	var note := Label.new()
 	host.add_child(note)

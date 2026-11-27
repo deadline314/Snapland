@@ -3,6 +3,7 @@ const RenderQuality = preload("res://game/world/render_quality.gd")
 ## Compact, single-page settings with fixed category navigation.
 
 const Paper = preload("res://game/ui/paper_ui.gd")
+const Collage = preload("res://game/ui/collage_kit.gd")
 var host: Node
 var body: VBoxContainer
 var content: VBoxContainer
@@ -33,6 +34,7 @@ func open(main: Node, modal_body: VBoxContainer) -> void:
 	_show_category("audio")
 
 func _show_category(category: String) -> void:
+	var turned := category!=active_category
 	active_category=category
 	for key in tabs:
 		var button: Button=tabs[key]
@@ -46,6 +48,8 @@ func _show_category(category: String) -> void:
 		"play": _fill_play()
 		"controls": _fill_controls()
 		"text": _fill_text()
+	# After the refill: clearing the page would also clear the leaf.
+	if turned: Collage.turn_leaf(content)
 	host.call_deferred("_adapt_open_menu")
 
 func _fill_text() -> void:

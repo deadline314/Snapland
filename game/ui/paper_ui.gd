@@ -17,6 +17,11 @@ const TICKET = Color("#f6ecd0")
 const TICKET_INK = Color("#12303b")
 const OUTLINE = Color("#07171f")
 const SHADOW = Color("#04121a", 0.4)
+## Collage pages: cream stock for dark enamel paint (normal, hover, pressed,
+## idle tab, idle tab hover, disabled), the cut-paper drop shadow and tape.
+const PAPER_STOCK := {"1f6570": "f6ecd0", "267480": "fffaf0", "1a5560": "ecd5a4", "143944": "f6ecd0", "226271": "fffaf0", "3b4d52": "cfc6ae"}
+const CUT_SHADOW = Color(0.02, 0.07, 0.1, 0.55)
+const TAPE = Color(0.98, 0.93, 0.78, 0.72)
 const FontProfiles = preload("res://game/ui/font_profiles.gd")
 static var FONT: Font = FontProfiles.current_font()
 const PIXEL_CHECKED = preload("res://assets/ui/pixel-controls/checked.svg")
@@ -114,6 +119,8 @@ class Board extends StyleBox:
 	## A smaller board mounted on a ticket (its brass plate), in local pixels.
 	var plate: Board
 	var plate_rect := Rect2()
+	## Drawn as cut paper on a collage page (see collage_twin).
+	var collage := false
 
 	## Resize the icon in whole pixel steps; 0 hides it. The label moves over to make room.
 	func set_glyph_scale(factor: int) -> void:
@@ -139,6 +146,7 @@ class Board extends StyleBox:
 		return [border_width_left,border_width_top,border_width_right,border_width_bottom][side]
 
 	func _get_draw_rect(rect: Rect2) -> Rect2:
+		if collage: return rect.grow(12.0)
 		var reach := float(shadow_size)+2.0
 		return rect.grow_individual(reach,reach+absf(minf(float(sink),0.0)),reach,reach+absf(shadow_offset.y))
 
@@ -147,6 +155,9 @@ class Board extends StyleBox:
 		if area.size.x<8.0 or area.size.y<8.0: return
 		if kind==Kind.RING or bg_color.a<=0.0:
 			_ring(item,area.grow(2.0),3,float(maxi(border_width_left,3)),border_color)
+			return
+		if collage:
+			_draw_cut_paper(item,area)
 			return
 		var notch := 0.0
 		if perforation!=0.0: notch=area.position.x+(perforation if perforation>0.0 else area.size.x+perforation)
@@ -196,6 +207,102 @@ class Board extends StyleBox:
 					RenderingServer.canvas_item_add_rect(item,Rect2(face.position.x+edge,face.position.y,face.size.x-edge*2.0,STEP),bg_color.lightened(gloss))
 					RenderingServer.canvas_item_add_rect(item,Rect2(face.position.x+edge,face.end.y-STEP,face.size.x-edge*2.0,STEP),bg_color.darkened(gloss))
 				if glyph_scale>0: _draw_glyph(item,face)
+
+	## This face as cut paper for collage pages, made once per face so a page
+	## never grows a pile of styles. Dark enamel button paint turns to cream
+	## stock (its text is re-inked by the page); chosen faces, red primary
+	## faces and every panel keep their paint.
+	func collage_twin() -> Board:
+		if collage or kind==Kind.RING: return self
+		if has_meta(&"collage_twin"): return get_meta(&"collage_twin")
+		var twin := duplicate() as Board
+		twin.collage=true
+		twin.plate=plate
+		twin.plate_rect=plate_rect
+		# A gold rim marks the chosen tab in every state; it stays dark.
+		if kind==Kind.ENAMEL and border_color!=GOLD: twin.bg_color=Color(PAPER_STOCK.get(bg_color.to_html(false),bg_color.to_html(false)))
+		set_meta(&"collage_twin",twin)
+		return twin
+
+	## A hard drop shadow, a deckled outline and a slight tilt; long button
+	## tags get chamfered corners and a brass eyelet, panels a strip of tape.
+	## Hovered and pressed faces sit level; a pressed one carries an ink stamp.
+	func _draw_cut_paper(item: RID, area: Rect2) -> void:
+		var tag := kind==Kind.ENAMEL
+		var salt := item.get_id()
+		var pressed := sink>0
+		var body := Rect2(area.position+Vector2(0,maxf(sink,0)),area.size-Vector2(0,maxf(sink,0)))
+		var points := _cut_outline(body,salt,tag and body.size.x>=72.0)
+		var centre := body.get_center()
+		var lean := 0.0 if sink!=0 else (_hash(salt,1)-0.5)*deg_to_rad(2.8 if tag else 0.9)*clampf(180.0/body.size.x,0.25,1.0)
+		RenderingServer.canvas_item_add_set_transform(item,Transform2D(lean,centre)*Transform2D(0.0,-centre))
+		var drop := Vector2(5,6)
+		if tag: drop=Vector2(1,2) if pressed else (Vector2(5,7) if sink<0 else Vector2(3,4))
+		var shade := PackedVector2Array()
+		for point in points: shade.append(point+drop)
+		RenderingServer.canvas_item_add_polygon(item,shade,PackedColorArray([CUT_SHADOW]))
+		RenderingServer.canvas_item_add_polygon(item,points,PackedColorArray([bg_color]))
+		# Paper tooth: a lit top edge, a shaded bottom edge and a few fibres.
+		var inner := body.grow(-3.0)
+		if inner.size.x>8.0 and inner.size.y>8.0:
+			RenderingServer.canvas_item_add_rect(item,Rect2(inner.position.x+4.0,inner.position.y,inner.size.x-8.0,2),bg_color.lightened(0.16))
+			RenderingServer.canvas_item_add_rect(item,Rect2(inner.position.x+4.0,inner.end.y-2.0,inner.size.x-8.0,2),bg_color.darkened(0.14))
+			for fibre in 6:
+				var spot := inner.position+Vector2(_hash(salt,fibre*2+3),_hash(salt,fibre*2+4))*(inner.size-Vector2(6,2))
+				RenderingServer.canvas_item_add_rect(item,Rect2(spot.floor(),Vector2(4 if fibre%2==0 else 2,2)),bg_color.darkened(0.1) if fibre%3==0 else bg_color.lightened(0.1))
+		var closed := points.duplicate()
+		closed.append(points[0])
+		# Tags keep their role's rim; panels get an inked edge, gold only when chosen.
+		var rim := border_color if (tag or border_color==GOLD) and border_width_left>0 else bg_color.darkened(0.55)
+		RenderingServer.canvas_item_add_polyline(item,closed,PackedColorArray([rim]),3.0 if rim==GOLD else 2.0)
+		if tag and body.size.x>=72.0 and body.size.y>=28.0:
+			# Inside the chamfer, clear of the label's left margin.
+			var eyelet := Vector2(body.position.x+7.0,centre.y).floor()
+			RenderingServer.canvas_item_add_circle(item,eyelet,3.0,BRASS)
+			RenderingServer.canvas_item_add_circle(item,eyelet,1.5,OUTLINE)
+		elif not tag and body.size.x>=140.0 and body.size.y>=56.0:
+			_tape(item,Vector2(centre.x+(_hash(salt,5)-0.5)*body.size.x*0.3,body.position.y+1.0),minf(84.0,body.size.x*0.3),(_hash(salt,6)-0.5)*0.3)
+		if pressed and tag and body.size.x>=120.0:
+			var mark := Vector2(body.end.x-minf(24.0,body.size.x*0.18),centre.y)
+			_ink_ring(item,mark,minf(14.0,body.size.y*0.32),Color(PRICE_INK,0.72),2.0)
+			_ink_ring(item,mark,minf(14.0,body.size.y*0.32)*0.6,Color(PRICE_INK,0.55),1.5)
+		RenderingServer.canvas_item_add_set_transform(item,Transform2D())
+
+	static func _cut_outline(rect: Rect2, salt: int, chamfer: bool) -> PackedVector2Array:
+		var points := PackedVector2Array()
+		var cut := minf(10.0,rect.size.y*0.3) if chamfer else 0.0
+		var corners := [rect.position+Vector2(cut,0),Vector2(rect.end.x,rect.position.y),rect.end,Vector2(rect.position.x+cut,rect.end.y)]
+		for side in 4:
+			var from: Vector2=corners[side]
+			var to: Vector2=corners[(side+1)%4]
+			if side==3 and chamfer:
+				points.append(from)
+				points.append(Vector2(rect.position.x,rect.end.y-cut))
+				points.append(Vector2(rect.position.x,rect.position.y+cut))
+				continue
+			var count := maxi(1,int(from.distance_to(to)/10.0))
+			var outward := (to-from).normalized().orthogonal()
+			for step in count:
+				var jitter := (_hash(salt+side*31,step)-0.5)*3.0
+				points.append((from.lerp(to,float(step)/count)+outward*jitter).round())
+		return points
+
+	static func _tape(item: RID, at: Vector2, length: float, angle: float) -> void:
+		var along := Vector2.RIGHT.rotated(angle)
+		var across := along.orthogonal()
+		var half := length*0.5
+		var strip := PackedVector2Array([at-along*half-across*7.0,at+along*half-across*7.0,at+along*(half-2.0),at+along*half+across*7.0,at-along*half+across*7.0,at-along*(half-2.0)])
+		RenderingServer.canvas_item_add_polygon(item,strip,PackedColorArray([TAPE]))
+
+	static func _ink_ring(item: RID, at: Vector2, radius: float, color: Color, width: float) -> void:
+		var ring := PackedVector2Array()
+		for step in 17: ring.append(at+Vector2.RIGHT.rotated(TAU*step/16.0)*radius)
+		RenderingServer.canvas_item_add_polyline(item,ring,PackedColorArray([color]),width)
+
+	static func _hash(a: int, b: int) -> float:
+		var mixed := (a*73856093)^(b*19349663)
+		mixed=(mixed^(mixed>>13))*1274126177
+		return float((mixed>>8)&0xffff)/65535.0
 
 	func _draw_glyph(item: RID, face: Rect2) -> void:
 		var rows: Array=GLYPHS.get(glyph,[])
@@ -374,7 +481,7 @@ class PixelButtonBevel extends Control:
 	func _draw() -> void:
 		if button==null or size.x<24.0 or size.y<24.0 or current_state=="disabled": return
 		var style := button.get_theme_stylebox(current_state) as Board
-		if style==null or style.kind!=Board.Kind.ENAMEL: return
+		if style==null or style.kind!=Board.Kind.ENAMEL or style.collage: return
 		var corner := Vector2(style.border_width_left,style.border_width_top+style.sink)
 		if current_state=="pressed":
 			# A pushed-in face is shaded by its own rim instead of catching light.

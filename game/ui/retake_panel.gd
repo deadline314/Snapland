@@ -7,6 +7,7 @@ const Paper = preload("res://game/ui/paper_ui.gd")
 const Catalog = preload("res://game/core/game_catalog.gd")
 const Lessons = preload("res://game/ui/tutorial_catalog.gd")
 const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
+const Collage = preload("res://game/ui/collage_kit.gd")
 const PHOTO_SIZE := Vector2i(1280,720)
 const MAX_PIXELS := 4 * 1024 * 1024
 const PROPS := [
@@ -109,6 +110,7 @@ func _ready() -> void:
 	var focus := get_viewport().gui_get_focus_owner()
 	if focus != null: _previous_focus = weakref(focus)
 	_build_ui()
+	Collage.paperize(self)
 	_valid = _load_set()
 	_refresh()
 	get_viewport().size_changed.connect(_layout)
@@ -171,8 +173,8 @@ func _source_error() -> bool:
 func _build_ui() -> void:
 	var background := Panel.new()
 	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	background.add_theme_stylebox_override("panel",Paper.box(Color("#102b3a"),0))
 	add_child(background)
+	Collage.sheet(background)
 	var margin := MarginContainer.new()
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	for edge in ["left","right","top","bottom"]: margin.add_theme_constant_override("margin_"+edge,16)
@@ -183,7 +185,9 @@ func _build_ui() -> void:
 	_title = Paper.label("免費補拍",24)
 	_title.autowrap_mode = TextServer.AUTOWRAP_OFF
 	_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	_title.add_theme_color_override("font_color", Collage.INK)
 	_column.add_child(_title)
+	Collage.backing(_title, "chip", 1, Collage.RIM, 4.0)
 	_step = Paper.label("",20)
 	_column.add_child(_step)
 	_hint = Paper.label("",18)
