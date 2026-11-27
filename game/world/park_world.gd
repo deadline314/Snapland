@@ -28,6 +28,7 @@ const AvatarHairRig = preload("res://game/world/avatar_hair_rig.gd")
 const TimeOfDayScript = preload("res://game/core/time_of_day.gd")
 const RegionRoutes = preload("res://game/core/region_routes.gd")
 const IslandAttractionsScript = preload("res://game/world/island_attractions.gd")
+const FieldGamesScript = preload("res://game/world/field/field_games.gd")
 const CoastalMaterialShader = preload("res://game/world/coastal_material.gdshader")
 const COASTAL_MATERIAL_ATLAS := "res://assets/world/coastal-materials-v1.png"
 const IDENTITY_ATLAS_PATH := "res://assets/characters/identities-v3.png"
@@ -207,6 +208,10 @@ var actor_shadow_proxies: Array[Dictionary] = []
 var coastal_rotors: Array[Node3D] = []
 var coastal_play: Node3D
 var island_attractions: Node
+## Instant map games and toys; null in regions that have none.
+var field_games: Node3D
+## Raises only the avatar's picture (a hop); the body, shadow and footing stay put.
+var avatar_visual_lift := 0.0
 
 func _ready() -> void:
 	active_lamp_indices.resize(ACTIVE_LAMP_LIMIT)
@@ -234,6 +239,7 @@ func _ready() -> void:
 	_build_region_geometry()
 	_build_player()
 	_build_region_activities()
+	field_games = FieldGamesScript.attach(self)
 	_build_camera()
 	_update_sprite_grounding()
 	occlusion_controller.configure(player,camera)
@@ -534,7 +540,7 @@ func _update_sprite_grounding() -> void:
 			continue
 		var ground_y := float(record.ground_y)
 		if parent == player:
-			ground_y = ground_surface_y(player.global_position)
+			ground_y = ground_surface_y(player.global_position) + avatar_visual_lift
 		var desired_y := sprite_ground_anchor_y(
 			ground_y,
 			parent.global_position.y,
@@ -2539,6 +2545,14 @@ func _constrain_player(previous_position: Vector3) -> bool:
 		return true
 	return false
 
+## True where the avatar can stand. Placement data asks this instead of
+## assuming the island's current outline.
+func is_walkable(position: Vector3) -> bool:
+	var bounds := CoastalCircuit.WALK_BOUNDS
+	if position.x < bounds.position.x or position.x > bounds.end.x or position.z < bounds.position.y or position.z > 26.5:
+		return false
+	return position.z <= 18.0 or absf(position.x) <= 2.05
+
 func _area_at_position(position: Vector3) -> String:
 	return "海岸環線" if absf(position.x)>20.0 or position.z < -48.0 else ("海風碼頭" if position.z>12 else ("迎賓大道" if position.z < -11 else "中央廣場"))
 
@@ -2893,6 +2907,8 @@ func interact() -> void:
 	if is_riding():
 		end_ride()
 		return
+	# During an instant map game the key belongs to that game.
+	if is_instance_valid(field_games) and field_games.press(): return
 	if not blocked and not nearest.is_empty():
 		play_action("interact")
 		interaction_requested.emit(nearest.id,nearest.label)

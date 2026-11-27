@@ -28,17 +28,25 @@ const PALETTE := {
 	"P": Color("#ffffff"), # butterfly wing (tinted per instance)
 	"p": Color("#d9d9d9"), # butterfly wing shade
 	"b": Color("#4a4250"), # butterfly body
+	"x": Color("#7a3340"), # crab outline
+	"R": Color("#e2734d"), # crab shell
+	"r": Color("#bb4f3d"), # crab shell shade
+	"q": Color("#f6a77d"), # crab shell light
+	"k": Color("#3a2a2e"), # crab mouth
+	"h": Color("#ecca7e"), # straw hat
+	"j": Color("#c79c55"), # straw hat shade
+	"n": Color("#7a5a36"), # straw hat outline
 }
 
 # One row per animal; columns are that animal's frames.
 const CRITTER_ROWS := {
-	"pigeon": 0, "sparrow": 1, "gull": 2, "butterfly": 3,
+	"pigeon": 0, "sparrow": 1, "gull": 2, "butterfly": 3, "crab": 4, "hat": 5,
 }
 
 # Ground birds: stand, peck, wings up, wings down. Gull: glide, up, down.
-# Butterfly: open, half, closed.
+# Butterfly: open, half, closed. Crab: peek, stand, claws up, bonked flat.
 # Animals listed in MIRRORED are drawn as a left half plus the centre column.
-const MIRRORED := ["gull"]
+const MIRRORED := ["gull", "crab"]
 const CRITTER_FRAMES := {
 	"pigeon": [
 		[
@@ -187,6 +195,65 @@ const CRITTER_FRAMES := {
 			"...oPPbo...",
 			"...oppbo...",
 			"....oob....",
+		],
+	],
+	"crab": [
+		[
+			"..........xxx...",
+			".........xWWx...",
+			".........xWex...",
+			"..........xrx...",
+			"........xxxRxxxx",
+			".......xRqqRRRRR",
+		],
+		[
+			"..........xxx...",
+			".........xWWx...",
+			".xx......xWex...",
+			"xqRx......xrx...",
+			"xRRRx...xxxRxxxx",
+			"xRrRx..xRqqRRRRR",
+			".xRx..xRqRRRRRRR",
+			"..xRxxxRRRRRRRRR",
+			"...xxrxRRRRRRRRR",
+			"....x.xrRRRRRRrr",
+			"...x.x.xrrrrrrxx",
+			"..x..x..xxxxxx..",
+		],
+		[
+			".xx.......xxx...",
+			"xqRx.x...xWWx...",
+			"xRRxxRx..xeWx...",
+			"xRrRRRx...xrx...",
+			".xRRxx..xxxRxxxx",
+			"..xRx..xRqqRRRRR",
+			"..xRx.xRqRRRRRRR",
+			"...xRxxRRRRRRRRR",
+			"....xrxRRRkkkkkk",
+			"....x.xrRRRkkkkk",
+			"...x.x.xrrrrrrxx",
+			"..x..x..xxxxxx..",
+		],
+		[
+			".........x...x..",
+			"..........x.x...",
+			".xxx.....x.x.x..",
+			"xqRRx.xxxxxxxxxx",
+			"xRRrxxRqqqRRRRRR",
+			".xxxxrRRRRRRRRRR",
+			"..x.xxrrrrrrrrrr",
+			".x..x.xxxxxxxxxx",
+		],
+	],
+	"hat": [
+		[
+			"....nnnnnn....",
+			"...nhhhhhhn...",
+			"..nhhhhhhhhn..",
+			"..nFFFFFFFFn..",
+			".nnjjjjjjjjnn.",
+			"nhhhhhhhhhhhhn",
+			".nnnnnnnnnnnn.",
 		],
 	],
 }

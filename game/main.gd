@@ -9,6 +9,7 @@ const GardenWorld = preload("res://game/world/garden_world.gd")
 const RegionRoutes = preload("res://game/core/region_routes.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
 const PaperMotion = preload("res://game/ui/paper_motion.gd")
+const FieldGameChip = preload("res://game/ui/field_game_chip.gd")
 const RegionTransitionScript = preload("res://game/ui/region_transition.gd")
 const Story = preload("res://game/story/story_director.gd")
 const Audio = preload("res://game/audio/audio_director.gd")
@@ -49,6 +50,7 @@ var context_action: Button
 var context_bar: PanelContainer
 var ticket_button: Button
 var toast: Label
+var field_chip: FieldGameChip
 var quest_label: Label
 var session: Control
 var modal_kind := ""
@@ -127,6 +129,10 @@ func _ready() -> void:
 func _bind_world() -> void:
 	if is_instance_valid(world.coastal_play):
 		world.coastal_play.note_requested.connect(audio.play_note)
+	if is_instance_valid(world.field_games):
+		world.field_games.note_requested.connect(audio.play_note)
+		world.field_games.feedback_requested.connect(audio.play_sfx)
+	field_chip.bind(world.field_games)
 	world.interaction_requested.connect(_on_world_interaction_requested.bind(world))
 	world.area_changed.connect(_on_world_area_changed.bind(world))
 	_on_world_area_changed(world.current_area,world)
@@ -477,6 +483,8 @@ func _build_ui() -> void:
 	toast.add_theme_color_override("font_shadow_color",Paper.INK)
 	toast.add_theme_constant_override("shadow_offset_y",2)
 	hud.add_child(toast)
+	field_chip=FieldGameChip.new()
+	hud.add_child(field_chip)
 	overlay=Control.new()
 	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	ui.add_child(overlay)
@@ -851,7 +859,8 @@ func _input(event: InputEvent) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if quitting or changing_region or _transition_busy(): return
 	if event.is_action_pressed("pause"):
-		if modal_kind=="" and session==null and is_instance_valid(world.coastal_play) and is_instance_valid(world.coastal_play.discoveries) and world.coastal_play.discoveries.end_control(): pass
+		if modal_kind=="" and session==null and is_instance_valid(world.field_games) and world.field_games.abort(): pass
+		elif modal_kind=="" and session==null and is_instance_valid(world.coastal_play) and is_instance_valid(world.coastal_play.discoveries) and world.coastal_play.discoveries.end_control(): pass
 		elif modal_kind=="dialogue": _cancel_dialogue()
 		elif modal_kind=="visit_photo": _exit_region_story_photo()
 		elif modal_kind!="": _close()
@@ -1385,6 +1394,8 @@ func _dialogue_panel_resized() -> void:
 func _interact(id: String, title: String) -> void:
 	if quitting or changing_region or session!=null or modal_kind!="": return
 	audio.play_sfx("interact")
+	if is_instance_valid(world.field_games) and world.field_games.activate(id):
+		return
 	if id=="region:welcome":
 		_travel_to_region("welcome")
 		return

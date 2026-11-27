@@ -7,6 +7,9 @@ signal achievement_unlocked(id: String)
 const SAVE_FILE := "user://progress.json"
 const SAVE_VERSION := 1
 const MAX_COINS := 1000000
+## Coins for the first bronze, silver and gold medal in each instant map game.
+const FIELD_MEDAL_COINS := [10, 20, 40]
+const MAX_FIELD_SCORE := 999999
 const MAX_GAME_PHOTO_FRAMES := 3
 const MAX_GAME_PHOTO_FRAME_CANDIDATES := 12
 const MAX_GAME_PHOTO_FILE_BYTES := 16 * 1024 * 1024
@@ -59,6 +62,8 @@ var coins := 120
 var wardrobe_rewarded_games: Array[String] = []
 var tutorial_seen_games: Array[String] = []
 var attempted_games: Array[String] = []
+## Instant map games: id -> {"best": highest score, "medal": 0 to 3}.
+var field_records: Dictionary = {}
 var _extra_fields: Dictionary = {}
 var _loading := false
 var _suppress_changed_save := false
@@ -160,6 +165,41 @@ func mark_game_attempted(game_id: String) -> bool:
 		attempted_games.erase(game_id)
 		return false
 	return true
+
+## Keeps the best score and medal of an instant map game. Each medal tier pays
+## its coins only the first time it is reached; nothing changes if the save fails.
+func record_field_result(id: String, score: int, medal: int) -> Dictionary:
+	var previous: Dictionary = field_records.get(id, {})
+	var old_best := int(previous.get("best", 0))
+	var old_medal := int(previous.get("medal", 0))
+	score = clampi(score, 0, MAX_FIELD_SCORE)
+	medal = clampi(medal, 0, FIELD_MEDAL_COINS.size())
+	var result := {"saved": true, "coins": 0, "best": old_best, "medal": old_medal, "new_best": false}
+	if id.is_empty() or (score <= old_best and medal <= old_medal):
+		return result
+	var gained := 0
+	for tier in range(old_medal, medal):
+		gained += int(FIELD_MEDAL_COINS[tier])
+	var previous_coins := coins
+	var had_record := field_records.has(id)
+	field_records[id] = {"best": maxi(old_best, score), "medal": maxi(old_medal, medal)}
+	coins = mini(MAX_COINS, coins + gained)
+	if not save_progress():
+		coins = previous_coins
+		if had_record:
+			field_records[id] = previous
+		else:
+			field_records.erase(id)
+		result.saved = false
+		return result
+	_suppress_changed_save = true
+	changed.emit()
+	_suppress_changed_save = false
+	result.coins = coins - previous_coins
+	result.best = maxi(old_best, score)
+	result.medal = maxi(old_medal, medal)
+	result.new_best = score > old_best
+	return result
 
 func set_time_phase(value: String) -> bool:
 	if not TimeOfDay.phase_ids().has(value):
@@ -685,6 +725,7 @@ func save_progress() -> bool:
 		"wardrobe_rewarded_games": wardrobe_rewarded_games,
 		"tutorial_seen_games": tutorial_seen_games,
 		"attempted_games": _validated_attempted_games(attempted_games),
+		"field_records": field_records,
 	}, true)
 	var temporary := path + ".tmp"
 	var file := FileAccess.open(temporary, FileAccess.WRITE)
@@ -1003,11 +1044,34 @@ func _validated_attempted_games(value: Variant) -> Array[String]:
 				valid.append(definition.id)
 	return valid
 
+## Ids are kept as saved so a game added or removed later loses nothing;
+## only well-formed scores and medals are accepted.
+func _validated_field_records(value: Variant) -> Dictionary:
+	var valid := {}
+	if not value is Dictionary:
+		if value != null:
+			push_warning("Invalid 'field_records' field in progress file '%s'; using defaults." % _save_path())
+		return valid
+	for id: Variant in value:
+		var record: Variant = value[id]
+		var best: Variant = record.get("best") if record is Dictionary else null
+		var medal: Variant = record.get("medal") if record is Dictionary else null
+		if typeof(id) != TYPE_STRING or str(id).is_empty() or not _valid_whole_number(best, MAX_FIELD_SCORE) or not _valid_whole_number(medal, FIELD_MEDAL_COINS.size()):
+			push_warning("Invalid instant game record '%s' in progress file '%s'; skipping." % [str(id), _save_path()])
+			continue
+		valid[id] = {"best": int(best), "medal": int(medal)}
+	return valid
+
+func _valid_whole_number(value: Variant, maximum: int) -> bool:
+	if typeof(value) not in [TYPE_INT, TYPE_FLOAT] or not is_finite(float(value)):
+		return false
+	return float(value) >= 0.0 and float(value) <= maximum and floor(float(value)) == float(value)
+
 func _apply_save(payload: Dictionary) -> void:
 	_loading = true
 	_reset_memory()
 	for key in payload:
-		if key not in ["version", "photos", "achievements", "quests", "settings", "visited", "intro_seen", "prologue_seen", "current_region", "platform_pending_achievements", "appearance", "equipped", "owned_clothes", "coins", "wardrobe_rewarded_games", "tutorial_seen_games", "attempted_games"]:
+		if key not in ["version", "photos", "achievements", "quests", "settings", "visited", "intro_seen", "prologue_seen", "current_region", "platform_pending_achievements", "appearance", "equipped", "owned_clothes", "coins", "wardrobe_rewarded_games", "tutorial_seen_games", "attempted_games", "field_records"]:
 			_extra_fields[key] = payload[key]
 	var loaded_photos: Variant = payload.get("photos", {})
 	if typeof(loaded_photos) == TYPE_DICTIONARY:
@@ -1091,6 +1155,7 @@ func _apply_save(payload: Dictionary) -> void:
 			if typeof(game_id) == TYPE_STRING and _is_rewardable_game_id(game_id) and not tutorial_seen_games.has(game_id):
 				tutorial_seen_games.append(game_id)
 	attempted_games = _validated_attempted_games(payload.get("attempted_games", []))
+	field_records = _validated_field_records(payload.get("field_records", {}))
 	if not payload.has("attempted_games"):
 		for definition: Dictionary in GameCatalog.all_definitions():
 			var identity := GameCatalog.identity(definition.id)
@@ -1154,6 +1219,7 @@ func _reset_memory() -> void:
 	wardrobe_rewarded_games = []
 	tutorial_seen_games = []
 	attempted_games = []
+	field_records = {}
 	settings["time_phase"] = TimeOfDay.DEFAULT_PHASE
 	_extra_fields = {}
 
