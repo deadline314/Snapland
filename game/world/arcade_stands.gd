@@ -27,6 +27,8 @@ const STANDS := {
 			"stand": Vector3(3.3, 0.2, 2.4), "point": Vector3(2.3, 0.2, 3.8), "prop": "puppet", "paint": Color("#7a2a3c")},
 		{"id": "game-068", "title": "陀螺相撲", "prompt": "陀螺相撲 · 方向鍵撞陀螺",
 			"stand": Vector3(-7.3, 0.2, 5.7), "point": Vector3(-6.15, 0.2, 6.85), "prop": "tops", "paint": Color("#8a4a3e")},
+		{"id": "game-069", "title": "骰塔改道", "prompt": "骰塔改道 · 傾斜骰塔送骰子進杯",
+			"stand": Vector3(-5.6, 0.2, -5.6), "point": Vector3(-4.4, 0.2, -4.3), "prop": "dice", "paint": Color("#3f6f5a")},
 		{"id": "game-070", "title": "敲敲玩具兵", "prompt": "敲敲玩具兵 · 方向鍵敲回去",
 			"stand": Vector3(-6.0, 0.2, 1.6), "point": Vector3(-4.95, 0.2, 3.0), "prop": "soldier", "paint": Color("#5b6f9a")},
 	],
@@ -72,6 +74,7 @@ static func build(world: Node3D, region: String) -> void:
 			"bridge": _bridge_prop(sculpt)
 			"rails": _rails_prop(sculpt)
 			"puppet": _puppet_prop(sculpt)
+			"dice": _dice_prop(sculpt)
 			"camera": _camera_prop(sculpt)
 			"lily": _lily_prop(sculpt)
 			"mushroom": _mushroom_prop(sculpt)
@@ -420,3 +423,22 @@ static func _vine_prop(sculpt: Kit.Sculpt) -> void:
 	sculpt.tube(Vector3(0.28, 1.04, 0.1), 0.1, 0.08, 0.16, Color("#b8643f"), 8)
 	sculpt.box(Vector3(0.28, 1.2, 0.1), Vector3(0.02, 0.18, 0.02), vine)
 	sculpt.box(Vector3(0.32, 1.27, 0.1), Vector3(0.1, 0.03, 0.06), vine.lightened(0.15), Basis(Vector3.BACK, 0.4))
+
+
+## A tall crenellated dice tower on the roof with a big die tumbling out, and a
+## felt tray of little cups and dice on the counter.
+static func _dice_prop(sculpt: Kit.Sculpt) -> void:
+	var walnut := Color("#8a5a3a")
+	var ivory := Color("#f3ead6")
+	var felt := Color("#3f6f5a")
+	sculpt.box(Vector3(-0.1, 2.75, -0.3), Vector3(0.34, 0.74, 0.3), walnut)
+	for merlon: float in [-0.22, -0.1, 0.02]:
+		sculpt.box(Vector3(merlon, 3.17, -0.3), Vector3(0.08, 0.1, 0.3), walnut.lightened(0.1))
+	sculpt.box(Vector3(-0.1, 2.48, -0.14), Vector3(0.16, 0.18, 0.02), Color("#1d1420"))
+	sculpt.box(Vector3(0.24, 2.5, -0.2), Vector3(0.16, 0.16, 0.16), ivory, Basis(Vector3.BACK, 0.4) * Basis(Vector3.UP, 0.5))
+	sculpt.box(Vector3(0.24, 2.5, -0.115), Vector3(0.04, 0.04, 0.01), DARK, Basis(Vector3.BACK, 0.4))
+	sculpt.box(Vector3(0.0, 0.99, 0.12), Vector3(0.9, 0.05, 0.32), felt)
+	for cup in 3:
+		sculpt.tube(Vector3(-0.3 + cup * 0.3, 1.06, 0.12), 0.07, 0.09, 0.1, Color("#d2a46a"), 8)
+	for die: Vector3 in [Vector3(-0.15, 1.06, 0.22), Vector3(0.16, 1.06, 0.02)]:
+		sculpt.box(die, Vector3(0.08, 0.08, 0.08), ivory, Basis(Vector3.UP, die.x * 3.0))

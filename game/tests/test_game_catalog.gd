@@ -20,7 +20,7 @@ func _run() -> void:
 	var garden: Array = catalog.definitions("garden")
 	var all_games: Array = catalog.all_definitions()
 	_check(welcome == JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json")), "default definitions preserve the original welcome row shape and order")
-	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 8 and toy.size() == 9 and garden.size() == 6 and all_games.size() == 71, "only the 71 delivered games are exposed")
+	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 8 and toy.size() == 10 and garden.size() == 6 and all_games.size() == 72, "only the 72 delivered games are exposed")
 	for index in range(welcome.size()):
 		_check(welcome[index].id == "game-%03d" % (index + 1), "welcome numbering stays ordered")
 	_check(all_games == welcome + harbor + candy + nightmarket + circus + toy + garden and catalog.definitions("hotel").is_empty(), "games retain global order and future regions remain unavailable")
@@ -49,8 +49,11 @@ func _run() -> void:
 		"the seventh toy town slot keeps its own number")
 	var tops := {"id":"game-068", "mode":"top_sumo", "zone":"toy", "local_index":8, "photo_id":"photo-toy-game-8", "devil_photo_id":"photo-toy-devil-8", "achievement_id":"ACH_GAME_068"}
 	_check(catalog.identity("game-068") == tops and catalog.identity("top_sumo") == tops and toy[7].name == "陀螺相撲" and toy[7].arcade == true, "eighth toy town game has stable identities and the arcade flow flag")
+	var dice := {"id":"game-069", "mode":"dice_tower", "zone":"toy", "local_index":9, "photo_id":"photo-toy-game-9", "devil_photo_id":"photo-toy-devil-9", "achievement_id":"ACH_GAME_069"}
+	_check(catalog.identity("game-069") == dice and catalog.identity("dice_tower") == dice and toy[8].name == "骰塔改道" and toy[8].arcade == true,
+		"the ninth toy town slot keeps its own number")
 	var bonk := {"id":"game-070", "mode":"soldier_bonk", "zone":"toy", "local_index":10, "photo_id":"photo-toy-game-10", "devil_photo_id":"photo-toy-devil-10", "achievement_id":"ACH_GAME_070"}
-	_check(catalog.identity("game-070") == bonk and catalog.identity("soldier_bonk") == bonk and toy[8].name == "敲敲玩具兵" and toy[8].arcade == true, "tenth toy town game has stable identities and the arcade flow flag")
+	_check(catalog.identity("game-070") == bonk and catalog.identity("soldier_bonk") == bonk and toy[9].name == "敲敲玩具兵" and toy[9].arcade == true, "tenth toy town game has stable identities and the arcade flow flag")
 	var scenery := {"id":"game-051", "mode":"scenery_drop", "zone":"circus", "local_index":3, "photo_id":"photo-circus-game-3", "devil_photo_id":"photo-circus-devil-3", "achievement_id":"ACH_GAME_051"}
 	_check(catalog.identity("game-051") == scenery and catalog.identity("scenery_drop") == scenery and circus[2].name == "舞台換景" and circus[2].arcade == true,
 		"the scenery drop fills circus slot three between the delivered neighbours")

@@ -52,7 +52,8 @@ var _current := Transform2D.IDENTITY
 
 func _init() -> void:
 	super()
-	word_anchor = Vector2(640, 250)
+	# Words pop beside the stage, clear of the puppet, its strings and the keys.
+	word_anchor = Vector2(175, 380)
 
 
 func _ready() -> void:

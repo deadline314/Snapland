@@ -160,6 +160,26 @@
     ]
   },
   {
+    "id": "game-069",
+    "mode": "dice_tower",
+    "zone": "toy",
+    "local_index": 9,
+    "arcade": true,
+    "name": "骰塔改道",
+    "goal": "骰子從塔頂掉下來，按住左右傾斜骰塔，讓骰子滾進同點數的杯子；沒進就會彈出來敲到你。",
+    "instructions": "← →、A D 或手把十字鍵：按住把骰塔往那邊傾斜，放開就站直。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助把骰子送進杯拿到金牌",
+    "ordinary": "傾斜骰塔把骰子送進同點數的杯子，拿到銅牌",
+    "attraction_tag": "骰子塔",
+    "island_invitation": "骰子上幾點，就把它送進幾號杯！送錯了，骰子會跳出來敲你的額頭，還會印出點點。",
+    "retake_props": [
+      "mascot",
+      "sign",
+      "bench"
+    ]
+  },
+  {
     "id": "game-070",
     "mode": "soldier_bonk",
     "zone": "toy",
