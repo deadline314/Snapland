@@ -1,4 +1,5 @@
 extends RefCounted
+const PaperMotion = preload("res://game/ui/paper_motion.gd")
 ## Shared layered pixel interface, readable with keyboard focus and pointer.
 const INK = Color("#f0f0d8")
 const PAPER = Color("#f0f0d8")
@@ -408,6 +409,7 @@ static func plaque(color := PAPER) -> StyleBoxFlat:
 ## callers can consult reduced_motion() before adding any optional transition.
 static func set_reduced_motion(enabled: bool) -> void:
 	_reduced_motion=enabled
+	PaperMotion.set_reduced(enabled)
 
 static func set_text_scale(value: float) -> void:
 	_text_scale=clampf(value,1.0,1.25)
@@ -505,6 +507,7 @@ static func _attach_button_bevel(button: Button) -> void:
 	var bevel := PixelButtonBevel.new()
 	button.add_child(bevel)
 	bevel.bind(button)
+	PaperMotion.attach_button(button)
 
 static func physical_scale(control: CanvasItem) -> float:
 	var transform := control.get_viewport().get_final_transform()

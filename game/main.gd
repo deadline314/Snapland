@@ -8,6 +8,8 @@ const ToyWorld = preload("res://game/world/toy_world.gd")
 const GardenWorld = preload("res://game/world/garden_world.gd")
 const RegionRoutes = preload("res://game/core/region_routes.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
+const PaperMotion = preload("res://game/ui/paper_motion.gd")
+const RegionTransitionScript = preload("res://game/ui/region_transition.gd")
 const Story = preload("res://game/story/story_director.gd")
 const Audio = preload("res://game/audio/audio_director.gd")
 const Catalog = preload("res://game/core/game_catalog.gd")
@@ -32,6 +34,9 @@ var story: RefCounted
 var ui: Control
 var hud: Control
 var overlay: Control
+var region_transition: Control
+## Collection totals last shown on the HUD; gains since then are announced when it returns.
+var _hud_seen: Dictionary = {}
 var modal_body: VBoxContainer
 var modal_footer: HBoxContainer
 var area_label: Label
@@ -104,6 +109,7 @@ func _ready() -> void:
 	Localization.locale_changed.connect(_on_locale_changed)
 	Progress.achievement_unlocked.connect(_achievement_toast)
 	_refresh()
+	_hud_seen=_collection_totals()
 	audio.play_context(_island_audio_context())
 	if capture_mode:
 		world.player.position=Vector3(0,0.4,9)
@@ -155,7 +161,7 @@ func _island_audio_context() -> String:
 	return "harbor" if world_region=="harbor" or (is_instance_valid(world) and world.current_area=="海風碼頭") else "plaza"
 
 func _travel_to_region(destination: String) -> bool:
-	if quitting or changing_region or session!=null or capture_mode or is_instance_valid(boat_stage) or modal_kind not in ["","gate","map","tasks"]:
+	if quitting or changing_region or _transition_busy() or session!=null or capture_mode or is_instance_valid(boat_stage) or modal_kind not in ["","gate","map","tasks"]:
 		return false
 	if not Progress.SUPPORTED_REGIONS.has(destination) or destination==world_region: return false
 	var threshold := RegionRoutes.threshold(destination)
@@ -168,9 +174,25 @@ func _travel_to_region(destination: String) -> bool:
 		_notice("旅程尚未保存，請再試一次。")
 		return false
 	world.blocked=true
-	# Interaction signals can still be on the old world's stack.
-	_replace_region.call_deferred(destination,true)
+	_begin_region_travel(destination)
 	return true
+
+func _transition_busy() -> bool:
+	return is_instance_valid(region_transition) and region_transition.busy()
+
+## Swap regions behind a cover so the blocking build never shows as a frozen view.
+func _begin_region_travel(destination: String) -> void:
+	if not PaperMotion.has_display() or not is_instance_valid(region_transition):
+		# Interaction signals can still be on the old world's stack.
+		_replace_region.call_deferred(destination,true)
+		return
+	var market := destination=="nightmarket"
+	region_transition.move_to_front()
+	region_transition.cover(RegionRoutes.title(destination),"SNAPLAND   /   前往",Color("#17132b") if market else Color("#08202b"),Color("#f7bd9d") if market else Paper.TEAL)
+	await region_transition.covered
+	if quitting or not is_instance_valid(region_transition): return
+	_replace_region(destination,true)
+	if is_instance_valid(region_transition): region_transition.reveal()
 
 func _replace_region(destination: String, returning: bool = false) -> void:
 	if quitting: return
@@ -190,6 +212,7 @@ func _replace_region(destination: String, returning: bool = false) -> void:
 	changing_region=false
 	_on_world_area_changed(world.current_area,world)
 	_refresh()
+	_hud_seen=_collection_totals()
 
 func _smoke_test() -> void:
 	if OS.get_environment("SNAPLAND_SAVE_PATH").is_empty():
@@ -458,6 +481,8 @@ func _build_ui() -> void:
 	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	ui.add_child(overlay)
 	overlay.hide()
+	region_transition=RegionTransitionScript.new()
+	ui.add_child(region_transition)
 	_update_breadcrumb("海風碼頭")
 	get_tree().root.size_changed.connect(_adapt_hud)
 	call_deferred("_adapt_hud")
@@ -470,6 +495,9 @@ func _update_breadcrumb(current: String) -> void:
 		breadcrumbs[i].add_theme_font_size_override("font_size",14 if i==active else 12)
 
 func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
+	var was_open := overlay.visible and modal_kind!=""
+	# Re-rendering the panel that is already showing (paging, tabs) must not replay its entrance.
+	var same_panel := was_open and modal_kind==kind
 	_dispose_retake()
 	for child in overlay.get_children():
 		overlay.remove_child(child)
@@ -560,6 +588,9 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	call_deferred("_adapt_open_menu")
 	if not get_tree().root.size_changed.is_connected(_adapt_open_menu):
 		get_tree().root.size_changed.connect(_adapt_open_menu)
+	if not same_panel:
+		PaperMotion.enter(center)
+		if not was_open: PaperMotion.fade_in(dim)
 	return content
 
 func _content_pager(parent: VBoxContainer, node_name: String, entries: Array, render: Callable, capacity: int, navigation_parent: Node = null) -> VBoxContainer:
@@ -682,7 +713,10 @@ func _close() -> void:
 		session.set_process_unhandled_input(true)
 		if session.has_method("set_paused"):
 			session.set_paused(false)
-	if session==null: hud.show()
+	if session==null:
+		hud.show()
+		PaperMotion.fade_in(hud,0.14)
+		_announce_gains()
 	if session==null and modal_kind=="" and not pending_story_notice.is_empty():
 		_notice(pending_story_notice)
 		pending_story_notice=""
@@ -690,6 +724,29 @@ func _close() -> void:
 		world.play_action("celebrate")
 	if not practice_return.is_empty():
 		_request_retake(str(practice_return.id),bool(practice_return.devil))
+
+func _collection_totals() -> Dictionary:
+	return {"normal":Progress.normal_count(),"devil":Progress.devil_count(world_region),"coins":Progress.coins}
+
+## Show what was collected while the HUD was hidden as short rising notes.
+func _announce_gains() -> void:
+	var totals := _collection_totals()
+	var banner := hud.get_node_or_null("ParkKeepsakeBanner") as Control
+	if PaperMotion.has_display() and banner!=null:
+		var row := 0
+		for entry in [["normal","+%d 拍貼",Paper.TEAL],["devil","+%d 小惡魔",Paper.CORAL],["coins","+%d 遊園幣",Paper.GOLD]]:
+			var gained := int(totals[entry[0]])-int(_hud_seen.get(entry[0],totals[entry[0]]))
+			if gained<=0: continue
+			var note := Paper.label(str(entry[1])%gained,20,entry[2])
+			note.name="CollectionGainNote"
+			note.add_theme_color_override("font_shadow_color",Paper.DEEP)
+			note.add_theme_constant_override("shadow_offset_y",2)
+			note.position=banner.position+Vector2(banner.size.x+14.0,10.0+row*28.0)
+			note.size=Vector2(260,28)
+			hud.add_child(note)
+			PaperMotion.rise_and_free(note,22.0)
+			row+=1
+	_hud_seen=totals
 
 func _back(parent: Node) -> void:
 	var button := Paper.button(Localization.text("button.back"),_close,modal_footer)
@@ -744,6 +801,7 @@ func _process(delta: float) -> void:
 		_sample_photo.call_deferred()
 	if is_instance_valid(world) and modal_kind=="" and session==null:
 		var has_context: bool = not world.nearest.is_empty() or world.is_riding()
+		var context_appeared := has_context and not context_bar.visible
 		context_bar.visible=has_context
 		context_action.visible=has_context
 		if has_context:
@@ -752,6 +810,9 @@ func _process(delta: float) -> void:
 				context_action.text=prompt
 				context_action.tooltip_text = "F 可向站定的角色揮手。" if not world.is_riding() and STORY_CHARACTER_BY_POINT.has(str(world.nearest.get("id", ""))) else ""
 				_adapt_hud()
+		if context_appeared:
+			PaperMotion.fade_in(context_bar,0.12)
+			PaperMotion.flash(context_action,PaperMotion.GAIN_TINT,0.3)
 	if modal_kind=="dialogue" and is_instance_valid(dialogue_label) and dialogue_label.visible_characters>=0:
 		var previous_count := dialogue_label.visible_characters
 		reveal+=delta*34.0*float(Progress.settings.get("text_speed",1.0))
@@ -773,7 +834,7 @@ func _context_prompt() -> String:
 	return "E   "+str(actor_prompts.get(id,world.nearest.get("label","附近設施")))
 
 func _input(event: InputEvent) -> void:
-	if quitting or changing_region: return
+	if quitting or changing_region or _transition_busy(): return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_T:
 		if modal_kind == "time":
 			_close()
@@ -788,7 +849,7 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if quitting or changing_region: return
+	if quitting or changing_region or _transition_busy(): return
 	if event.is_action_pressed("pause"):
 		if modal_kind=="" and session==null and is_instance_valid(world.coastal_play) and is_instance_valid(world.coastal_play.discoveries) and world.coastal_play.discoveries.end_control(): pass
 		elif modal_kind=="dialogue": _cancel_dialogue()
@@ -928,6 +989,7 @@ func _open_tutorial(target_id: String, origin: String, assisted_mode: bool = fal
 	tutorial_panel=TutorialPanelScript.new()
 	tutorial_panel.name="TutorialPanel"
 	ui.add_child(tutorial_panel)
+	PaperMotion.fade_in(tutorial_panel,0.14)
 	tutorial_panel.close_requested.connect(_tutorial_close)
 	tutorial_panel.start_requested.connect(_tutorial_start)
 	tutorial_panel.skip_requested.connect(_tutorial_skip)
@@ -1624,6 +1686,7 @@ func _show_game_info(id: String) -> void:
 	invitation.rules_requested=_show_game_rules.bind(id)
 	invitation.close_requested=_close
 	overlay.add_child(invitation)
+	PaperMotion.fade_in(invitation,0.14)
 
 func _show_game_rules(id: String) -> void:
 	var definition := _definition(id)
@@ -2317,6 +2380,9 @@ func _show_wardrobe() -> void:
 
 func _notice(message: String) -> void:
 	toast.text=message
+	if not message.is_empty():
+		PaperMotion.pop(toast,1.08)
+		PaperMotion.flash(toast,PaperMotion.GAIN_TINT,0.5)
 	var timer := get_tree().create_timer(3.5)
 	timer.timeout.connect(func(): if is_instance_valid(toast) and toast.text==message: toast.text="")
 

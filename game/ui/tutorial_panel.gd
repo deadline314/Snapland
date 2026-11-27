@@ -548,8 +548,10 @@ func _build_ui() -> void:
 	_copy_page_controls.alignment=BoxContainer.ALIGNMENT_CENTER
 	var copy_previous := Paper.button("‹",func(): _set_copy_page(_copy_page-1),_copy_page_controls)
 	copy_previous.name="TutorialCopyPrevious"
+	copy_previous.tooltip_text="上一段說明"
 	var copy_next := Paper.button("›",func(): _set_copy_page(_copy_page+1),_copy_page_controls)
 	copy_next.name="TutorialCopyNext"
+	copy_next.tooltip_text="下一段說明"
 	_copy_page_label=Paper.label("說明 1 / 2",15,Paper.INK)
 	_copy_page_label.name="TutorialCopyPageLabel"
 	_copy_page_label.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
