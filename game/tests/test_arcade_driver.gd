@@ -55,6 +55,7 @@ func _run() -> void:
 	_variants_are_seeded()
 	_input_routes_to_hooks()
 	_session_finds_arcade_games()
+	_untouched_rounds_earn_nothing()
 	for failure in failures:
 		push_error("FAIL: " + failure)
 	if failures.is_empty():
@@ -261,3 +262,32 @@ func _tap(game: Base, code: int) -> bool:
 func _check(condition: bool, message: String) -> void:
 	if not condition:
 		failures.append(message)
+
+
+## No input means no points: every delivered arcade game, left completely alone
+## for a whole round, ends at zero with no sticker, over many seeds and with
+## uneven frame steps (a busy machine delivers frames unevenly). Rules that pay
+## on their own when random events happen to land well fail here.
+const UNTOUCHED_SEEDS := 50
+
+
+func _untouched_rounds_earn_nothing() -> void:
+	for definition: Dictionary in Catalog.all_definitions():
+		if not bool(definition.get("arcade", false)):
+			continue
+		var script := load("res://game/minigames/arcade/%s_driver.gd" % definition.mode) as Script
+		var frames := RandomNumberGenerator.new()
+		frames.seed = 7
+		var scored: Array[String] = []
+		for round_seed in UNTOUCHED_SEEDS:
+			var game: Base = script.new()
+			game.round_seed = round_seed
+			game.reset(false, "noon")
+			for frame in 5000:
+				if game.snapshot().ended:
+					break
+				game.step(frames.randf_range(0.008, 0.11))
+			var state: Dictionary = game.snapshot()
+			if game.score != 0 or game.medal() != 0 or state.success or state.devil or state.ordinary_eligible or not state.ended:
+				scored.append("seed %d: %d" % [round_seed, game.score])
+		_check(scored.is_empty(), "%s left untouched for %d seeded rounds always ends at zero (%s)" % [definition.id, UNTOUCHED_SEEDS, ", ".join(scored)])

@@ -123,7 +123,9 @@ func _tick(_delta: float) -> void:
 		if thing.kind == "pie":
 			flying.erase(thing)
 			pies_dodged += 1
-			add_score(PIE_DODGE_POINTS, "放過了！+%d" % PIE_DODGE_POINTS)
+			# Letting a pie by only pays while there is a tower to protect.
+			if tower > 0:
+				add_score(PIE_DODGE_POINTS, "放過了！+%d" % PIE_DODGE_POINTS)
 			sound(64)
 		else:
 			_topple("miss", int(thing.side))

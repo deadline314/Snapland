@@ -328,6 +328,8 @@ func _round(variant_id: String, assisted: bool) -> Game:
 func _playing(variant_id: String, assisted := false) -> Game:
 	var game := _round(variant_id, assisted)
 	_advance(game, Base.READY_SECONDS + 0.01)
+	# Checks below place things by hand, as if the player had already pressed a key.
+	game.touched = true
 	return game
 
 

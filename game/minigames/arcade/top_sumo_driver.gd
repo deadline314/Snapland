@@ -267,8 +267,8 @@ func _collide(one: Dictionary, two: Dictionary) -> void:
 		if hero.kind != "hero":
 			continue
 		var other: Dictionary = two if side == 0 else one
-		# Only a push from your top makes the rival yours.
-		if float(drives[side]) > 20.0:
+		# Only a push from your top makes the rival yours, and only once you are steering at all.
+		if float(drives[side]) > 20.0 and (touched or _demo):
 			other.hit = clock
 		ram_point = (one.pos + two.pos) * 0.5
 		if closing > RAM_SPEED and float(drives[side]) > 0.0:

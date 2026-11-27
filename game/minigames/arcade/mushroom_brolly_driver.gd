@@ -225,7 +225,8 @@ func _on_cap(drop: Dictionary) -> void:
 		if dents.size() > MAX_DENTS:
 			dents.pop_front()
 		sound(52)
-		if not _demo:
+		# Hail can bonk an umbrella nobody has moved; that pays nothing.
+		if not _demo and touched:
 			add_score(BONK_POINTS, "咚！")
 		return
 	var over := _pot_under(cap_x, DRIP_REACH)

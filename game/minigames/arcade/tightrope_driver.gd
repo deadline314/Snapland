@@ -191,6 +191,10 @@ func _walk(delta: float) -> void:
 		steady_time += delta
 	_walked += step * (2.0 if steady else 0.3)
 	var points := floori(_walked / PIXELS_PER_POINT)
+	# He walks by himself, but a walk nobody has steered earns nothing.
+	if points > 0 and not touched:
+		_walked -= points * PIXELS_PER_POINT
+		points = 0
 	if points > 0:
 		_walked -= points * PIXELS_PER_POINT
 		add_score(points)
@@ -198,7 +202,8 @@ func _walk(delta: float) -> void:
 		walk_x = clampf(walk_x, WIRE_FROM, WIRE_TO)
 		heading = -heading
 		crossings += 1
-		add_score(CROSSING_BONUS, "走到了！+%d" % CROSSING_BONUS)
+		if touched:
+			add_score(CROSSING_BONUS, "走到了！+%d" % CROSSING_BONUS)
 		sound(84)
 		spin = 0.0
 		lean *= 0.3

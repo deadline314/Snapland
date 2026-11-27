@@ -52,6 +52,10 @@ var round_seed := -1
 ## The arcade marathon plays every game at half length this way.
 var round_scale := 1.0
 var assisted := false
+## Whether the player has pressed anything since play began. No input means no
+## points: a game whose rules can pay on their own (a walker that walks, a rival
+## that bounces off you) only pays once this is set.
+var touched := false
 var variant: Dictionary = {}
 var score := 0
 var mistakes := 0
@@ -95,6 +99,7 @@ func reset(assisted_mode: bool, _clock: String) -> void:
 	score = 0
 	mistakes = 0
 	fail_at = -99.0
+	touched = false
 	stage = "ready"
 	play_time = 0.0
 	clock = 0.0
@@ -279,6 +284,7 @@ func _route(button: StringName, pressed: bool, source: String) -> void:
 			return
 		_held[source] = button
 		if stage == "play":
+			touched = true
 			_press(button)
 	elif _held.erase(source) and stage == "play":
 		_release(button)
