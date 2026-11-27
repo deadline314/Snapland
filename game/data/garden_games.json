@@ -40,6 +40,26 @@
     ]
   },
   {
+    "id": "game-075",
+    "mode": "vine_weave",
+    "zone": "garden",
+    "local_index": 3,
+    "arcade": true,
+    "name": "藤蔓編路",
+    "goal": "藤蔓尖一直往上長，左右引導它穿過每一根棚架橫竿的空隙，一路爬到天窗；撞到橫竿會打結。",
+    "instructions": "← →、A D 或手把十字鍵、左搖桿：把藤蔓尖往那邊引。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助編路拿到金牌",
+    "ordinary": "引導藤蔓穿過棚架爬到天窗，拿到銅牌",
+    "attraction_tag": "藤蔓棚架",
+    "island_invitation": "藤蔓長得飛快，一路往天窗衝！空隙會開會合，還有蝴蝶擋路。撞到棚架的話，你會被綁成一個蝴蝶結。",
+    "retake_props": [
+      "flower_horn",
+      "hat",
+      "bench"
+    ]
+  },
+  {
     "id": "game-077",
     "mode": "lily_hop",
     "zone": "garden",

@@ -35,6 +35,8 @@ const STANDS := {
 			"stand": Vector3(-9.6, 0.2, 5.6), "point": Vector3(-8.5, 0.2, 6.9), "prop": "camera", "paint": Color("#38534e")},
 		{"id": "game-074", "title": "露珠牽橋", "prompt": "露珠牽橋 · 傾斜葉子滾露珠",
 			"stand": Vector3(-6.6, 0.2, 6.2), "point": Vector3(-5.5, 0.2, 7.5), "prop": "dew", "paint": Color("#4f7f5a")},
+		{"id": "game-075", "title": "藤蔓編路", "prompt": "藤蔓編路 · 引導藤蔓穿棚架",
+			"stand": Vector3(8.2, 0.2, -10.6), "point": Vector3(7.1, 0.2, -9.3), "prop": "vine", "paint": Color("#5a7a3a")},
 		{"id": "game-077", "title": "睡蓮踏浪", "prompt": "睡蓮踏浪 · 踩葉過池",
 			"stand": Vector3(-2.6, 0.2, -7.7), "point": Vector3(-1.55, 0.2, -6.35), "prop": "lily", "paint": Color("#3f6f5a")},
 		{"id": "game-079", "title": "蘑菇撐傘", "prompt": "蘑菇撐傘 · 替幼苗接雨",
@@ -75,6 +77,7 @@ static func build(world: Node3D, region: String) -> void:
 			"mushroom": _mushroom_prop(sculpt)
 			"code": _code_prop(sculpt)
 			"dew": _dew_prop(sculpt)
+			"vine": _vine_prop(sculpt)
 		var stand: MeshInstance3D = world._mesh(sculpt.mesh(), Vector3.ZERO, world._vertex_color_material("arcade-stand"))
 		stand.name = "ArcadeStand_" + str(row.id)
 		var body := StaticBody3D.new()
@@ -387,3 +390,33 @@ static func _puppet_prop(sculpt: Kit.Sculpt) -> void:
 		sculpt.box(Vector3(side * 0.16, 1.1, 0.06), Vector3(0.1, 0.3, 0.03), velvet)
 	sculpt.box(Vector3(0.0, 1.29, 0.06), Vector3(0.46, 0.06, 0.03), velvet)
 	sculpt.box(Vector3(0.0, 1.03, 0.08), Vector3(0.06, 0.1, 0.03), red)
+
+
+## A little bamboo trellis over the sign with a vine winding up through its
+## gaps to a pink flower, a butterfly on the top bar, and a coil of twine and a
+## seedling on the counter.
+static func _vine_prop(sculpt: Kit.Sculpt) -> void:
+	var bamboo := Color("#c9b26a")
+	var vine := Color("#4f8a3a")
+	for side: float in [-1.0, 1.0]:
+		sculpt.box(Vector3(side * 0.5, 2.85, -0.3), Vector3(0.05, 0.9, 0.05), bamboo.darkened(0.1))
+	for bar in 3:
+		var y := 2.55 + bar * 0.28
+		var gap: float = [-0.15, 0.2, -0.05][bar]
+		sculpt.box(Vector3((-0.5 + gap - 0.09) * 0.5, y, -0.3), Vector3(gap + 0.41, 0.04, 0.04), bamboo)
+		sculpt.box(Vector3((0.5 + gap + 0.09) * 0.5, y, -0.3), Vector3(0.41 - gap, 0.04, 0.04), bamboo)
+	var points: Array[Vector3] = [Vector3(0.05, 2.4, -0.25), Vector3(-0.15, 2.55, -0.25), Vector3(0.2, 2.83, -0.25), Vector3(-0.05, 3.11, -0.25), Vector3(0.1, 3.3, -0.25)]
+	for index in points.size() - 1:
+		var from := points[index]
+		var to := points[index + 1]
+		var mid := (from + to) * 0.5
+		var along := to - from
+		sculpt.box(mid, Vector3(0.04, along.length(), 0.04), vine, Basis(Vector3.BACK, -atan2(along.x, along.y)))
+		sculpt.box(mid + Vector3(0.06, 0, 0.02), Vector3(0.1, 0.05, 0.02), vine.lightened(0.15), Basis(Vector3.BACK, 0.6))
+	sculpt.ball(Vector3(0.1, 3.36, -0.25), 0.07, Color("#f2a7b8"), Color("#ffd166"), 6, 3, 1.0)
+	sculpt.box(Vector3(0.32, 3.13, -0.25), Vector3(0.12, 0.08, 0.02), Color("#ffd166"))
+	sculpt.tube(Vector3(-0.3, 1.02, 0.1), 0.12, 0.12, 0.1, Color("#d9c08a"), 8)
+	sculpt.tube(Vector3(-0.3, 1.08, 0.1), 0.05, 0.05, 0.03, Color("#8a7a5a"), 6)
+	sculpt.tube(Vector3(0.28, 1.04, 0.1), 0.1, 0.08, 0.16, Color("#b8643f"), 8)
+	sculpt.box(Vector3(0.28, 1.2, 0.1), Vector3(0.02, 0.18, 0.02), vine)
+	sculpt.box(Vector3(0.32, 1.27, 0.1), Vector3(0.1, 0.03, 0.06), vine.lightened(0.15), Basis(Vector3.BACK, 0.4))
