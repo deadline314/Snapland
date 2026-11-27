@@ -122,6 +122,7 @@ class RuntimeResultContractTests(unittest.TestCase):
                 self.assertEqual(path.read_bytes(), payload, "a later suite overwrote another suite's sidecar")
             expected_limits = {
                 "avatar renderer tests": 240,
+                "figure scale tests": 240,
                 "pixel UI shell tests": 240,
                 "region travel tests": 180,
                 "retake panel tests": 180,

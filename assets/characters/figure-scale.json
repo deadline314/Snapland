@@ -1,0 +1,34 @@
+{
+	"schema_version": 1.0,
+	"description": "Brings each drawn character source back to the size of the standing figure. 'head' scales the figure above the neck and 'body' ([x, y]) the rest, both about the ground contact 'feet', which lands on 'plant'. 'measured' is the head of the source as drawn, relative to the standing head of the same drawn direction. Baked by game/tests/test_figure_scale.gd, which keeps the hand-set fields: body, neck_below_top, pin_head, allow and reason. 'allow' widens one check for one source and only counts together with a reason.",
+	"tolerance": {"head":0.04,"feet_px":2,"standing_height":0.06},
+	"stepping": {"reason":"A step, a turn or a dance plants one foot away from the standing spot, so the feet centre is not compared; the ground row still is.","traveller":["settle","depart","pivot","pivot_depth"],"imp":["dance"]},
+	"sources": {
+		"traveller": {
+			"manifest:wave:front": {"body":[0.93,1.08],"neck_below_top":[138,156],"measured":1.34,"head":0.746,"feet":[140,345],"plant":[142,345],"neck_rows":[[191,209],[191,209],[194,212],[189,207],[191,209],[191,209],[191,209],[191,209]]},
+			"manifest:photograph:front": {"body":[0.93,1.08],"neck_below_top":[138,156],"measured":1.362,"head":0.734,"feet":[140,345],"plant":[142,345],"neck_rows":[[194,212],[194,212],[194,212],[194,212],[194,212],[194,212],[194,212],[194,212]]},
+			"manifest:interact:front": {"body":[0.93,1.08],"neck_below_top":[138,156],"measured":1.348,"head":0.742,"feet":[140,345],"plant":[142,345],"neck_rows":[[199,217],[199,217],[199,217],[199,217],[199,217],[199,217],[199,217],[199,217]]},
+			"manifest:jump:front": {"body":[0.95,1.06],"neck_below_top":[125,141],"measured":1.248,"head":0.801,"feet":[141,330],"plant":[143,345],"neck_rows":[[168,184],[221,237],[169,185],[134,150],[134,150],[169,185],[221,237],[168,184]]},
+			"pose:wave": {"pin_head":0.825,"allow":{"head":0.08},"reason":"The four portraits share one atlas scale. The neutral photograph pose sets it (1.21 by head, 1.20 by height); raised arms and wind-blown hair disturb the head reading of the others.","measured":1.142,"head":0.825,"feet":[153,346],"plant":[144,345]},
+			"pose:photograph": {"pin_head":0.825,"reason":"Sets the shared scale of the four portraits: 1.21 by head, 1.20 by height.","measured":1.213,"head":0.825,"feet":[143,346],"plant":[143,345]},
+			"pose:interact": {"pin_head":0.825,"allow":{"head":0.08,"feet_x":40},"reason":"Shares the portrait atlas scale; the lunge spreads the hair and the feet, so the pose is centred on its head.","measured":1.262,"head":0.825,"feet":[116,345],"plant":[120,345]},
+			"pose:celebrate": {"pin_head":0.825,"allow":{"head":0.09,"feet_x":7},"reason":"Shares the portrait atlas scale; both arms cross the hair, which narrows the head reading, and the wide stance is centred on the head.","measured":1.113,"head":0.825,"feet":[136,345],"plant":[138,345]},
+			"manifest:catch:front": {"body":[1.0,1.0],"neck_below_top":[108,124],"measured":1.057,"head":0.946,"feet":[138,346],"plant":[143,345],"neck_rows":[[178,194],[178,194],[178,194],[178,194],[178,194],[178,194],[178,194],[178,194],[177,193],[178,194],[178,194],[178,194]]},
+			"manifest:wave:left": {"pin_head":1.0,"allow":{"head":0.09,"feet_x":7},"reason":"The raised-arm profile cels draw thinner back spikes and boots 6 px back; the face and the standing height (278 vs 277) match, and the first and last cels are the standing pose itself.","measured":0.923,"head":1.0},
+			"manifest:photograph:left": {"allow":{"feet_x":8},"reason":"The boots are drawn 7 px back while the head stays over the standing head; moving the cel would move the head instead.","measured":0.965,"head":1.0},
+			"manifest:sit:front": {"allow":{"feet_x":4},"reason":"The seated cels keep their authored place on the card, 4 px left of the standing spot; the seat positions them and their hair is checked pixel for pixel against the source.","measured":1.014,"head":1.0}
+		},
+		"ticket": {
+		},
+		"imp": {
+		},
+		"announcer": {
+			"walk:right": {"allow":{"height":0.07},"reason":"The profile art perches the cap higher; the body from collar to boots is as tall as in the front view."},
+			"walk:left": {"allow":{"height":0.07},"reason":"The profile art perches the cap higher; the body from collar to boots is as tall as in the front view."},
+			"settle:right": {"allow":{"height":0.07},"reason":"The profile art perches the cap higher; the body from collar to boots is as tall as in the front view."},
+			"settle:left": {"allow":{"height":0.07},"reason":"The profile art perches the cap higher; the body from collar to boots is as tall as in the front view."},
+			"depart:right": {"allow":{"height":0.07},"reason":"The profile art perches the cap higher; the body from collar to boots is as tall as in the front view."},
+			"depart:left": {"allow":{"height":0.07},"reason":"The profile art perches the cap higher; the body from collar to boots is as tall as in the front view."}
+		}
+	}
+}

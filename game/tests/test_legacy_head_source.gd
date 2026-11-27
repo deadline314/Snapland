@@ -1,6 +1,7 @@
 extends SceneTree
 const Avatar = preload("res://game/world/avatar_renderer.gd")
 const Heads = preload("res://game/world/legacy_head_source.gd")
+const FigureScale = preload("res://game/world/figure_scale.gd")
 # Independently captured from a26a65d before reviewed legacy ownership existed.
 const ORIGINAL_RENDER_SHA := "ac5ae00803018d473727c82512bc3bd61c6c353787e7a73484b4e0c391315c2f"
 const FALLBACK_DIRECTION := "back"
@@ -21,6 +22,9 @@ func _initialize() -> void:
 	var save:=OS.get_environment("SNAPLAND_SAVE_PATH")
 	if not save.is_absolute_path():quit(2);return
 	var folder:=save.get_base_dir();DirAccess.make_dir_recursive_absolute(folder)
+	# Ownership is reviewed against the portrait as drawn. The fit to the standing
+	# figure runs after composition and has its own suite, so it is set aside here.
+	FigureScale.use_table({})
 	var avatar:=Avatar.new()
 	check(avatar.legacy_heads.cache_snapshot().compiled_portraits==0,"Head masks compiled before any portrait used them")
 	var source: Image=avatar._atlas_pose_image(15)

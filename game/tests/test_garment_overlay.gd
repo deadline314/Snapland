@@ -1,6 +1,7 @@
 extends SceneTree
 const Avatar = preload("res://game/world/avatar_renderer.gd")
 const Overlays = preload("res://game/world/garment_overlay_library.gd")
+const FigureScale = preload("res://game/world/figure_scale.gd")
 var failures := 0
 func check(value: bool, message: String) -> void:
 	if not value: push_error(message); failures+=1
@@ -12,12 +13,25 @@ func _initialize() -> void:
 	if failures>0: quit(1);return
 	var parsed: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(Overlays.MANIFEST_PATH))
 	var poses := 0
+	# Garment cels are drawn over the pose as authored. A pose that is fitted to
+	# the standing figure is fitted after it is dressed, so its expected picture
+	# is the dressed original put through the same fit.
+	var fits: Dictionary = FigureScale.table()
+	var drawn = Avatar.new()
 	for row in parsed.frames:
+		var fit: Dictionary = {} if row.action in ["idle","walk"] else FigureScale.entry("traveller",avatar.figure_source(row.action,row.direction,avatar.has_authored_action(row.action,row.direction)))
 		var original: Image = avatar.texture(Avatar.DEFAULT_APPEARANCE,{"outfit":"outfit-tide"},row.direction,int(row.frame),row.action).get_image()
 		var expected := original.duplicate()
+		if not fit.is_empty():
+			# `drawn` only ever renders with the fit set aside.
+			FigureScale.use_table({})
+			expected = drawn.texture(Avatar.DEFAULT_APPEARANCE,{"outfit":"outfit-tide"},row.direction,int(row.frame),row.action).get_image().duplicate()
+			FigureScale.use_table(fits)
+			check(FigureScale.refit(expected,fit,int(row.frame)).get_data()==original.get_data(),"Fitted original differs from the shown pose: %s/%s/%d"%[row.action,row.direction,row.frame])
 		var layer := Image.new()
 		check(layer.load_png_from_buffer(FileAccess.get_file_as_bytes(row.path))==OK,"Cannot decode garment")
 		expected.blend_rect(layer,Rect2i(0,0,280,360),Vector2i.ZERO)
+		if not fit.is_empty(): expected = FigureScale.refit(expected,fit,int(row.frame))
 		var dressed: Image = avatar.texture(Avatar.DEFAULT_APPEARANCE,{"outfit":Overlays.OUTFIT},row.direction,int(row.frame),row.action).get_image()
 		check(dressed.get_data()==expected.get_data(),"Garment integration changed original composition: %s/%s/%d"%[row.action,row.direction,row.frame])
 		check(dressed.get_data()!=original.get_data(),"Missing garment at "+str(row))

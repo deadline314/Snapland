@@ -17,6 +17,7 @@ const DIAGONAL_PARTS_PATH := "res://assets/characters/diagonal-parts.json"
 const IDLE_WALK_FRAME := 0
 const ACTIONS := ["wave", "photograph", "interact", "celebrate"]
 const CharacterAnimationLibraryScript = preload("res://game/world/character_animation_library.gd")
+const FigureScaleScript = preload("res://game/world/figure_scale.gd")
 const SOURCE_SIZE := Vector2i(1122, 1402)
 const HAT_ATLAS_PATH := "res://assets/characters/hats-v1.png"
 const HAT_SOURCE_SIZE := Vector2i(1217, 1293)
@@ -116,6 +117,9 @@ var _diagonal_hat_regions: Array = []
 var _diagonal_hair_valid := false
 var _diagonal_hat_valid := false
 var animation_library: RefCounted
+## Hats, ears and horns have one drawn size. On a source drawn with a larger head
+## they are enlarged to match, so the figure fit returns both to standing size.
+var _part_scale := 1.0
 
 ## Atlas-derived state captured after the first successful load, keyed by
 ## property name. Decoding and scanning the source atlases takes about a second,
@@ -244,6 +248,12 @@ func original_garment_pose(action: String, direction: String, frame: int) -> Ima
 	var cardinal := direction if DIRECTIONS.has(direction) else _closest_cardinal(direction)
 	return _atlas_pose_image(_pose_index(cardinal,frame,action)) if _atlas_valid else null
 
+## Names the drawn source of a pose for the baked figure-size table. Standing and
+## walking cels are the reference size and never have an entry.
+func figure_source(action: String, direction: String, authored: bool) -> String:
+	if authored: return "manifest:%s:%s" % [action, direction]
+	return "pose:" + action if ACTIONS.has(action) else ""
+
 func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "front", frame: int = 0, action: String = "idle") -> Texture2D:
 	var requested_direction := direction if WALK_DIRECTIONS.has(direction) else "front"
 	var safe_direction := requested_direction
@@ -301,6 +311,8 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	var image: Image = _stable_idle_pixels.frame("hero-idle",safe_direction,idle_frame) if registered_idle else (_walk_pose_image(safe_direction, walk_frame) if use_walk_source else (_atlas_pose_image(pose) if _atlas_valid else _fallback_image(pose_direction, safe_frame, safe_action)))
 	var manifest_head_anchor := Vector2i.ZERO
 	var manifest_has_head_anchor := false
+	# A manifest cel that cannot be composed leaves the portrait pose in its place.
+	var drawn_from_manifest := false
 	if has_manifest_frame:
 		# Clothing completeness and palette-only profiles are resolved by the library.
 		var pose_equipped := equipped.duplicate()
@@ -310,6 +322,7 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 			# ImageTexture.get_image() may expose a cached image. Renderer passes
 			# mutate their working canvas, so detach before stripping or compositing.
 			image = authored.get_image().duplicate()
+			drawn_from_manifest = true
 			if not use_walk_layout and animation_library.has_anchor("traveller", safe_action, safe_direction, safe_frame, "head", pose_equipped):
 				manifest_head_anchor = animation_library.normalized_anchor("traveller", safe_action, safe_direction, safe_frame, "head", pose_equipped)
 				manifest_has_head_anchor = true
@@ -423,6 +436,8 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 	if DIRECTIONS.has(safe_direction):
 		_apply_appearance_details(image, normalized_appearance, safe_direction, safe_action)
 	var selected_hair_color: Color = HAIR_COLORS.get(str(normalized_appearance.get("hair_color","ink")),HAIR_COLORS.ink)
+	var figure_fit: Dictionary = FigureScaleScript.entry("traveller", figure_source(safe_action, safe_direction, drawn_from_manifest))
+	_part_scale = 1.0 / maxf(float(figure_fit.get("head", 1.0)), 0.1)
 	if species == "elf" and _species_atlas_valid:
 		if source_metrics.is_empty():
 			var raw_pose := _walk_pose_image(safe_direction,walk_frame) if use_walk_source else image
@@ -441,6 +456,9 @@ func texture(appearance: Dictionary, equipped: Dictionary, direction: String = "
 		_apply_diagonal_hat(image, hat, safe_direction, hair_hat_offset, head_shift_x)
 	if face_backdrop != null and has_manifest_frame:
 		_restore_authored_foreground(image, face_backdrop, safe_action, safe_direction, safe_frame)
+	_part_scale = 1.0
+	# Hair, hats and ears are already composed, so they shrink with the figure.
+	if not figure_fit.is_empty(): image = FigureScaleScript.refit(image, figure_fit, safe_frame)
 	var result := ImageTexture.create_from_image(image)
 	_cache[key] = result
 	_cache_order.append(key)
@@ -1788,13 +1806,13 @@ func _apply_diagonal_hat(image: Image, hat: String, direction: String, vertical_
 	var direction_index := ["front_left", "front_right", "back_left", "back_right"].find(direction)
 	if row < 0 or row >= _diagonal_hat_regions.size() or direction_index < 0: return
 	var hat_image: Image = _diagonal_hat_regions[row][direction_index].duplicate()
-	var width := roundi(HAT_TARGET_WIDTHS[row] * float(image.get_width()) / CANVAS_SIZE.x)
+	var width := roundi(HAT_TARGET_WIDTHS[row] * _part_scale * float(image.get_width()) / CANVAS_SIZE.x)
 	var ratio := float(width) / 314.0
 	var height_scale: float = HAT_VERTICAL_SCALE[row]
 	var resized_width := maxi(1, roundi(float(hat_image.get_width()) * ratio))
 	var resized_height := maxi(1, roundi(float(hat_image.get_height()) * ratio * height_scale))
 	hat_image.resize(resized_width, resized_height, Image.INTERPOLATE_NEAREST)
-	var crown_offset := roundi(HAT_CROWN_OFFSETS[row] * float(image.get_height()) / CANVAS_SIZE.y)
+	var crown_offset := roundi(HAT_CROWN_OFFSETS[row] * _part_scale * float(image.get_height()) / CANVAS_SIZE.y)
 	var crown_y := maxi(roundi(2.0 * float(image.get_height()) / CANVAS_SIZE.y), vertical_offset + crown_offset)
 	image.blend_rect(hat_image, Rect2i(Vector2i.ZERO, Vector2i(resized_width, resized_height)), Vector2i((image.get_width() - resized_width) / 2 + head_shift_x, crown_y))
 
@@ -1846,7 +1864,7 @@ func _apply_species_ears(image: Image, species: String, direction: String, verti
 	for side in range(2):
 		if profile and side != (0 if direction=="right" else 1): continue
 		var region: Rect2i = ELF_EAR_REGIONS[(2 if side==0 else 3) if profile else side]
-		var part := _species_part_image(region,22 if profile else 36,skin_color)
+		var part := _species_part_image(region,roundi((22 if profile else 36)*_part_scale),skin_color)
 		var base := _strong_part_base(part)
 		var root := Vector2i(left+4 if side==0 else right-4,eye_y)
 		image.blend_rect(part,Rect2i(Vector2i.ZERO,Vector2i(part.get_width(),part.get_height())),root-base)
@@ -1894,7 +1912,7 @@ func _apply_species_horns(image: Image, species: String, direction: String, vert
 		var factor := 0.5 if profile else (0.30 if side==0 else 0.70)
 		var root := _crown_root(image,roundi(crown.position.x+crown.size.x*factor),crown,hair_color)
 		var region: Rect2i = IMP_HORN_REGIONS[0] if profile else IMP_HORN_REGIONS[3 if direction=="back" else 1]
-		var part := _species_part_image(region,26 if profile else 31,Color.WHITE,direction=="right" if profile else side==1)
+		var part := _species_part_image(region,roundi((26 if profile else 31)*_part_scale),Color.WHITE,direction=="right" if profile else side==1)
 		var base := _strong_part_base(part)
 		var position := root-base
 		# Complete source tips stay in-canvas while the broad base penetrates hair.
@@ -2010,7 +2028,7 @@ func _apply_hat_atlas(image: Image, row: int, column: int, vertical_offset: int,
 	var scale_x := float(_hat_atlas_image.get_width()) / HAT_SOURCE_SIZE.x
 	var scale_y := float(_hat_atlas_image.get_height()) / HAT_SOURCE_SIZE.y
 	var region := _scaled_region(source_region, scale_x, scale_y)
-	var target_width: float = HAT_TARGET_WIDTHS[row] * float(image.get_width()) / CANVAS_SIZE.x
+	var target_width: float = HAT_TARGET_WIDTHS[row] * _part_scale * float(image.get_width()) / CANVAS_SIZE.x
 	var row_average_width := 0.0
 	for hat_region: Rect2i in HAT_REGIONS[row]: row_average_width += hat_region.size.x * scale_x
 	row_average_width /= HAT_REGIONS[row].size()
@@ -2024,7 +2042,7 @@ func _apply_hat_atlas(image: Image, row: int, column: int, vertical_offset: int,
 			if pixel.a < 0.4: hat.set_pixel(x, y, Color.TRANSPARENT)
 	var resized := Vector2i(maxi(1, roundi(scaled_region_size.x)), maxi(1, roundi(scaled_region_size.y)))
 	hat.resize(resized.x, resized.y, Image.INTERPOLATE_NEAREST)
-	var crown_offset := roundi(HAT_CROWN_OFFSETS[row] * float(image.get_height()) / CANVAS_SIZE.y)
+	var crown_offset := roundi(HAT_CROWN_OFFSETS[row] * _part_scale * float(image.get_height()) / CANVAS_SIZE.y)
 	var crown_y := maxi(roundi(2.0 * float(image.get_height()) / CANVAS_SIZE.y), vertical_offset + crown_offset)
 	var position := Vector2i((image.get_width() - resized.x) / 2 + head_shift_x, crown_y)
 	var composite := Image.create(image.get_width(), image.get_height(), false, Image.FORMAT_RGBA8)

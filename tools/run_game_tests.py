@@ -22,6 +22,7 @@ EXPECTED_VERSION = "4.7.2"
 
 SUITE_TIMEOUT_SECONDS = {
     "avatar renderer tests": 240,
+    "figure scale tests": 240,
     "pixel UI shell tests": 240,
     "region travel tests": 180,
     "retake panel tests": 180,
@@ -184,6 +185,7 @@ PASS_MARKERS = {
     "island wind tests": "PASS: shared island wind declaration, users and reduced-motion freeze (",
     "picture quality tests": "PASS: picture quality levels, saved setting and world budgets (",
     "avatar shared source tests": "PASS: avatar renderers share decoded sources without sharing state (",
+    "figure scale tests": "PASS: every character keeps one head size and ground contact across actions (",
     "minigame atmosphere tests": "PASS: minigame atmosphere themes, shared feedback and layer order (",
     "pixel UI collection tests": "PASS: pixel UI collection, map, achievement, and tutorial checks",
     "pixel tutorial page tests": "PASS: native-matching tutorial steps for every lesson, all five semantic fields in capacity-driven page groups, three sizes/1.25, visible copy clip/line height and blocked wheel",
@@ -604,6 +606,7 @@ def build_checks(executable: str) -> list[tuple[str, list[str]]]:
         ("island wind tests", common + ["--script", "res://game/tests/test_island_wind.gd"]),
         ("picture quality tests", common + ["--script", "res://game/tests/test_render_quality.gd"]),
         ("avatar shared source tests", common + ["--script", "res://game/tests/test_avatar_shared_sources.gd"]),
+        ("figure scale tests", common + ["--script", "res://game/tests/test_figure_scale.gd"]),
         ("minigame atmosphere tests", common + ["--script", "res://game/tests/test_minigame_atmosphere.gd"]),
         ("pixel UI collection tests", common + ["res://game/tests/test_pixel_ui_collections.tscn"]),
         ("pixel tutorial page tests", common + ["--script", "res://game/tests/test_tutorial_paged_viewport.gd"]),
