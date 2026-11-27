@@ -18,12 +18,9 @@ const PAGE_SIZE := 4
 const MAX_PHOTO_FRAME_CANDIDATES := 12
 const MAX_LEGACY_UI_PHOTO_BYTES := 16 * 1024 * 1024
 
+## The page the photos are pinned to; the journal sheet behind shows through.
 class BookSpread extends Control:
-	func _draw() -> void:
-		var bounds := Rect2(Vector2.ZERO, size).grow(-2.0)
-		draw_rect(bounds, Paper.DEEP)
-		draw_rect(bounds, Paper.FRAME, false, 2.0)
-		draw_rect(Rect2(bounds.position + Vector2(6, 6), bounds.size - Vector2(12, 12)), Paper.FRAME, false, 1.0)
+	pass
 
 var _progress: Node
 var _definitions: Array = []
@@ -523,14 +520,6 @@ func _photo_tile(entry: Dictionary) -> Control:
 	tile.tooltip_text=str(entry.instructions)
 	if entry.has("game_id"):
 		tile.tooltip_text="查看原圖" if collected else ("免費補拍" if _progress.has_attempted_game(str(entry.game_id)) else "先練習再免費補拍")
-	var tile_style := Paper.button_box(Paper.FRAME, Paper.TEAL if collected else Paper.GOLD, 0, Vector2.ZERO)
-	tile.add_theme_stylebox_override("normal",tile_style)
-	tile.add_theme_stylebox_override("hover",Paper.button_box(Color("#1e5360"),Paper.GOLD,0,Vector2.ZERO))
-	tile.add_theme_stylebox_override("pressed",Paper.button_box(Paper.DEEP,Paper.GOLD,0,Vector2.ZERO))
-	tile.add_theme_stylebox_override("disabled",tile_style)
-	var focus_style := Paper.button_box(Color(0,0,0,0),Paper.GOLD,0,Vector2.ZERO)
-	focus_style.set_border_width_all(3)
-	tile.add_theme_stylebox_override("focus",focus_style)
 	var inset := MarginContainer.new()
 	inset.name="AlbumCardContent"
 	inset.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -550,7 +539,8 @@ func _photo_tile(entry: Dictionary) -> Control:
 		photo_frame.size_flags_horizontal=Control.SIZE_SHRINK_BEGIN
 		photo_frame.size_flags_vertical=Control.SIZE_SHRINK_CENTER
 		photo_frame.size_flags_stretch_ratio=0.0
-	var frame_style := Paper.plaque(Paper.DEEP)
+	# A waiting slot shows only a dashed outline drawn by its card.
+	var frame_style: StyleBox = Paper.plaque(Paper.DEEP) if collected else StyleBoxEmpty.new()
 	frame_style.content_margin_left=4.0/menu_scale
 	frame_style.content_margin_right=4.0/menu_scale
 	frame_style.content_margin_top=4.0/menu_scale
@@ -578,6 +568,7 @@ func _photo_tile(entry: Dictionary) -> Control:
 		blank.size_flags_vertical=Control.SIZE_EXPAND_FILL
 		photo_frame.add_child(blank)
 	var title := Paper.label(str(entry.title),17)
+	if collected: title.add_theme_color_override("font_color",Collage.INK)
 	title.name="AlbumPhotoTitle"
 	title.custom_minimum_size.x=0
 	title.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
@@ -600,6 +591,7 @@ func _photo_tile(entry: Dictionary) -> Control:
 		status.text="已收藏 · "+("補拍" if _progress.photos[entry.id].get("acquisition_method","")=="retake" else "遊戲")
 	if not collected and entry.has("game_id"):
 		status.text="免費補拍" if _progress.has_attempted_game(str(entry.game_id)) else "先練習再補拍"
+	if collected: status.add_theme_color_override("font_color",Collage.INK_TEAL)
 	status.name="AlbumPhotoStatus"
 	(copy_column if compact_layout else content_row).add_child(status)
 	var method := Paper.label(str(entry.instructions),16,Paper.INK)
@@ -610,6 +602,10 @@ func _photo_tile(entry: Dictionary) -> Control:
 	tile.focus_entered.connect(show_details)
 	tile.pressed.connect(func(): _open_collected_photo(entry,tile))
 	_set_children_mouse_ignored(tile)
+	# Pinned at a small tilt that belongs to the photo, so it never jumps.
+	var seed := hash(str(entry.id))
+	var card := Collage.dress(tile,"polaroid",_spread.get_child_count() % _page_capacity(),"",TAB_TONES.get(_category,Collage.CREAM),float(posmod(seed,9)-4)*0.5)
+	card.set_chosen(collected)
 	return tile
 
 func _set_children_mouse_ignored(node: Node) -> void:

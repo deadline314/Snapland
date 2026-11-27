@@ -644,7 +644,8 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	var title_label := Paper.label(title,25)
 	title_label.name="AdaptiveMenuTitle"
 	heading_stack.add_child(title_label)
-	if collage: Collage.headline(title_label,eyebrow,market_menu)
+	# The pause title hangs into a corner of the page the polaroid keeps clear.
+	if collage: Collage.headline(title_label,eyebrow,market_menu,2.2 if kind=="pause" else 0.0)
 	var content := VBoxContainer.new()
 	content.name="AdaptiveMenuContent"
 	content.size_flags_horizontal=Control.SIZE_EXPAND_FILL
@@ -1146,28 +1147,28 @@ func _show_pause() -> void:
 	var columns := HBoxContainer.new()
 	columns.name="PauseNavigation"
 	columns.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	columns.add_theme_constant_override("separation",24)
+	columns.add_theme_constant_override("separation",16)
 	body.add_child(columns)
+	# Left: the hero's polaroid, pinned below the corner the stamped title hangs in.
+	var island_column := VBoxContainer.new()
+	island_column.add_theme_constant_override("separation",0)
+	columns.add_child(island_column)
+	var title_clearance := Control.new()
+	title_clearance.name="PauseTitleClearance"
+	title_clearance.mouse_filter=Control.MOUSE_FILTER_IGNORE
+	island_column.add_child(title_clearance)
 	var island_panel := PanelContainer.new()
 	island_panel.name="PauseIslandStatus"
-	island_panel.custom_minimum_size.x=270
-	island_panel.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	island_panel.custom_minimum_size.x=200
 	var note_face := StyleBoxEmpty.new()
-	note_face.set_content_margin_all(14)
+	note_face.set_content_margin_all(12)
+	note_face.content_margin_bottom=18
 	island_panel.add_theme_stylebox_override("panel",note_face)
-	columns.add_child(island_panel)
-	Collage.backing(island_panel,"note",0,Collage.CREAM,12.0)
+	island_column.add_child(island_panel)
+	Collage.backing(island_panel,"snapshot",0,Color("#fbf7ec"),6.0)
 	var island := VBoxContainer.new()
-	island.add_theme_constant_override("separation",9)
+	island.add_theme_constant_override("separation",6)
 	island_panel.add_child(island)
-	var island_heading := HBoxContainer.new()
-	island_heading.add_theme_constant_override("separation",8)
-	island.add_child(island_heading)
-	island_heading.add_child(Paper.icon("shell",24,Collage.INK_CORAL))
-	var status_heading := Paper.section_title("島嶼狀態",Paper.TEAL)
-	status_heading.add_theme_color_override("font_color",Collage.INK_TEAL)
-	status_heading.name="PauseIslandHeading"
-	island_heading.add_child(status_heading)
 	var portrait := TextureRect.new()
 	portrait.name="PausePlayerPortrait"
 	portrait.custom_minimum_size=Vector2(176,202)
@@ -1179,8 +1180,7 @@ func _show_pause() -> void:
 	if world.avatar_renderer!=null:
 		portrait.texture=world.avatar_renderer.texture(Progress.appearance,Progress.equipped,"front",0,"idle")
 	island.add_child(portrait)
-	Collage.backing(portrait,"photo",1,Color("#fbf7ec"),6.0)
-	Paper.divider(island,Color("#c8b78f"))
+	Collage.backing(portrait,"window",1)
 	var place_row := HBoxContainer.new()
 	place_row.add_theme_constant_override("separation",7)
 	island.add_child(place_row)
@@ -1217,37 +1217,55 @@ func _show_pause() -> void:
 	nav_panel.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	nav_panel.add_theme_stylebox_override("panel",StyleBoxEmpty.new())
 	columns.add_child(nav_panel)
+	# Two columns: four big keepsake cards, then a small stack of luggage tags.
 	var actions := GridContainer.new()
 	actions.name="PauseActions"
 	actions.columns=2
 	actions.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	actions.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	actions.add_theme_constant_override("h_separation",18)
-	actions.add_theme_constant_override("v_separation",6)
+	actions.add_theme_constant_override("h_separation",16)
 	nav_panel.add_child(actions)
-	var island_actions := _pause_action_column(actions,"探索與旅券","map")
-	var keepsake_actions := _pause_action_column(actions,"紀念與整裝","album")
+	var board := Collage.Board.new()
+	board.name="PauseCardBoard"
+	board.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	board.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	actions.add_child(board)
+	var stack := GridContainer.new()
+	stack.name="PauseActionGrid"
+	stack.columns=1
+	stack.size_flags_vertical=Control.SIZE_SHRINK_CENTER
+	actions.add_child(stack)
+	# Sized by importance and tilted every which way; the map's slot starts low
+	# so the title's corner stays clear. Reading order: map, album, coat, ticket.
+	var cards := [
+		["島嶼地圖",_show_map,"PauseMapButton","map",Rect2(0.0,0.15,0.6,0.45),-7.0],
+		["拍貼收藏",_show_album,"PauseAlbumButton","album",Rect2(0.63,0.0,0.37,0.52),8.0],
+		["衣櫃換裝",_show_wardrobe,"PauseWardrobeButton","hanger",Rect2(0.0,0.62,0.37,0.38),-5.0],
+		["繼續遊園  ·  Esc",_close,"PauseResumeButton","ticket",Rect2(0.4,0.6,0.6,0.4),10.0],
+	]
+	for index in range(cards.size()):
+		var card: Array=cards[index]
+		var button := Paper.button(str(card[0]),card[1],board)
+		button.name=str(card[2])
+		if index<3: button.tooltip_text=str(card[0])
+		Collage.pin(board,button,card[4])
+		Collage.dress(button,str(card[3]),index,"",Color(0,0,0,0),float(card[5]))
 	var links := [
-		["島嶼地圖",_show_map,"PauseMapButton","map","explore"],
-		["今日任務",_show_tasks,"PauseTasksButton","task","explore"],
-		["更多旅券",_show_ticket,"PauseTicketButton","ticket","explore"],
-		["操作速查",_show_controls,"PauseControlsButton","book","explore"],
-		["拍貼收藏",_show_album,"PauseAlbumButton","album","keepsake"],
-		["遊園成就",_show_achievements,"PauseAchievementsButton","star","keepsake"],
-		["衣櫃換裝",_show_wardrobe,"PauseWardrobeButton","hat","keepsake"],
-		["切換時段",_show_time_panel,"PauseTimeButton","clock","keepsake"],
-		["設定與輔助",_show_settings,"PauseSettingsButton","gear","keepsake"],
+		["今日任務",_show_tasks,"PauseTasksButton","task"],
+		["更多旅券",_show_ticket,"PauseTicketButton","ticket"],
+		["遊園成就",_show_achievements,"PauseAchievementsButton","star"],
+		["操作速查",_show_controls,"PauseControlsButton","book"],
+		["切換時段",_show_time_panel,"PauseTimeButton","clock"],
+		["設定與輔助",_show_settings,"PauseSettingsButton","gear"],
 	]
 	for entry in links:
-		var column: VBoxContainer=island_actions if str(entry[4])=="explore" else keepsake_actions
-		var button := _pause_action(column,str(entry[0]),entry[1],str(entry[2]),str(entry[3]))
-		button.name=str(entry[2])
+		var button := _pause_action(stack,str(entry[0]),entry[1],str(entry[2]),str(entry[3]))
 		button.tooltip_text=str(entry[0])
 	if session==null and world_region=="welcome":
-		var replay := _pause_action(island_actions,"重看船上序章",_show_boat_prologue,"PauseBoatPrologueButton","play")
+		var replay := _pause_action(stack,"重看船上序章",_show_boat_prologue,"PauseBoatPrologueButton","play")
 		replay.tooltip_text="重看晚風號船上片刻，結束後回到原地。"
 	if session!=null:
-		var tutorial := _pause_action(island_actions,"本局圖解教學",func(): _open_tutorial(session.game_id,"session",session.assisted),"PauseTutorialButton","book")
+		var tutorial := _pause_action(stack,"本局圖解教學",func(): _open_tutorial(session.game_id,"session",session.assisted),"PauseTutorialButton","book")
 		tutorial.tooltip_text="本局圖解教學"
 	modal_footer.alignment=BoxContainer.ALIGNMENT_BEGIN
 	modal_footer.add_child(Paper.icon("gear",18,Collage.SEA))
@@ -1257,53 +1275,19 @@ func _show_pause() -> void:
 	var spacer := Control.new()
 	spacer.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	modal_footer.add_child(spacer)
-	var resume := Paper.button("繼續遊園  ·  Esc",_close,modal_footer)
-	resume.name="PauseResumeButton"
-	resume.custom_minimum_size=Vector2(210,0)
-	Collage.dress(resume,"stamp",8,"play",Paper.CORAL)
 	var leave := Paper.button("儲存並離開",_quit_game,modal_footer)
 	leave.name="PauseQuitButton"
 	leave.custom_minimum_size=Vector2(180,0)
 	Collage.dress(leave,"stamp",9,"",Collage.CREAM)
-	resume.grab_focus()
+	(board.get_node("PauseResumeButton") as Button).grab_focus()
 
-func _pause_action_column(parent: GridContainer,title: String,motif: String) -> VBoxContainer:
-	var column := VBoxContainer.new()
-	column.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	column.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	column.add_theme_constant_override("separation",10)
-	parent.add_child(column)
-	if parent.get_child_count()==2:
-		# The second column hangs half a tag lower: a diagonal, not a grid.
-		var drop := Control.new()
-		drop.name="PauseColumnDrop"
-		drop.custom_minimum_size.y=26
-		drop.mouse_filter=Control.MOUSE_FILTER_IGNORE
-		column.add_child(drop)
-	var heading := HBoxContainer.new()
-	heading.add_theme_constant_override("separation",7)
-	column.add_child(heading)
-	heading.add_child(Paper.icon(motif,20,Collage.SEA))
-	var heading_label := Paper.section_title(title,Collage.RIM)
-	heading_label.custom_minimum_size.y=22
-	heading.add_child(heading_label)
-	var grid := GridContainer.new()
-	grid.name="PauseActionGrid"
-	grid.columns=1
-	grid.add_theme_constant_override("h_separation",8)
-	grid.add_theme_constant_override("v_separation",6)
-	column.add_child(grid)
-	return column
-
-func _pause_action(parent: VBoxContainer,label: String,callback: Callable,node_name: String,motif: String) -> Button:
-	var grid := parent.get_node("PauseActionGrid") as GridContainer
-	var button := Paper.button(label,callback,grid)
+## One luggage tag on the pause menu's side stack; tags read after the cards.
+func _pause_action(stack: GridContainer,label: String,callback: Callable,node_name: String,motif: String) -> Button:
+	var button := Paper.button(label,callback,stack)
 	button.name=node_name
 	button.custom_minimum_size=Vector2(0,0)
 	button.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	# Reading order runs down the left column, then the right one.
-	var order := grid.get_child_count()-1+(5 if parent.get_index()==1 else 0)
-	Collage.dress(button,"tag",order,motif)
+	Collage.dress(button,"tag",stack.get_child_count()+3,motif).set_band(40.0)
 	return button
 
 func _show_boat_prologue(first_run: bool = false) -> void:
@@ -2136,6 +2120,10 @@ func _game_finished(result: Dictionary, saved_frames: Array[String] = [], saved_
 	if not practice:
 		Paper.button("練習操作",func(): _launch_game(id,bool(result.get("assisted",false)),true),modal_footer)
 		Paper.button("輔助重試",func(): _launch_game(id,true),modal_footer)
+	# Every remaining result action is a cream stamp beside the coral one.
+	for index in range(modal_footer.get_child_count()):
+		var action := modal_footer.get_child(index) as Button
+		if action!=null and not action.has_node("CollageArt"): Collage.dress(action,"stamp",index+1,"",Collage.CREAM)
 	_back(body)
 
 func _sync_finished_photo_thumbnails(result: Dictionary, saved_frames: Array[String], saved_original_frames: Array[String] = []) -> bool:
@@ -2964,7 +2952,8 @@ func _adapt_hud() -> void:
 func _menu_preferred_size(kind: String) -> Vector2:
 	if kind=="pause": return Vector2(1040,620)
 	if kind=="ticket": return Vector2(1060,560)
-	if kind=="album": return Vector2(1200,720)
+	# Shorter than the window so the album's stamped title has room above it.
+	if kind=="album": return Vector2(1200,660)
 	if kind=="time": return Vector2(1000,650)
 	if kind=="wardrobe": return Vector2(1080,650)
 	if kind=="tasks": return Vector2(1040,650)
@@ -2999,21 +2988,20 @@ func _adapt_open_menu() -> void:
 	var pause_actions := overlay.find_child("PauseActions",true,false) as GridContainer
 	if pause_actions!=null:
 		pause_actions.columns=2
-		for grid in pause_actions.find_children("PauseActionGrid","GridContainer",true,false):
-			grid.columns=2 if tall_text else 1
-		for button in pause_actions.find_children("*","Button",true,false):
-			button.custom_minimum_size.y=(44.0 if compact else 64.0)/scale_factor
-	var column_drop := overlay.find_child("PauseColumnDrop",true,false) as Control
-	if column_drop!=null: column_drop.custom_minimum_size.y=0.0 if compact or tall_text else 26.0
+		var stack := pause_actions.find_child("PauseActionGrid",true,false) as GridContainer
+		if stack!=null:
+			# Tags overlap a little on paper; their hit areas just touch.
+			stack.add_theme_constant_override("v_separation",0 if compact else 2)
+			for button in stack.get_children():
+				if button is Button: button.custom_minimum_size.y=(44.0 if compact else 64.0)/scale_factor
+	var title_clearance := overlay.find_child("PauseTitleClearance",true,false) as Control
+	if title_clearance!=null: title_clearance.custom_minimum_size.y=(34.0 if compact else 60.0)/scale_factor
 	var pause_status := overlay.find_child("PauseIslandStatus",true,false) as Control
 	if pause_status!=null: pause_status.visible=not (compact and tall_text)
 	var portrait := overlay.find_child("PausePlayerPortrait",true,false) as TextureRect
 	if portrait!=null:
 		var portrait_height := 82.0 if compact or tall_text else 150.0
 		portrait.custom_minimum_size=Vector2(portrait_height*0.82,portrait_height)
-	var pause_heading := overlay.find_child("PauseIslandHeading",true,false) as Label
-	if pause_heading!=null and compact:
-		pause_heading.add_theme_font_size_override("font_size",ceili(14.0*Paper.text_scale()/scale_factor))
 	var pause_area := overlay.find_child("PauseCurrentArea",true,false) as Label
 	if pause_area!=null and compact:
 		pause_area.add_theme_font_size_override("font_size",ceili(14.0*Paper.text_scale()/scale_factor))
@@ -3039,6 +3027,9 @@ func _layout_open_panel(panel: Control) -> void:
 	# CenterContainer owns the panel geometry; its minimum is the desired shell
 	# extent, while real content minima remain visible to Godot's layout system.
 	panel.custom_minimum_size=Vector2(width,height)
+
+const TICKET_SLOTS := [Rect2(0.0,0.0,0.38,0.34),Rect2(0.4,0.04,0.27,0.28),Rect2(0.69,0.0,0.31,0.31),Rect2(0.02,0.37,0.27,0.28),Rect2(0.31,0.35,0.38,0.31),Rect2(0.71,0.38,0.27,0.28),Rect2(0.03,0.7,0.44,0.3),Rect2(0.5,0.69,0.48,0.31)]
+const TICKET_TILTS := [-4.0,3.0,-2.0,2.5,-3.5,4.0,-2.5,3.0]
 
 func _show_ticket() -> void:
 	var body := _open("航海旅券",world_region.to_upper()+"  /  "+_region_name()+"遊園指南","ticket")
@@ -3074,13 +3065,11 @@ func _show_ticket() -> void:
 	marathon_button.name="MarathonStartButton"
 	marathon_button.tooltip_text="隨機五款街機，回合減半，比總分。"
 	Collage.dress(marathon_button,"stamp",1,"star",Paper.BRASS)
-	var groups := GridContainer.new()
+	# Destination stubs of different sizes in three loose rows, in reading order.
+	var groups := Collage.Board.new()
 	groups.name="TicketNavigation"
-	groups.columns=2
 	groups.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	groups.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	groups.add_theme_constant_override("h_separation",16)
-	groups.add_theme_constant_override("v_separation",8)
 	body.add_child(groups)
 	var lesson_label: String = {"candy":"工廠圖解教學","nightmarket":"夜市圖解教學","circus":"馬戲團圖解教學","toy":"玩具城圖解教學","garden":"溫室圖解教學"}.get(world_region,"園區圖解教學")
 	var entries := [
@@ -3094,9 +3083,8 @@ func _show_ticket() -> void:
 		var button := Paper.button(str(entry[0]),entry[1],groups)
 		button.name="TicketAction%d"%index
 		button.tooltip_text=str(entry[2])
-		button.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-		button.size_flags_vertical=Control.SIZE_EXPAND_FILL
-		Collage.dress(button,"stub",index+2,str(entry[3]))
+		Collage.pin(groups,button,TICKET_SLOTS[index])
+		Collage.dress(button,"stub",index+2,str(entry[3]),Color(0,0,0,0),TICKET_TILTS[index])
 	var help := Paper.label("WASD 移動　E 互動　P 拍照　Esc 暫停",16,Paper.TEAL)
 	help.name="TicketQuickHelp"
 	body.add_child(help)

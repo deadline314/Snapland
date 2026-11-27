@@ -10,6 +10,11 @@ const PAUSE_BUTTONS := [
 	"PauseAchievementsButton", "PauseWardrobeButton", "PauseTimeButton",
 	"PauseSettingsButton", "PauseTicketButton", "PauseControlsButton", "PauseQuitButton"
 ]
+const PAUSE_READING_ORDER: Array[String] = [
+	"PauseMapButton", "PauseAlbumButton", "PauseWardrobeButton", "PauseResumeButton",
+	"PauseTasksButton", "PauseTicketButton", "PauseAchievementsButton", "PauseControlsButton",
+	"PauseTimeButton", "PauseSettingsButton", "PauseQuitButton"
+]
 var _failures: Array[String] = []
 var _main: Node
 
@@ -129,6 +134,14 @@ func _run() -> void:
 				if owner is Button and PAUSE_BUTTONS.has(owner.name): seen_focus.append(owner.name)
 			for button_name in PAUSE_BUTTONS:
 				_check(seen_focus.has(button_name),"real Tab navigation reaches %s at %s: %s"%[button_name,str(dimensions),str(seen_focus)])
+			# Reading order: the four big cards, then the tag stack, then the footer.
+			var cycle: Array[String]=[]
+			for button_name in seen_focus:
+				if not cycle.has(button_name): cycle.append(button_name)
+			var start := cycle.find(PAUSE_READING_ORDER[0])
+			var rotated: Array[String]=[]
+			for step in range(cycle.size()): rotated.append(cycle[(start+step)%cycle.size()])
+			_check(rotated==PAUSE_READING_ORDER,"pause Tab order follows reading order at %s: %s"%[str(dimensions),str(rotated)])
 		_main._close()
 		_check(_main.modal_kind=="" and _main.hud.visible,"pause return restores the park HUD at %s"%str(dimensions))
 		_main._show_pause()
@@ -287,6 +300,17 @@ func _check_pause_layout(dimensions: Vector2i) -> void:
 	_check(scroll==null and content_scroll==null,"pause shell has no scroll container at %s"%str(dimensions))
 	var first := _main.overlay.find_child("PauseActions",true,false) as GridContainer
 	_check(first!=null and first.columns==2,"pause menu keeps two readable action columns at %s"%str(dimensions))
+	# The big cards never share a hit area and each outsizes a stack tag.
+	var cards: Array[Rect2]=[]
+	for card_name in ["PauseMapButton","PauseAlbumButton","PauseWardrobeButton","PauseResumeButton"]:
+		var card := _main.overlay.find_child(card_name,true,false) as Button
+		if card!=null: cards.append(card.get_global_rect())
+	var tag := _main.overlay.find_child("PauseTasksButton",true,false) as Button
+	_check(cards.size()==4,"pause shows four big keepsake cards at %s"%str(dimensions))
+	for index in range(cards.size()):
+		_check(tag!=null and cards[index].size.y>=tag.size.y,"pause card %d is at least as tall as a stack tag at %s"%[index,str(dimensions)])
+		for other in range(index+1,cards.size()):
+			_check(not cards[index].intersects(cards[other]),"pause cards %d and %d keep separate hit areas at %s"%[index,other,str(dimensions)])
 	var portrait := _main.overlay.find_child("PausePlayerPortrait",true,false) as TextureRect
 	_check(portrait!=null and portrait.texture!=null,"pause uses the current cached player portrait at %s"%str(dimensions))
 	for status_name in ["PauseCurrentArea","PauseCurrentPhase","PauseCollectionStatus","PauseSavedStatus"]:

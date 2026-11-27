@@ -82,6 +82,30 @@ func _run() -> void:
 	_check(is_equal_approx(art.squash, 0.0) and is_equal_approx(art.ink, 0.0), "a press leaves no lingering squash or ink without motion")
 	_check(dressed.text == "島嶼地圖", "the button keeps its own text")
 
+	# Big object cards sit on a board: slots never overlap, every card keeps its
+	# own minimum, and the art is baked once and shared.
+	var board := Collage.Board.new()
+	board.size = Vector2(500, 460)
+	host.add_child(board)
+	var slots := [Rect2(0.0, 0.15, 0.6, 0.45), Rect2(0.63, 0.0, 0.37, 0.52), Rect2(0.0, 0.62, 0.37, 0.38), Rect2(0.4, 0.6, 0.6, 0.4)]
+	var cards: Array[Button] = []
+	for index in slots.size():
+		var card := Paper.button("卡片%d" % index, func() -> void: pass, board)
+		Collage.pin(board, card, slots[index])
+		var card_art := Collage.dress(card, ["map", "album", "hanger", "ticket"][index], index, "", Color(0, 0, 0, 0), 8.0)
+		_check(card.clip_text and card.has_meta(&"collage_aspect") and is_equal_approx(card_art.enter, 1.0), "a card keeps its slot shape and rests settled")
+		cards.append(card)
+	board.notification(Container.NOTIFICATION_SORT_CHILDREN)
+	for first in cards.size():
+		_check(cards[first].size.x >= 44.0 and cards[first].size.y >= 44.0, "card %d keeps a 44 px target" % first)
+		for second in range(first + 1, cards.size()):
+			_check(not cards[first].get_rect().intersects(cards[second].get_rect()), "card hit areas %d and %d never overlap" % [first, second])
+	_check(board.get_combined_minimum_size().x >= cards[0].get_combined_minimum_size().x / 0.6, "the board's minimum leaves every card its own minimum")
+	_check(Collage.Objects.sprite("map") == Collage.Objects.sprite("map") and Collage.Objects.silhouette("ticket") == Collage.Objects.silhouette("ticket"), "card art is baked once and reused")
+	cards[1].grab_focus()
+	var album_art := cards[1].get_node("CollageArt") as Collage.Item
+	_check(is_equal_approx(album_art.lift, 1.0), "a focused card lifts and straightens at once")
+
 	var note := Label.new()
 	host.add_child(note)
 	PaperMotion.rise_and_free(note)
