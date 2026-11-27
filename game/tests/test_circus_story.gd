@@ -107,8 +107,9 @@ func _run() -> void:
 		"cancelling restores normal zoom, character position and movement")
 	_check(actor.sprite.texture == main.world._story_rest_pose, "close restores the host’s standing pose")
 	_check(marker_states == [false, true], "cancelling restores the nearby story glyph once")
-	_check(signs.map(func(sign: Node3D) -> bool: return sign.visible) == sign_visibility,
-		"return restores each plaque to the same visibility it had before the photo")
+	for index in signs.size():
+		_check(signs[index].visible == sign_visibility[index],
+			"return restores %s to the same visibility it had before the photo" % signs[index].name)
 	_check(not progress.photos.has(PHOTO) and not progress.visited.has(REGION), "cancelling never creates collection or visit credit")
 	_check(await _save_then_replay(), "the photo and visit carry through the archive")
 	await _finish()

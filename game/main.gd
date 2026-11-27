@@ -1425,10 +1425,10 @@ func _interact(id: String, title: String) -> void:
 		return
 	if world_region=="circus":
 		match id:
-			"circus:mirrors": _notice("玻璃角標標示鏡像示意。兩端步道都可通行。")
+			"circus:mirrors": _notice("走近鏡子，會照出被拉長或壓扁的自己。兩端步道都可通行。")
 			"circus:auditorium": _notice("沿中央通道向北可到砲彈安全墊。")
 			"circus:shadow": _notice(world.switch_projection())
-			"circus:mats": _notice("安全墊向南接觀眾席，兩側可繞回帳篷入口。")
+			"circus:mats": _notice("站進表演圈，聚光燈和鼓聲會跟著你。向南接觀眾席。")
 		return
 	if world_region=="nightmarket":
 		if id.begins_with("game-") and Catalog.identity(id).get("zone", "") == world_region:

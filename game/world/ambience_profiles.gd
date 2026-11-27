@@ -71,6 +71,11 @@ const PARTICLE_KINDS := {
 		"direction": Vector3.UP, "spread": 180.0, "force": Vector3.ZERO,
 		"box": Vector3(13.0, 1.4, 11.0), "lift": 1.4, "ramp": "pop", "scale_curve": "pop",
 	},
+	"confetti": {
+		"glyph": "petal", "color": Color(1.0, 0.82, 0.42, 1.0), "scale": 1.5, "life": 6.5, "speed": Vector2(0.25, 0.6),
+		"direction": Vector3(0.3, -1.0, 0.15), "spread": 30.0, "force": Vector3(0.04, -0.06, 0.0), "spin": 220.0,
+		"box": Vector3(3.2, 0.3, 3.0), "lift": 0.0, "ramp": "fade",
+	},
 	"spray": {
 		"glyph": "dot", "color": Color(0.90, 0.97, 1.0, 0.7), "scale": 1.3, "life": 2.2, "speed": Vector2(0.5, 1.1),
 		"direction": Vector3(0.5, 1.0, 0.1), "spread": 35.0, "force": Vector3(0.1, -1.3, 0.0),
@@ -202,14 +207,19 @@ const REGIONS := {
 		],
 	},
 	"circus": {
-		"clouds": 0.0,
+		"clouds": 0.7,
 		"particles": [
-			{"kind": "dust", "phases": ALWAYS, "amount": 46, "box": Vector3(11.0, 1.8, 9.0)},
+			{"kind": "pollen", "phases": ["dawn", "noon"], "amount": 30, "box": Vector3(11.0, 1.8, 9.0)},
+			{"kind": "dust", "phases": ["dusk", "night"], "amount": 40, "box": Vector3(11.0, 1.8, 9.0)},
 			{"kind": "sparkle", "phases": ALWAYS, "amount": 14, "box": Vector3(10.0, 1.2, 8.0)},
+			# Confetti keeps falling over the ring, and the calliope lets off steam.
+			{"kind": "confetti", "phases": ALWAYS, "amount": 26, "at": Vector3(0.0, 6.0, -8.8)},
+			{"kind": "steam", "phases": ALWAYS, "amount": 10, "at": Vector3(-6.5, 3.45, 8.25), "box": Vector3(0.9, 0.05, 0.1)},
 		],
 		"critters": [
-			{"kind": "dove", "count": 3, "at": Vector3(3.0, 0, 6.4), "spread": 0.8},
+			{"kind": "dove", "count": 3, "at": Vector3(8.4, 0, 2.5), "spread": 0.8},
 			{"kind": "moth", "count": 3, "at": Vector3(7.1, 0, -0.5), "spread": 1.2, "height": 1.7, "phases": ALWAYS},
+			{"kind": "butterfly", "count": 2, "at": Vector3(-6.1, 0, 10.9), "spread": 0.5, "height": 1.1},
 		],
 	},
 	"toy": {
