@@ -56,6 +56,11 @@ const PARTICLE_KINDS := {
 		"direction": Vector3.UP, "spread": 12.0, "force": Vector3(0.07, 0.05, 0.0),
 		"box": Vector3(0.5, 0.05, 0.5), "lift": 0.0, "ramp": "smoke", "scale_curve": "grow",
 	},
+	"smoke": {
+		"glyph": "puff", "color": Color(1.0, 0.90, 0.94, 0.5), "life": 5.0, "speed": Vector2(0.5, 0.8), "scale": 5.5,
+		"direction": Vector3.UP, "spread": 10.0, "force": Vector3(0.12, 0.03, 0.0),
+		"box": Vector3(0.3, 0.05, 0.3), "lift": 0.0, "ramp": "smoke", "scale_curve": "grow",
+	},
 	"ember": {
 		"glyph": "dot", "color": Color(1.0, 0.55, 0.22), "additive": true, "energy": 2.2, "scale": 1.4, "life": 3.6, "speed": Vector2(0.35, 0.85),
 		"direction": Vector3.UP, "spread": 24.0, "force": Vector3(0.08, 0.1, 0.0),
@@ -155,8 +160,13 @@ const REGIONS := {
 		"clouds": 0.55,
 		"particles": [
 			{"kind": "sparkle", "phases": ALWAYS, "amount": 34},
-			{"kind": "steam", "phases": ALWAYS, "amount": 12, "at": Vector3(11.4, 3.5, -2.0)},
-			{"kind": "steam", "phases": ALWAYS, "amount": 12, "at": Vector3(11.4, 3.5, -7.0)},
+			# Kettles along the hall wall, the two hall chimneys and the cooling tower.
+			{"kind": "steam", "phases": ALWAYS, "amount": 8, "at": Vector3(5.9, 2.4, -10.9)},
+			{"kind": "steam", "phases": ALWAYS, "amount": 8, "at": Vector3(8.5, 2.4, -10.9)},
+			{"kind": "steam", "phases": ALWAYS, "amount": 8, "at": Vector3(11.1, 2.4, -10.9)},
+			{"kind": "smoke", "phases": ALWAYS, "amount": 10, "at": Vector3(-9.0, 12.7, -18.5)},
+			{"kind": "smoke", "phases": ALWAYS, "amount": 10, "at": Vector3(5.5, 11.9, -20.5)},
+			{"kind": "smoke", "phases": ALWAYS, "amount": 12, "at": Vector3(23.5, 6.7, -8.5), "box": Vector3(1.0, 0.05, 1.0)},
 			{"kind": "firefly", "phases": ["night"], "amount": 20},
 		],
 		"critters": [

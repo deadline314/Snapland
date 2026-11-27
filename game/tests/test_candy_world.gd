@@ -2,6 +2,8 @@ extends SceneTree
 
 const CANDY_PATH := "res://game/world/candy_world.gd"
 const Catalog = preload("res://game/core/game_catalog.gd")
+const Scenery = preload("res://game/world/candy_scenery.gd")
+const Life = preload("res://game/world/candy_life.gd")
 var failures: Array[String] = []
 var checks := 0
 
@@ -61,6 +63,7 @@ func _run() -> void:
 				if mapped and not hit.is_empty():
 					_check(absf(hit.position.y - world.ground_surface_y(sample)) < 0.001, "floor height agreement")
 		var reached := _reachable_cells(snapshot, Vector2i(0, 9))
+		_check(reached.has(Vector2i(9, 2)), "the canal bridge joins the pipe gallery and the bubble mooring")
 		_check(snapshot.points.size() == world.points.size() and snapshot.points.size() == expected_games.size() + 5, "all actual factory interactions mapped")
 		for point in snapshot.points:
 			_check(point.size() == 3 and point.position is Vector3, "point contains only id/label/position")
@@ -103,6 +106,8 @@ func _run() -> void:
 			_check(world.find_children("*", "Node", true, false).size() == count and world.material_cache.size() == materials, "settings/day/night/temperature do not allocate scene resources")
 		_check(state_shapes[0] != state_shapes[1] and state_shapes[1] != state_shapes[2] and state_shapes[0] != state_shapes[2], "three distinct static sample shapes")
 		_check(state_materials[0] != state_materials[1] and state_materials[1] != state_materials[2] and state_materials[0] != state_materials[2], "three distinct cached sample colors")
+		await _check_district(world, script)
+		_check(world.find_children("*", "Node", true, false).size() == count and world.material_cache.size() == materials, "ambient motion and the dispenser allocate nothing")
 		world.set_avatar_look({"skin":"deep","species":"elf","gender":"neutral","hair":"curly","hair_color":"ink","face":"curious"}, {"outfit":"outfit-tide","hat":"hat-none"})
 		_check(world.avatar.texture != null and world.sea_material == null and world.fountain_water == null, "appearance/settings work without optional sea or fountain")
 		for destination in [Vector3(9, 0.2, 9), script.ENTRY + Vector3(0.01, 0, 0)]:
@@ -141,6 +146,118 @@ func _run() -> void:
 		_check(weak.get_ref() == null, "previous factory fully released")
 	_check(_progress_snapshot(progress) == before, "exploration/temperature/reset never mutate Progress or rewards")
 	_finish()
+
+## Ground cover, landmarks, clearances, lamp budget, night glow, reduced motion, the
+## ambient motions and the dispenser that answers the player. Leaves the world blocked,
+## at noon, with motion enabled and the player at the entrance.
+func _check_district(world, script) -> void:
+	for landmark in ["CandyLawn", "SyrupRiver", "SyrupCanal", "CandyBanks", "CandyFloor4", "SceneryDetail", "CandyGloss", "SceneryLanterns", "GumballGlobe", "GumballTumble", "CookiePressHead", "CanalPaddleWheel", "ConveyorSlats", "ConveyorDough", "ConveyorSweets", "FactoryGears", "KettleBubbles", "MooringBubbles", "RiverMarshmallows", "DispenserSample", "TemperatureNeedle"]:
+		_check(world.find_child(landmark, true, false) != null, "factory landmark %s exists" % landmark)
+	var lawn := world.find_child("CandyLawn", true, false) as MeshInstance3D
+	var river := world.find_child("SyrupRiver", true, false) as MeshInstance3D
+	var cover: AABB = lawn.get_aabb()
+	var bounds: Rect2 = script.BOUNDS
+	_check(cover.position.x <= bounds.position.x - 40.0 and cover.end.x >= bounds.end.x + 40.0 and cover.position.z <= bounds.position.y - 40.0 and cover.end.z >= bounds.end.y + 40.0, "the lawn runs far past anything the camera can show")
+	_check(lawn.position.y <= script.GROUND_Y - 0.02 and lawn.position.y > Scenery.SYRUP_Y + 0.1 and lawn.find_children("*", "CollisionObject3D", true, false).is_empty(), "the lawn lies under the floors, above the syrup, and is not walkable")
+	_check(river.get_aabb().position.z <= -60.0 and river.get_aabb().end.z >= 60.0 and river.get_aabb().position.y < lawn.position.y - 0.1, "the syrup river crosses the whole view below its banks")
+	_check(is_equal_approx(world.ground_surface_y(Vector3(-20, 0, 20)), Scenery.LAWN_Y) and is_equal_approx(world.ground_surface_y(Vector3(15, 0, 2)), Scenery.SYRUP_Y) and is_equal_approx(world.ground_surface_y(Vector3(9, 0, 2.5)), script.GROUND_Y), "ground heights of lawn, syrup and bridge deck")
+	# Solid props leave every interaction point 1.2 m clear and never fool a floor probe.
+	var solid_props := 0
+	for body in world.get_children():
+		if not body is StaticBody3D: continue
+		solid_props += 1
+		var box := (body.get_child(0) as CollisionShape3D).shape as BoxShape3D
+		var footprint := Rect2(body.position.x - box.size.x * 0.5, body.position.z - box.size.z * 0.5, box.size.x, box.size.z)
+		_check(body.position.y - box.size.y * 0.5 < 0.8 and body.position.y + box.size.y * 0.5 > 1.2, "solid prop spans the height floor probes start from")
+		for point in world.points:
+			var at := Vector2(point.position.x, point.position.z)
+			_check(at.distance_to(at.clamp(footprint.position, footprint.end)) >= 1.2, "solid prop keeps 1.2 m clear of %s" % point.id)
+	_check(solid_props >= 6, "bench, shelf, tanks, basin, mould table and dispenser are solid")
+	world.player.position = Vector3(12, script.GROUND_Y, 11)
+	await physics_frame
+	await physics_frame
+	for sign_label in world.local_sign_labels:
+		_check(sign_label.visible, "sign lettering stays on at any distance")
+	# Lamps: eight canes, nothing outside the budget, windows and syrup glow after dark.
+	var lights: Array = world.find_children("*", "Light3D", true, false).filter(func(light: Light3D) -> bool: return not light is DirectionalLight3D)
+	_check(world.lamps.size() == 8 and lights.size() == 8, "eight cane lamps and no light outside the lamp list")
+	world.set_time_of_day("night")
+	var lit: int = world.lamps.filter(func(lamp: Light3D) -> bool: return lamp.light_energy > 0.0).size()
+	var shadowed: int = world.lamps.filter(func(lamp: Light3D) -> bool: return lamp.shadow_enabled).size()
+	_check(lit == mini(8, world.active_lamp_budget) and shadowed <= world.SHADOW_LAMP_LIMIT, "every lamp is lit at night within the shadow budget")
+	_check(world._kit.glow_material.emission_energy_multiplier > 0.5 and float(world._scenery.syrup_material.get_shader_parameter("glow")) > 0.0, "windows, lanterns and syrup glow at night")
+	world.set_time_of_day("noon")
+	_check(world.lamps.all(func(lamp: Light3D) -> bool: return is_zero_approx(lamp.light_energy)) and is_zero_approx(world._kit.glow_material.emission_energy_multiplier), "lamps and windows are off at noon")
+	# Reduced motion holds every moving part, even with a visitor at the dispenser.
+	var life = world._life
+	var wheel := world.find_child("CanalPaddleWheel", true, false) as Node3D
+	var press := world.find_child("CookiePressHead", true, false) as Node3D
+	var tumble := world.find_child("GumballTumble", true, false) as Node3D
+	var beside_dispenser := Vector3(Scenery.DISPENSER_AT.x + 0.95, script.GROUND_Y, Scenery.DISPENSER_AT.z)
+	world.apply_settings({"reduced_motion": true})
+	world.blocked = false
+	world.player.position = beside_dispenser
+	world.player.velocity = Vector3.ZERO
+	await create_timer(0.25).timeout
+	var still_wheel := wheel.rotation
+	var still_press := press.position
+	var still_dough: float = life.dough_state(0).z
+	await create_timer(0.25).timeout
+	_check(wheel.rotation == still_wheel and press.position == still_press and is_equal_approx(life.dough_state(0).z, still_dough) and tumble.rotation == Vector3.ZERO, "reduced motion holds the wheel, press, conveyor and gumballs still")
+	_check(life.pops == 0 and is_zero_approx(life.sample_height()), "reduced motion keeps the sample in its cup")
+	_check(is_zero_approx(float(world._scenery.syrup_material.get_shader_parameter("motion"))), "reduced motion stops the syrup")
+	world.apply_settings({"reduced_motion": false})
+	world.player.position = script.ENTRY
+	await create_timer(0.3).timeout
+	_check(wheel.rotation != still_wheel and not is_equal_approx(life.dough_state(0).z, still_dough) and tumble.rotation != Vector3.ZERO and is_equal_approx(float(world._scenery.syrup_material.get_shader_parameter("motion")), 1.0), "wheel, conveyor, gumballs and syrup move with motion enabled")
+	# From here the test steps the clock itself, so results do not depend on frame rate.
+	world.blocked = true
+	var deepest := 0.0
+	for step in range(60):
+		world.time += 0.05
+		life.animate(0.05)
+		deepest = maxf(deepest, life.press_drop())
+	_check(deepest > Life.PRESS_LIFT * 0.6, "the press comes down on passing dough")
+	var pressed := 0
+	for index in range(life._dough_count):
+		var state: Dictionary = life.dough_state(index)
+		_check(state.pressed == (state.z > Scenery.PRESS_Z), "dough is flat only after the press")
+		if state.pressed: pressed += 1
+	_check(pressed > 0 and pressed < life._dough_count, "the line carries dough to the press and cookies away from it")
+	_check(life.pops == 0, "the dispenser waits while nobody is near")
+	var far_turn: float = life._tumble
+	for step in range(20):
+		world.time += 0.05
+		life.animate(0.05)
+	far_turn = life._tumble - far_turn
+	world.player.position = Vector3(-8, script.GROUND_Y, -4.4)
+	var near_turn: float = life._tumble
+	for step in range(40):
+		world.time += 0.05
+		life.animate(0.05)
+	near_turn = (life._tumble - near_turn) * 0.5
+	_check(near_turn > far_turn * 2.0, "gumballs tumble faster while someone watches")
+	world.player.position = beside_dispenser
+	var highest := 0.0
+	for step in range(40):
+		world.time += 0.05
+		life.animate(0.05)
+		highest = maxf(highest, life.sample_height())
+	_check(life.pops == 1 and highest > 0.8 and is_zero_approx(life.sample_height()), "the dispenser pops one sample for a visitor and it lands back in the cup")
+	for step in range(40):
+		world.time += 0.05
+		life.animate(0.05)
+	_check(life.pops == 1, "it does not pop again while the visitor stays")
+	world.player.position = script.ENTRY
+	life.animate(0.05)
+	world.player.position = beside_dispenser
+	life.animate(0.05)
+	_check(life.pops == 2 and life.sample_height() >= 0.0, "it pops again after the visitor has stepped away and returned")
+	for step in range(30):
+		world.time += 0.05
+		life.animate(0.05)
+	world.player.position = script.ENTRY
+	world.player.velocity = Vector3.ZERO
 
 func _floor_hit(world, at: Vector3) -> Dictionary:
 	var query := PhysicsRayQueryParameters3D.create(Vector3(at.x, 0.8, at.z), Vector3(at.x, -1, at.z))

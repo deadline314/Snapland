@@ -81,6 +81,31 @@ class Sculpt:
 			if bottom_radius > 0.001:
 				tri(bottom_center, bottom_to, bottom_from, color)
 
+	## Faceted ball around `center`; `alt` colours every other segment like a beach
+	## ball, `squash` scales its height and `dome` keeps only the upper half.
+	func ball(center: Vector3, radius: float, color: Color, alt := Color.TRANSPARENT, sides := 8, rings := 4, squash := 1.0, dome := false) -> void:
+		var lowest := 0.0 if dome else -PI * 0.5
+		for ring in range(rings):
+			var from_latitude := lerpf(lowest, PI * 0.5, float(ring) / float(rings))
+			var to_latitude := lerpf(lowest, PI * 0.5, float(ring + 1) / float(rings))
+			for side in range(sides):
+				var from_angle := TAU * float(side) / float(sides)
+				var to_angle := TAU * float(side + 1) / float(sides)
+				var tone := alt if alt.a > 0.0 and side % 2 == 1 else color
+				var low_from := center + _on_ball(from_angle, from_latitude, radius, squash)
+				var low_to := center + _on_ball(to_angle, from_latitude, radius, squash)
+				var high_from := center + _on_ball(from_angle, to_latitude, radius, squash)
+				var high_to := center + _on_ball(to_angle, to_latitude, radius, squash)
+				if ring == rings - 1:
+					tri(low_to, high_to, low_from, tone)
+				elif ring == 0 and not dome:
+					tri(low_to, high_to, high_from, tone)
+				else:
+					quad(low_to, high_to, high_from, low_from, tone)
+
+	func _on_ball(angle: float, latitude: float, radius: float, squash: float) -> Vector3:
+		return Vector3(cos(angle) * cos(latitude), sin(latitude) * squash, sin(angle) * cos(latitude)) * radius
+
 	func mesh() -> ArrayMesh:
 		_tool.generate_normals()
 		return _tool.commit()
@@ -106,6 +131,7 @@ var glow_material: StandardMaterial3D
 var view_basis: Basis
 var unit_box := BoxMesh.new()
 var unit_post := CylinderMesh.new()
+var unit_drum := CylinderMesh.new()
 var unit_boulder: Mesh
 var _batches: Dictionary = {}
 var _ground_materials: Array[ShaderMaterial] = []
@@ -118,6 +144,11 @@ func _init(owner: Node3D) -> void:
 	unit_post.height = 1.0
 	unit_post.radial_segments = 8
 	unit_post.rings = 1
+	unit_drum.top_radius = 0.5
+	unit_drum.bottom_radius = 0.5
+	unit_drum.height = 1.0
+	unit_drum.radial_segments = 16
+	unit_drum.rings = 1
 	var rock := Sculpt.new()
 	rock.tube(Vector3(0, -0.2, 0), 0.5, 0.45, 0.6, Color.WHITE, 6)
 	rock.tube(Vector3(0.05, 0.27, -0.03), 0.45, 0.24, 0.34, Color.WHITE, 5)
@@ -139,6 +170,10 @@ func batch(key: String, mesh: Mesh, material: Material) -> Batch:
 ## Unit boxes sharing one textured surface, such as decks, copings and counters.
 func surface(material: Material) -> Batch:
 	return batch("box:%d" % material.get_instance_id(), unit_box, material)
+
+## Unit drums sharing one textured surface, such as tanks, silos and chimneys.
+func rounds(material: Material) -> Batch:
+	return batch("drum:%d" % material.get_instance_id(), unit_drum, material)
 
 ## Short painted posts and caps; each instance takes its own colour.
 func posts() -> Batch:
@@ -287,13 +322,39 @@ func lamp_post(ground: Vector3, reach := 6.5) -> void:
 		detail.tube(ground + Vector3(0, 1.2, 0), 0.08, 0.06, 2.4, Color("#3d3a36"))
 		lantern = ground + Vector3(0, 2.5, 0)
 	glow.box(lantern, Vector3(0.2, 0.27, 0.06), WARM_GLOW, view_basis)
+	lamp_light(ground + Vector3(0, 2.15, 0.2), reach)
+
+## One light in the region's lamp budget; pair it with a glowing body in `glow`.
+func lamp_light(at: Vector3, reach := 6.5, color := Color("#ffd79a")) -> OmniLight3D:
 	var light := OmniLight3D.new()
-	light.position = ground + Vector3(0, 2.15, 0.2)
-	light.light_color = Color("#ffd79a")
+	light.position = at
+	light.light_color = color
 	light.omni_range = reach
 	light.light_energy = 0.0
 	world.add_child(light)
 	world.lamps.append(light)
+	return light
+
+## Flat strip between two rails with the same number of points: paths, rivers and
+## banks. It faces up when the rails run toward +Z with `left` on the -X side. UV is
+## in metres (x across, y along); UV2.x runs from 0 on the left rail to 1 on the right.
+static func ribbon_mesh(left: PackedVector3Array, right: PackedVector3Array) -> ArrayMesh:
+	var tool := SurfaceTool.new()
+	tool.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var along := 0.0
+	for index in range(left.size() - 1):
+		var step := ((left[index + 1] + right[index + 1]) * 0.5).distance_to((left[index] + right[index]) * 0.5)
+		var corners := [right[index], right[index + 1], left[index + 1], right[index], left[index + 1], left[index]]
+		var across := [1.0, 1.0, 0.0, 1.0, 0.0, 0.0]
+		var ahead := [0.0, 1.0, 1.0, 0.0, 1.0, 0.0]
+		for corner in range(6):
+			var row := index + int(ahead[corner])
+			tool.set_uv(Vector2(across[corner] * left[row].distance_to(right[row]), along + ahead[corner] * step))
+			tool.set_uv2(Vector2(across[corner], 0.0))
+			tool.add_vertex(corners[corner])
+		along += step
+	tool.generate_normals()
+	return tool.commit()
 
 func cloth_material(key: String, strength: float, net_cells := 0.0) -> ShaderMaterial:
 	var cache_key := "cloth:" + key

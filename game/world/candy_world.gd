@@ -1,87 +1,63 @@
 extends "res://game/world/park_world.gd"
-## Local material observation: static sample shapes never grant progress or rewards.
+## Candy factory district: tiled factory floors between a syrup river and the pastel
+## halls. This script owns what the player can do here (walkable land, the temperature
+## bench, the free return, every interaction point); candy_scenery builds the place and
+## candy_life animates it. Local material observation never grants progress or rewards.
+const Kit := preload("res://game/world/scenery_kit.gd")
+const Props := preload("res://game/world/candy_props.gd")
+const Scenery := preload("res://game/world/candy_scenery.gd")
+const Life := preload("res://game/world/candy_life.gd")
 const BOUNDS := Rect2(-13, -12, 26, 24)
+## Main aisle, material lab, pipe gallery, bubble mooring and the canal bridge.
 const LAND: Array[Rect2] = [
 	Rect2(-4, -12, 8, 24), Rect2(-13, -5, 9, 10),
 	Rect2(4, -9, 9, 9), Rect2(4, 5, 9, 7),
+	Rect2(8, 0, 2, 5),
 ]
 const GROUND_Y := 0.2
 const ENTRY := Vector3(0, GROUND_Y, 9)
 const TEMPERATURE_LABELS := ["冷 · 糖塊挺立，黏度高", "溫 · 糖團柔軟，可以拉伸", "熱 · 糖漿攤開，流動較快"]
 const TEMPERATURE_SIGN_LABELS := ["冷｜硬糖塊", "溫｜可拉伸", "熱｜糖漿流"]
 const TEMPERATURE_SCALES := [Vector3(0.65, 1.1, 0.65), Vector3(1, 0.65, 1), Vector3(1.5, 0.2, 1.5)]
-const SUGAR_PINK := Color("#c15b8c")
-const SUGAR_PLUM := Color("#664369")
+## The sample rests on the hot plate of the lab bench.
+const SAMPLE_AT := Vector3(-11, 1.66, 0)
+const SAMPLE_RADIUS := 0.55
 var _temperature := 0
 var _temperature_display: MeshInstance3D
 var _temperature_label: Label3D
+var _temperature_needle: MeshInstance3D
 var _temperature_materials: Array[Material] = []
+var _kit: Kit
+var _scenery: Scenery
+var _life: Life
 
 func _build_region_geometry() -> void:
-	var chocolate := PlaneMesh.new()
-	chocolate.size = Vector2(110, 110)
-	var syrup_material := _mat(Color("#53313e"))
-	syrup_material.roughness = 0.3
-	_mesh(chocolate, Vector3(0, -0.65, 0), syrup_material).name = "ChocolateBackdrop"
-	var floor_colors := [Color("#986478"), Color("#87618d"), Color("#467d6b"), Color("#4c7c87")]
-	for index in range(LAND.size()):
-		var rect := LAND[index]
-		var center := rect.get_center()
-		var floor_mesh := _box(Vector3(center.x, GROUND_Y - 0.3, center.y), Vector3(rect.size.x, 0.6, rect.size.y), floor_colors[index], true)
-		_set_registered_surface(floor_mesh, _coastal_surface(0, 2.0, floor_colors[index]))
-		floor_mesh.name = "CandyFloor%d" % index
-	# The conveyor is flush with the walking floor, leaving the whole main aisle open.
-	_box(Vector3(0, GROUND_Y + 0.002, 0), Vector3(3.4, 0.004, 23.6), SUGAR_PLUM).name = "MainConveyor"
-	for z in range(-11, 12, 2):
-		_box(Vector3(0, GROUND_Y + 0.006, z), Vector3(3.1, 0.004, 0.14), GOLD)
-	for x in [-2.0, 2.0]:
-		_box(Vector3(x, GROUND_Y + 0.004, 0), Vector3(0.14, 0.008, 23.6), SUGAR_PINK)
-	# Peripheral work surfaces and overhead pipes keep the marked routes clear.
-	_box(Vector3(-11, 0.8, 0), Vector3(2.6, 1.2, 3.3), SUGAR_PLUM).name = "MaterialWorkbench"
-	_box(Vector3(-11, 1.45, 0), Vector3(2.9, 0.1, 3.6), CREAM)
-	_box(Vector3(-11, 1.0, -3.8), Vector3(2.4, 1.6, 0.7), SUGAR_PINK)
-	for x in [-11.8, -11.0, -10.2]:
-		_cylinder(Vector3(x, 2.0, -3.8), 0.26, 0.55, GOLD)
-	for z in [-7.0, -2.0]:
-		_cylinder(Vector3(11.4, 1.7, z), 0.65, 3.0, SUGAR_PINK).name = "SyrupTank"
-		_cylinder(Vector3(11.4, 3.3, z), 0.82, 0.2, CREAM)
-	var pipe := _cylinder(Vector3(11.4, 3.0, -4.5), 0.17, 5.0, GOLD)
-	pipe.rotation_degrees.x = 90
-	for z in [-7.0, -2.0]:
-		var inlet := _cylinder(Vector3(9.7, 3.0, z), 0.17, 3.4, GOLD)
-		inlet.rotation_degrees.z = 90
-		_cylinder(Vector3(8.0, 2.65, z), 0.17, 0.7, GOLD)
-	_cylinder(Vector3(10.8, 0.3, 7.2), 1.4, 0.2, SUGAR_PLUM).name = "BubbleMooring"
-	for offset in [Vector3(0, 0, 0), Vector3(0.7, 0.6, 0.1), Vector3(-0.5, 0.8, -0.3)]:
-		var bubble := _sphere(Vector3(10.8, 1.3, 7.2) + offset, 0.65, CREAM)
-		bubble.material_override = _bubble_material()
-	for endpoints in [
-		[Vector2(-4, -12), Vector2(4, -12)], [Vector2(-4, -12), Vector2(-4, -5)],
-		[Vector2(-13, -5), Vector2(-4, -5)], [Vector2(-13, -5), Vector2(-13, 5)],
-		[Vector2(-13, 5), Vector2(-4, 5)], [Vector2(-4, 5), Vector2(-4, 12)],
-		[Vector2(-4, 12), Vector2(13, 12)], [Vector2(13, 5), Vector2(13, 12)],
-		[Vector2(4, 5), Vector2(13, 5)], [Vector2(4, 0), Vector2(4, 5)],
-		[Vector2(4, 0), Vector2(13, 0)], [Vector2(13, -9), Vector2(13, 0)],
-		[Vector2(4, -9), Vector2(13, -9)], [Vector2(4, -12), Vector2(4, -9)],
-	]:
-		var start: Vector2 = endpoints[0]
-		var end: Vector2 = endpoints[1]
-		var center := (start + end) * 0.5
-		_box(Vector3(center.x, 0.65, center.y), Vector3(maxf(absf(end.x - start.x), 0.12), 0.12, maxf(absf(end.y - start.y), 0.12)), SUGAR_PLUM)
-		for endpoint in [start, end]:
-			_cylinder(Vector3(endpoint.x, 0.65, endpoint.y), 0.1, 0.9, SUGAR_PINK)
-	_temperature_materials = [_mat(Color("#98c9e1")), _mat(Color("#d98ba6")), _mat(Color("#eea849"))]
-	_temperature_display = _sphere(Vector3(-11, 2.0, 0), 0.65, CREAM)
+	_kit = Kit.new(self)
+	_scenery = Scenery.new(self, _kit)
+	_scenery.build()
+	_build_temperature_bench()
+	_build_entries()
+	_life = Life.new(self, _scenery)
+	_life.build()
+	_kit.finish()
+	_life.hold_still()
+	current_area = "糖果工廠"
+
+## The sample changes shape and colour with the temperature; a needle on the bench dial follows.
+func _build_temperature_bench() -> void:
+	for tone: Color in Props.TEMPERATURE_TONES:
+		_temperature_materials.append(_finish(tone, Vector3.ONE * 2.0))
+	_temperature_display = _sphere(SAMPLE_AT, SAMPLE_RADIUS, CREAM)
 	_temperature_display.name = "TemperatureSample"
-	_temperature_label = _sign("", Vector3(-8, GROUND_Y, -1.8))
+	var needle := Kit.Sculpt.new()
+	needle.box(Vector3(0, 0.17, 0), Vector3(0.06, 0.4, 0.02), Props.DARK)
+	needle.box(Vector3(0, 0.38, 0), Vector3(0.12, 0.1, 0.02), Props.RED)
+	_temperature_needle = _mesh(needle.mesh(), _scenery.needle_pivot, _vertex_color_material("scenery-detail"))
+	_temperature_needle.name = "TemperatureNeedle"
+	_temperature_label = Props.signboard(self, _kit, Vector3(-7.3, GROUND_Y, -4.62), TEMPERATURE_SIGN_LABELS[0], 32)
 	_apply_temperature()
-	_sign("糖果工廠", Vector3(0, GROUND_Y, 6.5))
-	_sign("免費返回", Vector3(0, GROUND_Y, 11.3))
-	_sign("材料工作台", Vector3(-8, GROUND_Y, 4.3))
-	_sign("糖漿管道", Vector3(9, GROUND_Y, -5.5))
-	_sign("泡泡停靠", Vector3(9, GROUND_Y, 10.8))
-	_sign("工廠遊戲 %d／12" % preload("res://game/core/game_catalog.gd").definitions("candy").size(), Vector3(0, GROUND_Y, -10.8))
-	_sign("餅乾翻模", Vector3(-5.2, GROUND_Y, 0.5))
+
+func _build_entries() -> void:
 	_point("region:welcome", "返回迎賓大道 · 免費", Vector3(0, GROUND_Y, 10))
 	_point("candy:temperature", "溫度觀察台 · 切換冷／溫／熱", Vector3(-8, GROUND_Y, 0))
 	_point("candy:reset", "免費回到工廠入口", Vector3(9, GROUND_Y, 9))
@@ -99,15 +75,22 @@ func _build_region_geometry() -> void:
 	_point("game-034", "糖紙滑翔 · 摺翼穿窗落籃", Vector3(-2.6, GROUND_Y, 6.55))
 	_point("game-035", "汽泡升降梯 · 踩泵運桶跨熱槽", Vector3(2.6, GROUND_Y, -7.0))
 	_point("game-036", "熔糖抽絲 · 控溫拉出三段糖絲", Vector3(2.6, GROUND_Y, 2.8))
-	current_area = "糖果工廠"
 
-func _sign(text: String, at: Vector3) -> Label3D:
-	_box(at + Vector3(0, 1.2, 0), Vector3(4.8, 1.2, 0.14), SUGAR_PLUM)
-	_box(at + Vector3(0, 0.4, 0), Vector3(0.12, 0.8, 0.12), SUGAR_PINK)
-	var label := _local_label(text, at + Vector3(0, 1.25, 0.14), 32, CREAM)
-	label.pixel_size = 0.02
-	label.billboard = BaseMaterial3D.BILLBOARD_DISABLED
-	return label
+func set_time_of_day(phase_id: Variant) -> void:
+	super.set_time_of_day(phase_id)
+	if _scenery != null:
+		_scenery.apply_time_of_day(lamp_energy_for_phase)
+
+func _process(delta: float) -> void:
+	super._process(delta)
+	if reduced_motion:
+		_life.hold_still()
+	elif not blocked:
+		_life.animate(delta)
+
+## Sign boards are physical here, so their lettering never switches off with distance.
+func _update_district_label_visibility() -> void:
+	pass
 
 func _build_region_activities() -> void:
 	pass
@@ -128,7 +111,9 @@ func _area_at_position(_position: Vector3) -> String:
 	return "糖果工廠"
 
 func ground_surface_y(position: Vector3) -> float:
-	return GROUND_Y if _is_land(Vector2(position.x, position.z)) else -0.4
+	var at := Vector2(position.x, position.z)
+	if _is_land(at): return GROUND_Y
+	return Scenery.SYRUP_Y if Scenery.is_syrup(at) else Scenery.LAWN_Y
 
 func _is_land(point: Vector2) -> bool:
 	for rect in LAND:
@@ -159,7 +144,8 @@ func temperature_label() -> String:
 func _apply_temperature() -> void:
 	if not is_instance_valid(_temperature_display): return
 	_temperature_display.scale = TEMPERATURE_SCALES[_temperature]
-	_temperature_display.position.y = 1.5 + 0.65 * _temperature_display.scale.y
+	_temperature_display.position.y = SAMPLE_AT.y + SAMPLE_RADIUS * _temperature_display.scale.y
+	_temperature_needle.rotation.z = 1.0 - float(_temperature)
 	_set_registered_surface(_temperature_display, _temperature_materials[_temperature])
 	_temperature_label.text = TEMPERATURE_SIGN_LABELS[_temperature]
 
