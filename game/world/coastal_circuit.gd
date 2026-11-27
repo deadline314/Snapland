@@ -5,6 +5,12 @@ extends RefCounted
 const LAND_CENTER := Vector3(0, 0, -29)
 const LAND_SIZE := Vector3(72, 1.4, 96)
 const WALK_BOUNDS := Rect2(-33.6, -73.6, 67.2, 91.6)
+## Grass footprint in world x/z. Every side stops short of LAND_SIZE so a sand
+## band always separates lawn and water; the south side keeps a real beach.
+const LAWN_RECT := Rect2(-34.75, -74.6, 69.5, 90.8)
+const LAWN_CORNER_RADIUS := 5.0
+## The drawn edge wanders inward by up to this much; it never leaves LAWN_RECT.
+const LAWN_EDGE_WOBBLE := 0.4
 const ROUTE := [Vector2(0,16),Vector2(-19,16),Vector2(-25,4),Vector2(-29,-8),Vector2(-28,-27),Vector2(-27,-45),Vector2(-22,-60),Vector2(-9,-66),Vector2(12,-66),Vector2(26,-56),Vector2(29,-38),Vector2(28,-20),Vector2(26,-4),Vector2(21,6),Vector2(12,6)]
 const CONNECTORS := [[Vector2(-28,-27),Vector2(-14,-27)],[Vector2(14,-38),Vector2(29,-38)]]
 const STOPS := [
@@ -25,6 +31,16 @@ static func ground_y(position: Vector3) -> float:
 		if point.distance_to(Geometry2D.get_closest_point_to_segment(point,connector[0],connector[1])) <= 1.7:
 			return 0.18
 	return 0.055
+
+## Distance from `point` to the lawn's outer limit: positive inside the grass.
+static func lawn_inset(point: Vector2) -> float:
+	var half := LAWN_RECT.size * 0.5 - Vector2(LAWN_CORNER_RADIUS, LAWN_CORNER_RADIUS)
+	var q := (point - LAWN_RECT.get_center()).abs() - half
+	return LAWN_CORNER_RADIUS - Vector2(maxf(q.x, 0.0), maxf(q.y, 0.0)).length() - minf(maxf(q.x, q.y), 0.0)
+
+## True when `point` is on grass at least `margin` metres from the drawn edge.
+static func on_lawn(point: Vector2, margin := 0.0) -> bool:
+	return lawn_inset(point) >= LAWN_EDGE_WOBBLE + margin
 
 static func description(id: String) -> Dictionary:
 	for stop in STOPS:

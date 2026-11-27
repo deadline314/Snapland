@@ -11,6 +11,7 @@ const WELCOME_DOCK_SIZE := Vector3(5, 0.3, 13)
 const STONE = preload("res://game/world/stone.gdshader")
 const WOOD = preload("res://game/world/wood.gdshader")
 const GRASS = preload("res://game/world/grass.gdshader")
+const SAND = preload("res://game/world/sand.gdshader")
 const LIVING_SPRITE = preload("res://game/world/living_sprite.gdshader")
 const ComponentAnimationScript = preload("res://game/world/component_animation.gd")
 const NpcActivityScript = preload("res://game/world/npc_activity.gd")
@@ -867,10 +868,14 @@ func _build_land() -> void:
 	var sea_mesh := PlaneMesh.new()
 	sea_mesh.size = Vector2(240,240)
 	_mesh(sea_mesh,Vector3(0,-0.42,0),welcome_sea_material).name = "WelcomeBayWater"
-	_box(CoastalCircuit.LAND_CENTER+Vector3(0,-0.75,0),CoastalCircuit.LAND_SIZE,Color("#b89b70"))
+	# The land block is the beach: its top sits just under the lawn and its rim
+	# darkens into wet sand where the bay's foam line meets it.
+	var beach := _box(CoastalCircuit.LAND_CENTER+Vector3(0,BEACH_TOP_Y-CoastalCircuit.LAND_SIZE.y*0.5,0),CoastalCircuit.LAND_SIZE,Color("#b89b70"))
+	beach.name = "WelcomeBeach"
+	beach.material_override = _beach_material()
 	var grass_material := ShaderMaterial.new()
 	grass_material.shader=GRASS
-	_mesh(_island_lawn_mesh(),CoastalCircuit.LAND_CENTER+Vector3(0,0.055,0),grass_material)
+	_mesh(_island_lawn_mesh(),CoastalCircuit.LAND_CENTER+Vector3(0,0.055,0),grass_material).name = "WelcomeLawn"
 	# A larger, quieter tile scale keeps the avenue legible as a route instead of a single loud cobblestone stripe.
 	var stone_material := _coastal_surface(4,3.0,Color("#ddd8c8"))
 	var path_mesh := BoxMesh.new()
@@ -937,26 +942,60 @@ func _build_coastal_planting_pockets() -> void:
 	_multi_mesh(blade_mesh, Vector3.ZERO, blade_transforms, blade_colors, _vertex_color_material("coastal-pocket-leaves"))
 	_multi_mesh(flower_mesh, Vector3.ZERO, flower_transforms, flower_colors, _vertex_color_material("coastal-pocket-flowers"))
 
+const BEACH_TOP_Y := 0.03
+
+func _beach_material() -> Material:
+	if material_cache.has("welcome-beach"): return material_cache["welcome-beach"]
+	var material := ShaderMaterial.new()
+	material.shader = SAND
+	material.set_shader_parameter("land_center", Vector2(CoastalCircuit.LAND_CENTER.x, CoastalCircuit.LAND_CENTER.z))
+	material.set_shader_parameter("land_half_size", Vector2(CoastalCircuit.LAND_SIZE.x, CoastalCircuit.LAND_SIZE.z) * 0.5)
+	material.set_shader_parameter("lawn_center", CoastalCircuit.LAWN_RECT.get_center())
+	material.set_shader_parameter("lawn_half_size", CoastalCircuit.LAWN_RECT.size * 0.5)
+	material.set_shader_parameter("lawn_corner_radius", CoastalCircuit.LAWN_CORNER_RADIUS)
+	material_cache["welcome-beach"] = material
+	return material
+
 func _island_lawn_mesh() -> ArrayMesh:
+	# A rounded footprint that always stays inside CoastalCircuit.LAWN_RECT, so
+	# the grass can never run across the beach to the water again.
 	var mesh := ArrayMesh.new()
-	var vertices := PackedVector3Array([Vector3.ZERO])
+	var mesh_origin := Vector2(CoastalCircuit.LAND_CENTER.x, CoastalCircuit.LAND_CENTER.z)
+	var fan_center := CoastalCircuit.LAWN_RECT.get_center() - mesh_origin
+	var vertices := PackedVector3Array([Vector3(fan_center.x,0,fan_center.y)])
 	var indices := PackedInt32Array()
-	const SEGMENTS := 48
-	for i in range(SEGMENTS):
-		var angle := TAU*float(i)/SEGMENTS
-		var dx := cos(angle)
-		var dz := sin(angle)
-		var extent := minf(36.0/maxf(absf(dx),0.0001),48.0/maxf(absf(dz),0.0001))
-		var ragged := 1.0 + sin(angle*7.0+0.4)*0.022 + sin(angle*13.0-0.8)*0.013
-		vertices.append(Vector3(dx*extent*ragged,0,dz*extent*ragged))
+	var radius := CoastalCircuit.LAWN_CORNER_RADIUS
+	var core := CoastalCircuit.LAWN_RECT.grow(-radius)
+	# Corner centres in the fan's winding order (east -> south -> west -> north).
+	var arc_centers: Array[Vector2] = [core.end, Vector2(core.position.x,core.end.y), core.position, Vector2(core.end.x,core.position.y)]
+	const ARC_STEPS := 8
+	const EDGE_SPACING := 1.4
+	for corner in range(4):
+		var outline: Array[Vector2] = []
+		for step in range(ARC_STEPS+1):
+			var angle := (float(corner)+float(step)/ARC_STEPS)*PI*0.5
+			outline.append(arc_centers[corner]+Vector2(cos(angle),sin(angle))*radius)
+		var edge_normal := Vector2(cos(float(corner+1)*PI*0.5),sin(float(corner+1)*PI*0.5))
+		var edge_end: Vector2 = arc_centers[(corner+1)%4]+edge_normal*radius
+		var edge_start := outline[ARC_STEPS]
+		var edge_steps := ceili(edge_start.distance_to(edge_end)/EDGE_SPACING)
+		for step in range(1,edge_steps):
+			outline.append(edge_start.lerp(edge_end,float(step)/edge_steps))
+		for index in range(outline.size()):
+			var point := outline[index]
+			var inward := (arc_centers[corner]-point).normalized() if index <= ARC_STEPS else -edge_normal
+			var wander := 0.5 + 0.3*sin(point.x*0.83+point.y*0.61) + 0.2*sin(point.x*2.1-point.y*1.7)
+			var rim := point + inward*CoastalCircuit.LAWN_EDGE_WOBBLE*wander - mesh_origin
+			vertices.append(Vector3(rim.x,0,rim.y))
+	var segments := vertices.size()-1
 	# Godot treats clockwise triangles as front faces. Seen from above, the fan
 	# must run centre -> current rim -> next rim so the lawn's top side faces up;
 	# the reverse order made the sunlit side a flipped back face that ignored the
 	# key light and every cast shadow.
-	for i in range(SEGMENTS):
+	for i in range(segments):
 		indices.append(0)
 		indices.append(i+1)
-		indices.append((i+1)%SEGMENTS+1)
+		indices.append((i+1)%segments+1)
 	var arrays: Array=[]
 	arrays.resize(Mesh.ARRAY_MAX)
 	arrays[Mesh.ARRAY_VERTEX]=vertices
@@ -977,27 +1016,29 @@ func _build_shoreline() -> void:
 			for rock_index in range(rock_count):
 				var stagger := float(rock_index) - float(rock_count-1)*0.5
 				var z := center_z + stagger*1.08 + sin(float(cluster_index*7+rock_index)*1.73)*0.24
-				var x := side*(35.5 + cos(float(cluster_index*3+rock_index)*1.31)*0.52 + stagger*0.22)
-				_add_shore_rock(Vector3(x,-0.12,z),cluster_index*5+rock_index)
+				var x := side*(35.3 + cos(float(cluster_index*3+rock_index)*1.31)*0.2 + stagger*0.06)
+				_add_shore_rock(Vector3(x,0,z),cluster_index*5+rock_index)
 			if cluster_index == 1 or cluster_index == 3:
-				_sea_grass(Vector3(side*34.5,0,center_z+0.45),cluster_index)
+				_sea_grass(Vector3(side*35.2,BEACH_TOP_Y,center_z+0.45),cluster_index)
 	for cluster_index in range(4):
 		var center_x := -27.0 + cluster_index*18.0
 		for rock_index in range(2):
 			var stagger := float(rock_index)*0.9-0.45
 			var x := center_x + stagger + sin(float(cluster_index*5+rock_index))*0.28
-			var z := 19.0 + cos(float(cluster_index+rock_index)*1.7)*0.58
-			_add_shore_rock(Vector3(x,-0.12,z),20+cluster_index*2+rock_index)
+			var z := 18.25 + cos(float(cluster_index+rock_index)*1.7)*0.3
+			_add_shore_rock(Vector3(x,0,z),20+cluster_index*2+rock_index)
 
 func _add_shore_rock(pos: Vector3, seed_value: int) -> void:
+	# Tide-pool rocks belong to the beach: they rest on the sand by the waterline.
 	var scale_value := 0.72 + fposmod(float(seed_value)*0.17,0.32)
+	var rock: Node3D
 	if _foliage_has("rocks"):
-		var rock := _foliage_sprite("rocks",pos+Vector3(0,-0.12,0),scale_value)
-		rock.rotation.y = fposmod(float(seed_value)*1.93,TAU)
+		rock = _foliage_sprite("rocks",Vector3(pos.x,BEACH_TOP_Y-0.03,pos.z),scale_value)
 	else:
-		var rock := _sphere(pos+Vector3(0,0.02,0),scale_value,Color("#967e64") if seed_value%3==0 else Color("#b29a77"))
+		rock = _sphere(Vector3(pos.x,BEACH_TOP_Y+0.1,pos.z),scale_value,Color("#967e64") if seed_value%3==0 else Color("#b29a77"))
 		rock.scale=Vector3(1.35,0.55,1.15)
 		rock.rotation.y=fposmod(float(seed_value)*1.93,TAU)
+	rock.name = "ShoreRock%02d" % shoreline_rock_count
 	shoreline_rock_count += 1
 
 func _sea_grass(pos: Vector3, seed_value: int) -> void:

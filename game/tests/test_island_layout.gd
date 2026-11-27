@@ -29,6 +29,7 @@ func _run() -> void:
 	_check(player_screen_y > 0.47 and player_screen_y < 0.61, "camera places the avatar's ground point near the lower center instead of under the prompt")
 	_check(world.shoreline_rock_count <= 30, "shoreline rocks use separated clusters rather than a continuous perimeter row")
 	_check_welcome_water(world)
+	_check_ground_layers(world)
 	var game_points: Dictionary = {}
 	for point in world.points:
 		var point_id := String(point.get("id", ""))
@@ -275,6 +276,65 @@ func _check_welcome_water(world: Node) -> void:
 			"changing motion settings reaches the bay, pool, and fountain material")
 	world.set_time_of_day(initial_phase)
 	world.apply_settings({"reduced_motion":initial_motion})
+
+## Ground layers nest from the bottom up (water, beach, lawn, paving): the lawn
+## never reaches the water and tide-pool rocks rest on sand, not grass or paving.
+func _check_ground_layers(world: Node) -> void:
+	var circuit := preload("res://game/world/coastal_circuit.gd")
+	var land_size := Vector2(circuit.LAND_SIZE.x, circuit.LAND_SIZE.z)
+	var land := Rect2(Vector2(circuit.LAND_CENTER.x, circuit.LAND_CENTER.z) - land_size * 0.5, land_size)
+	var lawn := world.get_node_or_null("WelcomeLawn") as MeshInstance3D
+	var beach := world.get_node_or_null("WelcomeBeach") as MeshInstance3D
+	var bay := world.get_node_or_null("WelcomeBayWater") as MeshInstance3D
+	_check(lawn != null and beach != null and bay != null, "the Welcome shore keeps separate water, beach and lawn layers")
+	if lawn == null or beach == null or bay == null: return
+	var beach_box := beach.mesh as BoxMesh
+	_check(beach_box != null and beach_box.size == circuit.LAND_SIZE and is_equal_approx(beach.position.x, circuit.LAND_CENTER.x) and is_equal_approx(beach.position.z, circuit.LAND_CENTER.z),
+		"sand covers the whole island footprint, so the beach is continuous along every shore")
+	if beach_box == null: return
+	var beach_top := beach.position.y + beach_box.size.y * 0.5
+	_check(beach_top - bay.position.y >= 0.02, "the water surface stays below the beach rim")
+	_check(lawn.global_position.y - beach_top >= 0.02 and world._ground_surface_y(Vector3(30, 0, 0)) - lawn.global_position.y < 0.001, "the lawn sits a clear step above the sand without coplanar flicker")
+	var rim: PackedVector3Array = lawn.mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]
+	var narrowest_sand := INF
+	var widest_sand := 0.0
+	var rim_inside_limit := rim.size() > 32
+	for index in range(1, rim.size()):
+		var point := lawn.to_global(rim[index])
+		var sand_width := _land_inset(land, Vector2(point.x, point.z))
+		narrowest_sand = minf(narrowest_sand, sand_width)
+		widest_sand = maxf(widest_sand, sand_width)
+		var inset: float = circuit.lawn_inset(Vector2(point.x, point.z))
+		if inset < -0.001 or inset > circuit.LAWN_EDGE_WOBBLE + 0.001: rim_inside_limit = false
+	_check(narrowest_sand >= 0.3, "grass stops at least 0.3 m short of the water on every shore (narrowest sand %.2f m)" % narrowest_sand)
+	_check(widest_sand <= 8.0, "the lawn still fills the island instead of shrinking away from the shore (widest sand %.2f m)" % widest_sand)
+	_check(rim_inside_limit, "the drawn lawn edge stays within the declared lawn footprint that planting checks rely on")
+	# Counter-example: the former outline reached 2.2% past the land rectangle.
+	_check(_land_inset(land, Vector2(36.0 * 1.022, -29.0)) < 0.3, "the sand-width check rejects the former overhanging lawn rim")
+	_check(circuit.on_lawn(Vector2(20, -10)) and not circuit.on_lawn(Vector2(0, 18.5)) and not circuit.on_lawn(Vector2(35.6, -20)), "lawn membership separates the park interior from the beach")
+	var rocks := world.find_children("ShoreRock*", "Node3D", true, false)
+	_check(rocks.size() == world.shoreline_rock_count and rocks.size() >= 8, "every tide-pool rock is a named shoreline prop")
+	for rock: Node3D in rocks:
+		var spot := Vector2(rock.global_position.x, rock.global_position.z)
+		_check(_land_inset(land, spot) >= 0.3 and circuit.lawn_inset(spot) <= -0.2, "%s rests on sand, clear of both grass and open water" % rock.name)
+		_check(is_equal_approx(world._ground_surface_y(rock.global_position), 0.055), "%s is not placed on a paved path or deck" % rock.name)
+		var sprite := rock as Sprite3D
+		if sprite != null:
+			var base := sprite.global_position.y - sprite.pixel_size * sprite.texture.get_height() * 0.5
+			_check(absf(base - beach_top) <= 0.05, "%s sits on the sand surface instead of floating or sinking" % rock.name)
+	var trails := 0
+	for mesh: MeshInstance3D in world.find_children("*", "MeshInstance3D", true, false):
+		if not mesh.has_meta("coastal_trail"): continue
+		trails += 1
+		var half := (mesh.mesh as BoxMesh).size * 0.5
+		for corner in [Vector3(-half.x, 0, -half.z), Vector3(half.x, 0, -half.z), Vector3(-half.x, 0, half.z), Vector3(half.x, 0, half.z)]:
+			var edge := mesh.to_global(corner)
+			_check(_land_inset(land, Vector2(edge.x, edge.z)) >= 0.3, "coastal paving stays on land, clear of the waterline")
+	_check(trails >= 14, "the coastal loop paving is unchanged")
+
+## Distance from `point` to the nearest land edge: positive on land.
+func _land_inset(land: Rect2, point: Vector2) -> float:
+	return minf(minf(point.x - land.position.x, land.end.x - point.x), minf(point.y - land.position.y, land.end.y - point.y))
 
 func _check_wayfinding(world: Node) -> void:
 	var landmarks: Node = world.story_landmarks
