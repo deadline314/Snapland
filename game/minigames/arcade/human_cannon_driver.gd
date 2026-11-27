@@ -258,10 +258,7 @@ func _miss(kind: String, line: String) -> void:
 	last_points = 0
 	sound(40)
 	# The first miss of a round is a free look at the trough or the canvas.
-	if misses > 1:
-		add_mistake(line)
-	else:
-		say(line, false)
+	funny_fail(line, misses > 1)
 	_phase(kind)
 
 

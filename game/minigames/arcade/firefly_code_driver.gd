@@ -205,10 +205,7 @@ func _wrong() -> void:
 	sound(45)
 	wrongs += 1
 	# The first wrong answer of a round is a free look at the blackout.
-	if wrongs > 1 and not _demo:
-		add_mistake("熄燈！")
-	else:
-		say("熄燈！", false)
+	funny_fail("熄燈！", wrongs > 1 and not _demo)
 	_phase("dark")
 
 

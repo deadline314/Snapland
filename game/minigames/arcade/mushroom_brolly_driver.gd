@@ -261,10 +261,7 @@ func _on_soil(drop: Dictionary) -> void:
 	pots[struck].gulps = 0
 	add_score(-BRUISE_POINTS)
 	# The first bruised seedling of a round is a free look at the sulk.
-	if droops > 1:
-		add_mistake("嗚…")
-	else:
-		say("嗚…", false)
+	funny_fail("嗚…", droops > 1)
 
 
 func _bloom(index: int) -> void:

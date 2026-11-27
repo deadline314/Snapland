@@ -61,6 +61,10 @@ var time_panel: RefCounted
 var celebrate_on_close := false
 ## The arcade marathon in progress: {games, index, total, scores, lines}; empty when none.
 var marathon: Dictionary = {}
+## The game whose fail sticker was saved during the round now ending.
+var fresh_fail_sticker := ""
+## Seconds after a fail beat starts before it is photographed, so the gag shows.
+const FAIL_CAPTURE_DELAY := 0.5
 var dialogue: Array=[]
 var dialogue_index := 0
 var dialogue_label: Label
@@ -1866,6 +1870,7 @@ func _launch_game(id: String, assist: bool, practice: bool = false) -> void:
 	session.theme=Paper.theme()
 	session.finished.connect(_game_finished)
 	session.cancelled.connect(_session_cancelled)
+	if session.has_signal("funny_failed"): session.funny_failed.connect(_on_funny_failed)
 	if not marathon.is_empty(): session.round_scale=ParkVariety.MARATHON_ROUND_SCALE
 	session.help_requested.connect(func(game_id: String): _open_tutorial(game_id,"session",assist))
 	session.note_played.connect(audio.play_note)
@@ -1972,6 +1977,11 @@ func _game_finished(result: Dictionary, saved_frames: Array[String] = [], saved_
 			award.add_child(Paper.label("小惡魔也入鏡了",20,Paper.CORAL))
 	elif ordinary_eligible:
 		body.add_child(Paper.label("收藏尚未保存；請重試保存本局紀錄。",20,Paper.CORAL))
+	if fresh_fail_sticker==id:
+		var fail_note := Paper.label("失敗拍貼入冊！到收藏冊的「失敗拍貼」重播。",18,Paper.CORAL)
+		fail_note.name="FailStickerSaved"
+		body.add_child(fail_note)
+	fresh_fail_sticker=""
 	if daily_coins>0:
 		var bonus := Paper.label("★ 今日推薦攤位：獎牌遊園幣加倍 +%d"%daily_coins,20,Paper.GOLD)
 		bonus.name="DailyPickBonus"
@@ -2188,6 +2198,23 @@ func _daily_picks_line() -> Label:
 	line.tooltip_text="每級獎牌每天加倍一次。"
 	line.mouse_filter=Control.MOUSE_FILTER_PASS
 	return line
+
+## Keep the first fail beat of each arcade game: a thumbnail of the gag and the
+## picture state needed to replay it from the album.
+func _on_funny_failed(game_id: String, state: Dictionary) -> void:
+	if Progress.fail_stickers.has(game_id): return
+	var frame := ""
+	if DisplayServer.get_name()!="headless":
+		var source := session
+		await get_tree().create_timer(FAIL_CAPTURE_DELAY).timeout
+		await RenderingServer.frame_post_draw
+		if not is_instance_valid(source) or source!=session or session.paused: return
+		var thumbnail := _prepare_photo_thumbnail(_prepare_photo_original(get_viewport().get_texture().get_image()))
+		var directory := _photo_directory()
+		DirAccess.make_dir_recursive_absolute(directory)
+		var path := directory+"/fail-%s.png"%game_id
+		if thumbnail!=null and _save_bounded_photo_image(thumbnail,path): frame=path
+	if Progress.record_fail_sticker(game_id,frame,state): fresh_fail_sticker=game_id
 
 func _start_marathon() -> void:
 	if session!=null: return

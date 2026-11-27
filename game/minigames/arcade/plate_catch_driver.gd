@@ -233,10 +233,7 @@ func _topple(reason: String, side: int) -> void:
 	sound(45)
 	var line := "滿臉奶油！" if reason == "pie" else "盤塔倒了！"
 	# A pie in the face is always a mistake; the first dropped plate is a free lesson.
-	if reason == "pie" or topples > 1:
-		add_mistake(line)
-	else:
-		say(line, false)
+	funny_fail(line, reason == "pie" or topples > 1)
 	_set_mood("topple")
 
 

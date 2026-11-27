@@ -209,10 +209,7 @@ func _fall() -> void:
 	falls += 1
 	sound(41)
 	# The first fall of a round is a free look at the upside-down clown.
-	if falls > 1:
-		add_mistake("倒吊了！")
-	else:
-		say("倒吊了！", false)
+	funny_fail("倒吊了！", falls > 1)
 	lean = signf(lean) * FALL_LEAN
 	spin = 0.0
 	_walked = 0.0

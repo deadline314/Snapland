@@ -222,10 +222,7 @@ func _accuse() -> void:
 		pause = ESCAPE_SECONDS
 		sound(55)
 		# The very first wrong guess is a free look at how the fake gloats.
-		if cases_done > 1:
-			add_mistake("被耍了！")
-		else:
-			say("被耍了！", false)
+		funny_fail("被耍了！", cases_done > 1)
 
 
 func _next_case() -> void:

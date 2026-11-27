@@ -10,6 +10,7 @@ const PhotoViewer = preload("res://game/ui/photo_viewer.gd")
 const GameCatalog = preload("res://game/core/game_catalog.gd")
 const RegionalVisit = preload("res://game/story/regional_visit.gd")
 const RegionRoutes = preload("res://game/core/region_routes.gd")
+const FailReplayViewer = preload("res://game/ui/fail_replay_viewer.gd")
 const PAGE_SIZE := 4
 const MAX_PHOTO_FRAME_CANDIDATES := 12
 const MAX_LEGACY_UI_PHOTO_BYTES := 16 * 1024 * 1024
@@ -43,6 +44,7 @@ var _photo_details: Label
 var _normal_button: Button
 var _devil_button: Button
 var _time_button: Button
+var _fail_button: Button
 var _game_photo_texture_cache: Dictionary = {}
 var _thumbnail_decode_count := 0
 var _original_decode_count := 0
@@ -121,7 +123,10 @@ func _ready() -> void:
 	_devil_button.name="AlbumTab_devil"
 	_time_button=Paper.button("四時明信片  0 / 4",func(): _set_category("time"),_tabs)
 	_time_button.name="AlbumTab_time"
-	for button in [_normal_button,_devil_button,_time_button]:
+	_fail_button=Paper.button("失敗拍貼  0 / 0",func(): _set_category("fail"),_tabs)
+	_fail_button.name="AlbumTab_fail"
+	_fail_button.tooltip_text="好笑的失敗瞬間，可重播"
+	for button in [_normal_button,_devil_button,_time_button,_fail_button]:
 		button.custom_minimum_size=Vector2(0,44)
 	_photo_details=Paper.label("選取照片，查看收藏方式。",16,Paper.INK)
 	_photo_details.name="AlbumPhotoDetails"
@@ -142,6 +147,7 @@ func _ready() -> void:
 		_region=RegionRoutes.ORDER[index]
 		_definitions=GameCatalog.definitions(_region)
 		if _region!="welcome" and _category=="time": _category="normal"
+		if _category=="fail" and _arcade_games().is_empty(): _category="normal"
 		_page=0
 		_refresh_book()
 	)
@@ -219,13 +225,15 @@ func _refresh_book() -> void:
 		if phase is Dictionary and _progress.photos.has(TimeOfDay.postcard_id(str(phase.get("id","")))):
 			time_count+=1
 	_time_button.text="四時明信片  %d / 4" % time_count
-	_collection_state.visible=int(_progress.normal_count_for_zone(_region))+int(_progress.devil_count(_region))+(time_count if _region=="welcome" else 0)==0
+	_collection_state.visible=int(_progress.normal_count_for_zone(_region))+int(_progress.devil_count(_region))+(time_count if _region=="welcome" else 0)==0 and _category!="fail"
 	_collection_state.text="收藏簿還是空白的。拍照留下第一筆記錄。"
 	if Paper.physical_scale(self)<0.9:
 		_normal_button.text="普通 %d / 18" % int(_progress.normal_count_for_zone(_region))
 		_devil_button.text="小惡魔 %d / 12" % int(_progress.devil_count(_region))
 		_time_button.text="四時 %d / 4" % time_count
 	_time_button.visible=_region=="welcome"
+	_fail_button.visible=not _arcade_games().is_empty()
+	_fail_button.text=("失敗 %d / %d" if Paper.physical_scale(self)<0.9 else "失敗拍貼  %d / %d") % [_fail_count(),_arcade_games().size()]
 	_empty_message.text="這一類還沒有收藏；拍照或完成挑戰後，照片會出現在本頁。"
 	var entries := _entries()
 	if _region=="nightmarket" and entries.is_empty():
@@ -289,6 +297,8 @@ func _set_tab_labels(scale_factor: float) -> void:
 	_normal_button.text=("普通 %d / 18" if scale_factor<0.9 else "普通拍貼  %d / 18") % normal_count
 	_devil_button.text=("小惡魔 %d / 12" if scale_factor<0.9 else "小惡魔  %d / 12") % devil_count
 	_time_button.text=("四時 %d / 4" if scale_factor<0.9 else "四時明信片  %d / 4") % time_count
+	if is_instance_valid(_fail_button):
+		_fail_button.text=("失敗 %d / %d" if scale_factor<0.9 else "失敗拍貼  %d / %d") % [_fail_count(),_arcade_games().size()]
 
 func _apply_responsive_spread_columns() -> void:
 	if not is_instance_valid(_spread):
@@ -401,10 +411,15 @@ func _entries() -> Array[Dictionary]:
 			for phase in _time_phases:
 				var id := str(phase.get("id",""))
 				entries.append(_entry(TimeOfDay.postcard_id(id),str(phase.get("label","時段"))+" · "+str(phase.get("clock","")),"切換到這個時段，為園區拍攝紀念明信片。"))
+		"fail":
+			for game in _arcade_games():
+				var entry := _entry("fail-"+str(game.id),str(game.name)+" · 失敗","在這款街機第一次失敗就會留下；不計入拍貼數與開區門檻。")
+				entry.fail_game=str(game.id)
+				entries.append(entry)
 	var collected: Array[Dictionary] = []
 	var waiting: Array[Dictionary] = []
 	for entry in entries:
-		if _progress != null and _progress.photos.has(entry.id):
+		if _progress != null and _collected(entry):
 			collected.append(entry)
 		else:
 			waiting.append(entry)
@@ -416,6 +431,7 @@ func _category_prompt() -> String:
 	match _category:
 		"devil": return "小惡魔拍貼｜實際技巧與免費補拍分開記錄；選取缺卡進入補拍。"
 		"time": return "四時明信片｜切換園區時段，留下那一刻的實際照片。"
+		"fail": return "失敗拍貼｜每款街機第一次的好笑失敗；選取可以重播，不計入收藏數。"
 		_:
 			if _region=="toy": return "普通拍貼｜遊戲拿到銅牌即可收藏；也可往入口東側找阿浪拍車站合照。"
 			return "普通拍貼｜參與操作後正常結算不限勝負；選取缺卡可先練習或免費補拍。" if _region=="candy" else "普通拍貼｜正式遊玩自然結束不限勝負；選取缺卡可先練習或免費補拍。"
@@ -458,8 +474,32 @@ func _game_entry(game: Dictionary, identity: Dictionary, devil: bool) -> Diction
 func _entry(photo_id: String, title: String, instructions: String) -> Dictionary:
 	return {"id":photo_id,"title":title,"instructions":instructions}
 
+## Arcade games of the open region, in catalog order.
+func _arcade_games() -> Array:
+	var games: Array = []
+	for game in _definitions:
+		if bool(game.get("arcade",false)) and GameCatalog.identity(str(game.get("id",""))).get("zone","") == _region:
+			games.append(game)
+	return games
+
+func _fail_count() -> int:
+	var count := 0
+	if _progress != null:
+		for game in _arcade_games():
+			if _progress.fail_stickers.has(str(game.id)): count+=1
+	return count
+
+func _collected(entry: Dictionary) -> bool:
+	if entry.has("fail_game"):
+		return _progress.fail_stickers.has(str(entry.fail_game))
+	return _progress.photos.has(entry.id)
+
+func _fail_texture(game_id: String) -> Texture2D:
+	var path := str(_progress.fail_stickers.get(game_id,{}).get("frame",""))
+	return _legacy_ui_photo_texture(path) if not path.is_empty() else null
+
 func _photo_tile(entry: Dictionary) -> Control:
-	var collected: bool=_progress.photos.has(entry.id)
+	var collected: bool=_collected(entry)
 	var tile := Button.new()
 	tile.name="AlbumPhoto_"+str(entry.id)
 	var menu_scale := Paper.physical_scale(self)
@@ -507,7 +547,7 @@ func _photo_tile(entry: Dictionary) -> Control:
 	frame_style.content_margin_bottom=4.0/menu_scale
 	photo_frame.add_theme_stylebox_override("panel",frame_style)
 	content_row.add_child(photo_frame)
-	var texture := _saved_texture(str(entry.id)) if collected else null
+	var texture := (_fail_texture(str(entry.fail_game)) if entry.has("fail_game") else _saved_texture(str(entry.id))) if collected else null
 	if texture!=null:
 		var thumbnail := TextureRect.new()
 		thumbnail.texture=texture
@@ -543,6 +583,9 @@ func _photo_tile(entry: Dictionary) -> Control:
 	var status := Paper.label("已收藏" if collected else "尚未收藏",16,Paper.TEAL if collected else Paper.INK)
 	if collected and entry.has("story_region"):
 		status.text="已收藏 · 主線"
+	if entry.has("fail_game"):
+		status.text="已收藏 · 可重播" if collected else "還沒失敗過"
+		tile.tooltip_text="重播失敗瞬間" if collected else "失敗一次就會留下"
 	if collected and entry.has("game_id"):
 		status.text="已收藏 · "+("補拍" if _progress.photos[entry.id].get("acquisition_method","")=="retake" else "遊戲")
 	if not collected and entry.has("game_id"):
@@ -566,6 +609,9 @@ func _set_children_mouse_ignored(node: Node) -> void:
 		_set_children_mouse_ignored(child)
 
 func _open_collected_photo(entry: Dictionary, tile: Button) -> void:
+	if entry.has("fail_game"):
+		_open_fail_replay(entry,tile)
+		return
 	if not _progress.photos.has(entry.id):
 		if entry.has("game_id"):
 			if _progress.has_attempted_game(str(entry.game_id)):
@@ -599,6 +645,21 @@ func _open_collected_photo(entry: Dictionary, tile: Button) -> void:
 	if entry.has("story_region"):
 		replay = func(): story_replay_requested.emit(str(entry.story_region))
 	viewer.setup(texture,str(entry.title),tile,replay)
+	modal_overlay.add_child(viewer)
+
+func _open_fail_replay(entry: Dictionary, tile: Button) -> void:
+	var game_id := str(entry.fail_game)
+	if not _progress.fail_stickers.has(game_id):
+		_photo_details.text=str(entry.instructions)
+		return
+	var modal_overlay := _find_modal_overlay()
+	if modal_overlay == null:
+		_photo_details.text="這張照片現在不方便翻開，先留在本子裡。"
+		return
+	var path := "res://game/minigames/arcade/%s_driver.gd" % str(GameCatalog.find(game_id).get("mode",""))
+	var view_script: Script = (load(path) as Script).new().view_script if ResourceLoader.exists(path) else null
+	var viewer := FailReplayViewer.new()
+	viewer.setup(str(entry.title),_fail_texture(game_id),_progress.fail_replay(game_id),view_script,tile)
 	modal_overlay.add_child(viewer)
 
 func _has_original_photo_path(photo_id: String) -> bool:

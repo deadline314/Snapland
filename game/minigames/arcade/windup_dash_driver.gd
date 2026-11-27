@@ -214,10 +214,7 @@ func _burst() -> void:
 	last_points = 0
 	sound(48)
 	# The first pop of a round is a free look at where greed leads.
-	if bursts > 1:
-		add_mistake("彈簧爆了！")
-	else:
-		say("彈簧爆了！", false)
+	funny_fail("彈簧爆了！", bursts > 1)
 	_phase("burst")
 
 

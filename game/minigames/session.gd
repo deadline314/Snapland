@@ -7,6 +7,8 @@ signal cancelled
 signal note_played(note: int)
 signal feedback(kind: String)
 signal help_requested(game_id: String)
+## An arcade round played its funny fail beat; `state` is the picture's state then.
+signal funny_failed(game_id: String, state: Dictionary)
 
 const ROUND_SECONDS := 60.0
 const BG := Color("#172d49")
@@ -111,6 +113,7 @@ var _focus_axis_guards: Dictionary[StringName, bool] = {}
 var practice_mode := false
 ## Arcade rounds run at this share of their usual length (the marathon uses it).
 var round_scale := 1.0
+var _fail_reported := false
 var minigame_hud: Control
 ## Shared scene life and feedback layer between the game picture and the HUD.
 var atmosphere: Control
@@ -908,6 +911,7 @@ func reset_round() -> void:
 	_resume_presentation_rendering()
 	if active_driver != null:
 		active_driver.reset(assisted, time_phase)
+		_fail_reported = false
 		ended = false
 		paused = false
 		won = false
@@ -2331,6 +2335,9 @@ func _sync_driver_state(state: Dictionary) -> void:
 			note_played.emit(note)
 	elapsed = float(state.elapsed)
 	game_time = elapsed
+	if not _fail_reported and not practice_mode and float(state.get("fail_at", -99.0)) >= 0.0:
+		_fail_reported = true
+		funny_failed.emit(game_id, state.duplicate(true))
 	score = int(state.score)
 	mistakes = int(state.mistakes)
 

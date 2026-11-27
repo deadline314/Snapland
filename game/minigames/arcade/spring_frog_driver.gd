@@ -416,10 +416,7 @@ func _miss(into_bin: bool) -> void:
 	misses += 1
 	var word := "掉進玩具箱！" if into_bin else "發條鬆掉了！"
 	# The first miss of a round is a free look at what happens.
-	if misses > 1:
-		add_mistake(word)
-	else:
-		say(word, false)
+	funny_fail(word, misses > 1)
 
 
 func _send_claw() -> void:

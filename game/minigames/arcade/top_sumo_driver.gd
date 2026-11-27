@@ -321,10 +321,7 @@ func _fall(top: Dictionary, how: String) -> void:
 		sound(43)
 		var word := "滾下桌了！" if how == "out" else "轉不動了！"
 		# The first fall of a round is a free look at what happens.
-		if falls > 1:
-			add_mistake(word)
-		else:
-			say(word, false)
+		funny_fail(word, falls > 1)
 		return
 	sound(76)
 	if how != "out" or clock - float(top.hit) > CREDIT_SECONDS:

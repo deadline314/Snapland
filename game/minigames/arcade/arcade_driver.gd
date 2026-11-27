@@ -55,6 +55,8 @@ var assisted := false
 var variant: Dictionary = {}
 var score := 0
 var mistakes := 0
+## Driver clock when this round's funny fail beat first played; negative until then.
+var fail_at := -99.0
 ## "ready" (countdown) -> "play" -> "closing" (time is up) -> "done".
 var stage := "ready"
 ## Seconds of actual play, 0..round_seconds.
@@ -92,6 +94,7 @@ func reset(assisted_mode: bool, _clock: String) -> void:
 	variant = variants[rng.randi() % variants.size()]
 	score = 0
 	mistakes = 0
+	fail_at = -99.0
 	stage = "ready"
 	play_time = 0.0
 	clock = 0.0
@@ -240,8 +243,22 @@ func add_score(points: int, word := "") -> void:
 
 
 func add_mistake(word := "") -> void:
+	if fail_at < 0.0 and stage == "play":
+		fail_at = clock
 	mistakes += 1
 	if not word.is_empty():
+		say(word, false)
+
+
+## The game's funny fail beat (wonky print, bird bonk, burst spring...).
+## The first one of a round is kept as a fail sticker; `counts` false makes it
+## a free look that costs no mistake.
+func funny_fail(word := "", counts := true) -> void:
+	if fail_at < 0.0 and stage == "play":
+		fail_at = clock
+	if counts:
+		add_mistake(word)
+	elif not word.is_empty():
 		say(word, false)
 
 
@@ -302,6 +319,7 @@ func _refresh() -> void:
 	_state.word = _word
 	_state.word_good = _word_good
 	_state.word_at = _word_at
+	_state.fail_at = fail_at
 	_snapshot(_state)
 
 

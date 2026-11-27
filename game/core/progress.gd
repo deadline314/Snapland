@@ -11,6 +11,11 @@ const MAX_COINS := 1000000
 const FIELD_MEDAL_COINS := [10, 20, 40]
 ## Today's recommended booths pay the medal coins at this multiple.
 const DAILY_PICK_COIN_SCALE := 2
+## Fail stickers: one per arcade game, kept apart from photos so they never
+## count toward sticker totals or region thresholds. Storage is capped.
+const MAX_FAIL_STICKERS := 48
+const MAX_FAIL_REPLAY_CHARS := 24 * 1024
+const MAX_FAIL_FRAME_BYTES := 512 * 1024
 const MAX_FIELD_SCORE := 999999
 const MAX_GAME_PHOTO_FRAMES := 3
 const MAX_GAME_PHOTO_FRAME_CANDIDATES := 12
@@ -69,6 +74,8 @@ var field_records: Dictionary = {}
 ## {"day": "YYYY-MM-DD", "paid": {game_id: medal}}: the recommended-booth
 ## medals already paid today; a new day starts empty.
 var daily_bonus: Dictionary = {}
+## {game_id: {"frame": thumbnail path or "", "replay": JSON of the frozen picture state or ""}}
+var fail_stickers: Dictionary = {}
 var _extra_fields: Dictionary = {}
 var _loading := false
 var _suppress_changed_save := false
@@ -235,6 +242,40 @@ func record_daily_pick_medal(game_id: String, medal: int, day: String) -> Dictio
 	_suppress_changed_save = false
 	result.coins = coins - previous_coins
 	return result
+
+## Keeps the first fail moment of an arcade game; later fails change nothing.
+func record_fail_sticker(game_id: String, frame_path: String, state: Dictionary) -> bool:
+	var definition := GameCatalog.find(game_id)
+	if fail_stickers.has(game_id) or fail_stickers.size() >= MAX_FAIL_STICKERS or not bool(definition.get("arcade", false)) or definition.get("id", "") != game_id:
+		return false
+	if not frame_path.is_empty() and not _valid_fail_frame(frame_path):
+		frame_path = ""
+	var replay := JSON.stringify(JSON.from_native(state))
+	if replay.length() > MAX_FAIL_REPLAY_CHARS:
+		replay = ""
+	fail_stickers[game_id] = {"frame": frame_path, "replay": replay}
+	if not save_progress():
+		fail_stickers.erase(game_id)
+		return false
+	_suppress_changed_save = true
+	changed.emit()
+	_suppress_changed_save = false
+	return true
+
+## The picture state saved with a fail sticker, or {} when there is none.
+func fail_replay(game_id: String) -> Dictionary:
+	var text := str(fail_stickers.get(game_id, {}).get("replay", ""))
+	var parsed: Variant = JSON.parse_string(text) if not text.is_empty() else null
+	var state: Variant = JSON.to_native(parsed) if parsed != null else null
+	return state if state is Dictionary else {}
+
+func _valid_fail_frame(path: String) -> bool:
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		return false
+	var length := file.get_length()
+	file.close()
+	return length >= 45 and length <= MAX_FAIL_FRAME_BYTES
 
 func set_time_phase(value: String) -> bool:
 	if not TimeOfDay.phase_ids().has(value):
@@ -762,6 +803,7 @@ func save_progress() -> bool:
 		"attempted_games": _validated_attempted_games(attempted_games),
 		"field_records": field_records,
 		"daily_bonus": daily_bonus,
+		"fail_stickers": fail_stickers,
 	}, true)
 	var temporary := path + ".tmp"
 	var file := FileAccess.open(temporary, FileAccess.WRITE)
@@ -1112,6 +1154,22 @@ func _validated_daily_bonus(value: Variant) -> Dictionary:
 			valid[id] = int(paid[id])
 	return {"day": day, "paid": valid}
 
+func _validated_fail_stickers(value: Variant) -> Dictionary:
+	var valid := {}
+	if not value is Dictionary:
+		if value != null:
+			push_warning("Invalid 'fail_stickers' field in progress file '%s'; using defaults." % _save_path())
+		return valid
+	for id: Variant in value:
+		var record: Variant = value[id]
+		var frame: Variant = record.get("frame") if record is Dictionary else null
+		var replay: Variant = record.get("replay") if record is Dictionary else null
+		if valid.size() >= MAX_FAIL_STICKERS or typeof(id) != TYPE_STRING or typeof(frame) != TYPE_STRING or typeof(replay) != TYPE_STRING or str(replay).length() > MAX_FAIL_REPLAY_CHARS:
+			push_warning("Invalid fail sticker '%s' in progress file '%s'; skipping." % [str(id), _save_path()])
+			continue
+		valid[id] = {"frame": frame, "replay": replay}
+	return valid
+
 func _valid_whole_number(value: Variant, maximum: int) -> bool:
 	if typeof(value) not in [TYPE_INT, TYPE_FLOAT] or not is_finite(float(value)):
 		return false
@@ -1121,7 +1179,7 @@ func _apply_save(payload: Dictionary) -> void:
 	_loading = true
 	_reset_memory()
 	for key in payload:
-		if key not in ["version", "photos", "achievements", "quests", "settings", "visited", "intro_seen", "prologue_seen", "current_region", "platform_pending_achievements", "appearance", "equipped", "owned_clothes", "coins", "wardrobe_rewarded_games", "tutorial_seen_games", "attempted_games", "field_records", "daily_bonus"]:
+		if key not in ["version", "photos", "achievements", "quests", "settings", "visited", "intro_seen", "prologue_seen", "current_region", "platform_pending_achievements", "appearance", "equipped", "owned_clothes", "coins", "wardrobe_rewarded_games", "tutorial_seen_games", "attempted_games", "field_records", "daily_bonus", "fail_stickers"]:
 			_extra_fields[key] = payload[key]
 	var loaded_photos: Variant = payload.get("photos", {})
 	if typeof(loaded_photos) == TYPE_DICTIONARY:
@@ -1207,6 +1265,7 @@ func _apply_save(payload: Dictionary) -> void:
 	attempted_games = _validated_attempted_games(payload.get("attempted_games", []))
 	field_records = _validated_field_records(payload.get("field_records", {}))
 	daily_bonus = _validated_daily_bonus(payload.get("daily_bonus", {}))
+	fail_stickers = _validated_fail_stickers(payload.get("fail_stickers", {}))
 	if not payload.has("attempted_games"):
 		for definition: Dictionary in GameCatalog.all_definitions():
 			var identity := GameCatalog.identity(definition.id)
@@ -1272,6 +1331,7 @@ func _reset_memory() -> void:
 	attempted_games = []
 	field_records = {}
 	daily_bonus = {}
+	fail_stickers = {}
 	settings["time_phase"] = TimeOfDay.DEFAULT_PHASE
 	_extra_fields = {}
 

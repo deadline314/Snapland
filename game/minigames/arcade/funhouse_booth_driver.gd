@@ -195,7 +195,4 @@ func _print_face() -> void:
 	else:
 		printing = WONKY_PRINT_SECONDS
 		# The very first face is a free look at how the booth works.
-		if faces_done > 1:
-			add_mistake("怪臉出爐！")
-		else:
-			say("怪臉出爐！", false)
+		funny_fail("怪臉出爐！", faces_done > 1)

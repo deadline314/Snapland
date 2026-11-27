@@ -233,8 +233,5 @@ func _snatch(index: int) -> void:
 	streak = 0
 	sound(40)
 	# The first cat of a round is a free lesson.
-	if cat_hits > 1:
-		add_mistake("喵！槌子被搶走了！")
-	else:
-		say("喵！槌子被搶走了！", false)
+	funny_fail("喵！槌子被搶走了！", cat_hits > 1)
 

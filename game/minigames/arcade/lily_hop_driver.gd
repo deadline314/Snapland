@@ -252,10 +252,7 @@ func _dunk(why: String) -> void:
 	sound(43)
 	var words := "噗通！" if why == "missed" else "沉下去了！"
 	# The first dunk of a round is a free look at the frog.
-	if dunks > 1 and not _demo:
-		add_mistake(words)
-	else:
-		say(words, false)
+	funny_fail(words, dunks > 1 and not _demo)
 	_mode("dunk")
 
 

@@ -240,10 +240,7 @@ func _finish(outcome: String) -> void:
 		var words := "手震了！" if outcome == "smear" else "過曝了！"
 		sound(50)
 		# The first ruined photo of a round is a free look at the ghost.
-		if ruined > 1:
-			add_mistake(words)
-		else:
-			say(words, false)
+		funny_fail(words, ruined > 1)
 	_phase("print")
 
 

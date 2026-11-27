@@ -245,7 +245,4 @@ func _bonk(target: Dictionary) -> void:
 	bonks += 1
 	sound(46)
 	# The first bump of a round is a free look at what a closed door does.
-	if bonks > 1:
-		add_mistake("撞門了！")
-	else:
-		say("撞門了！", false)
+	funny_fail("撞門了！", bonks > 1)
