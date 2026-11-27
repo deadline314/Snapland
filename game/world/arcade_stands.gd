@@ -13,6 +13,8 @@ const STANDS := {
 	"toy": [
 		{"id": "game-061", "title": "發條衝刺", "prompt": "發條衝刺 · 連打上發條",
 			"stand": Vector3(-2.9, 0.2, 1.0), "point": Vector3(-1.95, 0.2, 2.45), "prop": "windup", "paint": Color("#ad6356")},
+		{"id": "game-062", "title": "整點咕咕", "prompt": "整點咕咕 · 數滴答開門",
+			"stand": Vector3(-2.4, 0.2, -5.2), "point": Vector3(-1.3, 0.2, -3.75), "prop": "cuckoo", "paint": Color("#567f77")},
 	],
 }
 const FOOTPRINT := Vector3(1.5, 2.0, 1.0)
@@ -34,6 +36,7 @@ static func build(world: Node3D, region: String) -> void:
 		_booth(sculpt, row.paint)
 		match str(row.prop):
 			"windup": _windup_prop(sculpt)
+			"cuckoo": _cuckoo_prop(sculpt)
 		var stand: MeshInstance3D = world._mesh(sculpt.mesh(), Vector3.ZERO, world._vertex_color_material("arcade-stand"))
 		stand.name = "ArcadeStand_" + str(row.id)
 		var body := StaticBody3D.new()
@@ -78,3 +81,24 @@ static func _windup_prop(sculpt: Kit.Sculpt) -> void:
 		sculpt.tube(Vector3(wheel, 1.04, 0.2), 0.07, 0.07, 0.04, DARK, 6, facing)
 	sculpt.box(Vector3(-0.52, 1.2, 0.08), Vector3(0.08, 0.04, 0.04), BRASS)
 	sculpt.box(Vector3(-0.58, 1.2, 0.08), Vector3(0.04, 0.2, 0.06), BRASS)
+
+
+## A cuckoo clock on the roof with its bird halfway out, and a spare bird on the counter.
+static func _cuckoo_prop(sculpt: Kit.Sculpt) -> void:
+	var facing := Basis(Vector3.RIGHT, PI * 0.5)
+	var wall := Color("#b9704a")
+	var roof := Color("#a8473f")
+	var bird := Color("#ffd166")
+	sculpt.box(Vector3(0, 2.72, -0.3), Vector3(0.62, 0.68, 0.3), wall)
+	for side: float in [-1.0, 1.0]:
+		sculpt.box(Vector3(side * 0.2, 3.14, -0.3), Vector3(0.54, 0.09, 0.4), roof, Basis(Vector3.BACK, side * -0.6))
+	sculpt.tube(Vector3(0, 2.66, -0.13), 0.19, 0.19, 0.04, CREAM, 10, facing)
+	sculpt.box(Vector3(0, 2.71, -0.1), Vector3(0.03, 0.13, 0.02), DARK)
+	sculpt.box(Vector3(0.05, 2.66, -0.1), Vector3(0.1, 0.03, 0.02), DARK)
+	sculpt.box(Vector3(0, 2.96, -0.1), Vector3(0.16, 0.14, 0.14), bird)
+	sculpt.box(Vector3(0, 2.94, -0.01), Vector3(0.06, 0.05, 0.06), Color("#e07b39"))
+	sculpt.box(Vector3(0, 2.2, -0.2), Vector3(0.03, 0.34, 0.03), BRASS)
+	sculpt.tube(Vector3(0, 2.02, -0.2), 0.08, 0.08, 0.04, BRASS, 8, facing)
+	sculpt.box(Vector3(0.3, 1.09, 0.1), Vector3(0.24, 0.24, 0.22), bird)
+	sculpt.box(Vector3(0.3, 1.08, 0.24), Vector3(0.08, 0.06, 0.08), Color("#e07b39"))
+	sculpt.box(Vector3(-0.3, 1.02, 0.1), Vector3(0.36, 0.12, 0.3), wall)
