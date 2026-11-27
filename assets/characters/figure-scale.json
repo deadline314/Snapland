@@ -23,12 +23,12 @@
 		"imp": {
 		},
 		"announcer": {
-			"walk:right": {"allow":{"height":0.07},"reason":"The profile art perches the cap higher; the body from collar to boots is as tall as in the front view."},
-			"walk:left": {"allow":{"height":0.07},"reason":"The profile art perches the cap higher; the body from collar to boots is as tall as in the front view."},
-			"settle:right": {"allow":{"height":0.07},"reason":"The profile art perches the cap higher; the body from collar to boots is as tall as in the front view."},
-			"settle:left": {"allow":{"height":0.07},"reason":"The profile art perches the cap higher; the body from collar to boots is as tall as in the front view."},
-			"depart:right": {"allow":{"height":0.07},"reason":"The profile art perches the cap higher; the body from collar to boots is as tall as in the front view."},
-			"depart:left": {"allow":{"height":0.07},"reason":"The profile art perches the cap higher; the body from collar to boots is as tall as in the front view."}
+			"walk:right": {"body":[1.0,1.0],"neck_below_top":[116,128],"reason":"The profile art draws the head and cap larger, so the figure stood 4 to 6.5% taller than the front view; each frame scales the head back above the collar until it stands as tall, the body untouched.","head":[0.885,0.885,0.885,0.885],"neck_rows":[[256,268],[256,268],[256,268],[256,268]],"feet":[157,447],"plant":[157,447]},
+			"walk:left": {"body":[1.0,1.0],"neck_below_top":[116,128],"reason":"The profile art draws the head and cap larger, so the figure stood 4 to 6.5% taller than the front view; each frame scales the head back above the collar until it stands as tall, the body untouched.","head":[0.91,0.91,0.91,0.91],"neck_rows":[[259,271],[259,271],[259,271],[259,271]],"feet":[176,447],"plant":[176,447]},
+			"settle:right": {"body":[1.0,1.0],"neck_below_top":[116,128],"reason":"The profile art draws the head and cap larger, so the figure stood 4 to 6.5% taller than the front view; each frame scales the head back above the collar until it stands as tall, the body untouched.","head":[0.902,0.852,0.852,0.861,1.0],"neck_rows":[[258,270],[252,264],[252,264],[252,264],[270,282]],"feet":[153,447],"plant":[153,447]},
+			"settle:left": {"body":[1.0,1.0],"neck_below_top":[116,128],"reason":"The profile art draws the head and cap larger, so the figure stood 4 to 6.5% taller than the front view; each frame scales the head back above the collar until it stands as tall, the body untouched.","head":[0.885,0.844,0.844,0.852,1.0],"neck_rows":[[256,268],[251,263],[251,263],[252,264],[270,282]],"feet":[163,447],"plant":[163,447]},
+			"depart:right": {"body":[1.0,1.0],"neck_below_top":[116,128],"reason":"The profile art draws the head and cap larger, so the figure stood 4 to 6.5% taller than the front view; each frame scales the head back above the collar until it stands as tall, the body untouched.","head":[1.0,0.861,0.852,0.852,0.852],"neck_rows":[[270,282],[252,264],[252,264],[252,264],[253,265]],"feet":[154,447],"plant":[154,447]},
+			"depart:left": {"body":[1.0,1.0],"neck_below_top":[116,128],"reason":"The profile art draws the head and cap larger, so the figure stood 4 to 6.5% taller than the front view; each frame scales the head back above the collar until it stands as tall, the body untouched.","head":[1.0,0.852,0.844,0.844,0.926],"neck_rows":[[270,282],[252,264],[251,263],[251,263],[261,273]],"feet":[163,447],"plant":[163,447]}
 		}
 	}
 }

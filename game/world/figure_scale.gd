@@ -39,9 +39,11 @@ static func entry(actor: String, source: String) -> Dictionary:
 	var found: Variant = sources.get(source, {}) if sources is Dictionary else {}
 	return found if found is Dictionary else {}
 
-## Returns `image` itself when the entry asks for no change.
+## Returns `image` itself when the entry asks for no change. `head` may list one
+## factor per frame, for sources whose cels are drawn at different sizes.
 static func refit(image: Image, found: Dictionary, frame: int = 0) -> Image:
-	var head := float(found.get("head", 1.0))
+	var head_value: Variant = found.get("head", 1.0)
+	var head := float(head_value[clampi(frame, 0, head_value.size() - 1)]) if head_value is Array else float(head_value)
 	var body_value: Variant = found.get("body", [head, head])
 	var body := Vector2(float(body_value[0]), float(body_value[1]))
 	var feet_value: Variant = found.get("feet", [image.get_width() / 2, image.get_height() - 1])

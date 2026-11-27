@@ -3,6 +3,7 @@ extends RefCounted
 
 const MANIFEST_PATH := "res://assets/characters/complete-animation-regions.json"
 const AnimationTiming = preload("res://game/world/character_animation_timing.gd")
+const FigureScale = preload("res://game/world/figure_scale.gd")
 const TEXTURE_CACHE_LIMIT := 96
 const IMAGE_CACHE_LIMIT := 8
 const OUTFIT_CACHE_LIMIT := 64
@@ -226,6 +227,9 @@ func _render_frame(actor: String, action: String, direction: String, index: int,
 	var layout := {}
 	var output := _compose_frame(actor, action, direction, index, frame, equipped, inspection, layout)
 	if output == null: return null
+	# NPC cels drawn at another size come back to the standing figure (the hero is fitted by AvatarRenderer).
+	if actor != "traveller":
+		output = FigureScale.refit(output, FigureScale.entry(actor, "%s:%s" % [action, direction]), index)
 	var result := ImageTexture.create_from_image(output)
 	_layouts[key] = layout
 	_textures[key] = result

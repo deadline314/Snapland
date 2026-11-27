@@ -6,7 +6,8 @@ extends SceneTree
 ## Bake after changing character art:
 ##   SNAPLAND_BAKE_FIGURE_SCALE=1 godot --headless --path . --script res://game/tests/test_figure_scale.gd
 ## Hand-set fields (body, neck_below_top, pin_head, allow, reason) are kept;
-## measured, head, neck_rows, feet and plant are rewritten.
+## measured, head, neck_rows, feet and plant are rewritten (for NPC sources with
+## neck_below_top: head, neck_rows, feet and plant).
 
 const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
 const FigureScale = preload("res://game/world/figure_scale.gd")
@@ -61,7 +62,9 @@ func _initialize() -> void:
 	_check(table.get("sources", {}) is Dictionary and not tolerance.is_empty(), "the figure-size table loads")
 	if failures == 0:
 		_hero(table, baking)
-		if not baking:
+		if baking:
+			_bake_npcs(table)
+		else:
 			_alternates()
 			_npcs(table)
 			_npc_sprite_scale()
@@ -462,7 +465,56 @@ func _npc_frames(library: Library, actor: String, action: String, direction: Str
 	return frames
 
 
+## An NPC profile drawn taller than the front view: the head above the neck is
+## scaled per frame, about the face, so the figure stands exactly as tall as the
+## standing figure with its feet where they were. The blend rows below the head
+## shrink by half, hence the reach is the middle of the neck band.
+func _npc_generated(found: Dictionary, frames: Array, standing: Dictionary) -> Dictionary:
+	var neck: Array = found.neck_below_top
+	var reach := float(int(neck[0]) + int(neck[1])) * 0.5
+	var heads: Array = []
+	var rows: Array = []
+	for frame: Dictionary in frames:
+		var excess := float(frame.height) - float(standing.height)
+		heads.append(snappedf(1.0 - excess / reach, 0.001) if excess > float(tolerance.get("feet_px", 2)) else 1.0)
+		rows.append([int(frame.top) + int(neck[0]), int(frame.top) + int(neck[1])])
+	var pivot := roundi(_median(frames.map(func(frame: Dictionary) -> float: return frame.head_x)))
+	return {"head": heads, "neck_rows": rows, "feet": [pivot, int(standing.ground)], "plant": [pivot, int(standing.ground)]}
+
+
+## The art as drawn, for every NPC source with a neck band, and its standing figure.
+func _npc_raw(table: Dictionary) -> Dictionary:
+	FigureScale.use_table({})
+	var library := Library.new()
+	var raw := {}
+	for actor: String in NPCS:
+		var standing := _summary(_npc_frames(library, actor, "idle", "front"))
+		for source: String in table.sources.get(actor, {}):
+			if table.sources[actor][source].has("neck_below_top"):
+				var parts := source.split(":")
+				raw["%s/%s" % [actor, source]] = [_npc_frames(library, actor, parts[0], parts[1]), standing]
+	FigureScale.reload()
+	return raw
+
+
+func _bake_npcs(table: Dictionary) -> void:
+	var raw := _npc_raw(table)
+	for key: String in raw:
+		var parts := key.split("/")
+		var found: Dictionary = table.sources[parts[0]][parts[1]]
+		found.merge(_npc_generated(found, raw[key][0], raw[key][1]), true)
+
+
 func _npcs(table: Dictionary) -> void:
+	var raw := _npc_raw(table)
+	for key: String in raw:
+		var parts := key.split("/")
+		var found: Dictionary = table.sources[parts[0]][parts[1]]
+		var generated := _npc_generated(found, raw[key][0], raw[key][1])
+		for field: String in generated:
+			_check(_close(found.get(field), generated[field]), "%s %s is %s in the table but measures %s; bake the table" % [key, field, JSON.stringify(found.get(field)), JSON.stringify(generated[field])])
+		var heights: Array = raw[key][0].map(func(frame: Dictionary) -> float: return float(frame.height) / float(raw[key][1].height))
+		report.append("%-31s drawn height %.3f..%.3f of standing" % [key, heights.min(), heights.max()])
 	var library := Library.new()
 	var head_tolerance := float(tolerance.get("head", 0.04))
 	var feet_tolerance := float(tolerance.get("feet_px", 2))
@@ -485,6 +537,10 @@ func _npcs(table: Dictionary) -> void:
 				if shown.is_empty():
 					continue
 				_check(absf(float(shown.ground) - float(standing.ground)) <= _allowed(found, "ground", feet_tolerance), "%s %s ground row %d vs standing %d" % [actor, source, shown.ground, standing.ground])
+				# Every frame keeps its feet on the standing ground row, so nothing hops.
+				for frame: Dictionary in _npc_frames(library, actor, action, direction):
+					if not frame.is_empty():
+						_check(absf(float(frame.bottom) - float(standing.ground)) <= _allowed(found, "ground", feet_tolerance), "%s %s frame ground row %d vs standing %d" % [actor, source, frame.bottom, standing.ground])
 				if SIDE_DIRECTIONS.has(direction):
 					# A profile cannot be compared head to head with the front view;
 					# an upright figure must still stand as tall.
