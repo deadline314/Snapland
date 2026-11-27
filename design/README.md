@@ -2,7 +2,8 @@
 
 設計基線：2026-10-06；入口更新：2026-10-20。這裡保存園區與內容規格；repo 已有 Godot 的上島與迎賓大道第一版，操作與執行見[專案入口](../README.md)。128款候選規格已列出；實際樂趣、多人及後續內容仍依各實作票驗收，不能將設計數量當作已實作。
 
-- [樂趣中心與業界來源](00-principles/fun-principles.md)
+- [樂趣中心與業界來源](00-principles/fun-principles.md)、[單純好玩的小遊戲準則](00-principles/simple-fun-minigames.md)
+- [場景與素材搭建規範](runtime/scene-building-standards.md)、[畫面打磨研究](runtime/visual-polish-research.md)
 - [園區、收藏與多人](01-park/park-and-collection.md)
 - [128款小遊戲目錄](02-minigames/catalog.md)、[修訂與研究](02-minigames/revision-notes.md)、[六款原型順序](02-minigames/prototype-order.md)、[SG-1驗收](../pm/Snapland-small-game/[SG-1]重設小遊戲樂趣目錄.md)
 - [劇情框架](03-story/story.md)

@@ -14,6 +14,8 @@ import os
 import subprocess
 import sys
 import tempfile
+import time
+from contextlib import contextmanager
 from pathlib import Path
 
 if __package__:
@@ -23,6 +25,39 @@ else:
 
 ROOT = Path(__file__).resolve().parents[1]
 OFFSCREEN_POSITION = "-4000,-4000"
+LOCK = Path(tempfile.gettempdir()) / "snapland-native-capture.lock"
+STALE_LOCK_SECONDS = 900.0
+
+
+@contextmanager
+def single_native_run(wait_seconds: float = 1200.0):
+    """Let only one native capture use the GPU at a time across checkouts."""
+    deadline = time.monotonic() + wait_seconds
+    while True:
+        try:
+            LOCK.mkdir()
+            break
+        except FileExistsError:
+            try:
+                stale = time.time() - LOCK.stat().st_mtime > STALE_LOCK_SECONDS
+            except FileNotFoundError:
+                continue
+            if stale:
+                try:
+                    LOCK.rmdir()
+                except OSError:
+                    pass
+                continue
+            if time.monotonic() > deadline:
+                raise TimeoutError("Another native capture is still running.")
+            time.sleep(2.0)
+    try:
+        yield
+    finally:
+        try:
+            LOCK.rmdir()
+        except OSError:
+            pass
 
 
 def main() -> int:
@@ -51,7 +86,11 @@ def main() -> int:
         env["SNAPLAND_SAVE_PATH"] = str(Path(isolated) / "profile" / "progress.json")
         env["SNAPLAND_CAPTURE_DIR"] = str(out)
         try:
-            result = run_validated_godot(ROOT, command, env=env, timeout=args.timeout)
+            with single_native_run():
+                result = run_validated_godot(ROOT, command, env=env, timeout=args.timeout)
+        except TimeoutError as error:
+            print(error, file=sys.stderr)
+            return 1
         except subprocess.TimeoutExpired as error:
             print((error.output or "") + (error.stderr or ""))
             print(f"Native capture timed out after {args.timeout:.0f} s.", file=sys.stderr)
