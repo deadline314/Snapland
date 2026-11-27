@@ -14,7 +14,7 @@
 - 至少100款基本小遊戲；當前128候選，異空間變體不湊數。
 - 十區普通拍貼180開終區，每區12惡魔拍貼開當區異空間。收藏不消耗。
 - 物品使用Steam相容固定定義；離線收藏與可交易經濟分開。
-- 新增或修改場景、道具、貼圖與影子前先讀 `design/runtime/scene-building-standards.md`。
+- 新增或修改場景、道具、貼圖與影子前先讀 `design/runtime/scene-building-standards.md`，交付前跑 `python tools/run_game_tests.py --only "scene standards tests"`；違規數只能減少。
 - 新小遊戲先過 `design/00-principles/simple-fun-minigames.md` 的稽核十問：單一動詞、短回合、失敗好笑，不做多按鈕面板與長教學。
 
 ## 驗證命令
