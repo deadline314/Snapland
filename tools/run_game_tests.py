@@ -25,6 +25,7 @@ SUITE_TIMEOUT_SECONDS = {
     "figure scale tests": 240,
     "pixel UI shell tests": 240,
     "region travel tests": 180,
+    "district tests": 180,
     "retake panel tests": 180,
 }
 
@@ -299,6 +300,7 @@ PASS_MARKERS = {
     "main story integration tests": "PASS: real Main story interactions and exploration evidence",
     "island ride tests": "PASS: island ride lifecycle",
     "island layout tests": "PASS: island layout contracts",
+    "district tests": "PASS: districts build, gate, connect, blend, stream and restore",
     "island shape tests": "PASS: island shape outline, queries, walk limit, bake and layers",
     "promenade free play tests": "PASS: promenade stepping and context toys, no standing repeats, pause/focus safety, reduced-motion result and unchanged save",
     "coastal free play tests": "PASS: coastal free play direction, physics, recall, bell, water, pause/focus/reduced-motion and unchanged save",
@@ -614,6 +616,7 @@ def build_checks(executable: str) -> list[tuple[str, list[str]]]:
         ("island ride tests", common + ["--script", "res://game/tests/test_island_ride.gd"]),
         ("island shape tests", common + ["--script", "res://game/tests/test_island_shape.gd"]),
         ("island layout tests", common + ["--script", "res://game/tests/test_island_layout.gd"]),
+        ("district tests", common + ["--script", "res://game/tests/test_districts.gd"]),
         ("promenade free play tests", common + ["--script", "res://game/tests/test_promenade_play.gd"]),
         ("coastal free play tests", common + ["--script", "res://game/tests/test_coastal_play.gd"]),
         ("field game tests", common + ["--script", "res://game/tests/test_field_games.gd"]),

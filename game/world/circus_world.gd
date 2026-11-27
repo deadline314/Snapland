@@ -145,8 +145,8 @@ func _register_npc_activity() -> void:
 func begin_story_photo() -> bool:
 	if is_instance_valid(_story_photo_camera) or not is_instance_valid(player) or not is_instance_valid(_story_host_sprite):
 		return false
-	_story_photo_origin = player.position
-	_story_photo_facing = facing
+	_story_photo_origin = player_spot()
+	_story_photo_facing = _host().facing
 	_set_story_host_pose(_story_photo_pose)
 	for sign in _story_photo_signs:
 		if is_instance_valid(sign):
@@ -163,7 +163,7 @@ func begin_story_photo() -> bool:
 	_story_photo_camera.far = camera.far
 	_story_photo_camera.position = center + Vector3(-0.38, 0.92, 8.9)
 	add_child(_story_photo_camera)
-	_story_photo_camera.look_at(center)
+	_story_photo_camera.look_at(to_global(center))
 	_story_photo_camera.make_current()
 	var fill := OmniLight3D.new()
 	fill.position = Vector3(0.32, -0.52, -5.35)
@@ -190,14 +190,13 @@ func end_story_photo() -> void:
 
 
 func _position_story_guest(at: Vector3, direction: String) -> void:
-	player.position = at
-	player.velocity = Vector3.ZERO
-	_sync_external_avatar_reposition()
-	facing = direction
-	avatar_action = ""
-	avatar_action_remaining = 0.0
-	avatar_action_elapsed = 0.0
-	_refresh_avatar_texture(0)
+	place_player(at)
+	var host := _host()
+	host.facing = direction
+	host.avatar_action = ""
+	host.avatar_action_remaining = 0.0
+	host.avatar_action_elapsed = 0.0
+	host._refresh_avatar_texture(0)
 
 
 func _set_story_host_pose(texture: Texture2D) -> void:
@@ -251,40 +250,41 @@ func ground_surface_y(position: Vector3) -> float:
 	return GROUND_Y if _on_floor_plan(Vector2(position.x, position.z)) else Scenery.MEADOW_Y
 
 
+func _stands_on(point: Vector2) -> bool:
+	return _on_floor_plan(point) or _open_ground(point)
+
+
 func _safe_footing(position: Vector3) -> bool:
 	var at := Vector2(position.x, position.z)
-	return (_on_floor_plan(at + Vector2(-0.30, -0.30))
-		and _on_floor_plan(at + Vector2(0.30, -0.30))
-		and _on_floor_plan(at + Vector2(-0.30, 0.30))
-		and _on_floor_plan(at + Vector2(0.30, 0.30)))
+	return (_stands_on(at + Vector2(-0.30, -0.30))
+		and _stands_on(at + Vector2(0.30, -0.30))
+		and _stands_on(at + Vector2(-0.30, 0.30))
+		and _stands_on(at + Vector2(0.30, 0.30)))
+
+
+func is_walkable(position: Vector3) -> bool:
+	return _safe_footing(position)
 
 
 func _constrain_player(previous_position: Vector3) -> bool:
-	if player.position.y < -1.0 or not _safe_footing(previous_position):
+	if player_spot().y < -1.0 or not _safe_footing(previous_position):
 		return _reset_to_entry()
-	if not _safe_footing(player.position):
-		player.position = previous_position
+	if not _safe_footing(player_spot()):
+		_set_player_spot(previous_position)
 		player.velocity = Vector3.ZERO
 	return false
 
 
 func _reset_to_entry() -> bool:
-	player.position = ENTRY
-	player.velocity = Vector3.ZERO
-	_sync_external_avatar_reposition()
-	avatar_is_walking = false
-	walk_distance_phase = 0.0
-	avatar_action = ""
-	avatar_action_remaining = 0.0
-	avatar_action_elapsed = 0.0
-	if is_instance_valid(avatar_hair_rig):
-		avatar_hair_rig.reset_motion()
-	if is_instance_valid(camera):
-		camera.position = ENTRY + CAMERA_OFFSET
-		camera.look_at(ENTRY + Vector3(0, 1, 0))
-	_refresh_avatar_texture(0)
-	_update_sprite_grounding()
+	place_player(ENTRY)
+	_host().settle_avatar()
 	return true
+
+
+## The two light pools burn whatever the hour, so on the island they hold two of
+## the lamp budget's places while the circus is awake.
+func steady_light_count() -> int:
+	return _pools.size() if is_visible_in_tree() else 0
 
 
 func switch_projection() -> String:
@@ -333,9 +333,19 @@ func set_time_of_day(phase_id: Variant) -> void:
 	for pool in _pools:
 		pool.light_energy = 1.02 if evening else 0.36
 	if _scenery != null:
-		_scenery.apply_time_of_day(lamp_energy_for_phase, environment.background_color)
+		_scenery.apply_time_of_day(lamp_energy_for_phase, air_target.sky)
 		_life.apply_time_of_day(lamp_energy_for_phase)
 
+
+## Canvas air: warm light off the big top by day, a velvet haze and stronger
+## bloom from the marquee bulbs after dark.
+func _air(phase: String, island: Dictionary) -> Dictionary:
+	var evening := phase in ["dusk", "night"]
+	return {
+		"fog": (island.fog as Color).lerp(Color("#3a2a44") if evening else Color("#ead2b6"), 0.3),
+		"ambient": (island.ambient as Color).lerp(Color("#ffd6b4"), 0.24), "saturation": 1.13,
+		"glow": float(island.glow) + (0.05 if evening else 0.015),
+	}
 
 func map_snapshot() -> Dictionary:
 	var land: Array[Rect2] = []
@@ -346,5 +356,5 @@ func map_snapshot() -> Dictionary:
 	var stops: Array[Dictionary] = []
 	for point in points:
 		stops.append({"id": point.id, "label": point.label, "position": point.position})
-	var at: Vector3 = player.position if is_instance_valid(player) else ENTRY
+	var at: Vector3 = player_spot() if is_instance_valid(player) else ENTRY
 	return {"bounds": BOUNDS, "land": land, "areas": areas, "points": stops, "player": at, "area": _area_at_position(at), "region": "circus"}

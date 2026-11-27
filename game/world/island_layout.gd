@@ -20,8 +20,8 @@ const DOCK_WALK := Rect2(-2.05, 14.0, 4.1, 12.5)
 const PATHS := [
 	{"id": "spine", "width": 5.0, "surface": "paving", "points": [Vector2(0,-10), Vector2(0,-16), Vector2(0,-24), Vector2(-4,-36), Vector2(-6,-48), Vector2(-4,-58), Vector2(0,-66), Vector2(6,-78), Vector2(6,-90), Vector2(3,-100), Vector2(2,-108), Vector2(2,-115.5)]},
 	{"id": "toy", "width": 3.6, "surface": "paving", "points": [Vector2(2,-108), Vector2(14,-112), Vector2(22,-122), Vector2(22,-134), Vector2(15,-146), Vector2(11,-151), Vector2(10,-154)]},
-	{"id": "nightmarket", "width": 3.6, "surface": "paving", "points": [Vector2(2,-108), Vector2(-12,-110), Vector2(-28,-116), Vector2(-44,-122), Vector2(-58,-124), Vector2(-64,-122.2), Vector2(-67.7,-120.5)]},
-	{"id": "circus", "width": 3.6, "surface": "paving", "points": [Vector2(22,-122), Vector2(32,-127), Vector2(42,-131), Vector2(47,-134.5), Vector2(50.9,-136.9)]},
+	{"id": "nightmarket", "width": 3.6, "surface": "paving", "points": [Vector2(2,-108), Vector2(-12,-110), Vector2(-28,-116), Vector2(-44,-122), Vector2(-58,-124), Vector2(-64,-122.2), Vector2(-69.5,-121.8), Vector2(-75,-124.6), Vector2(-79,-127.5), Vector2(-80,-129.6)]},
+	{"id": "circus", "width": 3.6, "surface": "paving", "points": [Vector2(22,-122), Vector2(32,-127), Vector2(42,-131), Vector2(47,-134.5), Vector2(52,-137.5), Vector2(60,-141), Vector2(68,-144.5), Vector2(75,-148), Vector2(79.2,-151.5), Vector2(80,-154)]},
 	{"id": "west", "width": 3.6, "surface": "paving", "points": [Vector2(-4,-58), Vector2(-16,-62), Vector2(-30,-66), Vector2(-44,-64), Vector2(-58,-62), Vector2(-72,-64), Vector2(-86,-62)]},
 	{"id": "harbor", "width": 3.6, "surface": "paving", "points": [Vector2(-12.5,-1.5), Vector2(-24,-6), Vector2(-38,-10), Vector2(-52,-6), Vector2(-66,0), Vector2(-76,5), Vector2(-82,8.4), Vector2(-84.7,9.5), Vector2(-92,15), Vector2(-97.5,28), Vector2(-98.5,44), Vector2(-97,57), Vector2(-94.5,63.5), Vector2(-92.4,65)]},
 	{"id": "east", "width": 3.6, "surface": "paving", "points": [Vector2(0,-66), Vector2(12,-70), Vector2(24,-66), Vector2(31,-59), Vector2(33,-50), Vector2(44,-46), Vector2(53,-46.6), Vector2(58,-47.6)]},
@@ -82,7 +82,6 @@ const MIN_ENTRY_SPACING := 14.0
 ## degrees (0 faces south). A district that stands on the island keeps its gate
 ## at its own door instead (see DistrictSites).
 const GATES := {
-	"nightmarket": Vector3(-69,-122,40), "circus": Vector3(52,-138.5,-35), "toy": Vector3(10,-156,0),
 	"hotel": Vector3(-36,34.6,180), "sky": Vector3(49.5,29,-160), "cinema": Vector3(85.5,-135.5,-60),
 }
 ## The coastal loop's six landmarks. "position" is the plaque on the trail and

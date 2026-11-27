@@ -33,8 +33,6 @@ const POOLS := [
 const LIGHT_UPDATE_INTERVAL := 0.14
 const CLOSED_LIGHT_SCALE := 0.24
 
-var _environment: Environment
-var _sun: DirectionalLight3D
 var _skyline: ShaderMaterial
 var _pools: Array[OmniLight3D] = []
 var _street_paving: ShaderMaterial
@@ -48,9 +46,7 @@ var _light_energy := 0.62
 var _pulse_phase := 0.0
 var _until_update := 0.0
 
-func setup(environment: Environment, sun: DirectionalLight3D, skyline: Texture2D, stone_atlas: Texture2D, shelter: Rect2) -> void:
-	_environment = environment
-	_sun = sun
+func setup(skyline: Texture2D, stone_atlas: Texture2D, shelter: Rect2) -> void:
 	_street_paving = _make_paving(stone_atlas, shelter, false, Color("#8c96a2"))
 	_roof_paving = _make_paving(stone_atlas, shelter, true, Color("#978b9d"))
 	_lane_paving = _make_paving(stone_atlas, shelter, false, Color("#6a7285"))
@@ -66,15 +62,17 @@ func paving_material(rooftop := false, lane := false) -> ShaderMaterial:
 		return _lane_paving
 	return _roof_paving if rooftop else _street_paving
 
+## The market's own sky, fill and key light for `phase`, as light targets for
+## the world to blend (see park_world's _air); this node never writes the sky.
+static func air(phase: String) -> Dictionary:
+	var palette: Dictionary = PALETTES.get(phase, PALETTES.noon)
+	return {"sky": palette.haze, "fog": palette.haze, "ambient": palette.fill, "ambient_energy": palette.fill_energy,
+		"sun": palette.key, "sun_energy": palette.key_energy, "glow": 0.55}
+
+## Pools, reflections and the skyline haze for `phase`.
 func apply_palette(phase: String) -> void:
 	var palette: Dictionary = PALETTES.get(phase, PALETTES.noon)
 	var haze: Color = palette.haze
-	_environment.background_color = haze
-	_environment.ambient_light_color = palette.fill
-	_environment.ambient_light_energy = palette.fill_energy
-	_environment.fog_light_color = haze
-	_sun.light_color = palette.key
-	_sun.light_energy = palette.key_energy
 	_light_energy = palette.pool_energy
 	if _skyline != null:
 		_skyline.set_shader_parameter("haze", haze)
@@ -140,6 +138,9 @@ func _build_pools() -> void:
 		lamp.shadow_enabled = false
 		add_child(lamp)
 		_pools.append(lamp)
+
+func pool_count() -> int:
+	return _pools.size()
 
 func _sync_animation() -> void:
 	set_process(_operating and not _reduced_motion and not _pools.is_empty())

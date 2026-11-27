@@ -122,7 +122,7 @@ func begin_story_photo() -> bool:
 	_story_photo_camera.far = camera.far
 	_story_photo_camera.position = center + Vector3(0.36, 4.40, 9.90)
 	add_child(_story_photo_camera)
-	_story_photo_camera.look_at(center)
+	_story_photo_camera.look_at(to_global(center))
 	_stage_story_people(pose)
 	_set_interaction_marker(null)
 	_story_photo_camera.make_current()
@@ -141,14 +141,14 @@ func _stage_story_people(pose: Texture2D) -> void:
 	guest.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	guest.top_level = true
 	_story_photo_camera.add_child(guest)
-	guest.global_position = STORY_GUEST + Vector3.UP * sprite_ground_anchor_y(STORY_GUEST.y, STORY_GUEST.y,
+	guest.global_position = to_global(STORY_GUEST) + Vector3.UP * sprite_ground_anchor_y(STORY_GUEST.y, STORY_GUEST.y,
 		0.0, AvatarRenderer.FEET_BASELINE, AvatarRenderer.CANVAS_SIZE.y, guest.pixel_size, camera_up)
 	_set_living_sprite_material(guest, 1, 0.0, 0.0, 0, false)
 	if is_instance_valid(avatar_contact_shadow):
 		var contact := avatar_contact_shadow.duplicate(0) as MeshInstance3D
 		contact.top_level = true
 		_story_photo_camera.add_child(contact)
-		contact.global_transform = Transform3D(avatar_contact_shadow.global_basis, STORY_GUEST + Vector3.UP * 0.008)
+		contact.global_transform = Transform3D(avatar_contact_shadow.global_basis, to_global(STORY_GUEST) + Vector3.UP * 0.008)
 
 	var host_anchor := _story_host_sprite.get_parent() as Node3D
 	_story_host_anchor_y = host_anchor.position.y
@@ -236,39 +236,34 @@ func ground_surface_y(position: Vector3) -> float:
 	return GROUND_Y if _on_yard(at) else Scenery.lawn_height(at)
 
 
+func _stands_on(point: Vector2) -> bool:
+	return _on_yard(point) or _open_ground(point)
+
+
 func _safe_footing(position: Vector3) -> bool:
 	var at := Vector2(position.x, position.z)
-	return (_on_yard(at + Vector2(-0.30, -0.30))
-		and _on_yard(at + Vector2(0.30, -0.30))
-		and _on_yard(at + Vector2(-0.30, 0.30))
-		and _on_yard(at + Vector2(0.30, 0.30)))
+	return (_stands_on(at + Vector2(-0.30, -0.30))
+		and _stands_on(at + Vector2(0.30, -0.30))
+		and _stands_on(at + Vector2(-0.30, 0.30))
+		and _stands_on(at + Vector2(0.30, 0.30)))
+
+
+func is_walkable(position: Vector3) -> bool:
+	return _safe_footing(position)
 
 
 func _constrain_player(previous_position: Vector3) -> bool:
-	if player.position.y < -1.0 or not _safe_footing(previous_position):
+	if player_spot().y < -1.0 or not _safe_footing(previous_position):
 		return _reset_to_entry()
-	if not _safe_footing(player.position):
-		player.position = previous_position
+	if not _safe_footing(player_spot()):
+		_set_player_spot(previous_position)
 		player.velocity = Vector3.ZERO
 	return false
 
 
 func _reset_to_entry() -> bool:
-	player.position = ENTRY
-	player.velocity = Vector3.ZERO
-	_sync_external_avatar_reposition()
-	avatar_is_walking = false
-	walk_distance_phase = 0.0
-	avatar_action = ""
-	avatar_action_remaining = 0.0
-	avatar_action_elapsed = 0.0
-	if is_instance_valid(avatar_hair_rig):
-		avatar_hair_rig.reset_motion()
-	if is_instance_valid(camera):
-		camera.position = ENTRY + CAMERA_OFFSET
-		camera.look_at(ENTRY + Vector3(0, 1, 0))
-	_refresh_avatar_texture(0)
-	_update_sprite_grounding()
+	place_player(ENTRY)
+	_host().settle_avatar()
 	return true
 
 
@@ -355,6 +350,14 @@ func set_time_of_day(phase_id: Variant) -> void:
 	_clock_minute.rotation.z = -TAU * fposmod(hour, 1.0)
 
 
+## Toy-box air: crisper colour, a clearer sky by day and a warm nursery fill.
+func _air(phase: String, island: Dictionary) -> Dictionary:
+	var day := phase in ["dawn", "noon"]
+	return {
+		"sky": (island.sky as Color).lerp(Color("#a8d8f4"), 0.22 if day else 0.0), "fog": (island.fog as Color).lerp(Color("#f4e6c6"), 0.2 if day else 0.05),
+		"ambient": (island.ambient as Color).lerp(Color("#fff0d2"), 0.22), "saturation": 1.18,
+	}
+
 func map_snapshot() -> Dictionary:
 	var land: Array[Rect2] = []
 	var areas: Array[Dictionary] = []
@@ -364,6 +367,6 @@ func map_snapshot() -> Dictionary:
 	var stops: Array[Dictionary] = []
 	for point in points:
 		stops.append({"id": point.id, "label": point.label, "position": point.position})
-	var at: Vector3 = player.position if is_instance_valid(player) else ENTRY
+	var at: Vector3 = player_spot() if is_instance_valid(player) else ENTRY
 	return {"bounds": BOUNDS, "land": land, "areas": areas, "points": stops, "player": at, "area": _area_at_position(at),
 		"region": "toy", "tracks": _tracks.duplicate(true), "rail_table": RAIL_TABLE, "train": train_state()}

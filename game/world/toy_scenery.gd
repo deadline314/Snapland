@@ -156,14 +156,17 @@ func _board(text: String, at: Vector3, width: float, paint: Color, font_size := 
 	return label
 
 func _build_ground() -> void:
-	var grass := ShaderMaterial.new()
-	grass.shader = world.GRASS
+	# On the island the knolls rise out of the island's own lawn, tint and all.
+	var grass: ShaderMaterial = world.material_cache.get("welcome-lawn") if world.embedded_in != null else null
+	if grass == null:
+		grass = ShaderMaterial.new()
+		grass.shader = world.GRASS
+		var plane := PlaneMesh.new()
+		plane.size = Vector2(220, 220)
+		var lawn: MeshInstance3D = world._mesh(plane, Vector3(0, LAWN_Y, 0), grass)
+		lawn.name = "ToyLawn"
+		lawn.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	world.material_cache["toy:lawn"] = grass
-	var plane := PlaneMesh.new()
-	plane.size = Vector2(220, 220)
-	var lawn: MeshInstance3D = world._mesh(plane, Vector3(0, LAWN_Y, 0), grass)
-	lawn.name = "ToyLawn"
-	lawn.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	for knoll: Array in KNOLLS:
 		kit.mound(Rect2(knoll[0], knoll[1], knoll[2], knoll[3]), float(knoll[4]), float(knoll[4]) - LAWN_Y + 0.12, float(knoll[5]), grass, float(knoll[6]))
 	for area: Dictionary in world.AREAS:
@@ -173,7 +176,8 @@ func _build_ground() -> void:
 		world._set_registered_surface(floor_mesh, world._coastal_surface(area.tile, 2.4, area.tint))
 	# The road home runs south through the castle gate and on toward the welcome avenue.
 	var road: Dictionary = world.AREAS[0]
-	kit.surface(world._coastal_surface(road.tile, 2.4, road.tint)).add(Vector3(0, _ground_y - 0.16, 25.75), Vector3(4.4, 0.3, 32.5))
+	var way: Rect2 = Rect2(-2.2, 9.5, 4.4, 32.5) if world.embedded_in == null else world._site.approach
+	kit.surface(world._coastal_surface(road.tile, 2.4, road.tint)).add(Vector3(way.get_center().x, _ground_y - 0.16, way.get_center().y), Vector3(way.size.x, 0.3, way.size.y))
 	for bay in STAND_BAYS:
 		if world._on_yard(bay.get_center()): continue
 		kit.surface(world._coastal_surface(4, 2.4, Color("#e6d7b6"))).add(Vector3(bay.get_center().x, _ground_y - 0.16, bay.get_center().y), Vector3(bay.size.x, 0.3, bay.size.y))
@@ -599,4 +603,5 @@ func _build_planting() -> void:
 		kit.posts().add(at + Vector3(0, 0.1, 0), Vector3(0.03, 0.2, 0.03), Basis.IDENTITY, Props.LEAF_DARK)
 		kit.posts().add(at + Vector3(0, 0.22, 0), Vector3(0.17, 0.05, 0.17), Basis.IDENTITY, [Props.CREAM, Props.YELLOW, Props.PINK, Props.RED][flower % 4])
 	for tree: Array in WOODS:
+		if not world.dresses(Vector2(float(tree[1]), float(tree[2]))): continue
 		kit.billboard(str(tree[0]), Vector3(float(tree[1]), LAWN_Y, float(tree[2])), float(tree[3]))

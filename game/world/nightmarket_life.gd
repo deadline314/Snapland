@@ -40,5 +40,5 @@ func _notice_player() -> void:
 	if not is_instance_valid(player):
 		cat_excited = false
 		return
-	var away := player.position - scenery.cat_arm.position
+	var away: Vector3 = world.player_spot() - scenery.cat_arm.position
 	cat_excited = away.x * away.x + away.z * away.z < CAT_NOTICE * CAT_NOTICE

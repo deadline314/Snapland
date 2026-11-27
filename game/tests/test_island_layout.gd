@@ -8,8 +8,8 @@ const CoastalCircuit = preload("res://game/world/coastal_circuit.gd")
 const IslandMapPanel = preload("res://game/ui/island_map_panel.gd")
 const DistrictSites = preload("res://game/world/district_sites.gd")
 
-## Scene budget for the Welcome island (design/runtime/scene-building-standards.md).
-const NODE_BUDGET := 2600
+## Scene budget for the island itself, districts excluded (design/runtime/scene-building-standards.md).
+const NODE_BUDGET := 2700
 ## Nodes that exist only with a GPU (air particles, cloud shade, hair viewport
 ## parts); this headless count must leave room for them.
 const GPU_ONLY_NODES := 60
@@ -341,7 +341,7 @@ func _check_ground_layers(world: Node) -> void:
 	_check(is_equal_approx(world._ground_surface_y(Vector3(62, 0, -50)), IslandLayout.BEACH_TOP_Y) and is_equal_approx(world._ground_surface_y(Vector3(0, 0, -30)), IslandLayout.PATH_TOP_Y),
 		"feet stand on sand at the beach and on paving along the promenade")
 	# Counter-examples the old rectangle would have passed.
-	_check(IslandShape.distance_to_coast(Vector2(35.9, -29)) > 20.0 and not IslandShape.contains(Vector2(0, -170)), "the old east rim is now deep inland and the far sea is still sea")
+	_check(IslandShape.distance_to_coast(Vector2(35.9, -29)) > 20.0 and not IslandShape.contains(Vector2(-40, -185)), "the old east rim is now deep inland and the far sea is still sea")
 	var rocks := world.find_children("ShoreRock*", "Node3D", true, false)
 	_check(rocks.size() == world.shoreline_rock_count and rocks.size() >= 12, "every tide-pool rock is a named shoreline prop (%d)" % rocks.size())
 	for rock: Node3D in rocks:
@@ -396,9 +396,10 @@ func _check_walkways(world: Node) -> void:
 	_check(IslandLayout.paths().size() >= 16 and curved >= 12 and total > 1500.0, "the island has a branching network of curved walkways (%d paths, %d curved, %.0f m)" % [IslandLayout.paths().size(), curved, total])
 	var route := IslandLayout.coast_route()
 	var hugging := 0
+	# Where a district now holds the shore the loop passes inland of it, beside its roads.
 	for spot in route:
-		if IslandShape.distance_to_coast(spot) <= 16.0: hugging += 1
-	_check(float(hugging) / float(route.size()) >= 0.9, "the coastal loop follows the new shore (%d of %d samples within 16 m of the water)" % [hugging, route.size()])
+		if IslandShape.distance_to_coast(spot) <= 16.0 or DistrictSites.regions().any(func(region: String) -> bool: return DistrictSites.distance(region, spot) <= 40.0): hugging += 1
+	_check(float(hugging) / float(route.size()) >= 0.9, "the coastal loop follows the shore or skirts a district (%d of %d samples)" % [hugging, route.size()])
 	_check(world.find_children("*", "MeshInstance3D", true, false).all(func(mesh: MeshInstance3D) -> bool: return not mesh.has_meta("coastal_trail")), "the old box-segment trail is gone")
 
 ## Planting keeps off the wet sand line, the walkways and the places: every
@@ -519,10 +520,10 @@ func _check_reachability(world: Node) -> void:
 		_check(IslandLayout.DOCK_WALK.has_point(spot) or IslandShape.contains(spot, IslandShape.WALK_MARGIN + 0.3), "%s lies inside the walkable island with room to spare" % point_id)
 		_check(_near(reached, columns, rows, spot - bounds.position, 1.5), "%s can be walked to from the plaza" % point_id)
 		_check(_near(by_paving, columns, rows, spot - bounds.position, 3.2), "%s is reached by an unbroken paved way from the plaza" % point_id)
-		if point_id.begins_with("gate:"):
+		if point_id.begins_with("gate:") and not DistrictSites.has(point_id.trim_prefix("gate:")):
 			_check(IslandShape.distance_to_coast(spot) <= 16.0 and spot.length() >= 45.0, "%s stands at the island's edge, far from the plaza (%.0f m out, %.0f m from the water)" % [point_id, spot.length(), IslandShape.distance_to_coast(spot)])
 	# Counter-examples: open sea and a pond are never reached.
-	_check(not _near(reached, columns, rows, Vector2(0, -175) - bounds.position, 1.5) and not _near(reached, columns, rows, Vector2(-41, -30) - bounds.position, 1.5), "the walk does not cross open water or a pond")
+	_check(not _near(reached, columns, rows, Vector2(-40, -178) - bounds.position, 1.5) and not _near(reached, columns, rows, Vector2(-41, -30) - bounds.position, 1.5), "the walk does not cross open water or a pond")
 	# The lookout deck is a ledge: the only way up is its ramp from the west.
 	var deck_cell := Vector2i((Vector2(IslandLayout.GAME_ENTRIES[9].position.x, IslandLayout.GAME_ENTRIES[9].position.z) - bounds.position).round())
 	var beside_cell := deck_cell + Vector2i(0, -3)
@@ -644,7 +645,7 @@ func _check_map_chart(world: Node) -> void:
 	_check(placed >= 44 and misplaced == 0, "every map marker falls inside the drawn island (%d of %d outside)" % [misplaced, placed])
 	var here: Vector2 = chart.project(Vector3(-94, 0, -61))
 	_check(Geometry2D.is_point_in_polygon(here, outline) and here.x < frame.get_center().x, "a walker on the west cape is drawn on the island's west side")
-	_check(not Geometry2D.is_point_in_polygon(chart.project(Vector3(0, 0, -175)), outline), "a position out at sea is drawn off the island")
+	_check(not Geometry2D.is_point_in_polygon(chart.project(Vector3(-40, 0, -185)), outline), "a position out at sea is drawn off the island")
 	chart.free()
 
 ## The moored ferry reads as a boat (tapered bow, tucked stern, detailed

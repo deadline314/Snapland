@@ -127,18 +127,22 @@ func apply_time_of_day(lamp_level: float, sky: Color) -> void:
 	mirror_material.set_shader_parameter("glow", lamp_level * 0.5)
 
 func _build_ground() -> void:
-	var meadow := ShaderMaterial.new()
-	meadow.shader = world.GRASS
+	# On the island the camp stands on the island's own lawn, tint and all.
+	var meadow: ShaderMaterial = world.material_cache.get("welcome-lawn") if world.embedded_in != null else null
+	if meadow == null:
+		meadow = ShaderMaterial.new()
+		meadow.shader = world.GRASS
+		var plane := PlaneMesh.new()
+		plane.size = Vector2(260, 260)
+		var lawn: MeshInstance3D = world._mesh(plane, Vector3(0, MEADOW_Y, 0), meadow)
+		lawn.name = "CircusMeadow"
+		lawn.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	world.material_cache["circus:meadow"] = meadow
-	var plane := PlaneMesh.new()
-	plane.size = Vector2(260, 260)
-	var lawn: MeshInstance3D = world._mesh(plane, Vector3(0, MEADOW_Y, 0), meadow)
-	lawn.name = "CircusMeadow"
-	lawn.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	# Trodden earth under the whole camp, and the track that leads back to the avenue.
 	var earth := kit.shore_ground("circus-earth", Color("#cdae7e"), Color("#9c7d55"), 0.5)
 	kit.mound(Rect2(-13.5, -17.8, 27.0, 28.4), YARD_Y, 0.04, 1.6, earth, 0.7).name = "CircusYard"
-	kit.mound(Rect2(-2.0, 9.6, 4.0, 32.0), YARD_Y - 0.008, 0.03, 0.9, earth, 2.9).name = "CircusTrack"
+	var track: Rect2 = Rect2(-2.0, 9.6, 4.0, 32.0) if world.embedded_in == null else world._site.approach
+	kit.mound(track, YARD_Y - 0.008, 0.03, 0.9, earth, 2.9).name = "CircusTrack"
 	# The welcome photo is taken from eye level south of the arch; this turf face
 	# closes the gap its lowest rows would otherwise see under the lawn.
 	var turf := QuadMesh.new()
@@ -452,6 +456,7 @@ func _build_camp() -> void:
 		HarborProps.cargo(kit, CRATES[index], index)
 	HarborProps.bench(kit, Vector3(5.6, MEADOW_Y, 12.2), -0.5)
 	for plant: Array in PLANTS:
+		if not world.dresses(Vector2(float(plant[1]), float(plant[2]))): continue
 		kit.billboard(str(plant[0]), Vector3(float(plant[1]), MEADOW_Y, float(plant[2])), float(plant[3]))
 
 ## The woods close the clearing on every side; they are scattered once from fixed numbers.
@@ -461,7 +466,7 @@ func _build_woods() -> void:
 		for row in range(-14, 12):
 			var seed_value := float(column) * 7.31 + float(row) * 3.17
 			var at := Vector2(float(column) * 3.1 + (_scatter(seed_value) - 0.5) * 2.2, float(row) * 3.1 + (_scatter(seed_value + 1.7) - 0.5) * 2.2)
-			if _in_clearing(at): continue
+			if _in_clearing(at) or not world.dresses(at): continue
 			kit.grove(kinds[int(_scatter(seed_value + 3.3) * 6.99)], Vector3(at.x, MEADOW_Y, at.y), 4.0 + 1.3 * _scatter(seed_value + 5.1))
 
 func _in_clearing(at: Vector2) -> bool:

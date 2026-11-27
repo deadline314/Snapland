@@ -499,10 +499,13 @@ func district_weights() -> Dictionary:
 		shares["welcome"] = district_host.island_share()
 	return shares
 
+## Fast travel home sets the walker down on the plaza's south edge, facing the fountain.
+const PLAZA_ARRIVAL := Vector3(0, 0.3, 6.5)
+
 ## Where fast travel sets the walker down for `region`, in world space; the
 ## district is built first if needed. Vector3.INF when it cannot be reached.
 func arrival_point(region: String) -> Vector3:
-	if region == "welcome": return _player_spawn_position()
+	if region == "welcome": return PLAZA_ARRIVAL
 	if not is_instance_valid(district_host) or district_host.ensure(region) == null: return Vector3.INF
 	return DistrictSites.arrival(region)
 
@@ -1059,8 +1062,6 @@ const DEFAULT_MARKER_HEIGHT := 2.85
 const NPC_ROLE_BY_POINT := {"guide":"ticket", "quest-001":"imp", "quest-002":"announcer"}
 
 func _point(id: String, title: String, pos: Vector3, marker_height := DEFAULT_MARKER_HEIGHT) -> void:
-	# On the island the way back is the road, so an embedded district keeps no return point.
-	if embedded_in != null and id == "region:welcome": return
 	var marker := _label("◇", pos + Vector3(0,marker_height,0), 38, GOLD)
 	_register_interaction_point(id, title, pos, marker)
 	# Capture the marker's animation baseline after attaching it to the actor.
@@ -2396,7 +2397,8 @@ func _add_gate_leaves(gate: Node3D, region: String) -> void:
 func show_gate(region: String, open: bool, celebrate: bool) -> void:
 	var status := find_child("GateStatus_" + region, false, false) as Label3D
 	if status != null:
-		status.text = "已開放 · 請進" if open else "%d 張 · 不消耗" % RegionRoutes.threshold(region)
+		if is_instance_valid(district_host) and district_host.failed.has(region): status.text = "整修中 · 暫停開放"
+		else: status.text = "已開放 · 請進" if open else "%d 張 · 不消耗" % RegionRoutes.threshold(region)
 	for leaf: MeshInstance3D in _gate_leaves.get(region, []):
 		var side: float = leaf.get_meta("hinge")
 		var closed := 0.0 if side < 0.0 else PI
@@ -3580,6 +3582,9 @@ func set_time_of_day(phase_id: Variant) -> void:
 		shadow.position = ground_offset
 
 func _update_lamp_selection(force := false) -> void:
+	if embedded_in != null:
+		embedded_in._update_lamp_selection(force)
+		return
 	if not is_instance_valid(player): return
 	if not force and lamp_selection_elapsed < LAMP_SELECTION_INTERVAL: return
 	lamp_selection_elapsed = 0.0
@@ -3602,12 +3607,15 @@ func _update_lamp_selection(force := false) -> void:
 			break
 	for slot in range(SHADOW_LAMP_LIMIT): shadow_lamp_indices[slot] = -1
 	var shadow_count := 0
+	# Lights an awake district keeps burning on its own take places from the budget.
+	var reserved: int = district_host.steady_lights() if is_instance_valid(district_host) else 0
 	for slot in range(ACTIVE_LAMP_LIMIT):
 		var lamp_index := active_lamp_indices[slot]
 		if lamp_index < 0: continue
 		var lamp := lamps[lamp_index]
-		var enabled := lamp_energy_for_phase > 0.0 and slot < active_lamp_budget
-		lamp.light_energy = lamp_energy_for_phase if enabled else 0.0
+		var level := _lamp_level(lamp)
+		var enabled := level > 0.0 and slot < active_lamp_budget - reserved
+		lamp.light_energy = level if enabled else 0.0
 		lamp.shadow_enabled = enabled and active_time_phase in ["dusk", "night"] and shadow_count < shadow_lamp_budget
 		if lamp.shadow_enabled:
 			# Two shadow passes per lamp instead of six; these short-range lamps look the same.
@@ -3621,6 +3629,19 @@ func _update_lamp_selection(force := false) -> void:
 		var lamp := lamps[lamp_index]
 		lamp.light_energy = 0.0
 		lamp.shadow_enabled = false
+
+## How bright a lamp burns when chosen: its district decides for its own lamps.
+func _lamp_level(lamp: Light3D) -> float:
+	var keeper: Object = lamp.get_meta(&"district") if lamp.has_meta(&"district") else null
+	return keeper.lamp_level(lamp) if is_instance_valid(keeper) else lamp_energy_for_phase
+
+## Lights this world keeps burning outside the lamp list (none by default).
+func steady_light_count() -> int:
+	return 0
+
+## A district's brightness for one of its lamps in the current phase.
+func lamp_level(_lamp: Light3D) -> float:
+	return lamp_energy_for_phase
 
 func apply_settings(settings: Dictionary) -> void:
 	reduced_motion=bool(settings.get("reduced_motion",false))

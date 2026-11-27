@@ -110,15 +110,18 @@ func _build_ground() -> void:
 	meadow.shader = world.GRASS
 	meadow.set_shader_parameter("shade", Color("#6a78a0"))
 	world.material_cache["nightmarket:meadow"] = meadow
-	var valley: MeshInstance3D = world._mesh(floor_mesh, Vector3(0, VALLEY_Y, 0), meadow)
-	valley.name = "ValleyFloor"
-	valley.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	# On the island the valley floor is the island's lawn, darkened toward the market.
+	if world.embedded_in == null:
+		var valley: MeshInstance3D = world._mesh(floor_mesh, Vector3(0, VALLEY_Y, 0), meadow)
+		valley.name = "ValleyFloor"
+		valley.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	var lane: Material = world._atmosphere.paving_material(false, true)
 	var slabs := kit.surface(lane)
 	var center := QUARTER.get_center()
 	slabs.add(Vector3(center.x, QUARTER_Y - 0.3, center.y), Vector3(QUARTER.size.x, 0.6, QUARTER.size.y))
 	# The way back to the welcome avenue runs south through the gateway.
-	slabs.add(Vector3(0, QUARTER_Y - 0.3, 22.0), Vector3(5.0, 0.6, 24.0))
+	var way: Rect2 = Rect2(-2.5, 10.0, 5.0, 24.0) if world.embedded_in == null else world._site.approach
+	slabs.add(Vector3(way.get_center().x, QUARTER_Y - 0.3, way.get_center().y), Vector3(way.size.x, 0.6, way.size.y))
 	# Loose flagstones break the quarter's edge up where it meets bare ground.
 	var flags := kit.surface(world._coastal_surface(0, 2.2, Color("#59607a")))
 	for index in range(64):
@@ -132,6 +135,7 @@ func _build_ground() -> void:
 			2: at = Vector3(QUARTER.end.x + out, 0, lerpf(-26.0, 12.0, along))
 			_: at = Vector3((2.6 + out) * (1.0 if index % 8 < 4 else -1.0), 0, lerpf(10.5, 28.0, along))
 		if absf(at.x) < 2.6 and at.z > 10.0: continue
+		if not world.dresses(Vector2(at.x, at.z)): continue
 		at.y = VALLEY_Y + 0.02
 		flags.add(at, Vector3(0.9 + 0.7 * Props.scatter(seed_value + 2.0), 0.06, 0.7 + 0.5 * Props.scatter(seed_value + 3.0)), Basis(Vector3.UP, seed_value))
 
@@ -327,6 +331,7 @@ func _build_corner_shrine() -> void:
 func _build_dressing() -> void:
 	for plant: Array in PLANTS:
 		var at := Vector2(float(plant[1]), float(plant[2]))
+		if not world.dresses(at): continue
 		var ground := Vector3(at.x, QUARTER_Y if QUARTER.has_point(at) else VALLEY_Y, at.y)
 		# The trees stand out of reach as one batch per kind; shrubs keep their own shadows.
 		if str(plant[0]) == "shrub":

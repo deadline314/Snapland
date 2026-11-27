@@ -106,7 +106,7 @@ func _build_atmosphere() -> void:
 	_atmosphere.name = "NightmarketAtmosphere"
 	add_child(_atmosphere)
 	var image := load(SKYLINE) as Texture2D if ResourceLoader.exists(SKYLINE) else null
-	_atmosphere.setup(environment, sun, image, coastal_atlas, AWNING)
+	_atmosphere.setup(image, coastal_atlas, AWNING)
 
 ## Walkable ground with collision: the wet streets, the ramp and the roof terrace.
 func _build_terrain() -> void:
@@ -229,20 +229,19 @@ func begin_story_photo() -> bool:
 	var actor := _npc_record_for_role("announcer")
 	if actor.is_empty():
 		return false
-	_story_photo_origin = player.position
-	_story_photo_facing = facing
+	var host := _host()
+	_story_photo_origin = player_spot()
+	_story_photo_facing = host.facing
 	_set_story_host_pose(_story_photo_pose)
 	_story_name_label = actor.get("name_label") as Label3D
 	if is_instance_valid(_story_name_label):
 		_story_name_label.hide()
-	player.position = STORY_POINT
-	player.velocity = Vector3.ZERO
-	_sync_external_avatar_reposition()
-	facing = "front"
-	avatar_action = ""
-	avatar_action_remaining = 0.0
-	avatar_action_elapsed = 0.0
-	_refresh_avatar_texture(0)
+	place_player(STORY_POINT)
+	host.facing = "front"
+	host.avatar_action = ""
+	host.avatar_action_remaining = 0.0
+	host.avatar_action_elapsed = 0.0
+	host._refresh_avatar_texture(0)
 	var center := STORY_POINT.lerp(STORY_HOST, 0.5) + Vector3(0, 1.45, 0)
 	_story_photo_camera = Camera3D.new()
 	_story_photo_camera.name = "NightmarketGroupPhotoCamera"
@@ -251,7 +250,7 @@ func begin_story_photo() -> bool:
 	_story_photo_camera.far = camera.far
 	_story_photo_camera.position = center + Vector3(-1.70, 3.05, 9.0)
 	add_child(_story_photo_camera)
-	_story_photo_camera.look_at(center)
+	_story_photo_camera.look_at(to_global(center))
 	_story_photo_camera.make_current()
 	var fill := OmniLight3D.new()
 	fill.position = Vector3(0, -0.85, -6.0)
@@ -272,11 +271,9 @@ func end_story_photo() -> void:
 		_story_name_label.show()
 	_story_name_label = null
 	_set_story_host_pose(_story_rest_pose)
-	player.position = _story_photo_origin
-	player.velocity = Vector3.ZERO
-	facing = _story_photo_facing
-	_sync_external_avatar_reposition()
-	_refresh_avatar_texture(0)
+	place_player(_story_photo_origin)
+	_host().facing = _story_photo_facing
+	_host()._refresh_avatar_texture(0)
 
 func _interaction_markers_allowed() -> bool:
 	return not is_instance_valid(_story_photo_camera)
@@ -318,10 +315,16 @@ func set_time_of_day(phase_id: Variant) -> void:
 	super.set_time_of_day(phase_id)
 	_atmosphere.apply_palette(active_time_phase)
 	lamp_energy_for_phase = float(LAMP_LEVELS[active_time_phase])
-	# Neon and lanterns bloom here at every hour.
-	environment.glow_intensity = 0.55
 	_update_lamp_selection(true)
 	_scenery.apply_time_of_day(active_time_phase)
+
+## Always dusk in the valley: its own haze, fill and key light, and neon bloom
+## at every hour. On the island this is the air the walker meets in the market.
+func _air(phase: String, _island: Dictionary) -> Dictionary:
+	return Atmosphere.air(phase)
+
+func steady_light_count() -> int:
+	return _atmosphere.pool_count() if is_instance_valid(_atmosphere) and is_visible_in_tree() else 0
 
 func refresh_label_fonts(font: Font) -> void:
 	super.refresh_label_fonts(font)
@@ -413,7 +416,10 @@ func _is_land(point: Vector2) -> bool:
 	for rect in LAND:
 		if rect.has_point(point):
 			return true
-	return false
+	return _open_ground(point)
+
+func is_walkable(position: Vector3) -> bool:
+	return _safe_footing(position)
 
 func _safe_footing(position: Vector3) -> bool:
 	for offset in [Vector2(-0.3, -0.3), Vector2(-0.3, 0.3), Vector2(0.3, -0.3), Vector2(0.3, 0.3)]:
@@ -422,37 +428,24 @@ func _safe_footing(position: Vector3) -> bool:
 	return true
 
 func _constrain_player(previous_position: Vector3) -> bool:
-	if player.position.y < -1.0 or not _safe_footing(previous_position):
+	if player_spot().y < -1.0 or not _safe_footing(previous_position):
 		return reset_to_entry()
-	if not _safe_footing(player.position):
-		player.position = previous_position
+	if not _safe_footing(player_spot()):
+		_set_player_spot(previous_position)
 		player.velocity = Vector3.ZERO
 	return false
 
 func reset_to_entry() -> bool:
 	if not is_instance_valid(player):
 		return false
-	player.position = ENTRY
-	player.velocity = Vector3.ZERO
-	_sync_external_avatar_reposition()
-	avatar_is_walking = false
-	walk_distance_phase = 0.0
-	avatar_action = ""
-	avatar_action_remaining = 0.0
-	avatar_action_elapsed = 0.0
-	if is_instance_valid(avatar_hair_rig):
-		avatar_hair_rig.reset_motion()
-	if is_instance_valid(camera):
-		camera.position = ENTRY + CAMERA_OFFSET
-		camera.look_at(ENTRY + Vector3(0, 1, 0))
-	_refresh_avatar_texture(0)
-	_update_sprite_grounding()
+	place_player(ENTRY)
+	_host().settle_avatar()
 	return true
 
 func map_snapshot() -> Dictionary:
 	var map_points: Array[Dictionary] = []
 	for point in points:
 		map_points.append({"id": point.id, "label": point.label, "position": point.position})
-	var at: Vector3 = player.position if is_instance_valid(player) else ENTRY
+	var at: Vector3 = player_spot() if is_instance_valid(player) else ENTRY
 	return {"bounds": BOUNDS, "land": LAND.duplicate(), "points": map_points, "player": at,
 		"awning": AWNING, "roof": ROOF, "operating": _operating, "covered": covered_at(at), "region": "nightmarket"}

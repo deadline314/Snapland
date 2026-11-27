@@ -58,9 +58,13 @@ func gate_is_open(region: String) -> bool:
 func ensure(region: String) -> Node3D:
 	if districts.has(region): return districts[region]
 	if failed.has(region) or not DistrictSites.has(region): return null
+	return _build(region, str(DistrictSites.SITES[region].script))
+
+func _build(region: String, script_path: String) -> Node3D:
 	var started := Time.get_ticks_msec()
 	var site: Dictionary = DistrictSites.SITES[region]
-	var script := load(site.script) as GDScript if ResourceLoader.exists(site.script) else null
+	var lamps_before: int = world.lamps.size()
+	var script := load(script_path) as GDScript if ResourceLoader.exists(script_path) else null
 	var node: Node3D = script.new() as Node3D if script != null else null
 	if node != null:
 		node.set("embedded_in", world)
@@ -71,14 +75,22 @@ func ensure(region: String) -> Node3D:
 	if node == null or not bool(node.get("district_ready")):
 		push_warning("District '%s' could not be built; its gate stays closed." % region)
 		failed[region] = true
-		if node != null: node.queue_free()
+		if node != null:
+			world.lamps.resize(lamps_before)
+			for index in range(world.points.size() - 1, -1, -1):
+				if world.points[index].get("region", "") == region: world.points.remove_at(index)
+			node.queue_free()
 		_set_gate(region, false, false)
 		return null
 	districts[region] = node
+	# The host chooses which lamps burn; each district still sets how bright its own are.
+	for index in range(lamps_before, world.lamps.size()):
+		world.lamps[index].set_meta(&"district", node)
 	node.set_time_of_day(world.active_time_phase)
 	if not _settings.is_empty(): node.apply_settings(_settings)
 	if _look.size() == 2: node.set_avatar_look(_look[0], _look[1])
 	world.bind_district_ground(districts.keys())
+	if _stickers >= 0: _set_gate(region, _stickers >= RegionRoutes.threshold(region), false)
 	last_build_msec = Time.get_ticks_msec() - started
 	print("[district] %s built in %d ms, %d nodes" % [region, last_build_msec, node.find_children("*", "Node", true, false).size() + 1])
 	return node
@@ -90,8 +102,15 @@ func track(at: Vector3, delta: float) -> void:
 	var changed := false
 	var leader := HOME
 	var lead := 0.0
+	var total := 0.0
 	for region: String in weights:
 		var share := DistrictSites.weight(region, spot) if districts.has(region) else 0.0
+		weights[region] = share
+		total += share
+	# Where two bands overlap the districts share the air and the island has none.
+	var scale := 1.0 / total if total > 1.0 else 1.0
+	for region: String in weights:
+		var share := float(weights[region]) * scale
 		weights[region] = share
 		if absf(share - float(_applied[region])) > AIR_STEP or (share == 0.0) != (float(_applied[region]) == 0.0): changed = true
 		if share > lead:
@@ -113,16 +132,16 @@ func track(at: Vector3, delta: float) -> void:
 		_stream_elapsed = 0.0
 		_stream(spot)
 
-## Fold every district's wanted light into `blend`, which starts as the island's own.
+## Mix every district's wanted light into `blend`, which starts as the island's
+## own: a weighted sum with the island's share, so overlapping bands stay exact.
 func blend_air(blend: Dictionary, keys: Array) -> void:
-	for region: String in districts:
-		var share := float(weights[region])
-		if share <= 0.0: continue
-		var target: Dictionary = districts[region].air_target
-		# ponytail: one lerp per district is exact only while bands never overlap
-		# (checked by the district tests); use a normalised sum if sites move closer.
-		for key: String in keys:
-			blend[key] = lerp(blend[key], target[key], share)
+	var home := island_share()
+	for key: String in keys:
+		var mixed: Variant = blend[key] * home
+		for region: String in districts:
+			var share := float(weights[region])
+			if share > 0.0: mixed += districts[region].air_target[key] * share
+		blend[key] = mixed
 
 func set_phase(phase: String) -> void:
 	for region: String in districts:
@@ -171,6 +190,13 @@ func _set_awake(node: Node3D, awake: bool) -> void:
 	node.visible = awake
 	node.process_mode = Node.PROCESS_MODE_INHERIT if awake else Node.PROCESS_MODE_DISABLED
 	world._update_lamp_selection(true)
+
+## Lights awake districts keep burning outside the shared lamp list.
+func steady_lights() -> int:
+	var count := 0
+	for region: String in districts:
+		count += int(districts[region].steady_light_count())
+	return count
 
 func is_awake(region: String) -> bool:
 	return districts.has(region) and districts[region].process_mode != Node.PROCESS_MODE_DISABLED

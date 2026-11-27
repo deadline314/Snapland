@@ -14,7 +14,7 @@ const STOPS := [
 	{"id":"tide-wheel", "name":"潮汐水車", "text":"水車把潮水帶進高處的木槽，再緩緩送回海裡。沿著岸邊的石路再走一段，就會回到碼頭；不必原路折返。"},
 ]
 ## Offshore rocks that give the open sea a horizon: x, z.
-const ISLETS := [Vector2(-62,-168), Vector2(-34,-171), Vector2(-14,-186), Vector2(34,-178), Vector2(62,-170), Vector2(108,-110), Vector2(-100,-98)]
+const ISLETS := [Vector2(-74,-216), Vector2(-38,-176), Vector2(-14,-240), Vector2(40,-240), Vector2(98,-234), Vector2(128,-160), Vector2(-100,-98)]
 const RIDGE_VARIANTS := 2
 ## The faceted meshes are costly to generate; every Welcome world shares them.
 static var _ridge_shapes: Array[ArrayMesh] = []

@@ -1,8 +1,5 @@
 extends Node
 const WorldScene = preload("res://game/world/park_world.gd")
-const NightmarketWorld = preload("res://game/world/nightmarket_world.gd")
-const CircusWorld = preload("res://game/world/circus_world.gd")
-const ToyWorld = preload("res://game/world/toy_world.gd")
 const RegionRoutes = preload("res://game/core/region_routes.gd")
 const DistrictSites = preload("res://game/world/district_sites.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
@@ -115,6 +112,8 @@ func _ready() -> void:
 	definitions=Session.definitions()
 	_build_ui()
 	_bind_world()
+	# A restored position decides the region the walker is really standing in.
+	_on_district_changed(world.standing_region())
 	Progress.changed.connect(_refresh)
 	Localization.locale_changed.connect(_on_locale_changed)
 	Progress.achievement_unlocked.connect(_achievement_toast)
@@ -179,11 +178,9 @@ func _on_world_interaction_requested(id: String, title: String, source: Node3D) 
 	if source!=world: return
 	_interact(id,title)
 
-func _new_region_world(region: String) -> Node3D:
-	match region:
-		"nightmarket": return NightmarketWorld.new()
-		"circus": return CircusWorld.new()
-		"toy": return ToyWorld.new()
+## Every region is a district of the one island world; the world builds a
+## district itself when the walker (or a restored save) first needs it.
+func _new_region_world(_region: String) -> Node3D:
 	var welcome := WorldScene.new()
 	welcome.allow_follow_interpolation = true
 	return welcome
@@ -247,17 +244,20 @@ func _replace_region(destination: String, returning: bool = false) -> void:
 		world.free()
 		world=_new_region_world(destination)
 		add_child(world)
-	if _on_island(destination):
-		var spot := Vector3.INF
-		if destination!="welcome":
-			spot=world.arrival_point(destination)
-		elif returning or same_world:
-			for point in world.points:
-				if point.id=="gate:"+departure: spot=point.position+Vector3(0,0.3,1.8)
-		if spot.is_finite():
+	if same_world:
+		# The district is built behind the cover; one that cannot be built keeps the walker here.
+		var spot: Vector3 = world.arrival_point(destination)
+		if not spot.is_finite():
+			world_region=departure
+			Progress.set_current_region(departure)
+			_notice("%s暫停開放，請稍後再來。" % RegionRoutes.title(destination))
+		else:
 			world.place_player(spot)
 			world.settle_avatar()
 		world.refresh_standing()
+	elif returning and destination=="welcome":
+		for point in world.points:
+			if point.id=="gate:"+departure: world.place_player(point.position+Vector3(0,0.3,1.8))
 	world.current_area=world._area_at_position(world.player.position)
 	if not same_world: _bind_world()
 	world.blocked=false
@@ -1451,7 +1451,9 @@ func _interact(id: String, title: String) -> void:
 		_travel_to_region("welcome")
 		return
 	# A point belongs to the district that built it, wherever the walker's feet are.
-	var here := str(world._point_by_id(id).get("region","welcome")) if _on_island(world_region) else world_region
+	# Every district has its own free return point, so prefer the one the walker stands at.
+	var record: Dictionary = world.nearest if str(world.nearest.get("id","")) == id else world._point_by_id(id)
+	var here := str(record.get("region","welcome")) if _on_island(world_region) else world_region
 	var place := region_world(here)
 	if not id.is_empty() and id == RegionalVisit.point_id(here):
 		_start_region_story_visit(here)
@@ -1469,16 +1471,16 @@ func _interact(id: String, title: String) -> void:
 	if here=="toy":
 		match id:
 			"toy:blocks": _notice("積木街北側通往維修台，往東可到車站岔道。")
-			"toy:switch": _notice(world.switch_tracks())
+			"toy:switch": _notice(place.switch_tracks())
 			"toy:train": _notice(world.operate_train())
-			"toy:repair": _notice(world.reset_train())
-			"toy:tower": _notice(world.wind_tower())
+			"toy:repair": _notice(place.reset_train())
+			"toy:tower": _notice(place.wind_tower())
 		return
 	if here=="circus":
 		match id:
 			"circus:mirrors": _notice("走近鏡子，會照出被拉長或壓扁的自己。兩端步道都可通行。")
 			"circus:auditorium": _notice("沿中央通道向北可到砲彈安全墊。")
-			"circus:shadow": _notice(world.switch_projection())
+			"circus:shadow": _notice(place.switch_projection())
 			"circus:mats": _notice("站進表演圈，聚光燈和鼓聲會跟著你。向南接觀眾席。")
 		return
 	if here=="nightmarket":
@@ -1487,7 +1489,7 @@ func _interact(id: String, title: String) -> void:
 		else:
 			match id:
 				"nightmarket:trade":
-					world.cycle_market()
+					place.cycle_market()
 					_notice("攤街" + world.market_status() + "。通路照常開放。")
 				"nightmarket:shelter":
 					_notice("在雨棚下可以遮雨。從巷北的斜坡可到屋頂餐桌。")
@@ -1496,7 +1498,7 @@ func _interact(id: String, title: String) -> void:
 				"nightmarket:signs":
 					_notice("招牌顯示" + world.market_status() + "。可在入口旁反覆切換。")
 				"nightmarket:reset":
-					world.reset_to_entry()
+					place.reset_to_entry()
 					_notice("已免費回到夜市入口。")
 		return
 	if here=="candy":
@@ -2596,8 +2598,15 @@ func _show_map() -> void:
 			elif world_region=="garden":
 				return_button.name="GardenReturnButton"
 			return_button.tooltip_text="永久免費返回；不需要拍貼或遊園幣。"
+		var island_button := Paper.button("全島地圖",_show_island_map,modal_footer)
+		island_button.name="IslandMapButton"
+		island_button.tooltip_text="看全島與你所在的位置。"
 		_back(harbor_body)
 		return
+	_show_island_map()
+
+## The whole island with every district, its gates and where the walker stands.
+func _show_island_map() -> void:
 	var body := _open("迎賓大道地圖","ISLAND MAP","map")
 	var map_script = load("res://game/ui/island_map_panel.gd")
 	var map_panel = map_script.new()

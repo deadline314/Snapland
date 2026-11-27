@@ -62,6 +62,38 @@ const SITES := {
 		"cutouts": [Rect2(-12.5, -12.2, 25.0, 22.05)],
 		"ground": Color("#1f3b2c"), "ground_strength": 0.7,
 	},
+	# The north rim: the market in its valley to the west, the toy town on the
+	# hill, the circus clearing to the east. Each road runs up from the plaza.
+	"nightmarket": {
+		"script": "res://game/world/nightmarket_world.gd",
+		"at": Vector3(-80, 0, -160),
+		"claim": Rect2(-26, -30, 52, 42),
+		"approach": Rect2(-2.5, 9.4, 5.0, 19.6), "approach_y": 0.18,
+		"arrival": Vector3(0, 0.2, 7.55),
+		"gate": Vector3(0, 28.4, 0),
+		"cutouts": [],
+		"ground": Color("#4b5675"), "ground_strength": 0.62,
+	},
+	"toy": {
+		"script": "res://game/world/toy_world.gd",
+		"at": Vector3(10, 0, -185),
+		"claim": Rect2(-31, -28, 62, 53),
+		"approach": Rect2(-2.2, 9.3, 4.4, 21.2), "approach_y": 0.2,
+		"arrival": Vector3(0, 0.2, 7.65),
+		"gate": Vector3(0, 29.9, 0),
+		"cutouts": [],
+		"ground": Color("#9fb860"), "ground_strength": 0.4,
+	},
+	"circus": {
+		"script": "res://game/world/circus_world.gd",
+		"at": Vector3(80, 0, -185),
+		"claim": Rect2(-24, -26, 48, 49),
+		"approach": Rect2(-2.0, 9.4, 4.0, 20.2), "approach_y": 0.2,
+		"arrival": Vector3(0, 0.2, 7.8),
+		"gate": Vector3(0, 29.0, 0),
+		"cutouts": [],
+		"ground": Color("#b39a6a"), "ground_strength": 0.42,
+	},
 }
 
 static var _tint: ImageTexture

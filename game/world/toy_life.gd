@@ -126,7 +126,8 @@ func animate(delta: float) -> void:
 func step_piano() -> void:
 	var player: Node3D = world.player
 	if not is_instance_valid(player): return
-	var at := Vector2(player.position.x, player.position.z)
+	var spot: Vector3 = world.player_spot()
+	var at := Vector2(spot.x, spot.z)
 	var key := int((at.x - PIANO.position.x) / PIANO.size.x * float(PIANO_NOTES.size())) if PIANO.has_point(at) else -1
 	if key == _piano_key: return
 	_piano_key = key
@@ -207,7 +208,8 @@ func _build_gears(paint: Material) -> void:
 func _react(delta: float) -> void:
 	var player: Node3D = world.player
 	if not is_instance_valid(player): return
-	var at := Vector2(player.position.x, player.position.z)
+	var spot: Vector3 = world.player_spot()
+	var at := Vector2(spot.x, spot.z)
 	for index in range(SOLDIERS.size()):
 		var post: Array = SOLDIERS[index]
 		var stand := Vector2(_soldier_x(index), float(post[1]))

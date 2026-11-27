@@ -86,34 +86,35 @@ func _run() -> void:
 		await _finish()
 		return
 	travel.pressed.emit()
-	_check(main.changing_region and main.world==original and Progress.current_region=="harbor", "save precedes deferred old-world release")
+	_check(main.changing_region and main.world==original and Progress.current_region=="harbor", "save precedes the deferred move")
 	var old_area: String=main.area_label.text
 	original.area_changed.emit("stale old area")
 	_check(main.area_label.text==old_area and not main._travel_to_region("welcome"), "transition ignores old events and rejects reentry")
 	await _frames(4)
-	_check(not is_instance_valid(original) and main.world_region=="harbor", "old world is released and saved harbor is visible")
-	_check(main.world.coastal_play==null and main.world.npc_activity==null, "harbor never instantiates welcome toys/NPCs")
-	_check(main.audio._active_context=="harbor" and main.world.reduced_motion and main.world.night, "harbor applies current settings/time/audio")
-	_check(main.world.avatar_appearance==Progress.appearance and main.world.avatar_equipped==Progress.equipped, "harbor reapplies complete current look")
+	_check(main.world==original and main.world_region=="harbor" and _world_count()==1, "the island stays one world and the saved harbor is where the walker stands")
+	_check(_at(main.world.arrival_point("harbor")) and main.world.standing_region()=="harbor" and main.region_world()!=main.world and main.region_world().embedded_in==main.world, "fast travel sets the walker down at the harbor district built into the island")
+	_check(main.audio._active_context=="harbor" and main.region_world().reduced_motion and main.region_world().night, "harbor applies current settings/time/audio")
+	_check(main.region_world().avatar_appearance==Progress.appearance and main.region_world().avatar_equipped==Progress.equipped, "harbor reapplies complete current look")
 	_check(main.normal_count_label.text.contains("1 / 18") and main.devil_count_label.text.contains("0 / 12"), "harbor HUD uses local numerators")
-	main.world.nearest=main.world.points[0]
+	main.world.nearest=main.region_world().points[0]
 	_check(not main._context_prompt().is_empty(), "optional coastal prompt is safe")
 	await _harbor_ui(before)
 	for tide in [false,true]:
-		main.world.set_tide(tide)
+		var harbor: Node=main.region_world()
+		harbor.set_tide(tide)
 		main._interact("harbor:ferry:shore","免費渡船")
-		_check(main.world.player.position.is_equal_approx(main.world.LIGHTHOUSE_DOCK), "free ferry reaches lighthouse in either tide")
+		_check(_at(harbor.to_global(harbor.LIGHTHOUSE_DOCK)), "free ferry reaches lighthouse in either tide")
 		main._interact("harbor:ferry:lighthouse","免費渡船")
-		_check(main.world.player.position.is_equal_approx(main.world.SHORE_DOCK), "free ferry reaches shore in either tide")
+		_check(_at(harbor.to_global(harbor.SHORE_DOCK)), "free ferry reaches shore in either tide")
 		_check(_snapshot()==before, "tides and ferry grant and consume nothing")
-		var harbor: Node=main.world
+		var island: Node=main.world
 		var saved_cards: Dictionary=Progress.photos.duplicate(true)
 		Progress.photos.clear()
-		# Emit from the real world signal: its stack must survive deferred release.
-		harbor.interaction_requested.emit("region:welcome","返回迎賓大道")
+		# Emit from the real world signal: its stack must survive the deferred move.
+		island.interaction_requested.emit("region:welcome","返回迎賓大道")
 		await _frames(4)
-		_check(not is_instance_valid(harbor) and main.world_region=="welcome", "free return in either tide releases harbor")
-		_check(main.world.player.position.distance_to(_point("gate:harbor").position)<2.5, "return uses safe welcome gate spawn")
+		_check(main.world==island and main.world_region=="welcome", "free return in either tide keeps the one island world")
+		_check(_at(main.world.PLAZA_ARRIVAL) and main.world.standing_region()=="welcome", "return sets the walker down on the plaza")
 		_check(Progress.photos.is_empty(), "free return requires no cards and grants none")
 		Progress.photos=saved_cards
 		main._show_pause()
@@ -130,7 +131,7 @@ func _run() -> void:
 	Progress.intro_seen=false
 	Progress.prologue_seen=false
 	await _spawn()
-	_check(main.world_region=="harbor" and main.boat_stage==null and main.modal_kind=="", "saved harbor restart skips welcome boat/arrival")
+	_check(main.world_region=="harbor" and main.world.standing_region()=="harbor" and main.boat_stage==null and main.modal_kind=="", "saved harbor restart stands in the harbor and skips welcome boat/arrival")
 	main._show_map()
 	main.overlay.find_child("RegionGamesButton",true,false).pressed.emit()
 	Progress.reset_progress()
@@ -178,15 +179,15 @@ func _nightmarket_trip(before: Dictionary) -> void:
 	travel.pressed.emit()
 	await _frames(4)
 	var reached: bool = main.world_region == "nightmarket" and Progress.current_region == "nightmarket"
-	_check(reached and not is_instance_valid(welcome) and _world_count() == 1 and _snapshot() == before,
-		"Nightmarket gate enters the saved market without changing collections or rewards")
+	_check(reached and main.world == welcome and _world_count() == 1 and _snapshot() == before and _at(main.world.arrival_point("nightmarket")),
+		"Nightmarket gate takes the walker to the saved market without changing collections or rewards")
 	if not reached:
 		return
 	var market: Node = main.world
 	market.interaction_requested.emit("region:welcome", "返回迎賓大道")
 	await _frames(4)
-	_check(main.world_region == "welcome" and Progress.current_region == "welcome" and not is_instance_valid(market)
-		and _world_count() == 1 and _snapshot() == before, "Nightmarket returns freely and preserves the collection")
+	_check(main.world_region == "welcome" and Progress.current_region == "welcome" and main.world == market
+		and _world_count() == 1 and _snapshot() == before and _at(main.world.PLAZA_ARRIVAL), "Nightmarket returns freely to the plaza and preserves the collection")
 
 func _same_batch_trip(region: String) -> void:
 	Progress.reset_progress()
@@ -222,24 +223,24 @@ func _same_batch_trip(region: String) -> void:
 	travel.pressed.emit()
 	await _frames(4)
 	var reached: bool = main.world_region == region and Progress.current_region == region
-	_check(reached and not is_instance_valid(welcome) and _snapshot() == before and _world_count() == 1, title + " entrance is saved without spending or retaining the prior world")
+	_check(reached and main.world == welcome and _snapshot() == before and _world_count() == 1 and main.world.standing_region() == region, title + " entrance is saved without spending, inside the one island world")
 	if not reached:
 		await _dispose()
 		return
 	await _dispose()
 	Progress.load_progress()
 	await _spawn()
-	_check(main.world_region == region and main.world._point_by_id("region:welcome").position == main.world.ENTRY
-		and _snapshot() == before and main.boat_stage == null, "new Main restores " + title + " and preserves the existing profile")
+	_check(main.world_region == region and main.region_world()._point_by_id("region:welcome").position == main.region_world().ENTRY
+		and main.world.standing_region() == region and _snapshot() == before and main.boat_stage == null, "new Main restores " + title + " and preserves the existing profile")
 	main._show_map()
 	await _frames(3)
 	var map: Node = main.overlay.find_child(prefix + "MapPanel", true, false)
 	var delivered: Array = Catalog.definitions(region)
 	var games_button := main.overlay.find_child("RegionGamesButton", true, false) as Button
-	_check(map != null and map.snapshot == main.world.map_snapshot() and (games_button != null) == (not delivered.is_empty()),
+	_check(map != null and map.snapshot == main.region_world().map_snapshot() and (games_button != null) == (not delivered.is_empty()),
 		title + " map reports actual terrain and offers game entries only for delivered games")
 	for definition: Dictionary in delivered:
-		_check(not main.world._point_by_id(definition.id).is_empty() and map != null and _labels(map).contains(str(definition.name)),
+		_check(not main.region_world()._point_by_id(definition.id).is_empty() and map != null and _labels(map).contains(str(definition.name)),
 			title + " map lists the physical stand of " + str(definition.id))
 	if map != null:
 		await _regional_map_location_flow(map)
@@ -258,13 +259,14 @@ func _same_batch_trip(region: String) -> void:
 		await _frames(4)
 		_check(main.world_region == "welcome" and Progress.current_region == "welcome" and _snapshot() == before,
 			title + " map return persists and retains the entire collection")
-		_check(main.world.player.position.distance_to(_point(gate).position) < 2.5, title + " returns to its original Welcome gate")
+		_check(_at(main.world.PLAZA_ARRIVAL), title + " returns to the plaza")
 		if region == "garden":
 			var reopened: bool = main._travel_to_region(region)
 			_check(reopened, "Garden can be reopened from the same Welcome gate")
 			if reopened:
 				await _frames(5)
-				_check(main.world.nearest.get("id") == "region:welcome", "Garden safe entry faces the physical free return")
+				await _physics_frames(2)
+				_check(main.world.nearest.get("id") == "region:welcome" and main.world.nearest.get("region") == "garden", "Garden safe entry faces the physical free return")
 				main.world.interact()
 				await _frames(5)
 				_check(main.world_region == "welcome" and Progress.current_region == "welcome" and _snapshot() == before,
@@ -275,53 +277,55 @@ func _candy_trips(before: Dictionary) -> void:
 	for trip in range(2):
 		var old: Node=main.world
 		_check(main._travel_to_region("candy"), "six global ordinary cards admit candy from harbor")
-		_check(main.changing_region and main.world==old and Progress.current_region=="candy", "candy saves before replacing the old world")
+		_check(main.changing_region and main.world==old and Progress.current_region=="candy", "candy saves before the walker moves")
 		old.interaction_requested.emit("region:welcome","stale return")
 		_check(not main._travel_to_region("welcome"), "candy transition rejects old interaction and reentry")
 		await _frames(4)
-		_check(not is_instance_valid(old) and main.world_region=="candy" and _world_count()==1, "candy releases previous world and has one live world")
-		_check(main.world.coastal_play==null and main.world.npc_activity==null and main.world.reduced_motion and main.world.night, "candy has no welcome activities and reapplies settings/time")
-		_check(main.world.avatar_appearance==Progress.appearance and main.world.avatar_equipped==Progress.equipped and main.audio._active_context=="plaza", "candy reapplies appearance and uses a valid existing music context")
+		_check(main.world==old and main.world_region=="candy" and _world_count()==1 and _at(main.world.arrival_point("candy")), "candy is a walk away in the same island world")
+		_check(main.region_world().embedded_in==main.world and main.region_world().reduced_motion and main.region_world().night, "candy district shares the island and reapplies settings/time")
+		_check(main.region_world().avatar_appearance==Progress.appearance and main.region_world().avatar_equipped==Progress.equipped and main.audio._active_context=="plaza", "candy reapplies appearance and uses a valid existing music context")
 		_check(main.normal_count_label.text.contains("0 / 18") and main.devil_count_label.text.contains("0 / 12") and not main.quest_label.visible, "candy HUD uses planned collection targets and no local tasks")
 		var stale := Node3D.new()
-		var temperature: int=main.world.map_snapshot().temperature
+		var temperature: int=main.region_world().map_snapshot().temperature
 		main._on_world_interaction_requested("candy:temperature","stale temperature",stale)
 		main._on_world_interaction_requested("region:welcome","stale return",stale)
 		main._on_world_area_changed("stale area",stale)
-		_check(main.world.map_snapshot().temperature==temperature and not main.changing_region and not main.area_label.text.contains("stale"), "late events from a different world cannot operate the new world")
+		_check(main.region_world().map_snapshot().temperature==temperature and not main.changing_region and not main.area_label.text.contains("stale"), "late events from a different world cannot operate the new world")
 		stale.free()
-		main._interact("guide","stale welcome guide")
-		main._interact("game-001","stale welcome game")
-		_check(main.modal_kind=="" and main.session==null, "candy rejects welcome game and story dispatch")
+		# Welcome's guide and games are a long walk away: the world never offers them here.
+		await _physics_frames(2)
+		var offered: Dictionary=main.world.nearest
+		_check(str(offered.get("region",""))=="candy" and main.world.player.global_position.distance_to(_point("guide").position)>60.0
+			and main.world.player.global_position.distance_to(_point("game-001").position)>60.0, "standing in candy offers only candy's own points")
 		for state in range(3):
 			main.world.interaction_requested.emit("candy:temperature","溫度觀察台")
-			_check(main.modal_kind=="" and main.world.map_snapshot().temperature==(temperature+state+1)%3 and main.toast.text.contains("不影響進度"), "candy observation cycles in place without a modal")
-		main.world.player.position=Vector3(0,1,0)
+			_check(main.modal_kind=="" and main.region_world().map_snapshot().temperature==(temperature+state+1)%3 and main.toast.text.contains("不影響進度"), "candy observation cycles in place without a modal")
+		main.world.player.global_position=main.region_world().to_global(Vector3(0,1,0))
 		main.world.player.velocity=Vector3(4,3,2)
 		main._interact("candy:reset","返回入口")
-		_check(main.world.player.velocity==Vector3.ZERO, "candy reset clears velocity")
+		_check(main.world.player.velocity==Vector3.ZERO and _at(main.region_world().to_global(main.region_world().ENTRY)), "candy reset clears velocity at the factory entry")
 		await _candy_ui()
 		_check(_snapshot()==before and Progress.photos.keys().all(func(id): return not str(id).begins_with("photo-candy-")), "candy observations and menus grant and consume nothing")
 		if trip==0:
-			main.world.cycle_temperature()
-			_check(main.world.map_snapshot().temperature!=0, "restart fixture has changed observation state")
+			main.region_world().cycle_temperature()
+			_check(main.region_world().map_snapshot().temperature!=0, "restart fixture has changed observation state")
 			_check(Progress.save_progress(), "candy profile saves for restart")
 			await _dispose()
 			Progress.load_progress()
 			Progress.intro_seen=false
 			Progress.prologue_seen=false
 			await _spawn()
-			_check(main.world_region=="candy" and main.boat_stage==null and main.modal_kind=="" and _world_count()==1, "saved candy restart builds candy directly and skips welcome intro")
-			_check(main.world.map_snapshot().temperature==0, "candy temperature is not persistent progress")
+			_check(main.world_region=="candy" and main.world.standing_region()=="candy" and main.boat_stage==null and main.modal_kind=="" and _world_count()==1, "saved candy restart stands in candy and skips welcome intro")
+			_check(main.region_world().map_snapshot().temperature==0, "candy temperature is not persistent progress")
 			Progress.intro_seen=true
 			Progress.prologue_seen=true
 		var saved_cards: Dictionary=Progress.photos.duplicate(true)
 		Progress.photos.clear()
-		var candy: Node=main.world
-		candy.interaction_requested.emit("region:welcome","返回迎賓大道")
+		var island: Node=main.world
+		island.interaction_requested.emit("region:welcome","返回迎賓大道")
 		await _frames(4)
-		_check(not is_instance_valid(candy) and main.world_region=="welcome" and _world_count()==1, "candy return is permanently free with no cards")
-		_check(main.world.player.position.distance_to(_point("gate:candy").position)<2.5 and Progress.photos.is_empty(), "candy returns safely beside its own welcome gate without rewards")
+		_check(main.world==island and main.world_region=="welcome" and _world_count()==1, "candy return is permanently free with no cards")
+		_check(_at(main.world.PLAZA_ARRIVAL) and Progress.photos.is_empty(), "candy returns safely to the plaza without rewards")
 		Progress.photos=saved_cards
 		main._interact("gate:candy","糖果工廠")
 		var travel: Button=main.overlay.find_child("TravelCandyButton",true,false)
@@ -334,7 +338,7 @@ func _candy_ui() -> void:
 	main._show_pause()
 	_check(main.overlay.find_child("PauseBoatPrologueButton",true,false)==null and _labels(main.overlay).contains("0 / 18"), "candy pause shows local collection target and no boat replay")
 	main._close()
-	var expected_map: Dictionary=main.world.map_snapshot()
+	var expected_map: Dictionary=main.region_world().map_snapshot()
 	main._show_map()
 	await _frames(3)
 	var map: Node=main.overlay.find_child("CandyMapPanel",true,false)
@@ -400,7 +404,7 @@ func _candy_ui() -> void:
 	main._close()
 	main._show_settings()
 	main._close()
-	_check(main.world.visible and not main.world.blocked and main.audio._active_context=="plaza", "candy settings safely restore world input and valid music")
+	_check(main.world.visible and main.region_world().visible and not main.world.blocked and main.audio._active_context=="plaza", "candy settings safely restore world input and valid music")
 
 func _harbor_ui(before: Dictionary) -> void:
 	main._show_pause()
@@ -412,7 +416,7 @@ func _harbor_ui(before: Dictionary) -> void:
 	await _frames(3)
 	var map: Node=main.overlay.find_child("HarborMapPanel",true,false)
 	_check(map!=null and main.overlay.find_child("MapStop_game-001",true,false)==null, "harbor map uses real terrain without welcome stations")
-	_check(map.snapshot.bounds==main.world.BOUNDS and map.snapshot.player==main.world.player.position, "map snapshot reflects actual world")
+	_check(map.snapshot.bounds==main.region_world().BOUNDS and map.snapshot.player==main.region_world().player_spot(), "map snapshot reflects actual world")
 	await _regional_map_location_flow(map)
 	main._close()
 	main._show_album()
@@ -543,7 +547,7 @@ func _failure_child() -> void:
 		DirAccess.remove_absolute(path+".tmp")
 		_check(main._travel_to_region(destination), "same gate supports retry")
 		await _frames(4)
-		_check(main.world_region==destination and not is_instance_valid(old), "retry reaches saved destination")
+		_check(main.world_region==destination and main.world==old and main.world.standing_region()==destination, "retry reaches saved destination in the same world")
 	await _dispose()
 	for failure in failures: push_error("FAIL: "+failure)
 	if failures.is_empty(): print("PASS: region travel failed save retains live world and permits retry")
@@ -553,6 +557,14 @@ func _spawn() -> void:
 	main=MainScene.instantiate()
 	get_tree().root.add_child(main)
 	await _frames(3)
+
+## True when the walker stands where `spot` is (world space, height aside).
+func _at(spot: Vector3) -> bool:
+	var feet: Vector3 = main.world.player.global_position
+	return Vector2(feet.x - spot.x, feet.z - spot.z).length() < 0.1
+
+func _physics_frames(count: int) -> void:
+	for index in range(count): await get_tree().physics_frame
 
 func _point(id: String) -> Dictionary:
 	for point in main.world.points:
