@@ -1,6 +1,8 @@
 shader_type spatial;
 render_mode cull_disabled;
 
+#include "res://game/world/sea_motion.gdshaderinc"
+
 uniform vec4 deep_color : source_color = vec4(0.067, 0.29, 0.37, 1.0);
 uniform vec4 shallow_color : source_color = vec4(0.24, 0.62, 0.58, 1.0);
 uniform vec4 foam_color : source_color = vec4(0.68, 0.82, 0.72, 1.0);
@@ -36,15 +38,9 @@ void fragment() {
 	float shallow = max(shelf, dock_shelf * 0.62);
 
 	float t = TIME * motion;
-	float swell = sin(p.x * 0.37 + p.y * 0.22 - t * 0.48) * cos(p.y * 0.31 - p.x * 0.08 + t * 0.36);
-	// Short asymmetric fragments provide scale in deep water without drawing
-	// an uninterrupted line through neighboring cells.
-	vec2 fleck = vec2(p.x * 0.73 + p.y * 0.28, p.y * 1.17 - p.x * 0.19);
-	vec2 fleck_local = fract(fleck);
-	float fleck_seed = cell_seed(floor(fleck));
-	float fleck_body = 1.0 - smoothstep(0.17, 0.43, abs(fleck_local.x - 0.48));
-	float fleck_crest = 1.0 - smoothstep(0.04, 0.15, abs(fleck_local.y - (0.19 + fleck_seed * 0.64 + swell * 0.075)));
-	float flecks = fleck_body * fleck_crest * smoothstep(0.34, 0.84, fleck_seed);
+	float ruffle = wind_gust(p);
+	float swell = sea_swell(p, t);
+	float flecks = sea_crests(p, t, ruffle);
 
 	bool dock_edge = dock + 0.24 < shore;
 	float distance_to_edge = dock_edge ? dock : shore;
@@ -54,20 +50,19 @@ void fragment() {
 		vec2 edge_delta = dock_edge ? dock_delta : land_delta;
 		bool side_edge = edge_delta.x > edge_delta.y;
 		float tangent = side_edge ? p.y : p.x;
-		float segment = tangent * 0.64 + 0.19 * distance_to_edge;
-		float section = fract(segment);
-		float seed = cell_seed(vec2(floor(segment), side_edge ? 31.0 : 47.0));
-		float breaks = smoothstep(0.09, 0.35, section) * (1.0 - smoothstep(0.62, 0.91, section));
-		breaks *= mix(0.18, 1.0, smoothstep(0.22, 0.78, seed));
-		float contact = smoothstep(0.025, 0.22, distance_to_edge) * (1.0 - smoothstep(0.67, 1.55, distance_to_edge));
-		float wave = smoothstep(0.59, 0.97, sin(distance_to_edge * 6.6 + seed * 1.8 + t * 1.24));
-		foam = contact * wave * breaks;
+		foam = sea_surf(distance_to_edge - 0.025, tangent, t, 1.5);
+		// A thin lapping line keeps the land and the dock seated in the water.
+		float lap = 0.14 + 0.05 * sin(t * 1.1 + tangent * 0.9);
+		foam = max(foam, (1.0 - smoothstep(lap * 0.6, lap, distance_to_edge)) * step(0.3, cell_seed(vec2(floor(tangent * 1.7), side_edge ? 5.0 : 9.0))) * 0.7);
 	}
+	float calm = 1.0 - ruffle;
+	float ripples = sea_ripples(p, t) * calm * (1.0 - smoothstep(0.0, 1.0, foam));
+	float glints = sea_glints(p, t) * (1.0 - shallow * 0.4);
 	float lantern = dock_glow * dock_shelf * smoothstep(0.09, 0.36, dock) * flecks;
 
 	vec3 water = mix(deep_color.rgb, shallow_color.rgb, shallow);
-	ALBEDO = water * (0.93 + swell * 0.15)
-		+ foam_color.rgb * (flecks * mix(0.055, 0.018, shallow) + foam * 0.23);
+	ALBEDO = water * (0.93 + swell * 0.15 - ruffle * 0.07)
+		+ foam_color.rgb * (flecks * mix(0.11, 0.045, shallow) + foam * 0.42 + ripples * 0.1 + glints * 0.3);
 	EMISSION = vec3(0.095, 0.046, 0.014) * lantern;
 	ROUGHNESS = mix(0.68, 0.49, shallow);
 	METALLIC = 0.02;

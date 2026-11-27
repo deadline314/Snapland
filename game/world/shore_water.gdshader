@@ -1,4 +1,6 @@
 shader_type spatial;
+
+#include "res://game/world/sea_motion.gdshaderinc"
 // Sea for a region whose shore is a set of axis-aligned land rectangles.
 // One analytic shore distance drives the shelf colour and the contact foam, so
 // foam hugs every side of every quay regardless of the camera angle. Shoals are
@@ -72,27 +74,16 @@ void fragment() {
 	float shallow = max(shelf * mix(1.0, 0.82, tide), shoal * mix(0.95, 0.8, tide));
 	shallow = mix(shallow, floor(shallow * 4.0 + 0.5) / 4.0, 0.7);
 
-	float swell = sin(p.x * 0.37 + p.y * 0.22 - t * 0.48) * cos(p.y * 0.31 - p.x * 0.08 + t * 0.36);
-	// Short asymmetric crests give deep water scale without drawing long lines.
-	vec2 fleck = vec2(p.x * 0.73 + p.y * 0.28, p.y * 1.17 - p.x * 0.19);
-	vec2 fleck_local = fract(fleck);
-	float fleck_seed = cell_seed(floor(fleck));
-	float fleck_body = 1.0 - smoothstep(0.17, 0.43, abs(fleck_local.x - 0.48));
-	float fleck_crest = 1.0 - smoothstep(0.04, 0.15, abs(fleck_local.y - (0.19 + fleck_seed * 0.64 + swell * 0.075)));
-	float flecks = fleck_body * fleck_crest * smoothstep(0.34, 0.84, fleck_seed);
+	float ruffle = wind_gust(p);
+	float swell = sea_swell(p, t);
+	float flecks = sea_crests(p, t, ruffle);
 
 	float foam = 0.0;
 	if (shore > 0.01 && shore < 1.6) {
 		bool side_edge = edge.x > edge.y;
 		float tangent = side_edge ? p.y : p.x;
-		float segment = tangent * 0.64 + 0.19 * shore;
-		float section = fract(segment);
-		float seed = cell_seed(vec2(floor(segment), side_edge ? 31.0 : 47.0));
-		float breaks = smoothstep(0.09, 0.35, section) * (1.0 - smoothstep(0.62, 0.91, section));
-		breaks *= mix(0.18, 1.0, smoothstep(0.22, 0.78, seed));
-		float contact = smoothstep(0.03, 0.22, shore) * (1.0 - smoothstep(0.6, mix(1.2, 1.55, tide), shore));
-		float wave = smoothstep(0.59, 0.97, sin(shore * 6.6 + seed * 1.8 + t * 1.24));
-		foam = contact * wave * breaks * 0.75;
+		float seed = cell_seed(vec2(floor(tangent * 0.64), side_edge ? 31.0 : 47.0));
+		foam = sea_surf(shore - 0.03, tangent, t, mix(1.2, 1.55, tide)) * 0.8;
 		// A broken bright line at the wall keeps the quay seated in the water.
 		float lap = 0.17 + 0.06 * sin(t * 0.9 + tangent * 0.8 + seed * 4.0);
 		float wall_seed = cell_seed(vec2(floor(tangent * 1.7), side_edge ? 5.0 : 9.0));
@@ -104,13 +95,15 @@ void fragment() {
 		foam = max(foam, (1.0 - smoothstep(lap * 0.5, lap, ring)) * step(0.35, ring_seed) * 0.8);
 	}
 
+	float ripples = sea_ripples(p, t) * (1.0 - ruffle) * (1.0 - clamp(foam, 0.0, 1.0));
+	float glints = sea_glints(p, t) * (1.0 - shallow * 0.4);
 	float distant = smoothstep(quiet_radius, quiet_radius + 34.0, distance(world_position, quiet_center));
 	vec3 water = mix(deep_color.rgb, shallow_color.rgb, shallow);
 	// Submerged sand shows through as a paler patch once the tide covers it.
 	water = mix(water, shallow_color.rgb * 1.16 + vec3(0.05, 0.045, 0.01), shoal_core * 0.45);
 	water = mix(water, far_color.rgb, distant * 0.75);
 	flecks *= 1.0 - distant * 0.6;
-	ALBEDO = mix(water * (0.93 + swell * 0.13) + foam_color.rgb * flecks * mix(0.07, 0.03, shallow), foam_color.rgb, clamp(foam, 0.0, 1.0) * 0.82);
+	ALBEDO = mix(water * (0.93 + swell * 0.13 - ruffle * 0.06) + foam_color.rgb * (flecks * mix(0.12, 0.05, shallow) + ripples * 0.1 + glints * 0.28), foam_color.rgb, clamp(foam, 0.0, 1.0) * 0.82);
 	// A little of the sky colour keeps dusk and night water from turning to mud.
 	EMISSION = mix(sky_color.rgb, deep_color.rgb, 0.45) * mix(0.085, 0.035, shallow);
 	ROUGHNESS = mix(0.68, 0.49, shallow);
