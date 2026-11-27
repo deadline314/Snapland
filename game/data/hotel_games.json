@@ -1,0 +1,22 @@
+[
+  {
+    "id": "game-085",
+    "mode": "page_corridor",
+    "zone": "hotel",
+    "local_index": 1,
+    "arcade": true,
+    "name": "折頁走廊",
+    "goal": "走廊是一本攤開的大書，地上的摺痕跑到腳下時兩邊書頁會啪地闔起來；在闔上的那一刻跳起來，別被夾進書頁。",
+    "instructions": "空白鍵、E、↑ 或手把 A 鈕：跳。書頁闔上時人在空中就跳過了；有的摺痕會停在腳下發抖，往下一沉才會闔。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助跳過書頁拿到金牌",
+    "ordinary": "在書頁闔上的瞬間跳起來，拿到銅牌",
+    "attraction_tag": "折頁走廊",
+    "island_invitation": "旅館的走廊是一本會自己闔上的書！啪、啪、啪越闔越快，還有幽靈在旁邊假裝翻頁。沒跳起來的話，你會被夾成一張書籤。",
+    "retake_props": [
+      "lantern",
+      "mascot",
+      "bench"
+    ]
+  }
+]

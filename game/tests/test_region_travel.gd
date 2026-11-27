@@ -378,6 +378,10 @@ func _candy_ui() -> void:
 			_check(garden_ids == expected_ids + ["photo-garden-story-1", "photo-garden-quest-1"] and expected_ids.has("photo-garden-game-5") and book._entries()[-2].story_region == "garden" and book._entries().back().story_errand == "garden"
 				and _labels(book).contains("票票") and garden_games.all(func(row: Dictionary) -> bool: return _labels(book).contains(row.name)),
 				"Garden album lists each delivered game under its own slot number and its story without speculative slots")
+		elif book._region == "hotel":
+			var hotel_ids: Array = book._entries().map(func(entry: Dictionary) -> String: return entry.id)
+			_check(hotel_ids.has("photo-hotel-game-1") and _labels(book).contains("折頁走廊"),
+				"Hotel album lists its delivered game under its own slot number")
 	main._close()
 	main._show_tasks()
 	_check(_labels(main.overlay).contains("糖果工廠目前沒有當地任務") and main.overlay.find_child("Task_quest-001",true,false)==null, "candy tasks name the current region and preserve welcome quest destination")

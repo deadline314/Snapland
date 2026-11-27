@@ -3216,7 +3216,7 @@ func _show_ticket() -> void:
 	groups.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	groups.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	body.add_child(groups)
-	var lesson_label: String = {"candy":"工廠圖解教學","nightmarket":"夜市圖解教學","circus":"馬戲團圖解教學","toy":"玩具城圖解教學","garden":"溫室圖解教學"}.get(world_region,"園區圖解教學")
+	var lesson_label: String = {"candy":"工廠圖解教學","nightmarket":"夜市圖解教學","circus":"馬戲團圖解教學","toy":"玩具城圖解教學","garden":"溫室圖解教學","hotel":"旅館圖解教學"}.get(world_region,"園區圖解教學")
 	var entries := [
 		["島嶼地圖",_show_map,"探索島嶼","map"], ["今日任務",_show_tasks,"探索島嶼","task"],
 		["拍貼收藏本",_show_album,"收藏記錄","album"], ["遊園成就",_show_achievements,"收藏記錄","star"],
@@ -3236,7 +3236,7 @@ func _show_ticket() -> void:
 	_back(body)
 
 func _show_region_tutorial() -> void:
-	var lessons: Dictionary = {"candy":["工廠圖解教學","CandyTutorial"],"nightmarket":["夜市圖解教學","NightmarketTutorial"],"circus":["馬戲團圖解教學","CircusTutorial"],"toy":["玩具城圖解教學","ToyTutorial"],"garden":["溫室圖解教學","GardenTutorial"]}
+	var lessons: Dictionary = {"candy":["工廠圖解教學","CandyTutorial"],"nightmarket":["夜市圖解教學","NightmarketTutorial"],"circus":["馬戲團圖解教學","CircusTutorial"],"toy":["玩具城圖解教學","ToyTutorial"],"garden":["溫室圖解教學","GardenTutorial"],"hotel":["旅館圖解教學","HotelTutorial"]}
 	if not lessons.has(world_region):
 		_open_tutorial("park","ticket")
 		return

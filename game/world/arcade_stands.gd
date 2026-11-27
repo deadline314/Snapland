@@ -48,6 +48,11 @@ const STANDS := {
 		{"id": "game-080", "title": "螢火蟲對暗號", "prompt": "螢火蟲對暗號 · 照閃光按回去",
 			"stand": Vector3(2.6, 0.2, -7.7), "point": Vector3(1.55, 0.2, -6.35), "prop": "code", "paint": Color("#3a3f5c")},
 	],
+	# Hotel stands use the kept sites in hotel_world.STAND_SITES (stand and point copied).
+	"hotel": [
+		{"id": "game-085", "title": "折頁走廊", "prompt": "折頁走廊 · 書頁闔上時跳起來",
+			"stand": Vector3(-3.6, 0.2, 4.6), "point": Vector3(-2.65, 0.2, 5.95), "prop": "book", "paint": Color("#5b3f74")},
+	],
 }
 const FOOTPRINT := Vector3(1.5, 2.0, 1.0)
 const DARK := Color("#343b42")
@@ -84,6 +89,7 @@ static func build(world: Node3D, region: String) -> void:
 			"dew": _dew_prop(sculpt)
 			"vine": _vine_prop(sculpt)
 			"post": _post_prop(sculpt)
+			"book": _book_prop(sculpt)
 		var stand: MeshInstance3D = world._mesh(sculpt.mesh(), Vector3.ZERO, world._vertex_color_material("arcade-stand"))
 		stand.name = "ArcadeStand_" + str(row.id)
 		var body := StaticBody3D.new()
@@ -466,3 +472,24 @@ static func _post_prop(sculpt: Kit.Sculpt) -> void:
 	sculpt.box(Vector3(-0.1, 1.24, 0.12), Vector3(0.02, 0.2, 0.02), Color("#5a4a3a"))
 	sculpt.box(Vector3(-0.05, 1.3, 0.12), Vector3(0.1, 0.07, 0.02), Color("#ffd166"))
 	sculpt.box(Vector3(0.3, 1.0, 0.1), Vector3(0.4, 0.06, 0.3), CREAM)
+
+
+## A big open book on the roof with its two pages swinging up to clap, a
+## little ghost peeking over the spine, and a stack of books with a ribbon
+## bookmark on the counter.
+static func _book_prop(sculpt: Kit.Sculpt) -> void:
+	var paper := Color("#efe3c8")
+	var leather := Color("#7a3a5c")
+	sculpt.box(Vector3(0, 2.42, -0.3), Vector3(1.3, 0.06, 0.5), leather)
+	for side: float in [-1.0, 1.0]:
+		var lift := Basis(Vector3.BACK, side * -0.55)
+		sculpt.box(Vector3(side * 0.3, 2.62, -0.3), Vector3(0.62, 0.05, 0.44), paper, lift)
+		sculpt.box(Vector3(side * 0.3, 2.6, -0.3), Vector3(0.6, 0.03, 0.42), paper.darkened(0.2), lift)
+	sculpt.ball(Vector3(0, 2.86, -0.2), 0.15, Color("#eef0ff"), Color.TRANSPARENT, 8, 4, 1.15)
+	for eye: float in [-0.05, 0.05]:
+		sculpt.box(Vector3(eye, 2.9, -0.06), Vector3(0.03, 0.05, 0.02), Color("#2a2440"))
+	for book in 3:
+		var tone: Color = [Color("#5b3f74"), Color("#4f8f86"), Color("#c0485e")][book]
+		sculpt.box(Vector3(0.28, 1.0 + book * 0.09, 0.1), Vector3(0.36 - book * 0.04, 0.08, 0.26), tone, Basis(Vector3.UP, book * 0.25))
+	sculpt.box(Vector3(0.3, 0.96, 0.25), Vector3(0.04, 0.2, 0.01), Color("#d9a64e"))
+	sculpt.box(Vector3(-0.3, 1.02, 0.1), Vector3(0.3, 0.1, 0.22), paper)
