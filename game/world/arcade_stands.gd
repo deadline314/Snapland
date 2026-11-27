@@ -23,6 +23,8 @@ const STANDS := {
 			"stand": Vector3(-2.6, 0.2, -7.7), "point": Vector3(-1.55, 0.2, -6.35), "prop": "lily", "paint": Color("#3f6f5a")},
 		{"id": "game-079", "title": "蘑菇撐傘", "prompt": "蘑菇撐傘 · 替幼苗接雨",
 			"stand": Vector3(7.0, 0.2, 6.0), "point": Vector3(5.85, 0.2, 7.35), "prop": "mushroom", "paint": Color("#8a4a3a")},
+		{"id": "game-080", "title": "螢火蟲對暗號", "prompt": "螢火蟲對暗號 · 照閃光按回去",
+			"stand": Vector3(2.6, 0.2, -7.7), "point": Vector3(1.55, 0.2, -6.35), "prop": "code", "paint": Color("#3a3f5c")},
 	],
 }
 const FOOTPRINT := Vector3(1.5, 2.0, 1.0)
@@ -48,6 +50,7 @@ static func build(world: Node3D, region: String) -> void:
 			"camera": _camera_prop(sculpt)
 			"lily": _lily_prop(sculpt)
 			"mushroom": _mushroom_prop(sculpt)
+			"code": _code_prop(sculpt)
 		var stand: MeshInstance3D = world._mesh(sculpt.mesh(), Vector3.ZERO, world._vertex_color_material("arcade-stand"))
 		stand.name = "ArcadeStand_" + str(row.id)
 		var body := StaticBody3D.new()
@@ -164,4 +167,24 @@ static func _mushroom_prop(sculpt: Kit.Sculpt) -> void:
 	sculpt.box(Vector3(-0.3, 1.3, 0.1), Vector3(0.03, 0.22, 0.03), Color("#5c9c62"))
 	for side: float in [-1.0, 1.0]:
 		sculpt.box(Vector3(-0.3 + side * 0.07, 1.4, 0.1), Vector3(0.12, 0.03, 0.07), Color("#6fae5c"), Basis(Vector3.BACK, side * 0.3))
+	sculpt.box(Vector3(0.3, 1.0, 0.1), Vector3(0.4, 0.06, 0.3), CREAM)
+
+
+## Four little paper lanterns hung under the sign, each with a firefly glow
+## (kept below the greenhouse ribs so they stay in view), and a stone lantern
+## on the counter.
+static func _code_prop(sculpt: Kit.Sculpt) -> void:
+	var paper := Color("#f1e2bc")
+	var glow := Color("#dcff8a")
+	for lantern: Vector3 in [Vector3(-0.42, 1.62, -0.12), Vector3(-0.14, 1.56, -0.12), Vector3(0.14, 1.62, -0.12), Vector3(0.42, 1.56, -0.12)]:
+		sculpt.box(lantern + Vector3(0, (1.9 - lantern.y) * 0.5 + 0.06, 0), Vector3(0.02, 1.9 - lantern.y - 0.12, 0.02), DARK)
+		sculpt.tube(lantern, 0.1, 0.1, 0.2, paper, 8)
+		sculpt.tube(lantern + Vector3(0, 0.12, 0), 0.06, 0.1, 0.04, TIMBER, 8)
+		sculpt.box(lantern + Vector3(0, 0, 0.1), Vector3(0.07, 0.07, 0.02), glow)
+	var stone := Color("#8f9488")
+	sculpt.box(Vector3(-0.3, 1.0, 0.1), Vector3(0.22, 0.06, 0.22), stone)
+	sculpt.box(Vector3(-0.3, 1.12, 0.1), Vector3(0.08, 0.18, 0.08), stone)
+	sculpt.box(Vector3(-0.3, 1.27, 0.1), Vector3(0.18, 0.12, 0.18), stone.darkened(0.1))
+	sculpt.box(Vector3(-0.3, 1.27, 0.2), Vector3(0.08, 0.06, 0.02), Color("#ffe7a0"))
+	sculpt.tube(Vector3(-0.3, 1.37, 0.1), 0.16, 0.02, 0.1, stone, 6)
 	sculpt.box(Vector3(0.3, 1.0, 0.1), Vector3(0.4, 0.06, 0.3), CREAM)

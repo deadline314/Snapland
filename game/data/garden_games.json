@@ -58,5 +58,25 @@
       "bench",
       "sign"
     ]
+  },
+  {
+    "id": "game-080",
+    "mode": "firefly_code",
+    "zone": "garden",
+    "local_index": 8,
+    "arcade": true,
+    "name": "螢火蟲對暗號",
+    "goal": "看螢火蟲在四座燈座上閃出的暗號，照順序用方向鍵按回去；每對上一次暗號就多一碼。",
+    "instructions": "↑、→、↓、← 或手把十字鍵，依螢火蟲閃的順序按燈座：上是三角、右是圓、下是方塊、左是菱形。閃兩下的要按兩下。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助對暗號拿到金牌",
+    "ordinary": "照順序按回螢火蟲的暗號，拿到銅牌",
+    "attraction_tag": "黃昏燈座",
+    "island_invitation": "黃昏的池邊，螢火蟲在燈座上打暗號。按錯了，全場熄燈只剩一隻在那邊尷尬地亮。",
+    "retake_props": [
+      "lantern",
+      "camera",
+      "bench"
+    ]
   }
 ]

@@ -63,6 +63,7 @@ func _run() -> void:
 ## Stands beyond the fountain are walked to along the east side of the sun floor, as visitors do.
 const STAND_ROUTES := {
 	"game-077": [Vector2(0, 4.65), Vector2(4.0, 4.65), Vector2(4.0, -6.15)],
+	"game-080": [Vector2(0, 4.65), Vector2(4.0, 4.65), Vector2(4.0, -6.15)],
 }
 
 
