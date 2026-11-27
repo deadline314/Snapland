@@ -17,6 +17,8 @@ const STANDS := {
 			"stand": Vector3(-2.4, 0.2, -5.2), "point": Vector3(-1.3, 0.2, -3.75), "prop": "cuckoo", "paint": Color("#567f77")},
 		{"id": "game-065", "title": "彈簧青蛙", "prompt": "彈簧青蛙 · 按住上發條跳積木",
 			"stand": Vector3(-6.2, 0.2, -2.5), "point": Vector3(-7.15, 0.2, -1.05), "prop": "frog", "paint": Color("#5f7d4a")},
+		{"id": "game-068", "title": "陀螺相撲", "prompt": "陀螺相撲 · 方向鍵撞陀螺",
+			"stand": Vector3(-7.3, 0.2, 5.7), "point": Vector3(-6.15, 0.2, 6.85), "prop": "tops", "paint": Color("#8a4a3e")},
 	],
 	"garden": [
 		{"id": "game-073", "title": "螢火蟲長曝光", "prompt": "螢火蟲長曝光 · 忍住別按",
@@ -50,6 +52,7 @@ static func build(world: Node3D, region: String) -> void:
 			"windup": _windup_prop(sculpt)
 			"cuckoo": _cuckoo_prop(sculpt)
 			"frog": _frog_prop(sculpt)
+			"tops": _tops_prop(sculpt)
 			"camera": _camera_prop(sculpt)
 			"lily": _lily_prop(sculpt)
 			"mushroom": _mushroom_prop(sculpt)
@@ -213,3 +216,22 @@ static func _frog_prop(sculpt: Kit.Sculpt) -> void:
 	sculpt.box(Vector3(0, 2.52, -0.3), Vector3(0.1, 0.3, 0.1), BRASS)
 	for side: float in [-1.0, 1.0]:
 		sculpt.tube(Vector3(side * 0.2, 2.8, -0.3), 0.2, 0.2, 0.09, tin, 8, facing)
+
+
+## A tin dish ringed with straw rope and two tops squaring up on the counter, and a big top on the roof.
+static func _tops_prop(sculpt: Kit.Sculpt) -> void:
+	sculpt.tube(Vector3(0, 0.98, 0.08), 0.5, 0.52, 0.05, Color("#8c7f74"), 16)
+	sculpt.tube(Vector3(0, 1.02, 0.08), 0.46, 0.46, 0.04, Color("#c9a35c"), 16)
+	sculpt.tube(Vector3(0, 1.0, 0.08), 0.4, 0.4, 0.03, Color("#7d7068"), 16)
+	for top: Array in [[-0.17, Color("#b8483a")], [0.19, Color("#4f8a7e")]]:
+		var at := Vector3(top[0], 1.0, 0.08)
+		sculpt.tube(at + Vector3(0, 0.06, 0), 0.02, 0.09, 0.12, Color("#8f8a86"), 8)
+		sculpt.tube(at + Vector3(0, 0.17, 0), 0.13, 0.13, 0.1, top[1], 10)
+		sculpt.tube(at + Vector3(0, 0.23, 0), 0.1, 0.06, 0.04, BRASS, 8)
+		sculpt.tube(at + Vector3(0, 0.29, 0), 0.025, 0.025, 0.08, TIMBER, 6)
+	sculpt.tube(Vector3(0, 2.5, -0.3), 0.03, 0.12, 0.2, Color("#8f8a86"), 8)
+	sculpt.tube(Vector3(0, 2.72, -0.3), 0.3, 0.3, 0.22, Color("#b8483a"), 12)
+	sculpt.tube(Vector3(0, 2.72, -0.3), 0.31, 0.31, 0.06, CREAM, 12)
+	sculpt.tube(Vector3(0, 2.9, -0.3), 0.2, 0.08, 0.1, BRASS, 10)
+	sculpt.tube(Vector3(0, 3.02, -0.3), 0.04, 0.04, 0.14, TIMBER, 6)
+

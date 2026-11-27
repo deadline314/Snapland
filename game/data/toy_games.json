@@ -58,5 +58,25 @@
       "bench",
       "sign"
     ]
+  },
+  {
+    "id": "game-068",
+    "mode": "top_sumo",
+    "zone": "toy",
+    "local_index": 8,
+    "arcade": true,
+    "name": "陀螺相撲",
+    "goal": "用方向鍵推自己的陀螺，把對手陀螺撞出圓盤；陀螺會慢慢沒力，撞人可以重新轉起來。",
+    "instructions": "方向鍵、WASD 或手把左搖桿推自己的陀螺，用力撞對手。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助相撲拿到金牌",
+    "ordinary": "推陀螺把對手撞出圓盤，拿到銅牌",
+    "attraction_tag": "陀螺土俵",
+    "island_invitation": "把別人的陀螺撞出圓盤！自己被撞出去，就會咕嚕咕嚕滾下桌。",
+    "retake_props": [
+      "mascot",
+      "sign",
+      "lantern"
+    ]
   }
 ]
