@@ -175,7 +175,7 @@ func _check_album() -> void:
 	if time != null:
 		time.emit_signal("pressed")
 		await _frames(2)
-		_check((_overlay.find_child("AlbumPhotoGrid", true, false) as GridContainer).get_child_count() == 4, "time collection retains the four canonical postcard records")
+		_check((_overlay.find_child("AlbumPhotoGrid", true, false) as GridContainer).get_child_count() == 7, "time collection retains the four canonical postcards and the three island-event stickers")
 	if album.has_method("_set_category"):
 		album.call("_set_category", "normal")
 	get_window().size=Vector2i(800,450)
@@ -273,7 +273,9 @@ func _check_album_card_geometry(album: Control, state: String, physical_size: Ve
 					valid=false
 					print("ALBUM_CARD_VIEWPORT_FAIL state=",state," size=",physical_size," control=",control.name," rect=",rect," viewport=",viewport_rect," content=",content_rect," pager=",pager_rect)
 					print("ALBUM_CARD_DIAG tile=",tile.get_global_rect()," copy_min=",(tile.get_child(0) as Control).get_combined_minimum_size() if tile.get_child_count()>0 else Vector2.ZERO," frame=",tile.find_child("SavedPhotoFrame",true,false).get_global_rect())
-	var expected_count := mini(grid.get_child_count(),int(album.call("_page_capacity"))) if grid!=null else 0
+	# A full page, or what is left on the last one.
+	var capacity := int(album.call("_page_capacity"))
+	var expected_count := mini(grid.get_child_count()-int(album.get("_page"))*capacity,capacity) if grid!=null else 0
 	valid=valid and visible_count==expected_count
 	_check(valid,"%s album keeps every full photo card and caption inside its content viewport, clear of the pager at %dx%d and 1.25 text" % [state,physical_size.x,physical_size.y])
 
@@ -583,7 +585,8 @@ func _check_album_catalog_pagination(album: Control) -> void:
 		album.call("_set_category",category)
 		await _frames(4)
 		var entries: Array=album.call("_entries")
-		var expected := 18 if category=="normal" else (12 if category=="devil" else 4)
+		# The time page holds the four postcards and the three island-event stickers.
+		var expected := 18 if category=="normal" else (12 if category=="devil" else 7)
 		var seen := {}
 		var complete := entries.size()==expected
 		var capacity := int(album.call("_page_capacity"))

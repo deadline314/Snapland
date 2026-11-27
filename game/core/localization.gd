@@ -27,6 +27,8 @@ const EMBEDDED_BASE_SOURCES := {
 	"settings.reduced_motion": "降低動態：停止水波與裝飾擺動",
 	"settings.roaming_thief": "怪盜出沒：逛園區時偶爾遇到怪盜",
 	"settings.roaming_thief.hint": "關閉後怪盜暫停出現，已抓到的次數會保留。",
+	"settings.island_events": "隨機事件：陣雨、強風與傍晚煙火",
+	"settings.island_events.hint": "關閉後不再發生；已得到的紀念拍貼會保留。",
 	"settings.fullscreen": "使用全螢幕",
 	"settings.ui_scale": "文字大小",
 	"settings.ui_scale.hint": "文字大小會放大介面文字；按鈕仍維持完整操作高度。",

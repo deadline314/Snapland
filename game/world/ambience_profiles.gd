@@ -76,6 +76,22 @@ const PARTICLE_KINDS := {
 		"direction": Vector3(0.3, -1.0, 0.15), "spread": 30.0, "force": Vector3(0.04, -0.06, 0.0), "spin": 220.0,
 		"box": Vector3(3.2, 0.3, 3.0), "lift": 0.0, "ramp": "fade",
 	},
+	# Island events (IslandEvents) borrow these; no region profile lists them.
+	"rain": {
+		"glyph": "streak", "color": Color(0.82, 0.90, 1.0, 0.62), "scale": 3.2, "life": 0.9, "speed": Vector2(9.0, 11.0),
+		"direction": Vector3(0.12, -1.0, 0.05), "spread": 3.0, "force": Vector3.ZERO,
+		"box": Vector3(15.0, 0.5, 12.0), "lift": 8.5, "ramp": "fade",
+	},
+	"gust_leaf": {
+		"glyph": "leaf", "color": Color(0.93, 0.66, 0.30, 1.0), "scale": 2.6, "life": 3.2, "speed": Vector2(3.0, 5.0),
+		"direction": Vector3(1.0, 0.12, 0.45), "spread": 18.0, "force": Vector3(0.6, -0.35, 0.2), "spin": 320.0,
+		"box": Vector3(3.0, 1.8, 11.0), "lift": 2.2, "ramp": "fade",
+	},
+	"droplet": {
+		"glyph": "dot", "color": Color(0.86, 0.94, 1.0, 0.85), "scale": 1.2, "life": 0.55, "speed": Vector2(1.4, 2.4),
+		"direction": Vector3.UP, "spread": 55.0, "force": Vector3(0.0, -9.0, 0.0),
+		"box": Vector3(0.25, 0.02, 0.25), "lift": 0.0, "ramp": "pop",
+	},
 	"spray": {
 		"glyph": "dot", "color": Color(0.90, 0.97, 1.0, 0.7), "scale": 1.3, "life": 2.2, "speed": Vector2(0.5, 1.1),
 		"direction": Vector3(0.5, 1.0, 0.1), "spread": 35.0, "force": Vector3(0.1, -1.3, 0.0),

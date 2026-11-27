@@ -28,6 +28,8 @@ signal area_changed(label: String)
 signal district_changed(region: String)
 ## A sticker gate opened while playing.
 signal gate_opened(region: String)
+## The walker raised the camera (the photo key) while free to walk.
+signal photo_snapped
 const DistrictSites = preload("res://game/world/district_sites.gd")
 const DistrictHostScript = preload("res://game/world/district_host.gd")
 const DistrictBand = preload("res://game/world/district_band.gd")
@@ -479,14 +481,33 @@ func _air(_phase: String, _island: Dictionary) -> Dictionary:
 	return {}
 
 func _write_air(target: Dictionary) -> void:
-	environment.background_color = target.sky
-	environment.fog_light_color = target.fog
-	environment.ambient_light_color = target.ambient
-	environment.ambient_light_energy = target.ambient_energy
+	var cover := float(event_air.get("amount", 0.0))
+	var sky: Color = target.sky
+	var fog: Color = target.fog
+	var ambient: Color = target.ambient
+	var sun_color: Color = target.sun
+	if cover > 0.0:
+		sky = sky.lerp(event_air.sky, cover)
+		fog = fog.lerp(event_air.sky, cover)
+		ambient = ambient.lerp(event_air.ambient, cover)
+		sun_color = sun_color.lerp(event_air.ambient, cover * 0.5)
+	environment.background_color = sky
+	environment.fog_light_color = fog
+	environment.ambient_light_color = ambient
+	environment.ambient_light_energy = float(target.ambient_energy) * lerpf(1.0, float(event_air.get("ambient_scale", 1.0)), cover) + float(event_air.get("flash", 0.0))
 	environment.glow_intensity = target.glow
-	environment.adjustment_saturation = target.saturation
-	sun.light_color = target.sun
-	sun.light_energy = target.sun_energy
+	environment.adjustment_saturation = float(target.saturation) * lerpf(1.0, float(event_air.get("saturation_scale", 1.0)), cover)
+	sun.light_color = sun_color
+	sun.light_energy = float(target.sun_energy) * lerpf(1.0, float(event_air.get("sun_scale", 1.0)), cover)
+
+## An island event's sky laid over the blended air (see IslandEvents): rain
+## cloud ("amount" toward "sky"/"ambient", sun and light scaled) or a firework
+## "flash" of ambient light. Empty leaves the phase's own air untouched.
+var event_air: Dictionary = {}
+
+func set_event_air(air: Dictionary) -> void:
+	event_air = air
+	blend_air()
 
 ## Repaint the shared sky and sun from this world's target and whatever share of
 ## each district's target reaches the walker.
@@ -3444,6 +3465,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 	elif event.keycode == KEY_P:
 		play_action("photograph")
+		photo_snapped.emit()
 		get_viewport().set_input_as_handled()
 
 func play_action(name: String) -> void:

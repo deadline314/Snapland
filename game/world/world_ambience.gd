@@ -35,6 +35,8 @@ var _cloud_drift := Vector2.ZERO
 var _emitter_specs: Array[Dictionary] = []
 var _critter_batch: MultiMesh
 var _shadow_batch: MultiMesh
+## Extra wind speed from an island event's gust (0 calm); the lawn and trees sway faster.
+var gust := 0.0
 ## An embedded district's air follows the island's wind instead of driving it.
 var _drives_wind := true
 
@@ -105,7 +107,7 @@ func advance(delta: float) -> void:
 	# Wind stands still and nothing reacts to the walker under reduced motion.
 	if _drives_wind: RenderingServer.global_shader_parameter_set(WIND_WALKER, NO_WALKER if _reduced_motion else focus)
 	if not _reduced_motion:
-		_wind_time += delta
+		_wind_time += delta * (1.0 + gust)
 		if _drives_wind: RenderingServer.global_shader_parameter_set(WIND_TIME, _wind_time)
 		if cloud != null and cloud.visible:
 			_cloud_drift += CLOUD_WIND * delta
@@ -227,9 +229,24 @@ func _write_critters() -> void:
 
 func _build_emitter(spec: Dictionary) -> void:
 	var kind := String(spec.get("kind", ""))
+	var emitter := make_emitter(kind, int(spec.get("amount", 16)), spec.get("box", null))
+	if emitter == null:
+		return
+	var look: Dictionary = Profiles.PARTICLE_KINDS[kind]
+	var material := (emitter.mesh as QuadMesh).material as StandardMaterial3D
+	if spec.has("at"):
+		emitter.position = spec.at
+	add_child(emitter)
+	emitters.append(emitter)
+	_emitter_specs.append({"phases": spec.get("phases", Profiles.ALWAYS), "follows": not spec.has("at"), "lift": float(look.get("lift", 0.0)), "material": material, "tone": material.albedo_color, "additive": bool(look.get("additive", false))})
+
+
+## A hidden, idle emitter of one PARTICLE_KINDS look; null for an unknown kind.
+## Its material is the mesh's (emitter.mesh.material). `box` overrides the kind's volume.
+static func make_emitter(kind: String, amount: int, box: Variant = null) -> CPUParticles3D:
 	if not Profiles.PARTICLE_KINDS.has(kind):
 		push_warning("Ambience particle kind '%s' is not defined; the emitter was skipped." % kind)
-		return
+		return null
 	var look: Dictionary = Profiles.PARTICLE_KINDS[kind]
 	var glyph := String(look.glyph)
 	var material := StandardMaterial3D.new()
@@ -245,18 +262,19 @@ func _build_emitter(spec: Dictionary) -> void:
 	var energy := float(look.get("energy", 1.0))
 	material.albedo_color = Color(tone.r * energy, tone.g * energy, tone.b * energy, tone.a)
 	var quad := QuadMesh.new()
-	quad.size = Vector2.ONE * (Sprites.mote_pixels(glyph) / Profiles.PIXELS_PER_METRE * float(look.get("scale", 1.0)))
+	var pixels := Vector2(material.albedo_texture.get_width(), material.albedo_texture.get_height())
+	quad.size = pixels / Profiles.PIXELS_PER_METRE * float(look.get("scale", 1.0))
 	quad.material = material
 	var emitter := CPUParticles3D.new()
 	emitter.name = "Air%s" % kind.capitalize()
 	emitter.mesh = quad
-	emitter.amount = int(spec.get("amount", 16))
+	emitter.amount = maxi(1, amount)
 	emitter.lifetime = float(look.life)
 	emitter.preprocess = emitter.lifetime
 	emitter.randomness = 1.0
 	emitter.lifetime_randomness = 0.35
 	emitter.emission_shape = CPUParticles3D.EMISSION_SHAPE_BOX
-	emitter.emission_box_extents = spec.get("box", look.box)
+	emitter.emission_box_extents = box if box is Vector3 else look.box
 	emitter.direction = (look.direction as Vector3).normalized()
 	emitter.spread = float(look.spread)
 	var speed: Vector2 = look.speed
@@ -287,8 +305,4 @@ func _build_emitter(spec: Dictionary) -> void:
 	emitter.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	emitter.visible = false
 	emitter.emitting = false
-	if spec.has("at"):
-		emitter.position = spec.at
-	add_child(emitter)
-	emitters.append(emitter)
-	_emitter_specs.append({"phases": spec.get("phases", Profiles.ALWAYS), "follows": not spec.has("at"), "lift": float(look.get("lift", 0.0)), "material": material, "tone": material.albedo_color, "additive": bool(look.get("additive", false))})
+	return emitter

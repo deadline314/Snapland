@@ -28,6 +28,7 @@ const MAX_GAME_PHOTO_ORIGINAL_PIXELS := 4 * 1024 * 1024
 const WardrobeCatalog = preload("res://game/core/wardrobe_catalog.gd")
 const TimeOfDay = preload("res://game/core/time_of_day.gd")
 const TestSaveGuard = preload("res://game/core/test_save_guard.gd")
+const IslandEventCatalog = preload("res://game/core/island_event_catalog.gd")
 const GameCatalog = preload("res://game/core/game_catalog.gd")
 const RegionalVisit = preload("res://game/story/regional_visit.gd")
 const ResidentErrands = preload("res://game/story/resident_errands.gd")
@@ -51,6 +52,7 @@ const DEFAULT_SETTINGS := {
 	"font_style": "pixel",
 	"graphics_quality": RenderQuality.DEFAULT_LEVEL,
 	"roaming_thief": true,
+	"island_events": true,
 }
 const WELCOME_GAME_IDS := [
 	"game-001", "game-002", "game-003", "game-004", "game-005", "game-006",
@@ -301,6 +303,23 @@ func record_thief_catch() -> Dictionary:
 	if rewarded:
 		achievement_unlocked.emit(THIEF_ACHIEVEMENT)
 	return {"saved": true, "catches": thief_catches, "coins": coins - previous_coins, "rewarded": rewarded}
+
+## An island event's souvenir sticker, kept once and never spent. It is not a
+## game photo, so it never counts toward sticker totals or gates. The frame is
+## the player's own shot of the moment (empty when no picture could be taken).
+func record_event_sticker(sticker: String, frame_path: String = "", original_path: String = "") -> bool:
+	var row := IslandEventCatalog.for_sticker(sticker)
+	if row.is_empty() or photos.has(sticker):
+		return false
+	var record := {"island_event": str(row.id), "frames": [frame_path] if not frame_path.is_empty() else []}
+	if not original_path.is_empty():
+		record["original_frames"] = [original_path]
+	photos[sticker] = record
+	if not save_progress():
+		photos.erase(sticker)
+		return false
+	changed.emit()
+	return true
 
 ## Pays a recommended booth's medal coins at the daily rate, once per medal
 ## tier per booth per day; nothing changes if the save fails.

@@ -14,6 +14,7 @@ const ResidentErrands = preload("res://game/story/resident_errands.gd")
 const RegionRoutes = preload("res://game/core/region_routes.gd")
 const FailReplayViewer = preload("res://game/ui/fail_replay_viewer.gd")
 const Collage = preload("res://game/ui/collage_kit.gd")
+const IslandEventCatalog = preload("res://game/core/island_event_catalog.gd")
 ## Each album category is a postage stamp of its own colour.
 const TAB_TONES := {"normal": Color("#6fc7b7"), "devil": Color("#f08f73"), "time": Color("#dfa458"), "fail": Color("#c9a6d8")}
 const PAGE_SIZE := 4
@@ -226,17 +227,14 @@ func _refresh_book() -> void:
 	_photo_details.text = _category_prompt()
 	_normal_button.text="普通拍貼  %d / 18" % int(_progress.normal_count_for_zone(_region))
 	_devil_button.text="小惡魔  %d / 12" % int(_progress.devil_count(_region))
-	var time_count := 0
-	for phase in _time_phases:
-		if phase is Dictionary and _progress.photos.has(TimeOfDay.postcard_id(str(phase.get("id","")))):
-			time_count+=1
-	_time_button.text="四時明信片  %d / 4" % time_count
+	var time_count := _time_count()
+	_time_button.text="四時與事件  %d / %d" % [time_count,_time_total()]
 	_collection_state.visible=int(_progress.normal_count_for_zone(_region))+int(_progress.devil_count(_region))+(time_count if _region=="welcome" else 0)==0 and _category!="fail"
 	_collection_state.text="收藏簿還是空白的。拍照留下第一筆記錄。"
 	if Paper.physical_scale(self)<0.9:
 		_normal_button.text="普通 %d / 18" % int(_progress.normal_count_for_zone(_region))
 		_devil_button.text="小惡魔 %d / 12" % int(_progress.devil_count(_region))
-		_time_button.text="四時 %d / 4" % time_count
+		_time_button.text="四時 %d / %d" % [time_count,_time_total()]
 	_time_button.visible=_region=="welcome"
 	for tab in [_normal_button,_devil_button,_time_button,_fail_button]:
 		var art := tab.get_node_or_null("CollageArt") as Collage.Item
@@ -298,14 +296,10 @@ func _set_tab_labels(scale_factor: float) -> void:
 		return
 	var normal_count := int(_progress.normal_count_for_zone(_region)) if _progress != null else 0
 	var devil_count := int(_progress.devil_count(_region)) if _progress != null else 0
-	var time_count := 0
-	if _progress != null:
-		for phase in _time_phases:
-			if phase is Dictionary and _progress.photos.has(TimeOfDay.postcard_id(str(phase.get("id","")))):
-				time_count+=1
+	var time_count := _time_count() if _progress != null else 0
 	_normal_button.text=("普通 %d / 18" if scale_factor<0.9 else "普通拍貼  %d / 18") % normal_count
 	_devil_button.text=("小惡魔 %d / 12" if scale_factor<0.9 else "小惡魔  %d / 12") % devil_count
-	_time_button.text=("四時 %d / 4" if scale_factor<0.9 else "四時明信片  %d / 4") % time_count
+	_time_button.text=("四時 %d / %d" if scale_factor<0.9 else "四時與事件  %d / %d") % [time_count,_time_total()]
 	if is_instance_valid(_fail_button):
 		_fail_button.text=("失敗 %d / %d" if scale_factor<0.9 else "失敗拍貼  %d / %d") % [_fail_count(),_arcade_games().size()]
 
@@ -423,6 +417,9 @@ func _entries() -> Array[Dictionary]:
 			for phase in _time_phases:
 				var id := str(phase.get("id",""))
 				entries.append(_entry(TimeOfDay.postcard_id(id),str(phase.get("label","時段"))+" · "+str(phase.get("clock","")),"切換到這個時段，為園區拍攝紀念明信片。"))
+			# Island events' souvenir stickers share the page: they too are moments of the day.
+			for row: Dictionary in IslandEventCatalog.EVENTS:
+				entries.append(_entry(str(row.sticker),str(row.title),str(row.how)))
 		"fail":
 			for game in _arcade_games():
 				var entry := _entry("fail-"+str(game.id),str(game.name)+" · 失敗","在這款街機第一次失敗就會留下；不計入拍貼數與開區門檻。")
@@ -442,7 +439,7 @@ func _entries() -> Array[Dictionary]:
 func _category_prompt() -> String:
 	match _category:
 		"devil": return "小惡魔拍貼｜實際技巧與免費補拍分開記錄；選取缺卡進入補拍。"
-		"time": return "四時明信片｜切換園區時段，留下那一刻的實際照片。"
+		"time": return "四時明信片與事件拍貼｜切換時段或遇到島上事件，留下那一刻的實際照片。"
 		"fail": return "失敗拍貼｜每款街機第一次的好笑失敗；選取可以重播，不計入收藏數。"
 		_:
 			if _region=="toy": return "普通拍貼｜遊戲拿到銅牌即可收藏；也可往入口東側找阿浪拍車站合照。"
@@ -482,6 +479,19 @@ func _game_entry(game: Dictionary, identity: Dictionary, devil: bool) -> Diction
 	entry.game_id=str(game.id)
 	entry.devil=devil
 	return entry
+
+## Postcards and island-event stickers kept, for the time page's tab.
+func _time_count() -> int:
+	var count := 0
+	for phase in _time_phases:
+		if phase is Dictionary and _progress.photos.has(TimeOfDay.postcard_id(str(phase.get("id","")))):
+			count+=1
+	for sticker in IslandEventCatalog.sticker_ids():
+		if _progress.photos.has(sticker): count+=1
+	return count
+
+func _time_total() -> int:
+	return _time_phases.size()+IslandEventCatalog.EVENTS.size()
 
 func _entry(photo_id: String, title: String, instructions: String) -> Dictionary:
 	return {"id":photo_id,"title":title,"instructions":instructions}

@@ -68,6 +68,14 @@
       "text": "Off pauses his appearances; catches so far are kept.",
       "source": "關閉後怪盜暫停出現，已抓到的次數會保留。"
     },
+    "settings.island_events": {
+      "text": "Island events: showers, gusts and evening fireworks",
+      "source": "隨機事件：陣雨、強風與傍晚煙火"
+    },
+    "settings.island_events.hint": {
+      "text": "Off stops them; souvenir stickers you have are kept.",
+      "source": "關閉後不再發生；已得到的紀念拍貼會保留。"
+    },
     "settings.fullscreen": {
       "text": "Fullscreen",
       "source": "使用全螢幕"

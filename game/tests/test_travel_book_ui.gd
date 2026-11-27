@@ -328,7 +328,8 @@ func _test_album() -> void:
 	if time_tab!=null:
 		await _activate(time_tab)
 		grid=_main.overlay.find_child("AlbumPhotoGrid",true,false) as GridContainer
-		_check(grid!=null and grid.get_child_count()==4,"time book shows four canonical TimeOfDay postcard IDs")
+		_check(grid!=null and grid.get_child_count()==7,"time book shows four canonical TimeOfDay postcards and three island-event stickers")
+		_check(grid!=null and grid.find_child("AlbumPhoto_event-shower",true,false)!=null and grid.find_child("AlbumPhoto_event-wind",true,false)!=null and grid.find_child("AlbumPhoto_event-fireworks",true,false)!=null,"time book keeps a slot for each island event's souvenir sticker")
 		_check(grid!=null and grid.find_child("AlbumPhoto_postcard-time-dawn",true,false)!=null,"time postcard retains the canonical dawn photo ID")
 		var time_detail := _main.overlay.find_child("AlbumPhotoDetails",true,false) as Label
 		_check(time_detail!=null and time_detail.text.contains("四時明信片"),"changing to the time category clears the previous devil-photo detail")

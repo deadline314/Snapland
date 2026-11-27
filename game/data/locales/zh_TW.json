@@ -19,6 +19,8 @@
     "settings.reduced_motion": {"source": "降低動態：停止水波與裝飾擺動", "text": "降低動態：停止水波與裝飾擺動"},
     "settings.roaming_thief": {"source": "怪盜出沒：逛園區時偶爾遇到怪盜", "text": "怪盜出沒：逛園區時偶爾遇到怪盜"},
     "settings.roaming_thief.hint": {"source": "關閉後怪盜暫停出現，已抓到的次數會保留。", "text": "關閉後怪盜暫停出現，已抓到的次數會保留。"},
+    "settings.island_events": {"source": "隨機事件：陣雨、強風與傍晚煙火", "text": "隨機事件：陣雨、強風與傍晚煙火"},
+    "settings.island_events.hint": {"source": "關閉後不再發生；已得到的紀念拍貼會保留。", "text": "關閉後不再發生；已得到的紀念拍貼會保留。"},
     "settings.fullscreen": {"source": "使用全螢幕", "text": "使用全螢幕"},
     "settings.ui_scale": {"source": "文字大小", "text": "文字大小"},
     "settings.ui_scale.hint": {"source": "文字大小會放大介面文字；按鈕仍維持完整操作高度。", "text": "文字大小會放大介面文字；按鈕仍維持完整操作高度。"},

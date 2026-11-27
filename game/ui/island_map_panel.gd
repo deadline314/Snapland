@@ -80,6 +80,8 @@ class MapSurface extends Control:
 	## The roaming thief's rough whereabouts: {"center", "radius"}, empty when away.
 	var thief_area: Dictionary = {}
 	var errand_marks: Array = []
+	## Where an island event happens (the fireworks lookout): {"center", "radius"}.
+	var event_area: Dictionary = {}
 	var walk_chart := Rect2()
 	var station_index := Rect2()
 	var region_overview := Rect2()
@@ -185,6 +187,8 @@ class MapSurface extends Control:
 		return Rect2(_project_xz(claim.position), claim.size * _scale)
 
 	func _draw_markers() -> void:
+		if not event_area.is_empty():
+			_draw_event(project(event_area.center), float(event_area.radius) * _scale)
 		if not thief_area.is_empty():
 			_draw_thief(project(thief_area.center), float(thief_area.radius) * _scale)
 		for mark: Vector3 in errand_marks:
@@ -206,6 +210,19 @@ class MapSurface extends Control:
 		draw_circle(point, 11.0 * _unit, Color(0.91, 0.45, 0.38, 0.22), true, -1.0, true)
 		draw_line(point + Vector2(-2, 6) * _unit, point + Vector2(-2, -8) * _unit, Color("#453c30"), 1.6 * _unit, true)
 		draw_colored_polygon(PackedVector2Array([point + Vector2(-2, -8) * _unit, point + Vector2(7, -5) * _unit, point + Vector2(-2, -2) * _unit]), Paper.CORAL)
+	## A warm ring and a small eight-point star where an island event happens.
+	func _draw_event(point: Vector2, radius: float) -> void:
+		radius = maxf(radius, 10.0 * _unit)
+		draw_circle(point, radius, Color(1.0, 0.80, 0.40, 0.16), true, -1.0, true)
+		draw_arc(point, radius, 0.0, TAU, 32, Color(1.0, 0.80, 0.40, 0.7), 1.4 * _unit, true)
+		var star := PackedVector2Array()
+		for index in range(16):
+			var reach := (8.0 if index % 2 == 0 else 3.4) * _unit
+			var angle := TAU * index / 16.0 - PI * 0.5
+			star.append(point + Vector2(cos(angle), sin(angle)) * reach)
+		draw_colored_polygon(star, TARGET)
+		star.append(star[0])
+		draw_polyline(star, Color("#453c30"), 1.2 * _unit, true)
 
 	## A soft ring where the thief is roughly, and a small domino mask in it.
 	func _draw_thief(point: Vector2, radius: float) -> void:
@@ -242,6 +259,8 @@ var daily_picks: Array = []
 var thief_area: Dictionary = {}
 ## Island positions of resident errands' next stops.
 var errand_marks: Array = []
+## The running island event's spot (see IslandEvents.map_area); empty hides it.
+var event_area: Dictionary = {}
 var _zones: Array = []
 var _games: Array = []
 var _normal_count := 0
@@ -310,6 +329,7 @@ func _ready() -> void:
 	_canvas.dock = _position("arrival")
 	_canvas.thief_area = thief_area
 	_canvas.errand_marks = errand_marks
+	_canvas.event_area = event_area
 	_canvas.resized.connect(_layout_map_buttons)
 	frame.add_child(_canvas)
 	_normal_style = _map_button_style(false, false)
@@ -343,7 +363,7 @@ func _ready() -> void:
 	title_stack.add_child(_detail_title)
 	_detail_body.add_child(_detail_text)
 
-	var legend := Paper.label("藍點：你的位置　金菱：目的地　珊瑚線：迎賓大道　青綠線：海岸環線" + ("　面具：怪盜出沒" if not thief_area.is_empty() else "") + ("　小旗：委託目標" if not errand_marks.is_empty() else ""), 15, Paper.INK)
+	var legend := Paper.label("藍點：你的位置　金菱：目的地　珊瑚線：迎賓大道　青綠線：海岸環線" + ("　面具：怪盜出沒" if not thief_area.is_empty() else "") + ("　小旗：委託目標" if not errand_marks.is_empty() else "") + ("　星星：島上活動" if not event_area.is_empty() else ""), 15, Paper.INK)
 	legend.name = "IslandMapLegend"
 	legend.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	add_child(legend)

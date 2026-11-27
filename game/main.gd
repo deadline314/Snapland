@@ -7,6 +7,7 @@ const PaperMotion = preload("res://game/ui/paper_motion.gd")
 const Collage = preload("res://game/ui/collage_kit.gd")
 const FieldGameChip = preload("res://game/ui/field_game_chip.gd")
 const RoamingThief = preload("res://game/world/roaming_thief.gd")
+const IslandEvents = preload("res://game/world/island_events.gd")
 const ArcadeMedal = preload("res://game/ui/arcade_medal.gd")
 const ParkVariety = preload("res://game/core/park_variety.gd")
 const RegionTransitionScript = preload("res://game/ui/region_transition.gd")
@@ -53,6 +54,8 @@ var toast: Label
 var field_chip: FieldGameChip
 ## The masked thief who roams the island world; null in a world of its own.
 var thief: Node3D
+## The island's occasional weather and evening events; null in a world of its own.
+var island_events: Node3D
 var quest_label: Label
 var session: Control
 var modal_kind := ""
@@ -156,6 +159,11 @@ func _bind_world() -> void:
 		thief.sfx_requested.connect(audio.play_sfx)
 		thief.note_requested.connect(audio.play_note)
 		thief.arc_finished.connect(_on_thief_arc_finished)
+		island_events=IslandEvents.attach(world)
+		island_events.notice_requested.connect(_notice)
+		island_events.sfx_requested.connect(audio.play_sfx)
+		island_events.note_requested.connect(audio.play_note)
+		island_events.sticker_earned.connect(_keep_event_sticker)
 	world.interaction_requested.connect(_on_world_interaction_requested.bind(world))
 	world.area_changed.connect(_on_world_area_changed.bind(world))
 	world.district_changed.connect(_on_district_changed)
@@ -1493,6 +1501,8 @@ func _interact(id: String, title: String) -> void:
 		return
 	if is_instance_valid(thief) and thief.activate(id):
 		return
+	if is_instance_valid(island_events) and island_events.activate(id):
+		return
 	if id=="region:welcome":
 		_travel_to_region("welcome")
 		return
@@ -2736,6 +2746,7 @@ func _show_island_map() -> void:
 	if is_instance_valid(thief): map_panel.thief_area=thief.map_area()
 	for region: String in Errands.regions():
 		if _errand_target(region).is_finite(): map_panel.errand_marks.append(_errand_target(region))
+	if is_instance_valid(island_events): map_panel.event_area=island_events.map_area()
 	map_panel.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	map_panel.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	body.add_child(map_panel)
@@ -2793,6 +2804,38 @@ func _notice(message: String) -> void:
 		PaperMotion.flash(toast,PaperMotion.GAIN_TINT,0.5)
 	var timer := get_tree().create_timer(3.5)
 	timer.timeout.connect(func(): if is_instance_valid(toast) and toast.text==message: toast.text=""; toast.visible=false)
+
+## An island event's goal was met: keep the moment on screen as its souvenir
+## sticker. Without a picture (no renderer, or the save of it failed) the
+## sticker is still kept, with an empty frame.
+func _keep_event_sticker(sticker: String) -> void:
+	var paths := {}
+	if DisplayServer.get_name() != "headless":
+		paths = await _snap_island_moment(sticker)
+	if not Progress.record_event_sticker(sticker, str(paths.get("thumbnail", "")), str(paths.get("original", ""))):
+		_remove_photo_paths(paths.values())
+
+func _snap_island_moment(sticker: String) -> Dictionary:
+	var hud_was_visible := hud.visible
+	hud.hide()
+	await RenderingServer.frame_post_draw
+	var snapshot := get_viewport().get_texture().get_image()
+	hud.visible = hud_was_visible
+	var original := _prepare_photo_original(snapshot)
+	var thumbnail := _prepare_photo_thumbnail(original)
+	if thumbnail == null: return {}
+	var directory := _photo_directory()
+	var error := DirAccess.make_dir_recursive_absolute(directory)
+	if error != OK and error != ERR_ALREADY_EXISTS:
+		push_warning("Cannot create event sticker directory: " + directory)
+		return {}
+	var base_path := directory + "/" + sticker + "-" + Crypto.new().generate_random_bytes(16).hex_encode()
+	var paths := {"thumbnail": base_path + ".png", "original": base_path + "-original.png"}
+	if not _save_bounded_photo_image(thumbnail, paths.thumbnail) or not _save_bounded_photo_image(original, paths.original):
+		_remove_photo_paths(paths.values())
+		push_warning("Cannot save event sticker image: " + str(paths.thumbnail))
+		return {}
+	return paths
 
 ## Third catch: the thief owns up and leaves his mask as a keepsake (already saved).
 func _on_thief_arc_finished() -> void:
