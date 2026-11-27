@@ -3,6 +3,13 @@ extends SceneTree
 const World = preload("res://game/world/garden_world.gd")
 const MapPanel = preload("res://game/ui/harbor_map_panel.gd")
 const SaveGuard = preload("res://game/core/test_save_guard.gd")
+const SceneStandards = preload("res://game/world/scene_standards.gd")
+## Scene-building standards, section 8: nodes and draws for a region other than Welcome.
+const DRAW_BUDGET := 800
+## How far the fixed camera sees past the player along the ground, plus the 12 m the standards ask for.
+const VIEW_MARGIN := Vector2(18.7, 19.2) + Vector2(12.0, 12.0)
+const LANDMARKS := ["GardenDoorway", "GardenGlazing", "GardenClearGlazing", "GardenLilyPond", "GardenRills", "GardenWetlandWater",
+	"GardenWeatherVane", "GardenWhirligig", "GardenFrogs", "GardenDrips", "GardenNightGlow", "GardenSunbeams", "GardenSunRack/GardenSunShaft"]
 const MOVES := ["move_left", "move_right", "move_up", "move_down"]
 
 var _world: World
@@ -31,6 +38,7 @@ func _run() -> void:
 	await _reach([Vector2(0, 3.45)], "garden:louvers", "日照窗")
 	await _check_louvers()
 	await _reach([Vector2(0, 4.65), Vector2(-7.2, 4.65), Vector2(-7.2, 0.05)], "garden:wetland", "濕地床")
+	await _check_life()
 	await _check_recovery("move_left", "wetland edge", World.GROUND_Y)
 	await _check_terraces()
 	_check_map()
@@ -52,11 +60,26 @@ func _check_budget() -> void:
 	var locals := _world.find_children("*", "OmniLight3D", true, false)
 	_check(locals.size() == 2 and locals.all(func(light: OmniLight3D) -> bool: return not light.shadow_enabled),
 		"the light experiment and bud court use only two shadowless local fills")
-	var meshes := _world.find_children("*", "MeshInstance3D", true, false).size() \
-		+ _world.find_children("*", "MultiMeshInstance3D", true, false).size()
-	var nodes := _world.find_children("*", "", true, false).size()
-	_check(meshes <= 220 and nodes <= 310, "full region stays bounded: %d mesh instances and %d nodes" % [meshes, nodes])
+	_check(_world.lamps.is_empty(), "lanterns glow without adding lights to the lamp budget")
+	var batches := _world.find_children("*", "MultiMeshInstance3D", true, false).size()
+	var meshes := _world.find_children("*", "MeshInstance3D", true, false).size() + batches
+	var nodes := _world.find_children("*", "", true, false).size() + 1
+	_check(meshes <= DRAW_BUDGET and nodes <= SceneStandards.DEFAULT_NODE_BUDGET and batches >= 20,
+		"full region stays inside the district budget with repeated props batched: %d mesh instances (%d batches) and %d nodes" % [meshes, batches, nodes])
 	print("Garden scene budget: %d mesh instances, %d nodes" % [meshes, nodes])
+	var found := SceneStandards.audit(_world, "garden")
+	for rule in SceneStandards.RULES:
+		_check((found[rule] as Array).is_empty(), "the rebuilt greenhouse has no '%s' debt" % rule)
+	for landmark: String in LANDMARKS:
+		_check(_world.get_node_or_null(landmark) is GeometryInstance3D, "landmark %s is built" % landmark)
+	var apron := _world.get_node_or_null("GardenContinuousApron") as MeshInstance3D
+	var ground := Rect2()
+	if apron != null:
+		var box := apron.global_transform * apron.get_aabb()
+		ground = Rect2(box.position.x, box.position.z, box.size.x, box.size.z)
+	_check(ground.encloses(World.BOUNDS.grow_individual(VIEW_MARGIN.x, VIEW_MARGIN.y, VIEW_MARGIN.x, VIEW_MARGIN.y))
+		and absf(_world.ground_surface_y(Vector3(20, 0, 20)) - apron.position.y) < 0.001 and apron.position.y < World.GROUND_Y - 0.02,
+		"natural ground runs past everything the camera can show from any reachable spot")
 	var west := _world.get_node_or_null("GardenCanopyWest") as Sprite3D
 	var east := _world.get_node_or_null("GardenCanopyEast") as Sprite3D
 	if _canopy_is_exterior(west) and _canopy_is_exterior(east):
@@ -84,6 +107,7 @@ func _check_louvers() -> void:
 	var west := _world.sun_patch_center()
 	_check(_world.louver_detent() == 0 and _world.illuminated_bed() == 0 and is_equal_approx(west.x, -2.75),
 		"west detent starts over the actual diamond-leaf bed")
+	_check(_sun_level_reads(rack, 0), "first sun level opens only the west bed's flowers and lands its shaft there")
 	_check(is_equal_approx(blade.rotation.z, _world.louver_angle()) and is_equal_approx(light.global_position.x, west.x)
 		and plant.emission_energy_multiplier > rack._plants[1].emission_energy_multiplier,
 		"physical blade, local light, and leaf response all use the west angle")
@@ -102,18 +126,72 @@ func _check_louvers() -> void:
 	_check(not _world.louver_is_moving() and _world.illuminated_bed() == 1 and absf(_world.sun_patch_center().x) < 0.01
 		and rack._plants[1].emission_energy_multiplier > plant.emission_energy_multiplier,
 		"center detent settles over the real center crop without residual light on the previous crop")
+	_check(_sun_level_reads(rack, 1), "second sun level opens only the centre bed's flowers and lands its shaft there")
 	_world.interact()
 	_world.apply_settings({"reduced_motion": true})
 	_check(not _world.louver_is_moving() and _world.illuminated_bed() == 2 and is_equal_approx(_world.sun_patch_center().x, 2.75),
 		"turning on reduced motion settles the same east target immediately")
+	_check(_sun_level_reads(rack, 2) and is_zero_approx(rack._shaft.get_shader_parameter("motion")),
+		"third sun level opens only the east bed's flowers, and reduced motion stills the dust in its shaft")
 	_world.interact()
 	_check(not _world.louver_is_moving() and _world.louver_detent() == 0 and _world.illuminated_bed() == 0
 		and _world.sun_patch_center().is_equal_approx(west) and _world.sun.global_basis.is_equal_approx(sun_basis),
 		"reduced cycling restores the exact west arrangement while the park sun keeps its direction")
 	var day_emission: float = _world._buds.emission_energy_multiplier
 	_world.set_time_of_day("night")
-	_check(_world._buds.emission_energy_multiplier > day_emission and _world._water.get_shader_parameter("reduced_motion"),
-		"night buds respond to actual time of day and reduced water stays static")
+	_check(_world._buds.emission_energy_multiplier > day_emission and _world._water.get_shader_parameter("reduced_motion")
+		and _world.material_cache["garden:rill-water"].get_shader_parameter("reduced_motion")
+		and _world.material_cache["garden:pond-water"].get_shader_parameter("reduced_motion"),
+		"night buds respond to actual time of day and every reduced water surface stays static")
+
+
+## The lit bed is the only one in flower, and the light shaft's foot stands on it.
+func _sun_level_reads(rack: Node3D, lit: int) -> bool:
+	for bed in 3:
+		if (rack.bloom(bed) > 0.95) != (bed == lit) or (bed != lit and rack.bloom(bed) > 0.05):
+			return false
+	return is_equal_approx(rack._shaft.get_shader_parameter("foot_shift"), rack.BED_X[lit])
+
+
+## Ambient motion and the frogs, which leap from whoever walks up the boardwalk.
+## The louver check leaves reduced motion on, so stillness is measured first.
+func _check_life() -> void:
+	var vane := _world.get_node("GardenWeatherVane") as Node3D
+	var whirligig := _world.get_node("GardenWhirligig") as Node3D
+	var near: Array[int] = []
+	for index in _world.frog_count():
+		if _flat_distance(_world.frog_home(index), _world.player.position) < 2.5:
+			near.append(index)
+	_check(_world.frog_count() >= 5 and near.size() >= 2, "frogs sit within reach of the boardwalk stop")
+	var still_vane := vane.rotation.y
+	var still_spin := whirligig.rotation.z
+	var nodes := _world.find_children("*", "", true, false).size()
+	var materials: int = _world.material_cache.size()
+	await _frames(40)
+	_check(vane.rotation.y == still_vane and whirligig.rotation.z == still_spin and near.all(_world.frog_is_out),
+		"reduced motion holds the weather vane, the whirligig and every frog still")
+	_world.apply_settings({"reduced_motion": false})
+	await _frames(50)
+	_check(vane.rotation.y != still_vane and whirligig.rotation.z != still_spin, "the weather vane and whirligig turn again with motion on")
+	_check(not near.any(_world.frog_is_out), "frogs beside the walker leap into the water")
+	var far: Array[int] = []
+	for index in _world.frog_count():
+		if _flat_distance(_world.frog_home(index), _world.player.position) > 3.2:
+			far.append(index)
+	_check(far.size() >= 3 and far.all(_world.frog_is_out), "frogs out of reach keep their lily pads")
+	_world.blocked = true
+	var frozen := vane.rotation.y
+	await _frames(20)
+	_check(vane.rotation.y == frozen, "a blocked world pauses the garden's motion")
+	_world.blocked = false
+	_world.apply_settings({"reduced_motion": true})
+	await _frames(3)
+	_check(near.all(_world.frog_is_out) and _world.find_children("*", "", true, false).size() == nodes
+		and _world.material_cache.size() == materials, "reduced motion returns the frogs at once and nothing is created by any of it")
+
+
+func _flat_distance(a: Vector3, b: Vector3) -> float:
+	return Vector2(a.x, a.z).distance_to(Vector2(b.x, b.z))
 
 
 func _check_terraces() -> void:

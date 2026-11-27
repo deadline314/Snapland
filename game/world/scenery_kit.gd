@@ -116,6 +116,8 @@ class Batch:
 	var material: Material
 	var transforms: Array[Transform3D] = []
 	var colors: Array[Color] = []
+	## Painted batches draw on the scenery layer and leave shadows to their contacts.
+	var painted := false
 
 	func add(center: Vector3, size := Vector3.ONE, basis := Basis.IDENTITY, color := Color.WHITE) -> void:
 		transforms.append(Transform3D(basis * Basis.from_scale(size), center))
@@ -195,7 +197,11 @@ func finish() -> void:
 		lanterns.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	for key: String in _batches:
 		var entry: Batch = _batches[key]
-		world._multi_mesh(entry.mesh, Vector3.ZERO, entry.transforms, entry.colors, entry.material).name = "Scenery_" + key.get_slice(":", 0)
+		var drawn: MultiMeshInstance3D = world._multi_mesh(entry.mesh, Vector3.ZERO, entry.transforms, entry.colors, entry.material)
+		drawn.name = "Scenery_" + key.get_slice(":", 0)
+		if entry.painted:
+			drawn.layers = world.SCENERY_RENDER_LAYER
+			drawn.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 
 ## Lantern bodies stay unlit by day and brighten with the region's lamp level.
 func set_glow(energy: float) -> void:
@@ -310,6 +316,48 @@ func billboard(kind: String, ground: Vector3, height: float) -> Sprite3D:
 	contact.origin.y = ground.y + 0.012
 	contacts[-1] = contact
 	return sprite
+
+## One more copy of a painted billboard in that kind's single batch: woodland and
+## hedgerows the player cannot walk up to. Copies sway and take the phase tint like
+## billboard() ones and get a contact shadow, but cast no silhouette. Returns false
+## when the atlas lacks `kind`.
+func grove(kind: String, ground: Vector3, height: float) -> bool:
+	if not world._foliage_has(kind): return false
+	var key := "grove:" + kind
+	if not _batches.has(key):
+		var art: AtlasTexture = world.foliage_textures[kind]
+		var atlas_size := Vector2(art.atlas.get_size())
+		var from := art.region.position / atlas_size
+		var to := art.region.end / atlas_size
+		var half_width := art.region.size.x / art.region.size.y * 0.5
+		var stand := Sprite3D.new()
+		stand.texture = art
+		var material: ShaderMaterial = world._set_living_sprite_material(stand, 0, 0.0, 0.72)
+		stand.free()
+		material.set_shader_parameter("outline_soften", world.FOLIAGE_OUTLINE_SOFTEN_DEFAULT)
+		material.set_shader_parameter("ground_blend", world.FOLIAGE_GROUND_BLEND)
+		material.set_shader_parameter("saturation", world.FOLIAGE_SATURATION)
+		world.material_cache[key] = material
+		world.foliage_materials.append(material)
+		# Half the copies are mirrored so a wood does not read as one stamp.
+		for mirrored: bool in [false, true]:
+			var card := SurfaceTool.new()
+			card.begin(Mesh.PRIMITIVE_TRIANGLES)
+			for corner: Vector2 in [Vector2(0, 0), Vector2(1, 0), Vector2(1, 1), Vector2(0, 0), Vector2(1, 1), Vector2(0, 1)]:
+				card.set_normal(Vector3.BACK)
+				card.set_uv(Vector2(lerpf(from.x, to.x, 1.0 - corner.x if mirrored else corner.x), lerpf(from.y, to.y, corner.y)))
+				card.add_vertex(Vector3((corner.x * 2.0 - 1.0) * half_width, 0.5 - corner.y, 0.0))
+			batch(key + (":mirrored" if mirrored else ""), card.commit(), material).painted = true
+	var mirror := posmod(int(floor(ground.x * 7.3 + ground.z * 3.1)), 2) == 1
+	var copies: Batch = _batches[key + (":mirrored" if mirror else "")]
+	copies.add(ground + Vector3(0, height * 0.5, 0), Vector3.ONE * height)
+	var art_region: Rect2 = world.foliage_textures[kind].region
+	var base_width := height * art_region.size.x / art_region.size.y * float(world.FOLIAGE_BASE_WIDTH.get(kind, world.FOLIAGE_TRUNK_BASE_WIDTH))
+	# The card leans back from the camera, so its painted base meets the ground in front of the anchor.
+	var bottom := ground + Vector3(0, height * 0.5, 0) - view_basis.y * height * 0.5
+	var base := bottom - view_basis.z * ((bottom.y - ground.y) / view_basis.z.y)
+	world._foliage_contact_transforms.append(Transform3D(Basis().scaled(Vector3(base_width, 1.0, base_width * 0.5)), Vector3(base.x, ground.y + 0.012, base.z)))
+	return true
 
 ## Where a point of an upright billboard really is: `across`/`up` are metres from its centre.
 func billboard_point(ground: Vector3, height: float, across: float, up: float) -> Vector3:

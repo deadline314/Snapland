@@ -1,11 +1,14 @@
 extends "res://game/world/park_world.gd"
 
+## Moss-light greenhouse: an iron-and-glass house in a wooded clearing. This script
+## owns what the player can do here (the floor plan, the louvred sunlight, safe
+## footing, the regional portrait, every interaction point); garden_scenery builds
+## the place and garden_life animates it.
+const Kit = preload("res://game/world/scenery_kit.gd")
+const Scenery = preload("res://game/world/garden_scenery.gd")
+const Life = preload("res://game/world/garden_life.gd")
 const Louvers = preload("res://game/world/garden_louvers.gd")
-const Glass = preload("res://game/world/garden_glass.gdshader")
-const Water = preload("res://game/world/garden_water.gdshader")
-const Paving = preload("res://game/world/garden_paving.gdshader")
 const RegionalVisit = preload("res://game/story/regional_visit.gd")
-const CANOPY_ART := "res://assets/world/garden-canopy-foliage.webp"
 const GROUND_Y := 0.20
 const LOWER_Y := 0.86
 const UPPER_Y := 1.12
@@ -39,18 +42,14 @@ const AREAS: Array[Dictionary] = [
 	{"id": "buds", "label": "夜芽庭", "rect": BUD_COURT},
 ]
 const IRON := Color("#38534e")
-const DEEP_IRON := Color("#263c38")
-const BRASS := Color("#ab945e")
-const GARDEN_STONE := Color("#92a18c")
 const IVORY := Color("#c1ad88")
-const TIMBER := Color("#938064")
-const FERN := Color("#638478")
-enum Finish { STONE, PLANKS, GROUND }
 const FOOTPRINT: Array[Vector2] = [Vector2(-0.30, -0.30), Vector2(-0.30, 0.30), Vector2(0.30, -0.30), Vector2(0.30, 0.30)]
 
+var _kit: Kit
+var _scenery: Scenery
+var _life: Life
 var _louvers: Louvers
 var _water: ShaderMaterial
-var _glazing: ShaderMaterial
 var _buds: StandardMaterial3D
 var _bud_pool: OmniLight3D
 var _last_safe := ENTRY
@@ -69,15 +68,32 @@ var _story_hidden_features: Array[Node3D] = []
 
 
 func _build_region_geometry() -> void:
-	_build_foundation()
-	_build_exterior()
-	_build_glasshouse()
-	_build_wetland()
-	_build_terraces()
-	_build_bud_court()
+	# One glowing surface for night buds, moss and mushrooms; it brightens after dusk.
+	_buds = StandardMaterial3D.new()
+	_buds.vertex_color_use_as_albedo = true
+	_buds.roughness = 0.7
+	_buds.emission_enabled = true
+	_buds.emission = Color("#4fe08c")
+	material_cache["garden:night-glow"] = _buds
+	_kit = Kit.new(self)
+	_scenery = Scenery.new(self, _kit)
+	_build_floors()
+	_scenery.build()
+	_water = _scenery.wetland_water
+	_foyer_sign = [_scenery.doorway]
 	_louvers = Louvers.new()
 	_louvers.name = "GardenSunRack"
 	add_child(_louvers)
+	_bud_pool = OmniLight3D.new()
+	_bud_pool.name = "GardenBudPool"
+	_bud_pool.position = Vector3(0.26, 2.04, -10.53)
+	_bud_pool.light_color = Color("#bedfab")
+	_bud_pool.omni_range = 5.25
+	_bud_pool.shadow_enabled = false
+	add_child(_bud_pool)
+	_life = Life.new(self, _scenery)
+	_life.build()
+	_kit.finish()
 	_coordinate_lighting()
 	_point("region:welcome", "返回迎賓大道 · 免費", ENTRY)
 	_point("garden:louvers", "日照窗 · 轉動百葉", SWITCH)
@@ -89,265 +105,50 @@ func _build_region_geometry() -> void:
 	current_area = _area_at_position(ENTRY)
 
 
-func _build_foundation() -> void:
-	var base := _box(Vector3(0, -0.46, -1.16), Vector3(25.05, 0.44, 22.30), DEEP_IRON)
-	_set_registered_surface(base, _paving(Color("#778477")))
-	_floor(SUN_FLOOR, GROUND_Y, 0.31, IVORY, "GardenSunFloor")
-	_floor(VINE_FLOOR, GROUND_Y, 0.31, FERN, "GardenVineFloor")
-	_floor(BUD_COURT, GROUND_Y, 0.31, Color("#84938a"), "GardenBudFloor")
-	_floor(WEST_SOUTH, GROUND_Y, 0.31, GARDEN_STONE, "GardenSouthBridge")
-	_floor(WEST_NORTH, GROUND_Y, 0.31, GARDEN_STONE, "GardenNorthBridge")
-	_floor(BOARDWALK, GROUND_Y, 0.25, TIMBER, "GardenWetlandBoardwalk", Finish.PLANKS)
-	for x in [-3.93, 3.93]:
-		_box(Vector3(x, GROUND_Y + 0.012, 1.18), Vector3(0.079, 0.025, 15.2), BRASS)
-	for side in [-1.0, 1.0]:
-		var x: float = side * 2.73
-		_box(Vector3(x, GROUND_Y + 0.44, 8.78), Vector3(0.34, 0.87, 0.34), IRON)
-		_box(Vector3(x, GROUND_Y + 0.91, 8.78), Vector3(0.46, 0.10, 0.43), BRASS)
-	_foyer_sign = _sign("苔光溫室", Vector3(-2.04, 1.48, 8.74), 1.83)
-	_brackets(ENTRY, BRASS)
-	_brackets(SWITCH, Color("#8b9864"))
-
-
-func _build_exterior() -> void:
-	var ground := PlaneMesh.new()
-	ground.size = Vector2(92.0, 84.0)
-	var apron := _mesh(ground, Vector3(0, -0.67, -1.16), _paving(Color("#76856c"), Finish.GROUND))
-	apron.name = "GardenContinuousApron"
-	apron.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	var bed := SphereMesh.new()
-	bed.radial_segments = 14
-	bed.rings = 4
-	var art := load(CANOPY_ART) as Texture2D if ResourceLoader.exists(CANOPY_ART) else null
-	var has_canopy := art != null and art.get_width() == art.get_height() * 2
-	for side in [-1.0, 1.0]:
-		var at := Vector3(side * 9.87, -0.64, 11.31 - 0.36 * side)
-		var berm := _mesh(bed, at, _mat(Color("#68775c")))
-		berm.scale = Vector3(7.1, 0.27, 2.52)
-		berm.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-		var outer: Array[Vector3] = []
-		var fronds: Array[Vector3] = []
-		for index in range(6):
-			var spread := (float(index) - 2.50) * 0.84
-			var tuft := at + Vector3(spread, 0.19 + 0.10 * float(index % 3), 0.42 * sin(index * 1.4))
-			outer.append(tuft)
-			if not has_canopy and index % 2 == 0:
-				fronds.append(tuft + Vector3(side * -0.23, 0.53, -0.28))
-		_leaf_cluster("GardenApronGroundcover", outer, Color("#778a61"), Vector3(1.20, 0.17, 0.83))
-		if has_canopy:
-			_canopy_silhouette(art, at, side)
-		else:
-			_leaf_cluster("GardenApronFronds", fronds, Color("#64846d"), Vector3(0.96, 0.82, 0.60))
-
-
-func _canopy_silhouette(art: Texture2D, at: Vector3, side: float) -> void:
-	var pixels := art.get_height()
-	var tile := AtlasTexture.new()
-	tile.atlas = art
-	tile.region = Rect2(0 if side < 0.0 else pixels, 0, pixels, pixels)
-	tile.filter_clip = true
-	var canopy := Sprite3D.new()
-	canopy.name = "GardenCanopyWest" if side < 0.0 else "GardenCanopyEast"
-	canopy.texture = tile
-	canopy.pixel_size = 2.94 / float(pixels)
-	canopy.position = at + Vector3(side * 1.04, 1.56, 0.08)
-	canopy.billboard = BaseMaterial3D.BILLBOARD_FIXED_Y
-	canopy.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR
-	canopy.shaded = true
-	canopy.modulate = Color(0.88, 0.91, 0.84)
-	canopy.alpha_cut = SpriteBase3D.ALPHA_CUT_DISCARD
-	canopy.alpha_scissor_threshold = 0.61
-	canopy.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	add_child(canopy)
-
-
-func _build_glasshouse() -> void:
-	_glazing = ShaderMaterial.new()
-	_glazing.shader = Glass
-	var pane := QuadMesh.new()
-	pane.size = Vector2(3.74, 2.52)
-	for bay in range(6):
-		var x := -10.0 + float(bay) * 4.0
-		var glass := _mesh(pane, Vector3(x, 1.87, -11.62), _glazing)
-		glass.name = "GardenGlazedPane_%d" % bay
-		glass.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-		_box(Vector3(x, 0.32, -11.63), Vector3(3.91, 0.64, 0.27), IRON)
-		_box(Vector3(x, 2.35, -11.48), Vector3(3.92, 0.081, 0.10), IRON)
-	for column in range(7):
-		_box(Vector3(-12.0 + float(column) * 4.0, 1.80, -11.56), Vector3(0.18, 3.44, 0.27), DEEP_IRON)
-	_box(Vector3(0, 3.19, -11.54), Vector3(24.22, 0.17, 0.25), DEEP_IRON)
-	_box(Vector3(0, 3.29, -11.51), Vector3(24.12, 0.06, 0.19), BRASS)
-	for z in [-10.95, -6.0, -0.88, 4.12]:
-		for side in [-1.0, 1.0]:
-			var x: float = side * 11.80
-			_box(Vector3(x, 0.29, z), Vector3(0.50, 0.57, 0.53), IRON)
-			_box(Vector3(x, 1.71, z), Vector3(0.17, 2.48, 0.21), DEEP_IRON)
-			_box(Vector3(x, 2.96, z), Vector3(0.30, 0.16, 0.28), BRASS)
-			var brace := _box(Vector3(side * 11.38, 3.20, z), Vector3(1.0, 0.11, 0.17), IRON)
-			brace.rotation.z = side * -0.41
-			if z < -5.0:
-				var roof_rib := _box(Vector3(side * 6.00, 4.01, z), Vector3(12.1, 0.10, 0.14), IRON)
-				roof_rib.rotation.z = side * -0.142
-	for x in [-11.8, 11.8]:
-		_box(Vector3(x, 3.0, -3.45), Vector3(0.18, 0.10, 15.05), IRON)
-
-
-func _build_wetland() -> void:
-	var plane := PlaneMesh.new()
-	plane.size = WETLAND_WATER.size
-	_water = ShaderMaterial.new()
-	_water.shader = Water
-	var hit := WETLAND_WATER.get_center()
-	var surface := _mesh(plane, Vector3(hit.x, -0.18, hit.y), _water)
-	surface.name = "GardenWetlandWater"
-	surface.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	for x in [-8.58, -5.82]:
-		_box(Vector3(x, 0.229, -0.46), Vector3(0.083, 0.065, 8.40), BRASS)
-		for z in [-4.39, -2.31, -0.23, 1.85, 3.46]:
-			_box(Vector3(x, 0.25, z), Vector3(0.17, 0.12, 0.20), IRON)
-	for z in [-4.44, 3.49]:
-		_box(Vector3(-8.1, 0.246, z), Vector3(7.7, 0.085, 0.115), IRON)
-	var pads: Array[Vector3] = []
-	for x in [-10.88, -9.56, -4.99]:
-		for index in range(5):
-			pads.append(Vector3(x + 0.18 * sin(index * 1.9 + x), -0.14, -3.79 + float(index) * 1.55 + 0.17 * cos(x + index)))
-	_leaf_cluster("GardenLilyPads", pads, Color("#6eaa7c"), Vector3(0.45, 0.06, 0.35))
-	_brackets(WETLAND, BRASS)
-	_sign("濕地床", Vector3(-10.31, 0.82, 4.16), 1.50)
-
-
-func _build_terraces() -> void:
-	_slope(RAMP, GROUND_Y, LOWER_Y, "GardenLeafRamp")
-	_floor(LOWER, LOWER_Y, 0.40, Color("#9a906e"), "GardenLowerLeafDeck", Finish.PLANKS)
-	_slope(LINK, LOWER_Y, UPPER_Y, "GardenUpperLink")
-	_floor(UPPER, UPPER_Y, 0.44, Color("#afa180"), "GardenUpperLeafDeck", Finish.PLANKS)
-	for rect in [LOWER, UPPER]:
+## The walkable floors keep their plan; each room has its own stone and moss.
+func _build_floors() -> void:
+	_floor(SUN_FLOOR, 0.31, "GardenSunFloor", _scenery.surface("sun-floor", Color("#b59a68"), Scenery.Style.PAVERS, 0.35, 0.45))
+	_floor(VINE_FLOOR, 0.31, "GardenVineFloor", _scenery.surface("vine-floor", Color("#7d8d74"), Scenery.Style.PAVERS, 0.6, 0.8, Vector2(0.9, 0.9)))
+	_floor(BUD_COURT, 0.31, "GardenBudFloor", _scenery.surface("bud-floor", Color("#6f807c"), Scenery.Style.PAVERS, 0.55, 0.9, Vector2(1.1, 0.7)))
+	var bridge := _scenery.surface("bridge-floor", Color("#868f78"), Scenery.Style.PAVERS, 0.85, 0.8, Vector2(0.8, 0.8))
+	_floor(WEST_SOUTH, 0.31, "GardenSouthBridge", bridge)
+	_floor(WEST_NORTH, 0.31, "GardenNorthBridge", bridge)
+	var boards := _scenery.surface("boards", Color("#94713f"), Scenery.Style.BOARDS, 0.0, 0.6, Vector2(1.92, 0.31))
+	_floor(BOARDWALK, 0.25, "GardenWetlandBoardwalk", boards)
+	var deck := _scenery.surface("deck", Color("#a17f4c"), Scenery.Style.BOARDS, 0.0, 0.7, Vector2(1.92, 0.31))
+	_slope(RAMP, GROUND_Y, LOWER_Y, "GardenLeafRamp", deck)
+	_floor(LOWER, 0.40, "GardenLowerLeafDeck", deck, LOWER_Y)
+	_slope(LINK, LOWER_Y, UPPER_Y, "GardenUpperLink", deck)
+	_floor(UPPER, 0.44, "GardenUpperLeafDeck", deck, UPPER_Y)
+	# Brick piers carry the two leaf decks; a brass nosing marks each edge.
+	for rect: Rect2 in [LOWER, UPPER]:
 		var height := LOWER_Y if rect == LOWER else UPPER_Y
-		var center: Vector2 = rect.get_center()
-		for x in [rect.position.x + 0.07, rect.end.x - 0.07]:
-			_box(Vector3(x, height + 0.023, center.y), Vector3(0.10, 0.088, rect.size.y), BRASS)
-		for offset in [-0.90, 0.90]:
-			_box(Vector3(center.x + offset, height - 0.33, center.y), Vector3(0.26, 0.64, rect.size.y * 0.62), DEEP_IRON)
-	_box(Vector3(7.20, UPPER_Y + 0.029, UPPER.position.y + 0.06), Vector3(4.09, 0.098, 0.12), BRASS)
-	var vines: Array[Vector3] = []
-	for z in [3.16, 1.55, -0.43, -2.53, -3.72, -5.53, -6.89]:
-		for side in [5.03, 9.35]:
-			var at := Vector3(side, 0.49, z)
-			_box(at - Vector3.UP * 0.16, Vector3(0.49, 0.30, 0.62), IRON)
-			vines.append(at)
-	_leaf_cluster("GardenTrellisFoliage", vines, Color("#739063"), Vector3(0.41, 0.17, 0.37))
-	_brackets(VINE, Color("#e2c789"))
-	_sign("藤蔓層", Vector3(9.93, 1.19, -5.16), 1.42)
+		var center := rect.get_center()
+		for offset: float in [-1.4, 1.4]:
+			_kit.surface(_scenery.brick()).add(Vector3(center.x + offset, (height - 0.4 + GROUND_Y) * 0.5, center.y), Vector3(0.5, height - 0.4 - GROUND_Y, rect.size.y * 0.8))
+		for x: float in [rect.position.x + 0.07, rect.end.x - 0.07]:
+			_kit.detail.box(Vector3(x, height + 0.02, center.y), Vector3(0.1, 0.05, rect.size.y), Scenery.Props.BRASS)
+	_kit.detail.box(Vector3(7.20, UPPER_Y + 0.02, UPPER.position.y + 0.06), Vector3(4.09, 0.05, 0.12), Scenery.Props.BRASS)
 
 
-func _build_bud_court() -> void:
-	_buds = _mat(Color("#b7c5a9")).duplicate() as StandardMaterial3D
-	_buds.emission_enabled = true
-	_buds.emission = Color("#bce4b5")
-	var bloom := SphereMesh.new()
-	bloom.radial_segments = 12
-	bloom.rings = 5
-	var stems: Array[Vector3] = []
-	for side in [-1.0, 1.0]:
-		var border: float = side * 4.55
-		_box(Vector3(border, 0.356, -10.83), Vector3(5.35, 0.32, 1.25), IRON)
-		_box(Vector3(border, 0.523, -10.83), Vector3(5.16, 0.049, 1.08), Color("#526957"))
-		for index in range(6):
-			var at := Vector3(border + (float(index) - 2.50) * 0.69, 0.64, -10.77 + float(index % 2) * 0.18)
-			var bud := _mesh(bloom, at + Vector3.UP * (0.13 + float(index % 3) * 0.11), _buds)
-			bud.scale = Vector3(0.34, 0.38, 0.34)
-			bud.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-			stems.append(at)
-	_leaf_cluster("GardenBudLeaves", stems, Color("#688c70"), Vector3(0.41, 0.11, 0.28))
-	_brackets(BUDS, Color("#bfc794"))
-	_sign("夜芽庭", Vector3(0, 1.13, -10.74), 1.57)
-	_bud_pool = OmniLight3D.new()
-	_bud_pool.name = "GardenBudPool"
-	_bud_pool.position = Vector3(0.26, 2.04, -10.53)
-	_bud_pool.light_color = Color("#bedfab")
-	_bud_pool.omni_range = 5.25
-	_bud_pool.shadow_enabled = false
-	add_child(_bud_pool)
-
-
-func _leaf_cluster(label: String, origins: Array[Vector3], tone: Color, leaflet: Vector3) -> void:
-	var geometry := SphereMesh.new()
-	geometry.radial_segments = 8
-	geometry.rings = 4
-	var material := StandardMaterial3D.new()
-	material.albedo_color = tone
-	material.vertex_color_use_as_albedo = true
-	material.roughness = 0.79
-	var transforms: Array[Transform3D] = []
-	var shades: Array[Color] = []
-	for index in origins.size():
-		for side in range(3):
-			var yaw := float(side) * TAU / 3.0 + float(index) * 1.33
-			var shape := Basis.from_euler(Vector3(-0.15 - float(side) * 0.09, yaw, 0.18)).scaled(leaflet)
-			var tip := Vector3(sin(yaw) * leaflet.x * 0.27, float(side) * leaflet.y * 0.24, cos(yaw) * leaflet.z * 0.27)
-			transforms.append(Transform3D(shape, origins[index] + tip))
-			shades.append(Color.WHITE.darkened(0.08 + float((index + side) % 4) * 0.07))
-	var leaves := _multi_mesh(geometry, Vector3.ZERO, transforms, shades, material)
-	leaves.name = label
-	leaves.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-
-
-func _floor(rect: Rect2, top: float, depth: float, tint: Color, label: String, finish: Finish = Finish.STONE) -> void:
+func _floor(rect: Rect2, depth: float, label: String, finish: Material, top := GROUND_Y) -> void:
 	var center := rect.get_center()
-	var floor_mesh := _box(Vector3(center.x, top - depth * 0.5, center.y), Vector3(rect.size.x, depth, rect.size.y), tint, true)
+	var floor_mesh := _box(Vector3(center.x, top - depth * 0.5, center.y), Vector3(rect.size.x, depth, rect.size.y), IVORY, true)
 	floor_mesh.name = label
-	_set_registered_surface(floor_mesh, _paving(tint, finish))
+	_set_registered_surface(floor_mesh, finish)
 
 
-func _slope(rect: Rect2, bottom: float, top: float, label: String) -> void:
+func _slope(rect: Rect2, bottom: float, top: float, label: String, finish: Material) -> void:
 	var rise := top - bottom
 	var rotation := Basis(Vector3.RIGHT, atan2(rise, rect.size.y))
 	var center := rect.get_center()
 	var surface := Vector3(center.x, (bottom + top) * 0.5, center.y)
 	var thickness := 0.30
 	var slope := _box(surface - rotation.y * thickness * 0.5,
-		Vector3(rect.size.x, thickness, Vector2(rise, rect.size.y).length()), FERN, true)
+		Vector3(rect.size.x, thickness, Vector2(rise, rect.size.y).length()), IVORY, true)
 	slope.name = label
 	slope.basis = rotation
-	_set_registered_surface(slope, _paving(Color("#a39777"), Finish.PLANKS))
-
-
-func _paving(tint: Color, finish: Finish = Finish.STONE) -> ShaderMaterial:
-	var surface := ShaderMaterial.new()
-	surface.shader = Paving
-	surface.set_shader_parameter("finish_tone", tint)
-	surface.set_shader_parameter("finish_style", finish)
-	if finish == Finish.PLANKS:
-		surface.set_shader_parameter("tile_size", Vector2(1.92, 0.31))
-	return surface
-
-
-func _box(at: Vector3, size: Vector3, tint: Color, solid := false) -> MeshInstance3D:
-	var geometry := BoxMesh.new()
-	geometry.size = size
-	var instance := _mesh(geometry, at, _finish(tint, size))
-	if solid:
-		var body := StaticBody3D.new()
-		var collision := CollisionShape3D.new()
-		var shape := BoxShape3D.new()
-		shape.size = size
-		collision.shape = shape
-		body.add_child(collision)
-		instance.add_child(body)
-	return instance
-
-
-func _sign(title: String, at: Vector3, width: float) -> Array[MeshInstance3D]:
-	var plaque := _box(at, Vector3(width, 0.32, 0.075), DEEP_IRON)
-	var trim := _box(at + Vector3(0, -0.145, 0.047), Vector3(width - 0.09, 0.028, 0.027), BRASS)
-	var label := _local_label(title, at + Vector3(0, 0.015, 0.048), 22, Color("#f5e9b8"))
-	label.outline_size = 1
-	return [plaque, trim]
-
-
-func _brackets(at: Vector3, tint: Color) -> void:
-	for side in [-1.0, 1.0]:
-		_box(at + Vector3(0.42 * side, 0.025, 0), Vector3(0.071, 0.041, 0.56), tint)
+	_set_registered_surface(slope, finish)
 
 
 func _build_player_floor() -> void:
@@ -399,7 +200,8 @@ func begin_story_photo() -> bool:
 	player.hide()
 	for label in local_sign_labels:
 		_hide_story_feature(label)
-	for piece in _foyer_sign:
+	# The portrait camera stands just outside the door, so the doorway steps aside.
+	for piece in _scenery.story_front:
 		_hide_story_feature(piece)
 	_hide_story_feature(_story_host_label)
 	_set_interaction_marker(null)
@@ -505,7 +307,8 @@ func _height_at(at: Vector2) -> float:
 
 
 func ground_surface_y(position: Vector3) -> float:
-	return _height_at(Vector2(position.x, position.z))
+	var at := Vector2(position.x, position.z)
+	return _height_at(at) if Scenery.HOUSE.has_point(at) else Scenery.TERRAIN_Y
 
 
 func _safe_standing(position: Vector3) -> bool:
@@ -581,16 +384,37 @@ func illuminated_bed() -> int:
 
 func _process(delta: float) -> void:
 	super._process(delta)
-	if not blocked and not is_instance_valid(_story_camera) and _louvers.moving():
+	var posing := is_instance_valid(_story_camera)
+	if not blocked and not posing and _louvers.moving():
 		_louvers.advance(delta)
+	if reduced_motion:
+		_life.hold_still()
+	elif not blocked and not posing:
+		_life.animate(delta)
+
+
+## Frogs on the wetland bed, for the map and for checks: how many, and whether one is on its pad.
+func frog_count() -> int:
+	return Life.FROGS.size()
+
+
+func frog_is_out(index: int) -> bool:
+	return _life.frog_is_out(index)
+
+
+func frog_home(index: int) -> Vector3:
+	return _life.frog_home(index)
 
 
 func apply_settings(settings: Dictionary) -> void:
 	super.apply_settings(settings)
-	if is_instance_valid(_louvers) and reduced_motion and louver_is_moving():
+	if not is_instance_valid(_louvers):
+		return
+	if reduced_motion and louver_is_moving():
 		_louvers.settle()
-	if _water != null:
-		_water.set_shader_parameter("reduced_motion", reduced_motion)
+	_louvers.set_motion(not reduced_motion)
+	for key: String in ["garden:wetland-water", "garden:pond-water", "garden:rill-water"]:
+		material_cache[key].set_shader_parameter("reduced_motion", reduced_motion)
 
 
 func set_time_of_day(phase_id: Variant) -> void:
@@ -598,22 +422,24 @@ func set_time_of_day(phase_id: Variant) -> void:
 	_coordinate_lighting()
 
 
+## The greenhouse keeps the island's sun but filters it: greener air, a softer key
+## light, and nights bright enough to read by the glow of the plants.
 func _coordinate_lighting() -> void:
 	var evening := active_time_phase in ["dusk", "night"]
-	var haze := Color("#445e61") if evening else Color("#849e8a")
+	var haze: Color = {"dawn": Color("#93a48c"), "noon": Color("#849e8a"), "dusk": Color("#5f6c66"), "night": Color("#22363f")}[active_time_phase]
 	environment.background_color = haze
 	environment.fog_light_color = haze
-	environment.ambient_light_color = Color("#b3c8c0") if evening else Color("#e3e6cf")
-	environment.ambient_light_energy = 0.78 if evening else 0.85
-	sun.light_color = Color("#dfebce")
-	sun.light_energy = minf(sun.light_energy, 0.76)
+	environment.ambient_light_color = {"dawn": Color("#f1ddc6"), "noon": Color("#e6ead2"), "dusk": Color("#d9b8a2"), "night": Color("#8a9aa8")}[active_time_phase]
+	environment.ambient_light_energy = {"dawn": 0.5, "noon": 0.52, "dusk": 0.48, "night": 0.38}[active_time_phase]
+	sun.light_color = sun.light_color.lerp(Color("#dfebce"), 0.35)
+	sun.light_energy = minf(sun.light_energy, 1.05)
 	if not is_instance_valid(_louvers):
 		return
 	_louvers.set_light_gain(0.50 if evening else 0.68)
-	_buds.emission_energy_multiplier = 0.64 if evening else 0.17
+	_louvers.set_light_color({"dawn": Color("#ffd9a0"), "noon": Color("#ffd161"), "dusk": Color("#ffb060"), "night": Color("#b4d2ff")}[active_time_phase])
+	_buds.emission_energy_multiplier = {"dawn": 0.2, "noon": 0.1, "dusk": 0.9, "night": 2.0}[active_time_phase]
 	_bud_pool.light_energy = 0.68 if evening else 0.26
-	_glazing.set_shader_parameter("glass_light", Color("#829d98") if evening else Color("#c2d5b5"))
-	_glazing.set_shader_parameter("glass_dark", Color("#3a6665") if evening else Color("#798d74"))
+	_scenery.apply_time_of_day(active_time_phase, lamp_energy_for_phase)
 
 
 func map_snapshot() -> Dictionary:
