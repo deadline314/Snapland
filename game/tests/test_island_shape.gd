@@ -84,7 +84,9 @@ func _check_outline() -> void:
 	_check(float(walkable) >= FORMER_WALK_AREA * 4.0, "walkable ground is at least four times the former island (%d m2, %.2fx)" % [walkable, float(walkable) / FORMER_WALK_AREA])
 	# Named features of the authored coast.
 	_check(not IslandShape.contains(Vector2(0, 24)) and IslandShape.contains(Vector2(-40, 34)) and IslandShape.contains(Vector2(50, 30)), "the dock sits in a bay between two headlands")
-	_check(not IslandShape.contains(Vector2(78, -121)) and IslandShape.contains(Vector2(80, -136)) and not IslandShape.contains(Vector2(84, -147)), "a sand spit encloses the north-east lagoon")
+	# Since MAIN-56 the spit's north end runs on into the circus headland (the circus
+	# approach crosses it), so the open water beside the spit lies to its east.
+	_check(not IslandShape.contains(Vector2(78, -121)) and IslandShape.contains(Vector2(80, -136)) and not IslandShape.contains(Vector2(100, -136)), "a sand spit encloses the north-east lagoon")
 	_check(not IslandShape.contains(Vector2(-66, -93)) and IslandShape.contains(Vector2(-66, -74)) and IslandShape.contains(Vector2(-66, -112)), "an inlet cuts into the west coast")
 
 func _check_queries() -> void:
@@ -174,7 +176,7 @@ func _check_lawn() -> void:
 
 func _check_areas_and_texture() -> void:
 	_check(IslandShape.area_at(Vector2(0, 22)) == IslandShape.DOCK_AREA and IslandShape.area_at(Vector2(3, -2)) == IslandShape.PLAZA_AREA, "the dock and the plaza keep their names")
-	_check(IslandShape.area_at(Vector2(0, -30)) == IslandShape.INLAND_AREA and IslandShape.area_at(Vector2(30, -147)) == IslandShape.COAST_AREA, "open ground is the promenade inland and the coastal loop by the sea")
+	_check(IslandShape.area_at(Vector2(0, -30)) == IslandShape.INLAND_AREA and IslandShape.area_at(Vector2(-40, -135)) == IslandShape.COAST_AREA, "open ground is the promenade inland and the coastal loop by the sea")
 	var names := {}
 	for area: Array in IslandShape.AREAS:
 		var centre := Vector2(area[1], area[2])

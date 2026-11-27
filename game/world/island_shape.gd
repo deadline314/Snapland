@@ -21,7 +21,7 @@ const COAST_CONTROL := [
 	Vector2(82,-67), Vector2(92,-65.5), Vector2(101,-58), Vector2(112,-55.5), Vector2(123,-48.5), Vector2(136,-52), Vector2(150,-47.5), Vector2(166,-52), Vector2(180,-61), Vector2(187,-74), Vector2(184.5,-88), Vector2(188,-101), Vector2(183,-114), Vector2(173,-123.5), Vector2(159,-125.5), Vector2(147,-131), Vector2(134,-126.5), Vector2(123,-128.5), Vector2(113,-124.5), Vector2(106,-116), Vector2(99,-105.5), Vector2(85.5,-97),
 	Vector2(76.5,-103), Vector2(67,-108.5), Vector2(63,-119.5), Vector2(70.5,-129), Vector2(82,-129), Vector2(87.5,-121.5), Vector2(92,-117.5), Vector2(96,-125), Vector2(91,-136.5),
 	Vector2(98,-146), Vector2(108,-154), Vector2(113.5,-168), Vector2(115,-186), Vector2(113.5,-205), Vector2(104.5,-218), Vector2(88,-221.5), Vector2(72,-222), Vector2(58,-219), Vector2(49,-222.5),
-	Vector2(34,-224.5), Vector2(18,-226), Vector2(2,-225), Vector2(-14,-222), Vector2(-27,-214), Vector2(-32,-200), Vector2(-33,-184), Vector2(-31.5,-168), Vector2(-28.5,-155), Vector2(-25,-146),
+	Vector2(34,-222.5), Vector2(18,-226), Vector2(2,-225), Vector2(-14,-222), Vector2(-27,-214), Vector2(-32,-200), Vector2(-33,-184), Vector2(-31.5,-168), Vector2(-28.5,-155), Vector2(-25,-146),
 	Vector2(-30,-141.5), Vector2(-40,-144), Vector2(-46,-153), Vector2(-47.5,-167), Vector2(-48,-183), Vector2(-54,-195), Vector2(-68,-200.5), Vector2(-86,-201.5), Vector2(-102,-199), Vector2(-114,-191),
 	Vector2(-119,-176), Vector2(-118,-158), Vector2(-113,-144), Vector2(-103,-134), Vector2(-91,-126), Vector2(-80,-112),
 	Vector2(-72.5,-103), Vector2(-59.5,-101), Vector2(-50,-93.5), Vector2(-52,-84), Vector2(-63,-80.5), Vector2(-76.5,-80.5),
