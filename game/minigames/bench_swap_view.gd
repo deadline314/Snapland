@@ -3,7 +3,9 @@ class_name BenchSwapView
 
 signal seat_requested(index: int)
 
+const Props = preload("res://game/ui/pixel_props.gd")
 const DESIGN_SIZE := Vector2(1280.0, 720.0)
+const CONTROLS_HELP := "選兩席交換　方向鍵移動 · Enter 選取"
 const SAFE_PLAYFIELD := Rect2(70.0, 130.0, 1140.0, 510.0)
 const FOOTER_LEFT := 70.0
 const FOOTER_WIDTH := 1140.0
@@ -33,6 +35,7 @@ var _keyboard_seat := 0
 func _ready() -> void:
 	custom_minimum_size = Vector2.ZERO
 	focus_mode = Control.FOCUS_ALL
+	texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	_renderer = AvatarRendererScript.new()
 	_resize_seats()
 	set_process(false)
@@ -173,6 +176,11 @@ func _handle_input(event: InputEvent) -> void:
 		queue_redraw()
 		accept_event()
 
+## Controls and the medal rule stay one hover away; the rules board and the
+## status line are what stays on screen.
+func _get_tooltip(_at_position: Vector2) -> String:
+	return "%s\n%s" % [CONTROLS_HELP, footer_text_contracts()[1].text]
+
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_RESIZED:
 		_resize_seats()
@@ -238,11 +246,11 @@ func _draw_diorama(palette: Dictionary, offset: Vector2, scale_value: float) -> 
 	_draw_table_legs(palette)
 	_draw_window(Vector2(0, -114), palette)
 	_draw_ellipse(Vector2(0, 88), Vector2(480, 126), palette.shadow)
-	_draw_ellipse(Vector2(0, 66), Vector2(478, 126), palette.wood_edge)
-	_draw_ellipse(Vector2(0, 52), Vector2(466, 112), palette.wood)
-	for line in 7:
-		var y := -17.0 + line * 22.0
-		draw_line(Vector2(-360, y), Vector2(360, y - 5), palette.grain, 2.0, true)
+	_draw_ellipse(Vector2(0, 66), Vector2(478, 126), palette.wood_edge, Props.wood_texture(palette.wood_edge))
+	_draw_ellipse(Vector2(0, 52), Vector2(466, 112), Color.WHITE, Props.wood_texture(palette.wood))
+	# Lit rim on the sun side, a darker lip toward the viewer.
+	_draw_rim(Vector2(0, 52), Vector2(466, 112), PI * 1.05, PI * 1.75, Color(Props.lighten(palette.wood, 0.35), 0.8), 3.0)
+	_draw_rim(Vector2(0, 52), Vector2(466, 112), PI * 0.1, PI * 0.9, Color(Props.deepen(palette.wood, 0.3), 0.7), 3.0)
 	_draw_bench_back(palette)
 	var seat_values: Array = _snapshot.get("seats", [])
 	var selected := int(_snapshot.get("selected_seat", -1))
@@ -266,17 +274,21 @@ func _draw_diorama(palette: Dictionary, offset: Vector2, scale_value: float) -> 
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 func _draw_bench_back(palette: Dictionary) -> void:
-	draw_line(Vector2(-413, 11), Vector2(413, 11), palette.wood_edge, 28.0, true)
+	Props.block_shadow(self, Rect2(-413, -3, 826, 28), Vector2(0, 8), 0.3)
+	Props.wood_panel(self, Rect2(-413, -3, 826, 28), palette.wood_edge)
 	draw_line(Vector2(-405, 1), Vector2(405, 1), palette.brass, 5.0, true)
+	draw_line(Vector2(-405, -1), Vector2(405, -1), Props.lighten(palette.brass, 0.4), 1.0)
 	for x in [-386, -230, -77, 77, 230, 386]:
-		draw_line(Vector2(x, -17), Vector2(x, 19), palette.wood_edge, 11.0, true)
-		draw_circle(Vector2(x, -3), 4, palette.brass)
+		Props.shaded_box(self, Rect2(x - 6, -17, 12, 36), palette.wood_edge, 4.0)
+		Props.rivet(self, Vector2(x, -3), palette.brass)
 
 func _draw_table_legs(palette: Dictionary) -> void:
 	for x in [-300.0, 300.0]:
 		var leg := PackedVector2Array([Vector2(x - 18, 62), Vector2(x + 18, 62), Vector2(x + 30, 161), Vector2(x - 27, 161)])
 		draw_colored_polygon(leg, palette.wood_edge)
 		draw_line(Vector2(x - 6, 78), Vector2(x - 2, 147), palette.grain, 3.0, true)
+		draw_line(Vector2(x + 16, 66), Vector2(x + 27, 157), Props.deepen(palette.wood_edge, 0.3), 3.0)
+		Props.contact_shadow(self, Vector2(x + 2, 162), 74.0, 0.45)
 
 func _draw_window(center: Vector2, palette: Dictionary) -> void:
 	var frame := Rect2(center - Vector2(61, 37), Vector2(122, 74))
@@ -296,14 +308,15 @@ func _draw_seat(index: int, center: Vector2, guest: int, highlight: String, pale
 	var cushion := Rect2(x - 48.0, y + 48.0, 96.0, 28.0)
 	draw_line(Vector2(x - 47, y + 76), Vector2(x - 38, y + 101), palette.wood_edge, 8.0, true)
 	draw_line(Vector2(x + 47, y + 76), Vector2(x + 38, y + 101), palette.wood_edge, 8.0, true)
-	draw_rect(cushion.grow(3), palette.wood_edge, true)
-	draw_rect(cushion, palette.cloth[guest % palette.cloth.size()], true)
+	# A buttoned cushion with a lit top and a shaded front, not a flat bar.
+	var cloth: Color = palette.cloth[guest % palette.cloth.size()]
+	Props.shaded_box(self, cushion.grow(2), cloth, 8.0)
 	draw_line(Vector2(x - 38, y + 55), Vector2(x + 38, y + 55), palette.stitch, 2.0, true)
+	for button in 3:
+		Props.rivet(self, Vector2(x - 26 + button * 26, y + 60), Props.deepen(cloth, 0.25))
 	# Each figure is a miniature standing token on a visible, grained wooden plinth.
 	var base := Rect2(x - 30, y + 32, 60, 10)
-	draw_rect(base.grow(3), palette.wood_edge, true)
-	draw_rect(base, palette.base_wood, true)
-	draw_line(Vector2(x - 24, y + 35), Vector2(x + 24, y + 35), palette.grain, 2.0, true)
+	Props.shaded_box(self, base.grow(3), palette.base_wood, 6.0)
 	draw_circle(Vector2(x, y + 37), 4.0, BADGE_COLORS[guest])
 	var ring: Color = palette.selected if highlight == "selected" else (palette.moving if highlight == "moving" else (palette.hint if highlight == "hint" else palette.brass))
 	draw_arc(Vector2(x, y + 54), 59.0, 0.0, TAU, 48, ring, 5.0 if highlight != "idle" else 2.0, true)
@@ -321,28 +334,38 @@ func _draw_avatar(guest: int, baseline_center: Vector2, palette: Dictionary) -> 
 	draw_texture_rect(_textures[guest], rect, false, Color.WHITE)
 
 func _draw_seat_number(center: Vector2, number: int, palette: Dictionary) -> void:
-	draw_circle(center, 13.0, palette.brass)
+	Props.token(self, center, 13.0, palette.brass)
 	draw_string(ThemeDB.fallback_font, center + Vector2(-5, 5), str(number), HORIZONTAL_ALIGNMENT_CENTER, 10, 13, palette.ink)
 
-func _draw_ellipse(center: Vector2, radii: Vector2, color: Color) -> void:
+func _draw_ellipse(center: Vector2, radii: Vector2, color: Color, texture: Texture2D = null) -> void:
 	var points := PackedVector2Array()
+	var uvs := PackedVector2Array()
 	for index in 64:
 		var angle := TAU * float(index) / 64.0
 		points.append(center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y))
-	draw_colored_polygon(points, color)
+		if texture != null:
+			uvs.append(points[index] / texture.get_size())
+	draw_colored_polygon(points, color, uvs, texture)
+
+func _draw_rim(center: Vector2, radii: Vector2, from: float, to: float, color: Color, width: float) -> void:
+	var previous := center + Vector2(cos(from) * radii.x, sin(from) * radii.y)
+	for step in range(1, 17):
+		var angle := lerpf(from, to, step / 16.0)
+		var point := center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y)
+		draw_line(previous, point, color, width)
+		previous = point
 
 func _draw_header(palette: Dictionary) -> void:
 	var current := int(_snapshot.get("level", 0))
 	draw_string(ThemeDB.fallback_font, Vector2(70, 158), "長椅換位 · %s" % str(_snapshot.get("level_name", ["窗邊重逢", "海風與留白", "長椅邀約"][mini(current, 2)])), HORIZONTAL_ALIGNMENT_LEFT, 420, 24, palette.ink)
-	draw_string(ThemeDB.fallback_font, Vector2(730, 158), "選兩席交換　方向鍵移動 · Enter 選取", HORIZONTAL_ALIGNMENT_RIGHT, 480, 16, palette.muted)
 	var dots := int(_snapshot.get("level", 0))
 	for i in 3:
 		draw_circle(Vector2(588.0 + i * 46.0, 157), 7.0, palette.coral if i <= dots else palette.inactive)
 
 func _draw_rules(palette: Dictionary) -> void:
 	var rect := Rect2(172, 174, 936, 68)
-	draw_rect(rect, Color("#102b3a"))
-	draw_rect(rect, Color("#dfb95f"), false, 2.0)
+	Props.block_shadow(self, rect, Vector2(4, 6), 0.3)
+	Props.wood_panel(self, rect, Props.SIGN_TEAL, true)
 	var labels := str(_snapshot.get("rule_text", "先看看提示標記")).split("　", false)
 	for index in labels.size():
 		var column := index % 2
@@ -356,7 +379,9 @@ func _draw_footer(palette: Dictionary) -> void:
 	var status: Dictionary = contracts[0]
 	var help: Dictionary = contracts[1]
 	draw_string(ThemeDB.fallback_font, status.origin, status.text, HORIZONTAL_ALIGNMENT_CENTER, status.width, status.font_size, palette.ink)
-	draw_string(ThemeDB.fallback_font, help.origin, help.text, HORIZONTAL_ALIGNMENT_CENTER, help.width, help.font_size, palette.hint if bool(_snapshot.get("assisted", false)) and not _snapshot.get("hint_pair", []).is_empty() else palette.muted)
+	# The medal rule lives in the tooltip; an assisted hint still shows here.
+	if bool(_snapshot.get("assisted", false)) and not _snapshot.get("hint_pair", []).is_empty():
+		draw_string(ThemeDB.fallback_font, help.origin, help.text, HORIZONTAL_ALIGNMENT_CENTER, help.width, help.font_size, palette.hint)
 
 func _palette() -> Dictionary:
 	var phase_colors := {"night": [Color("#243644"), Color("#678094"), Color("#334e60"), Color("#779eaa")], "dusk": [Color("#f0e2d6"), Color("#bd7d60"), Color("#704a3b"), Color("#c79775")], "dawn": [Color("#f6edda"), Color("#bf9560"), Color("#78533d"), Color("#8bb8b1")], "noon": [Color("#f5efe2"), Color("#b98555"), Color("#744d39"), Color("#92c3bd")]}

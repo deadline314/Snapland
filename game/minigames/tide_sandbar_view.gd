@@ -8,11 +8,17 @@ const Paper = preload("res://game/ui/paper_ui.gd")
 const FontProfiles = preload("res://game/ui/font_profiles.gd")
 const Model = preload("res://game/minigames/tide_sandbar_model.gd")
 const AvatarRendererScript = preload("res://game/world/avatar_renderer.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const StageProps = preload("res://game/minigames/stage_props.gd")
+const Scenery = preload("res://game/world/scenery_kit.gd")
 const DESIGN_SIZE := Vector2(1280, 720)
 const STAGE := Rect2(24, 208, 1232, 364)
 const GAUGE := Rect2(1058, 222, 186, 336)
 const COMMANDS := ["left", "up", "down", "right", "run", "mark", "tide_pause"]
 const BUTTON_LABELS := ["A / ← 左", "W / ↑ 上", "S / ↓ 下", "D / → 右", "Shift 跑步", "空白／E 路標", "T 水位暫停"]
+const BUTTON_ICONS := ["left", "up", "down", "right", "power", "sail", "wait"]
+const STATUS_PLATE := Rect2(24, 140, 1232, 62)
+const HELP_TEXT := "按住方向走、Shift 跑；在沙丘或礁石中央插路標。紅框沙路即將淹沒，金圈是下一個安全高點。"
 const OCTANTS := ["right", "front_right", "front", "front_left", "left", "back_left", "back", "back_right"]
 const SPRITE_HEIGHT := 1.35
 const HELPER_APPEARANCE := {"skin": "bronze", "hair": "curly", "hair_color": "chestnut", "face": "cheerful"}
@@ -27,7 +33,7 @@ var _camera: Camera3D
 var _sun: DirectionalLight3D
 var _environment: Environment
 var _water: MeshInstance3D
-var _water_material: StandardMaterial3D
+var _water_material: ShaderMaterial
 var _anchor_nodes: Dictionary = {}
 var _flags: Dictionary = {}
 var _anchor_labels: Dictionary = {}
@@ -211,6 +217,7 @@ func _create_stage() -> void:
 	_sun.shadow_enabled = true
 	_sun.directional_shadow_max_distance = 40
 	_world.add_child(_sun)
+	StageProps.dress_lighting(_environment, _sun)
 	_camera = Camera3D.new()
 	_camera.name = "SandbarCamera"
 	_camera.projection = Camera3D.PROJECTION_ORTHOGONAL
@@ -221,15 +228,24 @@ func _create_stage() -> void:
 	_world.add_child(_camera)
 	_camera.look_at(Vector3(1.25, 0.6, 0.2))
 	_camera.current = true
-	for item in [["seabed", "#5e7468"], ["wet", "#b19669"], ["dry", "#e7d09b"], ["reef", "#8a9c95"], ["grass", "#8fb27a"],
-			["camp", "#d9b783"], ["pole", "#4a3a2c"], ["flag", "#e8735a"], ["camp_flag", "#f2c45e"], ["warning", "#ff7b5c"],
-			["safe", "#ffd36a"], ["rope", "#f0e2b8"]]:
+	for item in [["wet", "#b19669"], ["dry", "#e7d09b"], ["flag", "#e8735a"], ["camp_flag", "#f2c45e"], ["warning", "#ff7b5c"], ["safe", "#ffd36a"]]:
 		_materials[item[0]] = _material(Color(item[1]))
-	_water_material = _material(Color("#3d8ea3"), 0.6)
-	_water_material.roughness = 0.25
+	_materials.seabed = StageProps.stone(Color("#6f7f6a"), 1.0)
+	_materials.reef = StageProps.stone(Color("#8a948a"), 1.0, Model.ANCHOR_HEIGHT * 0.45)
+	_materials.grass = StageProps.painted(Color("#8fb27a"))
+	_materials.camp = StageProps.painted(Color("#d9b783"))
+	_materials.tent = StageProps.painted(Color("#e8735a"))
+	_materials.pole = StageProps.wood(Color("#6d5236"), 0.08)
+	_materials.rope = StageProps.solid(StageProps.HEMP)
+	_materials.sculpt = StageProps.sculpt_material()
+	_water_material = StageProps.water(Color("#3d8ea3"), true)
+	_water_material.set_shader_parameter("opacity", 0.62)
 	var floor_mesh := PlaneMesh.new()
 	floor_mesh.size = Vector2(44, 32)
 	_mesh_node("SeaFloor", floor_mesh, Vector3(-1.5, -0.02, 0), _world, _materials.seabed)
+	# Stones on the seabed read through the water as depth, not one flat colour.
+	for at: Vector3 in [Vector3(-4.6, -0.02, 2.6), Vector3(5.8, -0.02, 3.1), Vector3(-2.2, -0.02, -3.4), Vector3(7.4, -0.02, -2.2), Vector3(0.9, -0.02, 3.6)]:
+		StageProps.add(_world, "SeabedRock", StageProps.rock_mesh(0.32 + fposmod(at.x, 0.3), 0.22, Color("#7d8a80")), _materials.sculpt, at)
 	var water_mesh := PlaneMesh.new()
 	water_mesh.size = Vector2(44, 32)
 	_water = _mesh_node("Water", water_mesh, Vector3(-1.5, 0.1, 0), _world, _water_material)
@@ -270,8 +286,9 @@ func _build_layout() -> void:
 		_world.add_child(node)
 		var length := from.distance_to(to)
 		var elevation: float = row.elevation
-		var sand: StandardMaterial3D = _material(_materials.wet.albedo_color.lerp(_materials.dry.albedo_color, clampf(elevation, 0.0, 1.0)))
+		var sand := StageProps.painted(_materials.wet.albedo_color.lerp(_materials.dry.albedo_color, clampf(elevation, 0.0, 1.0)))
 		_box("Sand", Vector3(length, elevation, Model.CORRIDOR_HALF_WIDTH * 2.0), Vector3(0, elevation * 0.5, 0), node, sand)
+		StageProps.add(node, "Ripples", _ripple_mesh(length, elevation, sand.get_shader_parameter("tint")), _materials.sculpt)
 		var outline := Node3D.new()
 		outline.name = "FloodOutline"
 		node.add_child(outline)
@@ -291,12 +308,13 @@ func _build_layout() -> void:
 		top.bottom_radius = Model.ANCHOR_RADIUS + 0.15
 		top.height = Model.ANCHOR_HEIGHT
 		top.radial_segments = 20
-		var material: StandardMaterial3D = {"reef": _materials.reef, "highland": _materials.grass, "camp": _materials.camp}.get(anchor.kind, _materials.dry)
+		var material: Material = {"reef": _materials.reef, "highland": _materials.grass, "camp": _materials.camp}.get(anchor.kind, StageProps.painted(_materials.dry.albedo_color))
 		_mesh_node("Ground", top, Vector3(0, Model.ANCHOR_HEIGHT * 0.5, 0), node, material)
+		_dress_anchor(node, str(anchor.kind))
 		if anchor.kind == "camp":
 			var tent := PrismMesh.new()
 			tent.size = Vector3(0.9, 0.7, 0.8)
-			_mesh_node("Tent", tent, Vector3(-0.35, Model.ANCHOR_HEIGHT + 0.35, -0.35), node, _materials.flag)
+			_mesh_node("Tent", tent, Vector3(-0.35, Model.ANCHOR_HEIGHT + 0.35, -0.35), node, _materials.tent)
 		var flag := Node3D.new()
 		flag.name = "RouteFlag"
 		flag.position = Vector3(0.45, Model.ANCHOR_HEIGHT, -0.25)
@@ -306,6 +324,43 @@ func _build_layout() -> void:
 		_flags[anchor.id] = flag
 		_anchor_labels[anchor.id] = _label3d("", Vector3(0, Model.ANCHOR_HEIGHT + 0.7, -0.55), node, 34)
 
+## Rocks at a reef's foot, tufts on the highland, a fire ring at camp: each high
+## point reads as a place, not a coloured drum. One merged mesh per anchor.
+func _dress_anchor(node: Node3D, kind: String) -> void:
+	var sculpt := Scenery.Sculpt.new()
+	var top := Model.ANCHOR_HEIGHT
+	for index in 7:
+		var around := TAU * index / 7.0 + 0.4
+		var rim := Vector3(cos(around), 0, sin(around)) * (Model.ANCHOR_RADIUS + 0.12)
+		match kind:
+			"reef":
+				sculpt.ball(rim + Vector3(0, 0.12 + 0.06 * (index % 2), 0), 0.16 + 0.05 * (index % 3), Color("#6f7a72").lightened(0.06 * (index % 2)), Color("#4f5a54"), 6, 3, 0.7)
+			"highland":
+				if index % 2 == 0:
+					sculpt.ball(rim * 0.62 + Vector3(0, top + 0.1, 0), 0.16, Color("#6f9a5c"), Color("#5a8048"), 6, 3, 0.8)
+			_:
+				if index % 3 == 0:
+					sculpt.ball(rim + Vector3(0, 0.06, 0), 0.1, Color("#c9b48a"), Color("#a8916a"), 6, 3, 0.6)
+	if kind == "camp":
+		for stone in 6:
+			var around := TAU * stone / 6.0
+			sculpt.ball(Vector3(0.3 + cos(around) * 0.16, top + 0.04, 0.3 + sin(around) * 0.16), 0.06, Color("#8a8278"), Color.TRANSPARENT, 5, 2)
+		sculpt.box(Vector3(0.3, top + 0.05, 0.3), Vector3(0.18, 0.04, 0.05), Color("#6d5236"), Basis(Vector3.UP, 0.6))
+	StageProps.add(node, "Dressing", sculpt.mesh(), _materials.sculpt)
+
+## Wind ripples across a sand path and a darker wet lip along both edges.
+func _ripple_mesh(length: float, elevation: float, tone: Color) -> ArrayMesh:
+	var sculpt := Scenery.Sculpt.new()
+	var width := Model.CORRIDOR_HALF_WIDTH * 2.0
+	var count := int(length / 0.32)
+	for index in count:
+		var along := -length * 0.5 + (index + 0.5) * length / count
+		sculpt.box(Vector3(along, elevation + 0.006, 0.04 * sin(index * 1.7)), Vector3(0.07, 0.012, width * (0.7 + 0.2 * sin(index * 2.3))), tone.lightened(0.1))
+		sculpt.box(Vector3(along + 0.06, elevation + 0.004, 0), Vector3(0.05, 0.008, width * 0.8), tone.darkened(0.08))
+	for side: float in [-1.0, 1.0]:
+		sculpt.box(Vector3(0, elevation * 0.18, side * (width * 0.5 + 0.005)), Vector3(length, elevation * 0.36, 0.012), tone.darkened(0.28))
+	return sculpt.mesh()
+
 func _apply_snapshot() -> void:
 	if _snapshot.is_empty():
 		return
@@ -314,6 +369,7 @@ func _apply_snapshot() -> void:
 	var level: float = _snapshot.tide
 	var shimmer := 0.0 if _reduced_motion else sin(float(_snapshot.elapsed) * 1.7) * 0.012
 	_water.position.y = level + shimmer
+	StageProps.set_motion(_water_material, _reduced_motion)
 	var marked: Array = _snapshot.marked
 	for anchor: Dictionary in _snapshot.anchors:
 		_flags[anchor.id].visible = marked.has(anchor.id)
@@ -422,33 +478,31 @@ func route_text() -> String:
 func _text(at: Vector2, text: String, width: float, font_size: int = 18, color: Color = Paper.PAPER) -> void:
 	draw_string(Paper.font(), at, text, HORIZONTAL_ALIGNMENT_LEFT, width, roundi(font_size * Paper.text_scale()), color)
 
+## The route and the how-to stay one hover away instead of filling the screen.
+func _get_tooltip(at_position: Vector2) -> String:
+	if _snapshot.is_empty() or not STATUS_PLATE.has_point(at_position):
+		return ""
+	return route_text() + "\n" + HELP_TEXT
+
 func _draw() -> void:
-	draw_rect(Rect2(24, 140, 1232, 62), Paper.DEEP_TEAL)
+	Props.wood_panel(self, STATUS_PLATE, Props.SIGN_TEAL, true)
 	if not _snapshot.is_empty():
-		_text(Vector2(40, 164), status_text(), 1200)
-		_text(Vector2(40, 191), route_text(), 1200, 17)
+		_text(Vector2(46, 166), status_text(), 1190, 17)
+		_text(Vector2(46, 193), str(_snapshot.get("feedback", "")), 1190, 18, Paper.GOLD)
 		_draw_gauge()
 	for i in COMMANDS.size():
 		var command: String = COMMANDS[i]
-		var rect := button_rect(command)
-		var held := _pointer_owners.values().has(command)
 		var unavailable: bool = command == "tide_pause" and not _snapshot.get("assisted", false)
-		draw_rect(rect, Paper.FRAME if held else Paper.DEEP_TEAL)
-		draw_rect(rect, Paper.GOLD if held else (Paper.DEEP if unavailable else Paper.TEAL), false, 2)
-		_text(rect.position + Vector2(10, 34), BUTTON_LABELS[i] + ("（輔助）" if unavailable else ""), rect.size.x - 16, 16, Color(Paper.PAPER, 0.55) if unavailable else Paper.PAPER)
-	_text(Vector2(30, 673), str(_snapshot.get("feedback", "")), 1210, 20, Paper.GOLD)
-	_text(Vector2(30, 704), "按住方向走、Shift 跑；在沙丘或礁石中央插路標。紅框沙路即將淹沒，金圈是下一個安全高點。", 1210, 17)
+		Props.control_key(self, button_rect(command), _pointer_owners.values().has(command), BUTTON_ICONS[i], BUTTON_LABELS[i] + ("（輔助）" if unavailable else ""), Paper.font(), roundi(16 * Paper.text_scale()), not unavailable)
 
 ## Water gauge: every corridor elevation is a labelled tick, so the flood order reads without sound or color.
 func _draw_gauge() -> void:
-	draw_rect(GAUGE, Color(Paper.DEEP, 0.86))
-	draw_rect(GAUGE, Paper.TEAL, false, 2)
+	Props.wood_panel(self, GAUGE, Props.SIGN_TEAL, true)
 	_text(GAUGE.position + Vector2(10, 22), "水位刻度", 160, 16, Paper.GOLD)
 	var bar := Rect2(GAUGE.position.x + 14, GAUGE.position.y + 36, 22, GAUGE.size.y - 50)
 	var to_y := func(height: float) -> float: return bar.end.y - clampf(height / Model.ANCHOR_HEIGHT, 0.0, 1.0) * bar.size.y
-	draw_rect(bar, Color("#22404a"))
 	var water_y: float = to_y.call(_snapshot.tide)
-	draw_rect(Rect2(bar.position.x, water_y, bar.size.x, bar.end.y - water_y), Color("#4fa6bb"))
+	Props.gauge(self, bar, (bar.end.y - water_y) / bar.size.y, Color("#4fa6bb"))
 	draw_line(Vector2(bar.position.x - 6, water_y), Vector2(bar.end.x + 6, water_y), Paper.PAPER, 3)
 	var arrow := "▲" if _snapshot.tide_rising else "▼"
 	if _snapshot.tide_paused:

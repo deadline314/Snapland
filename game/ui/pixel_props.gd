@@ -318,6 +318,46 @@ static func dust_puffs(canvas: CanvasItem, at: Vector2, elapsed: float, spread :
 			canvas.draw_rect(Rect2(centre - Vector2(size, size * 0.6), Vector2(size * 2.0, size * 1.2)), Color(tone, 0.55 * (1.0 - t)))
 			canvas.draw_rect(Rect2(centre - Vector2(size * 0.6, size), Vector2(size * 1.2, size * 0.5)), Color(tone.lightened(0.4), 0.45 * (1.0 - t)))
 
+## Sky or water as posterised bands from `top` to `bottom` instead of one flat
+## colour; `ease` > 1 keeps more of the top tone.
+static func bands(canvas: CanvasItem, rect: Rect2, top: Color, bottom: Color, steps := 8, ease := 1.0) -> void:
+	var y := rect.position.y
+	for band in steps:
+		var next := roundf(rect.position.y + rect.size.y * float(band + 1) / steps / PIXEL) * PIXEL
+		canvas.draw_rect(Rect2(rect.position.x, y, rect.size.x, next - y), top.lerp(bottom, pow(float(band) / maxf(1.0, steps - 1.0), ease)))
+		y = next
+
+## The planked wood texture wood_panel tiles, for textured polygons (an oval
+## tabletop, a slanted board): uvs = points / wood_texture().get_size().
+static func wood_texture(tone := OAK, calm := false) -> ImageTexture:
+	return _wood(tone, 0.35 if calm else 1.0)
+
+## Neutral rock grain for textured polygons: draw_colored_polygon(points, tone,
+## uvs, rock_grain()) with uvs = points / 64 on an item whose texture_repeat is
+## enabled. Strata, chips and lit flecks stay at or below white, so `tone` shows.
+static func rock_grain() -> ImageTexture:
+	return _cached("rock_grain", func() -> Image:
+		var image := Image.create(32, 32, false, Image.FORMAT_RGBA8)
+		for y in 32:
+			for x in 32:
+				# Wavy strata (periods divide 32, so the tile repeats cleanly),
+				# chipped faces and a few lit flecks; no straight block joints.
+				var wave := roundi(2.0 * sin(x * TAU / 32.0) + 1.0 * sin(x * TAU / 16.0 + 1.3))
+				var stratum := posmod(y + wave + (y / 16) * 5, 16)
+				var value := 0.9
+				if stratum == 0:
+					value = 0.7
+				elif stratum == 1 or stratum == 2:
+					value = 1.0
+				elif stratum > 11:
+					value = 0.84
+				if Pixels.noise(x / 2 + (y / 3) * 17, 21) < 0.1:
+					value -= 0.1
+				elif Pixels.noise(x, y + 90) < 0.04:
+					value = 1.0
+				image.set_pixel(x, y, Color(value, value, value))
+		return image)
+
 ## Darkened side edges of `area` keep the eye on the middle.
 static func vignette(canvas: CanvasItem, area: Rect2, strength := 0.5, shade := SHADOW) -> void:
 	for band in 5:

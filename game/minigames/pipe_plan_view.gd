@@ -8,6 +8,8 @@ const BOARD_RECT := Rect2(320.0, 166.0, 640.0, 400.0)
 const GRID_SIDE := 4
 const FLOW_SECONDS := 1.15
 const FontProfiles = preload("res://game/ui/font_profiles.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const COPPER := Color("#cf9b5c")
 const DIRS: Array[Vector2i] = [Vector2i(0, -1), Vector2i(1, 0), Vector2i(0, 1), Vector2i(-1, 0)]
 const BITS: Array[int] = [1, 2, 4, 8]
 const PORT_NORMALS: Array[Vector2] = [Vector2.UP, Vector2.RIGHT, Vector2.DOWN, Vector2.LEFT]
@@ -236,15 +238,11 @@ func _draw() -> void:
 func _draw_workbench() -> void:
 	# A quiet joiner's table gives the plan its own harbor-garden identity.
 	draw_rect(Rect2(0, 0, 1280, 720), WOOD_DARK, true)
-	draw_rect(Rect2(18, 18, 1244, 684), WOOD, true)
-	for y in [34.0, 686.0]:
-		draw_line(Vector2(28, y), Vector2(1252, y), WOOD_LIGHT, 2.0)
-	for x in [34.0, 1246.0]:
-		draw_line(Vector2(x, 30), Vector2(x, 690), WOOD_DARK, 1.0)
+	Props.wood_panel(self, Rect2(18, 18, 1244, 684), WOOD)
 	# The plan is pinned as one broad sheet; its margins remain open for instructions.
-	draw_rect(Rect2(55, 70, 1170, 596), Color("#493a2d"), true)
+	Props.block_shadow(self, Rect2(48, 62, 1170, 596), Vector2(7, 8), 0.4)
 	draw_rect(Rect2(48, 62, 1170, 596), PAPER_EDGE, true)
-	draw_rect(Rect2(56, 70, 1154, 580), _paper_color(), true)
+	Props.surface(self, Rect2(56, 70, 1154, 580), "grain", _paper_color())
 	for x in [66.0, 1200.0]:
 		for y in [80.0, 640.0]:
 			draw_circle(Vector2(x, y), 4.0, WOOD_DARK)
@@ -252,26 +250,28 @@ func _draw_workbench() -> void:
 
 func _draw_blueprint_margins(paper: Color) -> void:
 	# Separate the order slip and turn tally from the board and all garden beds.
-	draw_rect(UI_LABEL_RECT, Color("#f5e9ce"), true)
-	draw_rect(UI_LABEL_RECT, WOOD, false, 2.0)
+	_draw_slip(UI_LABEL_RECT)
 	draw_line(Vector2(108, 191), Vector2(108, 232), TEAL, 4.0)
 	draw_string(FontProfiles.current_font(), Vector2(122, 200), "配水工單　%d / %d" % [order_index + 1, order_count], HORIZONTAL_ALIGNMENT_LEFT, 178, 16, INK)
 	draw_string(FontProfiles.current_font(), Vector2(122, 227), _compact_brief(), HORIZONTAL_ALIGNMENT_LEFT, 180, 14, TEAL)
-	draw_rect(UI_TURN_RECT, Color("#f5e9ce"), true)
-	draw_rect(UI_TURN_RECT, WOOD, false, 2.0)
+	_draw_slip(UI_TURN_RECT)
 	draw_string(FontProfiles.current_font(), Vector2(1096, 199), "轉動管節", HORIZONTAL_ALIGNMENT_LEFT, 90, 14, INK)
 	draw_string(FontProfiles.current_font(), Vector2(1096, 230), "%02d" % move_count, HORIZONTAL_ALIGNMENT_LEFT, 90, 23, OCHRE)
-	draw_line(Vector2(96, 673), Vector2(1184, 673), Color(INK, 0.2), 1.0)
-	draw_string(FontProfiles.current_font(), Vector2(96, 694), "泉口　・　分流　・　花床", HORIZONTAL_ALIGNMENT_LEFT, 290, 15, Color("#f1dfbb"))
-	draw_string(FontProfiles.current_font(), Vector2(1090, 694), "4 × 4 配水盤", HORIZONTAL_ALIGNMENT_LEFT, 115, 14, Color("#f1dfbb"))
+
+## A pinned paper slip with a shadow under it and a brass pin.
+func _draw_slip(rect: Rect2) -> void:
+	Props.block_shadow(self, rect, Vector2(4, 5), 0.3)
+	Props.surface(self, rect, "paper", Color("#f5e9ce"))
+	draw_rect(rect, Props.deepen(Color("#f5e9ce"), 0.3), false, 2.0)
+	Props.rivet(self, rect.position + Vector2(rect.size.x * 0.5, 6), Props.BRASS)
 
 func _draw_board(paper: Color) -> void:
 	var size_per_cell := BOARD_RECT.size / float(GRID_SIDE)
 	# The sheet is a garden-bed plan: raised soil islands, fine survey lines, no repeated park frame.
-	draw_rect(BOARD_RECT.grow(18), WOOD_DARK, true)
-	draw_rect(BOARD_RECT.grow(13), WOOD_LIGHT, true)
+	Props.block_shadow(self, BOARD_RECT.grow(18), Vector2(6, 8), 0.4)
+	Props.wood_panel(self, BOARD_RECT.grow(18), WOOD_DARK)
 	draw_rect(BOARD_RECT.grow(8), Color("#f5e9ce"), true)
-	draw_rect(BOARD_RECT, Color("#d7e3d1"), true)
+	draw_rect(BOARD_RECT, Color("#c9d8c4"), true)
 	for i in range(GRID_SIDE + 1):
 		var x := BOARD_RECT.position.x + i * size_per_cell.x
 		var y := BOARD_RECT.position.y + i * size_per_cell.y
@@ -281,7 +281,12 @@ func _draw_board(paper: Color) -> void:
 		var rect := cell_rect(index)
 		var tile := rect.grow(-5.0)
 		var selected := index == cursor
-		draw_rect(tile, Color("#f7efda"), true)
+		# Each cell is a raised paper tile: grain, a lit top-left edge and a shadow
+		# into the board, instead of one flat pale square.
+		Props.block_shadow(self, tile, Vector2(3, 4), 0.22)
+		Props.surface(self, tile, "grain", Color("#f3e8cd"))
+		draw_line(tile.position, Vector2(tile.end.x, tile.position.y), Color(1, 1, 1, 0.5), 2.0)
+		draw_line(tile.position, Vector2(tile.position.x, tile.end.y), Color(1, 1, 1, 0.35), 2.0)
 		draw_rect(tile, Color(CORAL if selected else OCHRE, 0.9 if selected else 0.48), false, 2.5 if selected else 1.0)
 		_draw_pipe(index, tile)
 		if selected:
@@ -304,10 +309,25 @@ func _draw_pipe(index: int, tile: Rect2) -> void:
 		if mask & BITS[direction] == 0:
 			continue
 		var endpoint := _pipe_endpoint(center, half, direction)
-		draw_line(center, endpoint, INK, 18, true)
-		draw_line(center, endpoint, Color("#cf9b5c"), 12, true)
+		# A round copper run: deep rim, lit side toward the top-left sun, a
+		# shaded underside and a brass collar before the socket.
+		var along := PORT_NORMALS[direction]
+		var lit := Vector2(-along.y, along.x)
+		if lit.dot(Vector2(-0.6, -0.8)) < 0.0:
+			lit = -lit
+		draw_line(center, endpoint, Props.deepen(COPPER, 0.55), 18, true)
+		draw_line(center, endpoint, COPPER, 12, true)
+		draw_line(center + lit * 3.0, endpoint + lit * 3.0, Props.lighten(COPPER, 0.4), 3, true)
+		draw_line(center - lit * 4.0, endpoint - lit * 4.0, Props.deepen(COPPER, 0.22), 3, true)
+		var collar := endpoint - along * 12.0
+		draw_line(collar - lit * 11.0, collar + lit * 11.0, Props.deepen(Props.BRASS), 8)
+		draw_line(collar - lit * 10.0, collar + lit * 10.0, Props.BRASS, 5)
 		draw_circle(endpoint, 5, INK)
 		draw_circle(endpoint, 2, Color("#fff4dc"))
+	if mask != 0:
+		draw_rect(Rect2(center - Vector2(11, 11), Vector2(22, 22)), Props.deepen(Props.BRASS), true)
+		draw_rect(Rect2(center - Vector2(9, 9), Vector2(18, 18)), Props.BRASS, true)
+		draw_rect(Rect2(center - Vector2(9, 9), Vector2(18, 3)), Props.lighten(Props.BRASS, 0.4), true)
 	# A different center mark makes straight, elbow, and branch pieces identifiable without relying on hue.
 	var open_sides := _bit_count(mask)
 	if open_sides == 2:
@@ -372,10 +392,12 @@ func _draw_flower_bed(target: Array) -> void:
 		return
 	var bed_center := rect.get_center()
 	# Individual cedar planter, dark soil, rim and a visible pair of seedlings.
-	draw_rect(rect.grow(4), WOOD_DARK, true)
-	draw_rect(rect, WOOD, true)
-	draw_rect(rect.grow(-5), Color("#d7ba83"), true)
+	Props.block_shadow(self, rect.grow(4), Vector2(4, 5), 0.35)
+	Props.wood_panel(self, rect.grow(4), WOOD)
+	draw_rect(rect.grow(-8), Props.deepen(SOIL, 0.3), true)
 	draw_rect(rect.grow(-10), SOIL, true)
+	for crumb in 9:
+		draw_rect(Rect2(rect.position + Vector2(14 + (crumb * 37) % int(maxf(1.0, rect.size.x - 28)), rect.size.y * 0.7 + (crumb % 3) * 4), Vector2(4, 2)), Props.lighten(SOIL, 0.2), true)
 	var plant_y := rect.position.y + rect.size.y * 0.57
 	for offset in [-22.0, 0.0, 22.0]:
 		var root := Vector2(bed_center.x + offset, plant_y + 8.0)

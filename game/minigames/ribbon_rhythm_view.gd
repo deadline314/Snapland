@@ -4,6 +4,7 @@ class_name RibbonRhythmView
 signal action_pressed(action: String)
 signal action_released(action: String)
 
+const Props = preload("res://game/ui/pixel_props.gd")
 const DESIGN_SIZE := Vector2(1280.0, 720.0)
 const FontProfiles = preload("res://game/ui/font_profiles.gd")
 const AvatarRenderer = preload("res://game/world/avatar_renderer.gd")
@@ -491,9 +492,10 @@ func _draw_cue_card(rect: Rect2, cue: Dictionary, is_current: bool, palette: Dic
 		return
 	var paper: Color = palette.sky.darkened(0.10) if is_current else Color(palette.sky, 0.75)
 	var key_color: Color = palette.gold if bool(cue.get("strong", false)) else palette.accent
-	draw_rect(Rect2(rect.position + Vector2(4, 5), rect.size), Color.BLACK, true)
-	draw_rect(rect, paper, true)
-	draw_rect(rect, key_color if is_current else Color(key_color, 0.62), false, 2.0, true)
+	# A stained board with a soft drop shadow instead of a flat card on black.
+	Props.block_shadow(self, rect, Vector2(4, 6), 0.4)
+	Props.wood_panel(self, rect, paper, true)
+	draw_rect(rect.grow(-3.0), key_color if is_current else Color(key_color, 0.62), false, 2.0)
 	var icon_center := rect.position + Vector2(34, rect.size.y * 0.52)
 	_draw_action_glyph(icon_center, str(cue.get("action", "")), key_color, bool(cue.get("strong", false)))
 	var title := str(cue.get("label", "下一拍"))
@@ -504,7 +506,7 @@ func _draw_cue_card(rect: Rect2, cue: Dictionary, is_current: bool, palette: Dic
 
 func _draw_action_glyph(center: Vector2, action: String, color: Color, strong: bool) -> void:
 	draw_circle(center, 23.0 if strong else 19.0, Color(color, 0.12))
-	draw_circle(center, 14.0 if strong else 12.0, color)
+	Props.token(self, center, 14.0 if strong else 12.0, color)
 	match action:
 		"left":
 			draw_colored_polygon(PackedVector2Array([center + Vector2(-8, 0), center + Vector2(4, -8), center + Vector2(4, 8)]), Color("#28384a"))
@@ -612,12 +614,9 @@ func _draw_controls(palette: Dictionary) -> void:
 	for action in ["left", "jump", "right"]:
 		var rect: Rect2 = CONTROL_RECTS[action]
 		var active: bool = str(_snapshot.get("hold_action", "")) == action
-		var fill: Color = palette.gold if active else Color(palette.sky, 0.82)
-		draw_rect(Rect2(rect.position + Vector2(3, 4), rect.size), Color.BLACK, true)
-		draw_rect(rect, fill, true)
-		draw_rect(rect, palette.gold.darkened(0.16) if active else palette.accent.darkened(0.12), false, 2.0, true)
 		var label := "←  A / ←" if action == "left" else ("跳起  SPACE" if action == "jump" else "D / →  →")
-		_draw_label(rect.position + Vector2(0, 32), label, palette.text if not active else palette.sky, HORIZONTAL_ALIGNMENT_CENTER, int(rect.size.x), 15)
+		# Physical keys that sink while held, at the same rects and labels.
+		Props.control_key(self, rect, active, {"left": "left", "jump": "up", "right": "right"}[action], label, FontProfiles.current_font(), 15)
 
 func _draw_beat_guides(palette: Dictionary) -> void:
 	var number := count_in_number()
@@ -649,9 +648,9 @@ func _draw_beat_guides(palette: Dictionary) -> void:
 		var missed := stamp == "失拍"
 		var precise := stamp.begins_with("精準")
 		var tone: Color = palette.coral if missed else (palette.gold if precise else palette.accent)
-		draw_rect(Rect2(JUDGEMENT_RECT.position + Vector2(3, 4), JUDGEMENT_RECT.size), Color.BLACK, true)
-		draw_rect(JUDGEMENT_RECT, palette.sky.darkened(0.2), true)
-		draw_rect(JUDGEMENT_RECT, tone, false, 2.0, true)
+		Props.block_shadow(self, JUDGEMENT_RECT, Vector2(3, 5), 0.4)
+		Props.wood_panel(self, JUDGEMENT_RECT, palette.sky.darkened(0.2), true)
+		draw_rect(JUDGEMENT_RECT.grow(-3.0), tone, false, 2.0)
 		_draw_label(JUDGEMENT_RECT.position + Vector2(0.0, 26.0), stamp, tone, HORIZONTAL_ALIGNMENT_CENTER, int(JUDGEMENT_RECT.size.x), 14)
 
 func _draw_label(position: Vector2, text: String, color: Color, alignment: HorizontalAlignment, width: int, size_value: int) -> void:

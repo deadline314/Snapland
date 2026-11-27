@@ -4,6 +4,9 @@ class_name SignBalanceView
 signal balance_requested(value: float)
 
 const FontProfiles = preload("res://game/ui/font_profiles.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const StageProps = preload("res://game/minigames/stage_props.gd")
+const INPUT_HELP := "按住方向鍵移動配重　·　拖曳滑軌微調"
 const DESIGN_SIZE := Vector2(1280.0, 720.0)
 const HUD_SAFE_RECT := Rect2(34.0, 18.0, 1212.0, 112.0)
 const SCENE_BOUNDS := Rect2(0.0, 0.0, 1280.0, 720.0)
@@ -115,16 +118,19 @@ func _create_lighting() -> void:
 	_sun.shadow_bias = 0.035
 	_sun.rotation_degrees = Vector3(-47.0, -31.0, 0.0)
 	_world_root.add_child(_sun)
+	StageProps.dress_lighting(_environment, _sun)
 
 func _create_harbor_platform() -> void:
-	_materials["water"] = _material(PALETTE_NOON[1], 0.34, 0.08)
-	_materials["dock"] = _material(Color("#765b43"), 0.88, 0.0)
-	_materials["plank_light"] = _material(Color("#917153"), 0.82, 0.0)
-	_materials["plank_dark"] = _material(Color("#624a39"), 0.9, 0.0)
+	_materials["water"] = StageProps.water(PALETTE_NOON[1])
+	_materials["water"].set_shader_parameter("texels_per_metre", 6.0)
+	_materials["water"].set_shader_parameter("foam_color", PALETTE_NOON[1].lerp(Color("#dcefe8"), 0.45))
+	_materials["dock"] = StageProps.wood(Color("#765b43"), 0.3, true)
+	_materials["plank_light"] = StageProps.wood(Color("#917153"), 0.3, true)
+	_materials["plank_dark"] = StageProps.wood(Color("#624a39"), 0.2)
 	_materials["brass"] = _material(Color("#d3a65f"), 0.28, 0.72)
 	_materials["iron"] = _material(Color("#3f5155"), 0.38, 0.62)
-	_materials["wood"] = _material(Color("#6f513c"), 0.72, 0.0)
-	_materials["face"] = _material(Color("#ead8b5"), 0.88, 0.0)
+	_materials["wood"] = StageProps.wood(Color("#6f513c"), 0.12, true)
+	_materials["face"] = StageProps.painted(Color("#ead8b5"))
 	_materials["face_edge"] = _material(Color("#503e34"), 0.64, 0.08)
 	_materials["weight"] = _material(Color("#b2794e"), 0.31, 0.64)
 	_materials["flag"] = _material(Color("#c66f54"), 0.88, 0.0)
@@ -139,7 +145,7 @@ func _create_harbor_platform() -> void:
 	# Broad, individually modeled deck boards give the machine a real working surface.
 	for index in range(13):
 		var x := -7.2 + float(index) * 1.2
-		var plank_material: StandardMaterial3D = _materials["plank_light"] if index % 3 == 0 else _materials["dock"]
+		var plank_material: Material = _materials["plank_light"] if index % 3 == 0 else _materials["dock"]
 		_box("DeckBoard%02d" % index, Vector3(1.12, 0.08, 7.45), Vector3(x, 0.19, 0.65), _world_root, plank_material)
 	_box("DockFrontFascia", Vector3(16.8, 0.40, 0.20), Vector3(0.0, -0.02, 4.56), _world_root, _materials["plank_dark"])
 	_box("DockRearBeam", Vector3(16.8, 0.34, 0.28), Vector3(0.0, -0.04, -3.43), _world_root, _materials["wood"])
@@ -170,6 +176,9 @@ func _create_sign_mechanism() -> void:
 
 	_sign_face = _box("SignFace", Vector3(7.55, 2.12, 0.34), Vector3(0.0, 0.72, 0.0), _assembly, _materials["face_edge"])
 	_box("SignInlay", Vector3(7.23, 1.82, 0.055), Vector3(0.0, 0.72, 0.205), _assembly, _materials["face"])
+	# Painted boards rather than one cream sheet: seams between four planks.
+	for seam in 3:
+		_box("SignSeam", Vector3(7.2, 0.025, 0.012), Vector3(0.0, 0.72 - 0.91 + 0.455 * (seam + 1), 0.236), _assembly, _materials["face_edge"])
 	_box("SignTopRail", Vector3(7.62, 0.12, 0.43), Vector3(0.0, 1.81, 0.0), _assembly, _materials["brass"])
 	_box("SignBottomRail", Vector3(7.62, 0.12, 0.43), Vector3(0.0, -0.37, 0.0), _assembly, _materials["brass"])
 	for side in [-1.0, 1.0]:
@@ -227,7 +236,7 @@ func _material(color: Color, roughness: float, metallic: float) -> StandardMater
 	result.metallic = metallic
 	return result
 
-func _mesh_instance(node_name: String, mesh: Mesh, parent: Node3D, material: StandardMaterial3D) -> MeshInstance3D:
+func _mesh_instance(node_name: String, mesh: Mesh, parent: Node3D, material: Material) -> MeshInstance3D:
 	var instance := MeshInstance3D.new()
 	instance.name = node_name
 	instance.mesh = mesh
@@ -236,14 +245,14 @@ func _mesh_instance(node_name: String, mesh: Mesh, parent: Node3D, material: Sta
 	parent.add_child(instance)
 	return instance
 
-func _box(node_name: String, dimensions: Vector3, at: Vector3, parent: Node3D, material: StandardMaterial3D) -> MeshInstance3D:
+func _box(node_name: String, dimensions: Vector3, at: Vector3, parent: Node3D, material: Material) -> MeshInstance3D:
 	var mesh := BoxMesh.new()
 	mesh.size = dimensions
 	var instance := _mesh_instance(node_name, mesh, parent, material)
 	instance.position = at
 	return instance
 
-func _cylinder(node_name: String, radius: float, height: float, at: Vector3, parent: Node3D, material: StandardMaterial3D, rotation: Vector3 = Vector3.ZERO) -> MeshInstance3D:
+func _cylinder(node_name: String, radius: float, height: float, at: Vector3, parent: Node3D, material: Material, rotation: Vector3 = Vector3.ZERO) -> MeshInstance3D:
 	var mesh := CylinderMesh.new()
 	mesh.top_radius = radius
 	mesh.bottom_radius = radius
@@ -254,7 +263,7 @@ func _cylinder(node_name: String, radius: float, height: float, at: Vector3, par
 	instance.rotation = rotation
 	return instance
 
-func _beam(node_name: String, start: Vector3, finish: Vector3, thickness: float, parent: Node3D, material: StandardMaterial3D) -> MeshInstance3D:
+func _beam(node_name: String, start: Vector3, finish: Vector3, thickness: float, parent: Node3D, material: Material) -> MeshInstance3D:
 	var delta := finish - start
 	var instance := _box(node_name, Vector3(thickness, delta.length(), thickness), (start + finish) * 0.5, parent, material)
 	instance.quaternion = Quaternion(Vector3.UP, delta.normalized())
@@ -277,6 +286,7 @@ func _apply_snapshot_to_scene() -> void:
 	var torque := float(_snapshot.get("forecast_torque", 0.0)) if bool(_snapshot.get("forecast_visible", false)) else float(_snapshot.get("wind_torque", 0.0))
 	var direction := -1.0 if int(_snapshot.get("wind_direction", 1)) < 0 else 1.0
 	_wind_pennant.rotation.z = direction * lerpf(0.07, 0.24, clampf(absf(torque) / 0.28, 0.0, 1.0))
+	StageProps.set_motion(_materials["water"], _reduced_motion)
 	if _time_of_day == "dawn":
 		_environment.background_color = PALETTE_DAWN[0]
 		_environment.ambient_light_color = Color("#d9c8aa")
@@ -301,7 +311,7 @@ func _apply_snapshot_to_scene() -> void:
 		_sun.rotation_degrees = Vector3(-47.0, -31.0, 0.0)
 	if _time_of_day != "night":
 		_sun.light_energy = 1.0
-	(_materials["water"] as StandardMaterial3D).albedo_color = PALETTE_NOON[1] if _time_of_day == "noon" else (PALETTE_DAWN[1] if _time_of_day == "dawn" else (PALETTE_DUSK[1] if _time_of_day == "dusk" else PALETTE_NIGHT[1]))
+	(_materials["water"] as ShaderMaterial).set_shader_parameter("water_color", PALETTE_NOON[1] if _time_of_day == "noon" else (PALETTE_DAWN[1] if _time_of_day == "dawn" else (PALETTE_DUSK[1] if _time_of_day == "dusk" else PALETTE_NIGHT[1])))
 
 func visual_angle(snapshot: Dictionary = {}) -> float:
 	var state := snapshot if not snapshot.is_empty() else _snapshot
@@ -428,6 +438,16 @@ func _gui_input(event: InputEvent) -> void:
 func _balance_from_x(x: float) -> float:
 	return clampf(inverse_lerp(WEIGHT_RAIL.position.x + 17.0, WEIGHT_RAIL.end.x - 17.0, x) * 2.0 - 1.0, -1.0, 1.0)
 
+## Counts and the how-to stay one hover away instead of two more rows of small text.
+func _get_tooltip(at_position: Vector2) -> String:
+	if not CONTROLS_PANEL.has_point(at_position):
+		return ""
+	return "%s\n撞線 %d / 3　穩住 %d / 7　精準 %d / 7" % [INPUT_HELP, int(_snapshot.get("impacts", 0)), int(_snapshot.get("safe_stages", 0)), int(_snapshot.get("precise_stages", 0))]
+
+func _board(rect: Rect2) -> void:
+	Props.block_shadow(self, rect, Vector2(4, 6), 0.35)
+	Props.wood_panel(self, rect, Props.SIGN_TEAL, true)
+
 func _draw() -> void:
 	var palette := PALETTE_NOON
 	if _time_of_day == "dawn": palette = PALETTE_DAWN
@@ -446,9 +466,7 @@ func _draw_forecast(ink: Color, brass: Color, terracotta: Color, paper: Color) -
 	var ivory := Color("#f4eedc")
 	var visible := bool(_snapshot.get("forecast_visible", false)) and not bool(_snapshot.get("ended", false))
 	var marker_x := 1004.0
-	draw_rect(FORECAST_CARD_BOUNDS, Color("#102b3a"))
-	draw_rect(FORECAST_CARD_BOUNDS, brass, false, 2.0)
-	draw_rect(Rect2(FORECAST_CARD_BOUNDS.position, Vector2(5.0, FORECAST_CARD_BOUNDS.size.y)), brass)
+	_board(FORECAST_CARD_BOUNDS)
 	var label := str(_snapshot.get("wind_kind", "港風"))
 	_label(Vector2(892.0, 171.0), label, ivory, HORIZONTAL_ALIGNMENT_LEFT, 96, 15)
 	var torque := float(_snapshot.get("forecast_torque", 0.0)) if visible else float(_snapshot.get("wind_torque", 0.0))
@@ -488,7 +506,10 @@ func _draw_balance_gauges(ink: Color, brass: Color, terracotta: Color, paper: Co
 	var units_per_radian := scale_width / 1.64
 	_label(Vector2(352.0, 532.0), "支點角度", ivory, HORIZONTAL_ALIGNMENT_LEFT, 120, 14)
 	_label(Vector2(822.0, 532.0), "安全帶 ±%.2f" % safe_limit, ivory, HORIZONTAL_ALIGNMENT_RIGHT, 130, 13)
-	draw_rect(Rect2(ANGLE_GAUGE.position, ANGLE_GAUGE.size), Color("#102b3a"))
+	draw_rect(ANGLE_GAUGE.grow(4.0), Props.deepen(Props.BRASS))
+	draw_rect(ANGLE_GAUGE.grow(2.0), Props.BRASS)
+	draw_rect(Rect2(ANGLE_GAUGE.position - Vector2(2, 2), Vector2(ANGLE_GAUGE.size.x + 4, 2)), Props.lighten(Props.BRASS, 0.4))
+	draw_rect(ANGLE_GAUGE, Color("#12303c"))
 	var center_x := scale_left + scale_width * 0.5 + target * units_per_radian
 	var precise_w := precise_limit * units_per_radian
 	var safe_w := safe_limit * units_per_radian
@@ -497,39 +518,30 @@ func _draw_balance_gauges(ink: Color, brass: Color, terracotta: Color, paper: Co
 	draw_line(Vector2(center_x, ANGLE_GAUGE.position.y - 4.0), Vector2(center_x, ANGLE_GAUGE.end.y + 4.0), ink, 2.0)
 	var pointer_x := scale_left + scale_width * 0.5 + angle_value * units_per_radian
 	var pointer_color := terracotta if absf(angle_value - target) > safe_limit else ink
-	draw_circle(Vector2(pointer_x, ANGLE_GAUGE.get_center().y), 9.0, pointer_color)
-	_label(Vector2(356.0, 590.0), "撞線 %d / 3" % int(_snapshot.get("impacts", 0)), ivory, HORIZONTAL_ALIGNMENT_LEFT, 150, 15)
-	_label(Vector2(565.0, 590.0), "穩住 %d / 7" % int(_snapshot.get("safe_stages", 0)), ivory, HORIZONTAL_ALIGNMENT_CENTER, 150, 15)
-	_label(Vector2(774.0, 590.0), "精準 %d / 7" % int(_snapshot.get("precise_stages", 0)), ivory, HORIZONTAL_ALIGNMENT_RIGHT, 150, 15)
+	Props.token(self, Vector2(pointer_x, ANGLE_GAUGE.get_center().y), 10.0, pointer_color)
 	var rail_y := WEIGHT_RAIL.position.y + WEIGHT_RAIL.size.y * 0.5
 	_label(Vector2(356.0, 617.0), "移動配重", ivory, HORIZONTAL_ALIGNMENT_LEFT, 130, 14)
 	_label(Vector2(794.0, 617.0), "左 ←　→ 右", ivory, HORIZONTAL_ALIGNMENT_RIGHT, 150, 13)
-	draw_rect(Rect2(WEIGHT_RAIL.position.x, rail_y - 4.0, WEIGHT_RAIL.size.x, 8.0), Color("#102b3a"))
+	Props.shaded_box(self, Rect2(WEIGHT_RAIL.position.x, rail_y - 5.0, WEIGHT_RAIL.size.x, 12.0), Props.IRON, 4.0)
 	for notch in range(9):
 		var x := WEIGHT_RAIL.position.x + float(notch) * WEIGHT_RAIL.size.x / 8.0
 		draw_line(Vector2(x, rail_y - 11.0), Vector2(x, rail_y - 6.0), brass, 2.0)
 	var weight_x := lerpf(WEIGHT_RAIL.position.x + 17.0, WEIGHT_RAIL.end.x - 17.0, (float(_snapshot.get("balance", 0.0)) + 1.0) * 0.5)
-	draw_circle(Vector2(weight_x, rail_y), 16.0, brass.darkened(0.10))
-	draw_circle(Vector2(weight_x, rail_y), 10.0, Color("#f3dd9f"))
-	_label(Vector2(356.0, 672.0), str(_snapshot.get("last_event", "先看風旗預告，再微調配重")), ivory, HORIZONTAL_ALIGNMENT_CENTER, 564, 13)
-	_label(Vector2(356.0, 696.0), "按住方向鍵移動配重　·　拖曳滑軌微調", ivory, HORIZONTAL_ALIGNMENT_CENTER, 564, 13)
+	Props.contact_shadow(self, Vector2(weight_x + 3.0, rail_y + 14.0), 34.0, 0.45)
+	Props.token(self, Vector2(weight_x, rail_y), 16.0, brass.darkened(0.10))
+	_label(Vector2(356.0, 680.0), str(_snapshot.get("last_event", "先看風旗預告，再微調配重")), ivory, HORIZONTAL_ALIGNMENT_CENTER, 564, 14)
 
 func _draw_controls_panel(paper: Color, brass: Color, ink: Color) -> void:
-	draw_rect(CONTROLS_PANEL, Color("#102b3a"))
-	draw_rect(CONTROLS_PANEL, brass, false, 2.0)
-	draw_rect(Rect2(CONTROLS_PANEL.position, Vector2(7.0, CONTROLS_PANEL.size.y)), brass)
+	_board(CONTROLS_PANEL)
 
 func _draw_round_marks(ink: Color, brass: Color, paper: Color) -> void:
 	var ivory := Color("#f4eedc")
 	var score_value := int(_snapshot.get("score", 0))
 	var score_card := Rect2(58.0, 152.0, 128.0, 68.0)
-	draw_rect(score_card, Color("#102b3a"))
-	draw_rect(score_card, brass, false, 2.0)
+	_board(score_card)
 	_label(Vector2(72.0, 177.0), "平衡章", ivory, HORIZONTAL_ALIGNMENT_LEFT, 98, 13)
 	_label(Vector2(72.0, 204.0), "%03d" % score_value, brass, HORIZONTAL_ALIGNMENT_LEFT, 92, 22)
-	draw_rect(STAGE_CARD_BOUNDS, Color("#102b3a"))
-	draw_rect(STAGE_CARD_BOUNDS, brass, false, 2.0)
-	draw_rect(Rect2(STAGE_CARD_BOUNDS.position, Vector2(5.0, STAGE_CARD_BOUNDS.size.y)), brass)
+	_board(STAGE_CARD_BOUNDS)
 	var stage := int(_snapshot.get("stage", 0))
 	var stable_ratio := clampf(float(_snapshot.get("stable_seconds", 0.0)) / SAFE_DWELL_SECONDS, 0.0, 1.0)
 	_label(Vector2(208.0, 171.0), "風段 %d · %s" % [mini(stage + 1, 7), str(_snapshot.get("wind_kind", "海風"))], ivory, HORIZONTAL_ALIGNMENT_CENTER, 166, 14)

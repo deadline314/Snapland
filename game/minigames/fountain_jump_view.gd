@@ -8,6 +8,7 @@ class_name FountainJumpView
 
 const AvatarRendererScript = preload("res://game/world/avatar_renderer.gd")
 const FountainModel = preload("res://game/minigames/fountain_jump_model.gd")
+const StageProps = preload("res://game/minigames/stage_props.gd")
 const DESIGN_SIZE := Vector2i(1280, 720)
 const CONTENT_BOUNDS := Rect2(142.0, 130.0, 996.0, 550.0)
 ## A sounded count makes its side jet surge for this long.
@@ -230,6 +231,10 @@ func _build_beat_lamps() -> void:
 	# The camera looks toward +z, so world +x is screen-left: lamps read left to
 	# right from the first count to the larger jump lamp on a dark brass rail.
 	_world.add_child(_mesh_node("BeatLampRail", _box(Vector3(2.2, 0.03, 0.44)), _mat("#24363a", 0.6, 0.3), Vector3(0.12, 0.06, -1.92)))
+	# A brass-rimmed timber footplate carries the lamps, so they read as stage
+	# fittings set into the court instead of discs lying on a flat strip.
+	_world.add_child(_mesh_node("BeatLampPlate", _box(Vector3(2.4, 0.05, 0.56)), StageProps.wood(Color("#6d5236"), 0.14), Vector3(0.12, 0.035, -1.92)))
+	var bezel := _mat("#c99b50", 0.38, 0.62)
 	for slot in slots + 1:
 		var jump_lamp := slot == slots
 		var material := _signal_material()
@@ -237,6 +242,7 @@ func _build_beat_lamps() -> void:
 		var x := 0.88 - float(slot) * 0.5 - (0.08 if jump_lamp else 0.0)
 		var lamp := _mesh_node("BeatLamp%d" % slot if not jump_lamp else "BeatLampJump", _cylinder(radius, 0.05), material, Vector3(x, 0.09, -1.92))
 		_world.add_child(lamp)
+		_world.add_child(_mesh_node("BeatLampBezel%d" % slot, _torus(radius + 0.035, 0.03), bezel, Vector3(x, 0.095, -1.92)))
 		_beat_lamps.append(lamp)
 		_beat_lamp_materials.append(material)
 	for index in FountainModel.phrase_count():
@@ -393,10 +399,13 @@ func _build_environment() -> void:
 	_camera.current = true
 
 func _build_stage() -> void:
-	var stone := _mat("#737b73", 0.91)
-	var limestone := _mat("#c6b38d", 0.84)
-	var dark_stone := _mat("#3c5f63", 0.88)
-	var brick := _mat("#b96e55", 0.86)
+	# Dressed stone and brick finishes instead of single-colour slabs.
+	var stone := StageProps.stone(Color("#77796f"))
+	stone.set_shader_parameter("block", Vector2(0.62, 0.42))
+	var limestone := StageProps.stone(Color("#c6b38d"))
+	var dark_stone := StageProps.stone(Color("#3c5f63"))
+	var brick := StageProps.stone(Color("#b96e55"))
+	brick.set_shader_parameter("block", Vector2(0.24, 0.1))
 	var brass := _mat("#c99b50", 0.38, 0.62)
 	var teal := _mat("#418d89", 0.5, 0.16)
 	var water := _mat("#75c5c0", 0.24, 0.12)
@@ -442,7 +451,9 @@ func _build_stage() -> void:
 		_world.add_child(hanging)
 	# Layered circular basin; the waterline has narrow brass and glaze bands.
 	_world.add_child(_mesh_node("BasinFoot", _cylinder(1.45, 0.28), dark_stone, Vector3(0.0, 0.22, 0.25)))
-	_world.add_child(_mesh_node("BasinBody", _cylinder(1.72, 0.38), teal, Vector3(0.0, 0.48, 0.25)))
+	var basin_tiles := StageProps.stone(Color("#418d89"))
+	basin_tiles.set_shader_parameter("block", Vector2(0.2, 0.12))
+	_world.add_child(_mesh_node("BasinBody", _cylinder(1.72, 0.38), basin_tiles, Vector3(0.0, 0.48, 0.25)))
 	_world.add_child(_mesh_node("OuterLip", _torus(1.68, 0.10), brass, Vector3(0.0, 0.69, 0.25)))
 	_world.add_child(_mesh_node("InnerGlaze", _torus(1.48, 0.07), limestone, Vector3(0.0, 0.72, 0.25)))
 	_water_glaze_material = water.duplicate() as StandardMaterial3D

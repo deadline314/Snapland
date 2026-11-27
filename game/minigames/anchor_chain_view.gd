@@ -7,11 +7,17 @@ signal command_requested(command: String, pressed: bool, source: String)
 const Paper = preload("res://game/ui/paper_ui.gd")
 const FontProfiles = preload("res://game/ui/font_profiles.gd")
 const Model = preload("res://game/minigames/anchor_chain_model.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const StageProps = preload("res://game/minigames/stage_props.gd")
+const Scenery = preload("res://game/world/scenery_kit.gd")
 const DESIGN_SIZE := Vector2(1280, 720)
 const STAGE := Rect2(24, 208, 1232, 364)
 const METER := Rect2(1066, 222, 178, 336)
 const COMMANDS := ["previous", "next", "place", "reel", "helper", "recall", "undo"]
 const BUTTON_LABELS := ["Q／A 上一個", "E／D 下一個", "F 繞礁／下錨", "按住空白 收鏈", "R 船員舵", "X 收錨重來", "Z 回溯（輔助）"]
+const BUTTON_ICONS := ["left", "right", "anchor", "hook", "turn_right", "undo", "undo"]
+const STATUS_PLATE := Rect2(24, 140, 1232, 62)
+const HELP_TEXT := "直拉時拉力線穿過擱淺點不會轉；先繞礁石改變拉的方向，船頭才會轉。鏈越長、繞越多圈拉力越小。"
 const LINKS := 40
 var _snapshot: Dictionary = {}
 var _time_phase := "noon"
@@ -187,6 +193,7 @@ func _create_stage() -> void:
 	_sun.shadow_enabled = true
 	_sun.directional_shadow_max_distance = 40
 	_world.add_child(_sun)
+	StageProps.dress_lighting(_environment, _sun)
 	_camera = Camera3D.new()
 	_camera.name = "RescueCamera"
 	_camera.projection = Camera3D.PROJECTION_ORTHOGONAL
@@ -201,17 +208,32 @@ func _create_stage() -> void:
 	for item in [["water", "#357488"], ["sand", "#e2cd98"], ["hull", "#b5533c"], ["deck", "#e8d6a8"], ["cabin", "#2f566a"], ["rock", "#7d8a86"],
 			["chain", "#c9c4b4"], ["anchor", "#f2d27a"], ["select", "#ffd36a"], ["arrow", "#9fe0c8"], ["channel", "#e9f4f2"]]:
 		_materials[item[0]] = _material(Color(item[1]))
+	# The bay is seen from far up, so the water pattern runs at a coarser grain.
+	_materials.water = StageProps.water(Color("#357488"))
+	_materials.water.set_shader_parameter("texels_per_metre", 4.0)
+	_materials.water.set_shader_parameter("wave_scale", 0.9)
+	_materials.water.set_shader_parameter("foam_color", Color("#357488").lerp(Color("#dcefe8"), 0.45))
+	_materials.deck = StageProps.wood(Color("#c9a878"), 0.3)
+	_materials.cabin = StageProps.painted(Color("#e8dcc0"))
+	_materials.chain = StageProps.solid(Color("#9ba3a6"))
+	_materials.chain.metallic = 0.6
+	_materials.chain.roughness = 0.4
+	_materials.sculpt = StageProps.sculpt_material()
 	_box("Water", Vector3(140, 0.1, 60), Vector3(0, -0.1, 0), _world, _materials.water)
-	_cylinder("Sandbar", 2.2, 0.2, Vector3(0, -0.02, 0), _world, _materials.sand)
+	StageProps.add(_world, "Sandbar", _sandbar_mesh(), _materials.sculpt, Vector3(0, -0.1, 0))
 	_ship = Node3D.new()
 	_ship.name = "Freighter"
 	_world.add_child(_ship)
-	_box("Hull", Vector3(Model.SHIP_LENGTH + 0.6, 0.5, 1.2), Vector3(Model.SHIP_LENGTH * 0.5, 0.2, 0), _ship, _materials.hull)
-	_box("Deck", Vector3(Model.SHIP_LENGTH, 0.06, 1.0), Vector3(Model.SHIP_LENGTH * 0.5, 0.48, 0), _ship, _materials.deck)
+	StageProps.add(_ship, "Hull", StageProps.boat_mesh(Model.SHIP_LENGTH + 0.6, 1.25, Color("#b5533c"), Color("#e8d6a8"), 0.45, false), _materials.sculpt, Vector3(Model.SHIP_LENGTH * 0.5, -0.02, 0))
+	_box("Deck", Vector3(Model.SHIP_LENGTH - 0.2, 0.06, 0.92), Vector3(Model.SHIP_LENGTH * 0.5, 0.44, 0), _ship, _materials.deck)
 	_box("Bridge", Vector3(0.8, 0.6, 0.8), Vector3(0.6, 0.8, 0), _ship, _materials.cabin)
+	StageProps.add(_ship, "BridgeTrim", _bridge_trim_mesh(), _materials.sculpt, Vector3(0.6, 0.8, 0))
+	for slot in 3:
+		StageProps.add(_ship, "DeckCargo", StageProps.crate_mesh(Vector3(0.5, 0.4, 0.7), Color("#8f6f4c") if slot % 2 == 0 else Color("#b98a57"), Color("#5fb7a4") if slot == 1 else Color.TRANSPARENT, 0.47), _materials.sculpt, Vector3(1.6 + slot * 0.62, 0, 0))
 	_box("BowCleat", Vector3(0.25, 0.25, 0.25), Vector3(Model.SHIP_LENGTH, 0.6, 0), _ship, _materials.anchor)
+	var link_mesh := _link_mesh()
 	for i in LINKS:
-		var link := _box("Link%d" % i, Vector3(1, 0.08, 0.12), Vector3.ZERO, _world, _materials.chain)
+		var link := StageProps.add(_world, "Link%d" % i, link_mesh, _materials.chain)
 		link.visible = false
 		_links.append(link)
 	var ring := TorusMesh.new()
@@ -243,15 +265,42 @@ func _build_layout() -> void:
 		node.position = Vector3(at.x, 0, at.y)
 		_world.add_child(node)
 		if target.kind == "post":
-			_cylinder("Pillar", 0.7, 1.0, Vector3(0, 0.4, 0), node, _materials.rock)
+			StageProps.add(node, "Pillar", StageProps.rock_mesh(0.72, 1.1, Color("#7d8a86")), _materials.sculpt, Vector3(0, -0.1, 0))
 		else:
-			_cylinder("Marker", 0.45, 0.3, Vector3(0, 0.1, 0), node, _materials.anchor)
+			StageProps.add(node, "Marker", StageProps.buoy_mesh(0.32, 0.9, Color("#e9b44c")), _materials.sculpt, Vector3(0, -0.05, 0))
 			_anchor_marks.append(node)
 		_label3d(target.name, Vector3(0, 1.4, 0), node, 26)
 		_layout_nodes.append(node)
 	var heading := float(_snapshot.target_heading)
 	_target_line.position = Vector3(cos(heading) * 4.5, 0.0, sin(heading) * 4.5)
 	_target_line.rotation.y = -heading
+
+## Sand island the freighter is stuck on: a wet foot, a dry crown and a few stones.
+func _sandbar_mesh() -> ArrayMesh:
+	var sculpt := Scenery.Sculpt.new()
+	sculpt.tube(Vector3(0, 0.06, 0), 2.5, 2.3, 0.12, Color("#a98f66"), 14)
+	sculpt.tube(Vector3(0, 0.15, 0), 2.2, 1.7, 0.1, Color("#e2cd98"), 14)
+	for stone in 5:
+		var around := TAU * stone / 5.0 + 0.9
+		sculpt.ball(Vector3(cos(around) * 1.9, 0.14, sin(around) * 1.9), 0.18 + 0.05 * (stone % 2), Color("#8a8f86"), Color("#6f756d"), 6, 3, 0.6)
+	return sculpt.mesh()
+
+## Window band, roof and funnel on the bridge box.
+func _bridge_trim_mesh() -> ArrayMesh:
+	var sculpt := Scenery.Sculpt.new()
+	sculpt.box(Vector3(0, 0.14, 0), Vector3(0.84, 0.12, 0.84), Color("#2f566a"))
+	sculpt.box(Vector3(0, 0.33, 0), Vector3(0.92, 0.06, 0.92), Color("#b5533c"))
+	sculpt.tube(Vector3(-0.15, 0.55, 0), 0.12, 0.1, 0.4, Color("#2f566a"), 8)
+	sculpt.tube(Vector3(-0.15, 0.7, 0), 0.125, 0.125, 0.08, Color("#e9b44c"), 8)
+	return sculpt.mesh()
+
+## One chain link a metre long, scaled to each span: an open oval of bar.
+func _link_mesh() -> ArrayMesh:
+	var sculpt := Scenery.Sculpt.new()
+	for side: float in [-1.0, 1.0]:
+		sculpt.box(Vector3(0, 0, side * 0.09), Vector3(0.8, 0.07, 0.05), Color.WHITE)
+		sculpt.box(Vector3(side * 0.42, 0, 0), Vector3(0.1, 0.07, 0.16), Color.WHITE)
+	return sculpt.mesh()
 
 func _apply_snapshot() -> void:
 	if _snapshot.is_empty():
@@ -274,7 +323,8 @@ func _apply_snapshot() -> void:
 			link.visible = true
 			link.position = Vector3((a.x + b.x) * 0.5, 0.35, (a.y + b.y) * 0.5)
 			link.scale = Vector3(maxf(0.05, a.distance_to(b) * 0.9), 1, 1)
-			link.rotation.y = -(b - a).angle()
+			# Every other link stands on edge, like a real chain.
+			link.rotation = Vector3(PI * 0.5 * (used % 2), -(b - a).angle(), 0)
 			used += 1
 	for index in range(used, LINKS):
 		_links[index].visible = false
@@ -289,6 +339,7 @@ func _apply_snapshot() -> void:
 	_torque_arrow.visible = int(_snapshot.anchor) >= 0
 	var night := _time_phase == "night"
 	_environment.background_color = Color("#1b2c3a") if night else Color("#b8ccc9")
+	StageProps.set_motion(_materials.water, _reduced_motion)
 	_sun.light_color = {"dawn": Color("#f2caad"), "noon": Color("#f8efcf"), "dusk": Color("#e2b19c"), "night": Color("#a5c2d8")}.get(_time_phase, Color("#f8efcf"))
 	_sun.light_energy = 0.75 if night else 1.15
 	_sun.rotation_degrees = Vector3(-55, {"dawn": -70.0, "noon": -30.0, "dusk": 40.0, "night": 70.0}.get(_time_phase, -30.0), 0)
@@ -311,39 +362,34 @@ func torque_text() -> String:
 func _text(at: Vector2, text: String, width: float, font_size: int = 18, color: Color = Paper.PAPER) -> void:
 	draw_string(Paper.font(), at, text, HORIZONTAL_ALIGNMENT_LEFT, width, roundi(font_size * Paper.text_scale()), color)
 
+## The torque reading and the how-to stay one hover away; the meter shows torque.
+func _get_tooltip(at_position: Vector2) -> String:
+	if _snapshot.is_empty() or not STATUS_PLATE.has_point(at_position):
+		return ""
+	return torque_text() + "\n" + HELP_TEXT
+
 func _draw() -> void:
-	draw_rect(Rect2(24, 140, 1232, 62), Paper.DEEP_TEAL)
+	Props.wood_panel(self, STATUS_PLATE, Props.SIGN_TEAL, true)
 	if not _snapshot.is_empty():
-		_text(Vector2(40, 164), status_text(), 1200)
-		_text(Vector2(40, 191), torque_text(), 1200, 17, Paper.GOLD if _snapshot.reeling else Paper.PAPER)
+		_text(Vector2(46, 166), status_text(), 1190, 17)
+		_text(Vector2(46, 193), str(_snapshot.get("feedback", "")), 1190, 18, Paper.GOLD)
 		_draw_meter()
 	for i in COMMANDS.size():
 		var command: String = COMMANDS[i]
-		var rect := button_rect(command)
-		var held := _pointer_owners.values().has(command)
 		var unavailable: bool = command == "undo" and not _snapshot.get("assisted", false)
-		draw_rect(rect, Paper.FRAME if held else Paper.DEEP_TEAL)
-		draw_rect(rect, Paper.GOLD if held else (Paper.DEEP if unavailable else Paper.TEAL), false, 2)
-		_text(rect.position + Vector2(10, 34), BUTTON_LABELS[i], rect.size.x - 16, 15, Color(Paper.PAPER, 0.55) if unavailable else Paper.PAPER)
-	_text(Vector2(30, 673), str(_snapshot.get("feedback", "")), 1210, 20, Paper.GOLD)
-	_text(Vector2(30, 704), "直拉時拉力線穿過擱淺點不會轉；先繞礁石改變拉的方向，船頭才會轉。鏈越長、繞越多圈拉力越小。", 1210, 17)
+		Props.control_key(self, button_rect(command), _pointer_owners.values().has(command), BUTTON_ICONS[i], BUTTON_LABELS[i], Paper.font(), roundi(15 * Paper.text_scale()), not unavailable)
 
 ## Torque against ground friction, and chain strain toward breaking.
 func _draw_meter() -> void:
-	draw_rect(METER, Color(Paper.DEEP, 0.86))
-	draw_rect(METER, Paper.TEAL, false, 2)
+	Props.wood_panel(self, METER, Props.SIGN_TEAL, true)
 	_text(METER.position + Vector2(10, 22), "轉矩／鏈繃", 160, 16, Paper.GOLD)
 	var top := METER.position.y + 40
 	var bottom := METER.end.y - 40
 	var torque_bar := Rect2(METER.position.x + 24, top, 40, bottom - top)
-	draw_rect(torque_bar, Color("#22404a"))
-	var level := clampf(absf(float(_snapshot.torque)) / 6.0, 0.0, 1.0)
-	draw_rect(Rect2(torque_bar.position.x, bottom - level * torque_bar.size.y, torque_bar.size.x, level * torque_bar.size.y), Color("#9fe0c8"))
+	Props.gauge(self, torque_bar, absf(float(_snapshot.torque)) / 6.0, Color("#9fe0c8"))
 	var friction_y := bottom - Model.GROUND_FRICTION / 6.0 * torque_bar.size.y
 	draw_line(Vector2(torque_bar.position.x - 5, friction_y), Vector2(torque_bar.end.x + 5, friction_y), Color("#ff8a6a"), 3)
 	_text(Vector2(torque_bar.position.x - 4, bottom + 24), "轉矩", 60, 14)
 	var strain_bar := Rect2(METER.position.x + 104, top, 40, bottom - top)
-	draw_rect(strain_bar, Color("#22404a"))
-	var strain := clampf(float(_snapshot.strain), 0.0, 1.0)
-	draw_rect(Rect2(strain_bar.position.x, bottom - strain * strain_bar.size.y, strain_bar.size.x, strain * strain_bar.size.y), Color("#ff8a6a"))
+	Props.gauge(self, strain_bar, float(_snapshot.strain), Color("#ff8a6a"))
 	_text(Vector2(strain_bar.position.x - 4, bottom + 24), "鏈繃", 60, 14)

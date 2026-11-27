@@ -5,6 +5,9 @@ class_name CrowdSemaphoreView
 ## snapshot; all timing, arrivals, and outcomes remain owned by the model.
 signal signal_requested(lane: int)
 
+const Props = preload("res://game/ui/pixel_props.gd")
+const StageProps = preload("res://game/minigames/stage_props.gd")
+const Scenery = preload("res://game/world/scenery_kit.gd")
 const DESIGN_SIZE := Vector2(1280.0, 720.0)
 const HUD_SAFE_RECT := Rect2(80.0, 160.0, 1120.0, 455.0)
 const PLAYFIELD_RECT := Rect2(80.0, 160.0, 1120.0, 455.0)
@@ -74,6 +77,7 @@ var _pool_size_at_build := 0
 var _rescue_flag: MeshInstance3D
 var _rescue_stretcher: MeshInstance3D
 var geometry_build_count := 0
+var _water_material: ShaderMaterial
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -116,6 +120,15 @@ func present_traffic(snapshot: Dictionary, elapsed: float, reduced_motion: bool,
 	_update_gates_and_lamps(snapshot if valid else {}, phase_name_for(valid, snapshot))
 	_update_signal_surface(snapshot if valid else {})
 	_update_lighting()
+	StageProps.set_motion(_water_material, reduced_motion)
+
+## Each planning card sits on a stained board; the card's own border still
+## carries the risk and advice colours.
+func _draw() -> void:
+	for child in get_children():
+		if child is PanelContainer:
+			Props.block_shadow(self, Rect2(child.position, child.size), Vector2(4, 6), 0.35)
+			Props.wood_panel(self, Rect2(child.position, child.size), Props.SIGN_TEAL, true)
 
 func phase_name_for(valid: bool, snapshot: Dictionary) -> String:
 	return str(snapshot.get("phase", "red")) if valid else "red"
@@ -261,6 +274,10 @@ func _build_lighting() -> void:
 	_key_light.name = "HarborKeyLight"
 	_key_light.rotation_degrees = Vector3(-48.0, -28.0, 0.0)
 	_key_light.shadow_enabled = true
+	_key_light.shadow_blur = 1.6
+	_environment.ssao_enabled = true
+	_environment.ssao_radius = 0.5
+	_environment.ssao_intensity = 2.0
 	_key_light.light_energy = phase_light_energy("noon")
 	_stage.add_child(_key_light)
 	for corner in [Vector3(-4.2, 0.45, -3.8), Vector3(4.2, 0.45, -3.8), Vector3(-4.2, 0.45, 3.8), Vector3(4.2, 0.45, 3.8)]:
@@ -273,10 +290,41 @@ func _build_lighting() -> void:
 		_stage.add_child(lamp)
 		_phase_lights.append(lamp)
 
+var _paving := StageProps.stone(Color("#cbbd9c"))
+var _sculpt := StageProps.sculpt_material()
+var _cobbles := _cobble_material()
+
+static func _cobble_material() -> ShaderMaterial:
+	var material := StageProps.stone(Color("#6e7578"))
+	material.set_shader_parameter("block", Vector2(0.26, 0.16))
+	return material
+
+## Wooden planter box with a round shrub, for the empty quay corners.
+func _planter_mesh() -> ArrayMesh:
+	var planter := Scenery.Sculpt.new()
+	planter.box(Vector3(0, 0.12, 0), Vector3(0.5, 0.24, 0.5), Color("#8a6844"))
+	planter.box(Vector3(0, 0.25, 0), Vector3(0.56, 0.04, 0.56), Color("#a57a4e"))
+	planter.ball(Vector3(0, 0.42, 0), 0.24, Color("#6f9a5c"), Color("#5a8048"), 8, 4, 0.85)
+	planter.ball(Vector3(0.1, 0.55, -0.05), 0.05, Color("#e98a6c"), Color.TRANSPARENT, 5, 2)
+	return planter.mesh()
+
+## Hat, backpack and scarf on one traveller, so each is a person with luggage
+## rather than a coloured pill. One merged mesh per traveller.
+func _traveller_gear(coat: Color, person_index: int) -> ArrayMesh:
+	var gear := Scenery.Sculpt.new()
+	var hat: Color = [Color("#e9d3a0"), Color("#4f5b60"), Color("#c46a50"), Color("#2f566a")][person_index % 4]
+	gear.tube(Vector3(0, 0.575, 0), 0.105, 0.105, 0.018, hat, 10)
+	gear.tube(Vector3(0, 0.61, 0), 0.07, 0.062, 0.06, hat.darkened(0.1), 10)
+	gear.box(Vector3(0, 0.33, -0.085), Vector3(0.13, 0.17, 0.07), coat.darkened(0.42))
+	gear.box(Vector3(0, 0.42, -0.085), Vector3(0.135, 0.03, 0.075), coat.darkened(0.25))
+	gear.tube(Vector3(0, 0.45, 0), 0.08, 0.075, 0.035, coat.lightened(0.35), 8)
+	return gear.mesh()
+
 func _build_harbor() -> void:
-	_add_box("Tidewater", Vector3(0.0, -0.58, 0.0), Vector3(11.3, 0.12, 8.7), "#527e86", 0.07)
-	_add_box("RaisedTimberTable", Vector3(0.0, -0.28, 0.0), Vector3(10.2, 0.38, 7.65), "#76533e", 0.12)
-	_add_box("QuayTop", Vector3(0.0, -0.04, 0.0), Vector3(9.82, 0.14, 7.27), "#c2a77c", 0.05)
+	_water_material = StageProps.water(Color("#4f828a"))
+	_add_box("Tidewater", Vector3(0.0, -0.58, 0.0), Vector3(11.3, 0.12, 8.7), "#527e86", 0.07).material_override = _water_material
+	_add_box("RaisedTimberTable", Vector3(0.0, -0.28, 0.0), Vector3(10.2, 0.38, 7.65), "#76533e", 0.12).material_override = StageProps.wood(Color("#76533e"), 0.19)
+	_add_box("QuayTop", Vector3(0.0, -0.04, 0.0), Vector3(9.82, 0.14, 7.27), "#c2a77c", 0.05).material_override = StageProps.wood(Color("#c2a77c"), 0.28, true)
 	# Eight repeated plank seams are restrained; the four corner quay pads make
 	# a legible navigable harbor miniature instead of a floating blank rectangle.
 	for index in 9:
@@ -284,11 +332,18 @@ func _build_harbor() -> void:
 		_add_box("PlankSeam%d" % index, Vector3(x, 0.041, 0.0), Vector3(0.018, 0.006, 6.98), "#70533f", 0.01)
 	for x in [-3.55, 3.55]:
 		for z in [-2.55, 2.55]:
-			_add_box("QuayStone", Vector3(x, 0.13, z), Vector3(2.1, 0.20, 1.75), "#b7b6a2", 0.12)
-			_add_box("QuayInset", Vector3(x, 0.245, z), Vector3(1.94, 0.055, 1.59), "#d4c5a4", 0.08)
+			_add_box("QuayStone", Vector3(x, 0.13, z), Vector3(2.1, 0.20, 1.75), "#b7b6a2", 0.12).material_override = StageProps.stone(Color("#a9a894"))
+			_add_box("QuayInset", Vector3(x, 0.245, z), Vector3(1.94, 0.055, 1.59), "#d4c5a4", 0.08).material_override = _paving
 	# Two marked roads intersect with distinct stone curb lips and raised zebra bars.
-	_add_box("HorizontalAsphalt", Vector3(0.0, 0.045, 0.0), Vector3(9.2, 0.045, 1.72), "#596267", 0.04)
-	_add_box("VerticalAsphalt", Vector3(0.0, 0.049, 0.0), Vector3(1.72, 0.045, 6.65), "#596267", 0.04)
+	_add_box("HorizontalAsphalt", Vector3(0.0, 0.045, 0.0), Vector3(9.2, 0.045, 1.72), "#596267", 0.04).material_override = _cobbles
+	_add_box("VerticalAsphalt", Vector3(0.0, 0.049, 0.0), Vector3(1.72, 0.045, 6.65), "#596267", 0.04).material_override = _cobbles
+	# Planters and cargo on the corner pads give each quay a use.
+	var planter := _planter_mesh()
+	var sculpt := _sculpt
+	for corner: Vector3 in [Vector3(-4.3, 0.27, -1.9), Vector3(4.3, 0.27, 1.9)]:
+		StageProps.add(_stage, "QuayPlanter", planter, sculpt, corner)
+	for corner: Vector3 in [Vector3(-2.8, 0.27, 3.0), Vector3(2.9, 0.27, -3.05)]:
+		StageProps.add(_stage, "QuayCargo", StageProps.crate_mesh(Vector3(0.38, 0.32, 0.38), Color("#a57a4e"), Color("#5b9d91")), sculpt, corner)
 	for offset in [-1.12, -0.78, -0.44, -0.10, 0.24, 0.58, 0.92, 1.26]:
 		_add_box("ZebraNorthSouth", Vector3(0.0, 0.087, offset), Vector3(1.04, 0.04, 0.16), "#f0e5c9", 0.025)
 		_add_box("ZebraEastWest", Vector3(offset, 0.087, 0.0), Vector3(0.16, 0.04, 1.04), "#f0e5c9", 0.025)
@@ -360,6 +415,7 @@ func _build_group_pool() -> void:
 			var tunic := _add_capsule("WoolCoat", Vector3(0.0, 0.29, 0.0), 0.085, 0.29, PERSON_COLORS[group_id], 8, 4, person)
 			_add_sphere("Head", Vector3(0.0, 0.51, 0.0), 0.073, "#dca884", 10, 6, person)
 			_add_capsule("Boots", Vector3(0.0, 0.08, 0.0), 0.063, 0.11, "#4c4540", 8, 4, person)
+			StageProps.add(person, "Gear", _traveller_gear(PERSON_COLORS[group_id], person_index + group_id), _sculpt)
 			bodies.append(tunic)
 		_guest_people.append(bodies)
 		var patience := _add_box("PatienceMeter", Vector3(0.0, 0.76, 0.0), Vector3(0.72, 0.055, 0.07), "#78ae9b", 0.02, group_root)
@@ -420,7 +476,8 @@ func _make_card(card_name: String, position: Vector2) -> VBoxContainer:
 	panel.size = CARD_SIZE
 	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var style := StyleBoxFlat.new()
-	style.bg_color = CARD_BG
+	# The board behind is drawn by _draw(); the card keeps only its frame colour.
+	style.bg_color = Color(CARD_BG, 0.0)
 	style.border_color = CARD_BORDER
 	style.set_border_width_all(2)
 	style.set_corner_radius_all(0)

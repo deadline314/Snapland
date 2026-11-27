@@ -7,11 +7,17 @@ signal command_requested(command: String, pressed: bool, source: String)
 const Paper = preload("res://game/ui/paper_ui.gd")
 const FontProfiles = preload("res://game/ui/font_profiles.gd")
 const Model = preload("res://game/minigames/lighthouse_prism_model.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const StageProps = preload("res://game/minigames/stage_props.gd")
+const Scenery = preload("res://game/world/scenery_kit.gd")
 const DESIGN_SIZE := Vector2(1280, 720)
 const STAGE := Rect2(24, 208, 1232, 364)
 const GAUGE := Rect2(1046, 222, 198, 336)
 const COMMANDS := ["previous", "next", "rotate_left", "rotate_right", "undo", "settle"]
 const BUTTON_LABELS := ["A / ← 上一件", "D / → 下一件", "Q 逆轉", "E／空白 順轉·開合", "Z 回復上一鏡位", "Enter 點燈結算"]
+const BUTTON_ICONS := ["left", "right", "turn_left", "turn_right", "undo", "lamp"]
+const STATUS_PLATE := Rect2(24, 140, 1232, 62)
+const HELP_TEXT := "選鏡後 Q／E 轉 45 度，遮光板按空白開合；可直接點選鏡面。光線越粗越亮，經霧帶、分束與航標都會減弱。"
 const ORIENTATION_GLYPHS := ["—", "\\", "|", "/"]
 const PICK_RADIUS := 34.0
 var _snapshot: Dictionary = {}
@@ -214,6 +220,7 @@ func _create_stage() -> void:
 	_sun.shadow_enabled = true
 	_sun.directional_shadow_max_distance = 30
 	_world.add_child(_sun)
+	StageProps.dress_lighting(_environment, _sun)
 	_camera = Camera3D.new()
 	_camera.name = "PrismCamera"
 	_camera.projection = Camera3D.PROJECTION_ORTHOGONAL
@@ -233,18 +240,34 @@ func _create_stage() -> void:
 	_materials.lamp = _material(Color("#fff2b0"), 1.0, 2.5)
 	_materials.lit = _material(Color("#ffe27a"), 1.0, 3.0)
 	_materials.unlit = _material(Color("#3c4a50"))
-	_materials.fog = _material(Color("#eef3f5"), 0.38)
-	_materials.beam = _material(Color("#fff0a0"), 0.85, 2.2)
+	_materials.fog = _material(Color("#eef3f5"), 0.34)
+	_materials.fog.vertex_color_use_as_albedo = true
+	_materials.beam = _material(Color("#ffd970"), 0.9, 1.3)
+	_materials.halo = _material(Color("#ffcf5a"), 0.3, 1.0)
+	_materials.halo.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	_materials.halo.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	_materials.water = StageProps.water(Color("#2f6f83"))
+	_materials.deck = StageProps.stone(Color("#9aa39a"))
+	_materials.deck.set_shader_parameter("block", Vector2(0.5, 0.5))
+	_materials.frame = StageProps.wood(Color("#6d5236"), 0.12)
+	_materials.shutter = StageProps.wood(Color("#8a6844"), 0.14, true)
+	_materials.mirror.roughness = 0.12
+	_materials.mirror.metallic_specular = 0.9
+	_materials.sculpt = StageProps.sculpt_material()
 	var water := PlaneMesh.new()
 	water.size = Vector2(40, 30)
 	_mesh_node("Water", water, Vector3(0, -0.3, 0), _world, _materials.water)
 	_box("Deck", Vector3(Model.SIZE.x + 0.4, 0.3, Model.SIZE.y + 0.4), Vector3(0, -0.15, 0), _world, _materials.deck)
+	# A wet stone footing and a few rocks seat the pier in the sea.
+	_box("DeckFooting", Vector3(Model.SIZE.x + 0.8, 0.3, Model.SIZE.y + 0.8), Vector3(0, -0.42, 0), _world, StageProps.stone(Color("#6f786f"), 1.0, 0.0))
+	for at: Vector3 in [Vector3(-6.4, -0.3, 2.6), Vector3(6.3, -0.3, -2.9), Vector3(-6.0, -0.3, -3.2), Vector3(6.6, -0.3, 3.4)]:
+		StageProps.add(_world, "PierRock", StageProps.rock_mesh(0.45, 0.4, Color("#7d877f")), _materials.sculpt, at)
 	for x in Model.SIZE.x + 1:
 		_box("Seam", Vector3(0.03, 0.02, Model.SIZE.y), Vector3(x - Model.SIZE.x * 0.5, 0.005, 0), _world, _materials.seam)
 	for y in Model.SIZE.y + 1:
 		_box("Seam", Vector3(Model.SIZE.x, 0.02, 0.03), Vector3(0, 0.005, y - Model.SIZE.y * 0.5), _world, _materials.seam)
 	var lamp := cell_to_world(_snapshot.source)
-	_cylinder("LighthouseTower", 0.36, 1.6, lamp + Vector3(0, 0.8, 0), _world, _materials.tower)
+	StageProps.add(_world, "LighthouseTower", _tower_mesh(), _materials.sculpt, lamp)
 	_cylinder("LighthouseRoof", 0.42, 0.18, lamp + Vector3(0, 1.75, 0), _world, _materials.roof)
 	var light := SphereMesh.new()
 	light.radius = 0.22
@@ -263,9 +286,11 @@ func _create_stage() -> void:
 			"mirror":
 				_box("Frame", Vector3(0.92, 0.7, 0.1), Vector3(0, 0.4, 0), body, _materials.frame)
 				_box("Glass", Vector3(0.84, 0.6, 0.12), Vector3(0, 0.42, 0), body, _materials.mirror)
+				StageProps.add(node, "Stand", _stand_mesh(), _materials.sculpt)
 			"splitter":
 				_box("Prism", Vector3(0.9, 0.8, 0.22), Vector3(0, 0.45, 0), body, _materials.prism)
 				_box("Base", Vector3(0.6, 0.06, 0.6), Vector3(0, 0.03, 0), node, _materials.frame)
+				StageProps.add(node, "Stand", _stand_mesh(), _materials.sculpt)
 			"shutter":
 				for side in [-0.42, 0.42]:
 					_box("Post", Vector3(0.08, 0.9, 0.08), Vector3(side, 0.45, 0), node, _materials.frame)
@@ -279,7 +304,7 @@ func _create_stage() -> void:
 		node.position = cell_to_world(beacon.cell)
 		_world.add_child(node)
 		var factor := 0.7 if beacon.hidden else 1.0
-		_cylinder("Buoy", 0.3 * factor, 0.9 * factor, Vector3(0, 0.45 * factor, 0), node, _materials.buoy_dark if beacon.hidden else _materials.buoy)
+		StageProps.add(node, "Buoy", StageProps.buoy_mesh(0.3 * factor, 1.0 * factor, Color("#5f6f72") if beacon.hidden else Color("#e3b34f"), Color("#f1ead6"), Color("#3c4a50")), _materials.sculpt)
 		var cap := SphereMesh.new()
 		cap.radius = 0.2 * factor
 		cap.height = 0.4 * factor
@@ -293,7 +318,39 @@ func _create_stage() -> void:
 		var beam := _box("Beam%d" % i, Vector3.ONE, Vector3.ZERO, _world, _materials.beam)
 		beam.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		beam.visible = false
+		# A soft additive halo around the hot core reads as light, not a white bar.
+		_box("Halo", Vector3(1.0, 2.6, 2.6), Vector3.ZERO, beam, _materials.halo).cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		_beams.append(beam)
+
+## Banded stone lighthouse on the source cell: plinth, tapering shaft with two
+## red bands, a railed gallery and the lamp room the glowing lamp sits in.
+func _tower_mesh() -> ArrayMesh:
+	var sculpt := Scenery.Sculpt.new()
+	sculpt.tube(Vector3(0, 0.08, 0), 0.5, 0.46, 0.16, Color("#8a8f86"), 10)
+	sculpt.tube(Vector3(0, 0.62, 0), 0.4, 0.33, 0.92, Color("#ece2c8"), 12)
+	for band: float in [0.42, 0.86]:
+		sculpt.tube(Vector3(0, band, 0), 0.38 - band * 0.06, 0.37 - band * 0.06, 0.14, Color("#d9785f"), 12)
+	sculpt.box(Vector3(0.3, 0.5, 0.18), Vector3(0.05, 0.16, 0.1), Color("#4b3c2f"))
+	sculpt.tube(Vector3(0, 1.12, 0), 0.44, 0.44, 0.06, Color("#4b3c2f"), 12)
+	for post in 8:
+		var around := TAU * post / 8.0
+		sculpt.box(Vector3(cos(around) * 0.42, 1.22, sin(around) * 0.42), Vector3(0.03, 0.14, 0.03), Color("#3a3029"))
+	sculpt.tube(Vector3(0, 1.45, 0), 0.3, 0.3, 0.5, Color("#cfe3ea"), 8)
+	return sculpt.mesh()
+
+## Weighted iron foot every optic stands on, so it sits on the deck.
+func _stand_mesh() -> ArrayMesh:
+	var sculpt := Scenery.Sculpt.new()
+	sculpt.tube(Vector3(0, 0.025, 0), 0.34, 0.3, 0.05, Color("#4f5b60"), 8)
+	sculpt.tube(Vector3(0, 0.06, 0), 0.16, 0.12, 0.04, Color("#c9a45a"), 8)
+	return sculpt.mesh()
+
+## Three overlapping puffs instead of a translucent box.
+func _fog_mesh() -> ArrayMesh:
+	var sculpt := Scenery.Sculpt.new()
+	for puff: Vector3 in [Vector3(-0.22, 0.0, 0.1), Vector3(0.2, 0.05, -0.12), Vector3(0.0, 0.12, 0.18)]:
+		sculpt.ball(puff, 0.38, Color("#f4f7f8"), Color("#dfe7ea"), 7, 4, 0.55)
+	return sculpt.mesh()
 
 func _build_fog() -> void:
 	_fog_variant = int(_snapshot.variant)
@@ -302,7 +359,7 @@ func _build_fog() -> void:
 		node.queue_free()
 	_fog_nodes.clear()
 	for cell: Vector2i in _snapshot.fog:
-		var fog := _box("Fog%d" % _fog_nodes.size(), Vector3(1.0, 0.5, 1.0), cell_to_world(cell, 0.35), _world, _materials.fog)
+		var fog := _mesh_node("Fog%d" % _fog_nodes.size(), _fog_mesh(), cell_to_world(cell, 0.35), _world, _materials.fog)
 		fog.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		_fog_nodes.append(fog)
 
@@ -350,6 +407,7 @@ func _apply_snapshot() -> void:
 		beam.rotation = Vector3(0, -atan2(to.z - from.z, to.x - from.x), 0)
 	var night := _time_phase == "night"
 	_environment.background_color = Color("#16293a") if night else Color("#a9bfc2")
+	StageProps.set_motion(_materials.water, _reduced_motion)
 	_sun.light_color = {"dawn": Color("#f2caad"), "noon": Color("#f8efcf"), "dusk": Color("#e2b19c"), "night": Color("#a5c2d8")}.get(_time_phase, Color("#f8efcf"))
 	_sun.light_energy = 0.7 if night else 1.1
 	_sun.rotation_degrees = Vector3(-48, {"dawn": -70.0, "noon": -30.0, "dusk": 40.0, "night": 70.0}.get(_time_phase, -30.0), 0)
@@ -379,27 +437,26 @@ func beacon_text() -> String:
 func _text(at: Vector2, text: String, width: float, font_size: int = 18, color: Color = Paper.PAPER) -> void:
 	draw_string(Paper.font(), at, text, HORIZONTAL_ALIGNMENT_LEFT, width, roundi(font_size * Paper.text_scale()), color)
 
+## Per-beacon readings and the how-to stay one hover away.
+func _get_tooltip(at_position: Vector2) -> String:
+	if _snapshot.is_empty() or not STATUS_PLATE.has_point(at_position):
+		return ""
+	return beacon_text() + "\n" + HELP_TEXT
+
 func _draw() -> void:
-	draw_rect(Rect2(24, 140, 1232, 62), Paper.DEEP_TEAL)
+	Props.wood_panel(self, STATUS_PLATE, Props.SIGN_TEAL, true)
 	if not _snapshot.is_empty():
-		_text(Vector2(40, 164), status_text(), 1200)
-		_text(Vector2(40, 191), beacon_text(), 1200, 17)
+		_text(Vector2(46, 166), status_text(), 1190, 17)
+		_text(Vector2(46, 193), str(_snapshot.get("feedback", "")), 1190, 18, Paper.GOLD)
 		_draw_gauges()
 	for i in COMMANDS.size():
 		var command: String = COMMANDS[i]
-		var rect := button_rect(command)
-		var held := _pointer_owners.values().has(command)
 		var unavailable: bool = command == "undo" and not _snapshot.get("assisted", false)
-		draw_rect(rect, Paper.FRAME if held else Paper.DEEP_TEAL)
-		draw_rect(rect, Paper.GOLD if held else (Paper.DEEP if unavailable else Paper.TEAL), false, 2)
-		_text(rect.position + Vector2(10, 34), BUTTON_LABELS[i] + ("（輔助）" if unavailable else ""), rect.size.x - 16, 16, Color(Paper.PAPER, 0.55) if unavailable else Paper.PAPER)
-	_text(Vector2(30, 673), str(_snapshot.get("feedback", "")), 1210, 20, Paper.GOLD)
-	_text(Vector2(30, 704), "選鏡後 Q／E 轉 45 度，遮光板按空白開合；可直接點選鏡面。光線越粗越亮，經霧帶、分束與航標都會減弱。", 1210, 17)
+		Props.control_key(self, button_rect(command), _pointer_owners.values().has(command), BUTTON_ICONS[i], BUTTON_LABELS[i] + ("（輔助）" if unavailable else ""), Paper.font(), roundi(16 * Paper.text_scale()), not unavailable)
 
 ## Bars show received light against the threshold, so lit state never relies on color.
 func _draw_gauges() -> void:
-	draw_rect(GAUGE, Color(Paper.DEEP, 0.86))
-	draw_rect(GAUGE, Paper.TEAL, false, 2)
+	Props.wood_panel(self, GAUGE, Props.SIGN_TEAL, true)
 	_text(GAUGE.position + Vector2(10, 22), "航標接收刻度", 170, 16, Paper.GOLD)
 	var beacons: Array = _snapshot.beacons
 	var bar_width := 30.0
@@ -410,9 +467,7 @@ func _draw_gauges() -> void:
 		var beacon: Dictionary = beacons[i]
 		var x := GAUGE.position.x + 10 + spacing * i + (spacing - bar_width) * 0.5
 		var bar := Rect2(x, top, bar_width, bottom - top)
-		draw_rect(bar, Color("#22404a"))
-		var fill := clampf(float(beacon.received), 0.0, 1.0) * bar.size.y
-		draw_rect(Rect2(x, bottom - fill, bar_width, fill), Color("#ffe27a") if beacon.lit else Color("#6f8f97"))
+		Props.gauge(self, bar, float(beacon.received), Color("#ffe27a") if beacon.lit else Color("#6f8f97"))
 		var threshold_y := bottom - Model.THRESHOLD * bar.size.y
 		draw_line(Vector2(x - 4, threshold_y), Vector2(x + bar_width + 4, threshold_y), Paper.PAPER, 2)
 		var short := "側" if beacon.hidden else str(beacon.name).left(1)

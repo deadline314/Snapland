@@ -25,6 +25,11 @@ const STREAMER_START_X: Array[float] = [154.0, 555.0, 947.0]
 const STREAMER_LENGTH: Array[float] = [188.0, 214.0, 176.0]
 const STREAMER_BASE_Y: Array[float] = [244.0, 299.0, 255.0]
 const FontProfiles = preload("res://game/ui/font_profiles.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const SHELF_RECT := Rect2(80.0, 637.0, 1120.0, 71.0)
+const SHELF_HELP := "↑↓迎風　短按衝刺　收線降張力　↑氣流升高\n五枚風環，中心最穩"
+## Cliff texture scale: one rock-grain tile per this many design pixels.
+const GRAIN_TILE := 64.0
 
 const INK := Color("#263f50")
 const SEA_GLASS := Color("#4b8985")
@@ -62,6 +67,9 @@ var _near_ridge := PackedVector2Array()
 var _cliff_facets: Array[PackedVector2Array] = []
 var _cliff_arches: Array[PackedVector2Array] = []
 var _cliff_strata: Array[PackedVector2Array] = []
+var _far_cliff_uv := PackedVector2Array()
+var _near_cliff_uv := PackedVector2Array()
+var _facet_uvs: Array[PackedVector2Array] = []
 var _sea_wave_paths: Array[PackedVector2Array] = []
 var _wind_streamers: Array[PackedVector2Array] = []
 var _clouds: Array[PackedVector2Array] = []
@@ -92,6 +100,7 @@ func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	custom_minimum_size = DESIGN_SIZE
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	_ensure_geometry()
 
 func _notification(what: int) -> void:
@@ -272,12 +281,27 @@ func _ensure_geometry() -> void:
 	_bridle_line.resize(2)
 	_resize_points(_spool_disc, 12)
 	_resize_points(_spool_ring, 12)
+	_far_cliff_uv = _grain_uvs(_far_cliff)
+	_near_cliff_uv = _grain_uvs(_near_cliff)
+	_facet_uvs.clear()
+	for facet in _cliff_facets:
+		_facet_uvs.append(_grain_uvs(facet))
 	_resize_points(_warning_triangle, 3)
 	_warning_triangle.set(0, Vector2(0, -10))
 	_warning_triangle.set(1, Vector2(9, 7))
 	_warning_triangle.set(2, Vector2(-9, 7))
 	_geometry_revision = GEOMETRY_REVISION
 	_update_dynamic_geometry()
+
+func _grain_uvs(points: PackedVector2Array) -> PackedVector2Array:
+	var uvs := PackedVector2Array()
+	for point in points:
+		uvs.append(point / GRAIN_TILE)
+	return uvs
+
+## The fine controls stay one hover away instead of a second row of small text.
+func _get_tooltip(at_position: Vector2) -> String:
+	return SHELF_HELP if SHELF_RECT.has_point(at_position) else ""
 
 func _resize_points(points: PackedVector2Array, count: int) -> void:
 	points.resize(count)
@@ -353,9 +377,10 @@ func _draw() -> void:
 	_draw_bottom_instruments()
 
 func _draw_sky() -> void:
-	draw_rect(Rect2(Vector2.ZERO, DESIGN_SIZE), _sky_color(), true)
-	# One quiet sea plane meets the sky at a clean horizon; the coast supplies the foreground texture.
-	draw_rect(Rect2(0.0, 402.0, DESIGN_SIZE.x, DESIGN_SIZE.y - 402.0), _sea_color(), true)
+	# Banded sky deepening upward and a sea that darkens away from the horizon,
+	# instead of two flat fills.
+	Props.bands(self, Rect2(0.0, 0.0, DESIGN_SIZE.x, 402.0), _sky_color().darkened(0.06), _sky_color().lerp(_horizon_color(), 0.55), 9, 1.6)
+	Props.bands(self, Rect2(0.0, 402.0, DESIGN_SIZE.x, DESIGN_SIZE.y - 402.0), _sea_color().lightened(0.12), _sea_color().darkened(0.12), 6, 0.8)
 	draw_line(Vector2(0.0, 402.0), Vector2(DESIGN_SIZE.x, 402.0), Color(PAPER, 0.48), 1.5, true)
 	draw_line(Vector2(0.0, 406.0), Vector2(DESIGN_SIZE.x, 406.0), Color(INK, 0.12), 1.0, true)
 	_draw_wind_streamers()
@@ -415,17 +440,17 @@ func _draw_parallax_layers() -> void:
 	for repeat in 2:
 		var copy_x := float(repeat) * DESIGN_SIZE.x
 		draw_set_transform(Vector2(far_shift + copy_x, 0.0))
-		draw_colored_polygon(_far_cliff, _far_cliff_color())
+		draw_colored_polygon(_far_cliff, _far_cliff_color(), _far_cliff_uv, Props.rock_grain())
 		draw_polyline(_far_ridge, _far_ridge_color(), 1.6, true)
 		_draw_cliff_strata(0.0, 0.50)
 		draw_set_transform(Vector2(harbor_shift + copy_x, 0.0))
 		draw_colored_polygon(_far_harbor, _harbor_color())
 		_draw_harbor_landmarks(harbor_shift + copy_x)
 		draw_set_transform(Vector2(near_shift + copy_x, 0.0))
-		draw_colored_polygon(_near_cliff, _near_cliff_color())
+		draw_colored_polygon(_near_cliff, _near_cliff_color(), _near_cliff_uv, Props.rock_grain())
 		draw_polyline(_near_ridge, _near_ridge_color(), 2.0, true)
 		for facet_index in _cliff_facets.size():
-			draw_colored_polygon(_cliff_facets[facet_index], _cliff_facet_color(facet_index))
+			draw_colored_polygon(_cliff_facets[facet_index], _cliff_facet_color(facet_index), _facet_uvs[facet_index], Props.rock_grain())
 		_draw_cliff_arches()
 		_draw_cliff_strata(0.0, 0.78)
 		_draw_ridge_foam()
@@ -518,38 +543,48 @@ func _draw_ring(index: int, front_half: bool) -> void:
 		return
 	var status := ring_status(index)
 	var color := _ring_color(status)
-	var alpha := 0.98 if status == "next" else (0.86 if status == "center" else 0.76 if status == "edge" else 0.70 if status == "miss" else 0.42)
-	if status == "miss":
-		alpha = 0.78
-	draw_set_transform(center, 0.0, Vector2(RING_HALF_DEPTH, RING_HALF_HEIGHT))
-	var start_angle := -PI / 2.0 if front_half else PI / 2.0
-	var end_angle := PI / 2.0 if front_half else 3.0 * PI / 2.0
-	if front_half:
-		if status == "next":
-			draw_circle(Vector2.ZERO, 0.17, Color(SEA_GLASS, 0.12))
-			draw_arc(Vector2.ZERO, 0.53, -0.18, 0.18, 18, Color(CREAM, 0.42), 0.035)
-			draw_line(Vector2(-0.17, 0), Vector2(0.17, 0), Color(PAPER, 0.48), 0.018, true)
-	var face_color := Color(color, alpha) if front_half else Color(color.darkened(0.34), alpha * 0.9)
-	var cord_shadow := Color(INK, alpha * (0.92 if front_half else 0.78))
-	draw_arc(Vector2.ZERO, 0.91, start_angle, end_angle, 40, cord_shadow, 0.19)
-	draw_arc(Vector2.ZERO, 0.88, start_angle, end_angle, 40, face_color, 0.105)
-	draw_arc(Vector2.ZERO, 0.82, start_angle, end_angle, 40, Color(CREAM, alpha * (0.72 if front_half else 0.34)), 0.035)
-	draw_arc(Vector2.ZERO, 0.71, start_angle, end_angle, 40, Color(INK, alpha * 0.20), 0.025)
-	if status == "edge" and front_half:
+	var alpha := 0.98 if status == "next" else (0.86 if status == "center" else 0.76 if status == "edge" else 0.78 if status == "miss" else 0.42)
+	var radii := Vector2(RING_HALF_DEPTH, RING_HALF_HEIGHT)
+	if front_half and status == "next":
+		draw_set_transform(center, 0.0, radii)
+		draw_circle(Vector2.ZERO, 0.17, Color(SEA_GLASS, 0.12))
+		draw_set_transform(Vector2.ZERO)
+		draw_line(center - Vector2(3.0, 0.0), center + Vector2(3.0, 0.0), Color(PAPER, 0.48), 1.0)
+	# A rope-wrapped hoop: a deepened rim, a face lit from the top left and
+	# darker wraps every few segments, drawn in screen space so it has real width.
+	var tone := color if front_half else color.darkened(0.34)
+	var from := -PI / 2.0 if front_half else PI / 2.0
+	var rim := Color(Props.deepen(tone), alpha)
+	for pass_index in 2:
+		for step in 16:
+			var a := from + PI * step / 16.0
+			var b := a + PI / 16.0
+			var p0 := center + Vector2(cos(a), sin(a)) * radii * 0.88
+			var p1 := center + Vector2(cos(b), sin(b)) * radii * 0.88
+			if pass_index == 0:
+				draw_line(p0, p1, rim, 9.0)
+				continue
+			var facing := Vector2(cos((a + b) * 0.5), sin((a + b) * 0.5)).dot(Vector2(-0.6, -0.8))
+			var face := Props.lighten(tone, 0.28) if facing > 0.3 else (Props.deepen(tone, 0.2) if facing < -0.3 else tone)
+			draw_line(p0, p1, Color(face, alpha), 5.0)
+			if step % 3 == 1:
+				var normal := Vector2(cos(a) / radii.x, sin(a) / radii.y).normalized()
+				draw_line(p0 - normal * 3.0, p0 + normal * 3.0, Color(rim, alpha * 0.8), 2.0)
+	if not front_half:
+		return
+	var at := func(unit: Vector2) -> Vector2: return center + unit * radii
+	if status == "edge":
 		for tick in 3:
 			var tick_y := -0.14 + float(tick) * 0.14
-			draw_line(Vector2(0.71, tick_y), Vector2(0.98, tick_y + 0.06), Color(OCHRE, 0.92), 0.035, true)
-	elif status == "miss" and front_half:
-		draw_line(Vector2(0.67, -0.16), Vector2(0.96, -0.02), Color(CORAL, 0.96), 0.045, true)
-		draw_line(Vector2(0.66, 0.12), Vector2(0.91, 0.27), Color(CORAL, 0.96), 0.045, true)
-	if front_half and status == "center":
-		draw_arc(Vector2.ZERO, 0.94, -0.16, 0.16, 12, Color(TIDAL, 0.82), 0.055)
-	if front_half:
-		for rivet in 5:
-			var rivet_angle := -1.0 + float(rivet) * 0.5
-			var rivet_alpha := 0.86 if status == "next" else 0.48
-			draw_circle(Vector2(cos(rivet_angle), sin(rivet_angle)) * 0.88, 0.032, Color(CREAM, rivet_alpha))
-	draw_set_transform(Vector2.ZERO)
+			draw_line(at.call(Vector2(0.71, tick_y)), at.call(Vector2(0.98, tick_y + 0.06)), Color(OCHRE, 0.92), 2.0)
+	elif status == "miss":
+		draw_line(at.call(Vector2(0.67, -0.16)), at.call(Vector2(0.96, -0.02)), Color(CORAL, 0.96), 2.5)
+		draw_line(at.call(Vector2(0.66, 0.12)), at.call(Vector2(0.91, 0.27)), Color(CORAL, 0.96), 2.5)
+	if status == "center":
+		draw_line(at.call(Vector2(cos(-0.16), sin(-0.16)) * 0.94), at.call(Vector2(cos(0.16), sin(0.16)) * 0.94), Color(TIDAL, 0.82), 3.0)
+	for rivet in 5:
+		var rivet_angle := -1.0 + float(rivet) * 0.5
+		Props.rivet(self, at.call(Vector2(cos(rivet_angle), sin(rivet_angle)) * 0.88), Color(CREAM, 0.86 if status == "next" else 0.48))
 
 
 func _set_tail_and_tether_points() -> void:
@@ -621,6 +656,8 @@ func _draw_tether_and_kite() -> void:
 	draw_line(_kite_body[1], _kite_body[2], Color(INK, 0.82), 1.4, true)
 	draw_line(_kite_body[2], _kite_body[3], Color(INK, 0.82), 1.4, true)
 	draw_line(_kite_body[3], _kite_body[0], Color(INK, 0.82), 1.4, true)
+	# Lit hem along the sun-facing edges so the sail reads as cloth, not a flat cut-out.
+	draw_line(_kite_body[3] + Vector2(2.0, 0.0), _kite_body[0] + Vector2(0.0, 2.0), Color(CREAM, 0.55), 1.6, true)
 	var spar_color := Color(PAPER, 0.87)
 	draw_line(_kite_body[0], _kite_body[2], spar_color, 1.4, true)
 	draw_line(_kite_body[3], _kite_body[1], Color(INK, 0.82), 1.7, true)
@@ -677,8 +714,7 @@ func _flight_caption_color(time_phase: String, flight_phase: String, event: Stri
 		_: return Color("#fff7e5")
 
 func _draw_bottom_instruments() -> void:
-	draw_rect(Rect2(80.0, 637.0, 1120.0, 71.0), Color(_instrument_bg(), 0.94), true)
-	draw_line(Vector2(80.0, 637.0), Vector2(1200.0, 637.0), Color(PAPER, 0.52), 1.0)
+	Props.wood_panel(self, SHELF_RECT, _instrument_bg().lightened(0.06), true)
 	draw_string(FontProfiles.current_font(), Vector2(98.0, 660.0), "現風", HORIZONTAL_ALIGNMENT_LEFT, 70.0, 14, _instrument_text())
 	_draw_actual_wind(Vector2(177.0, 668.0), _actual_wind)
 	draw_string(FontProfiles.current_font(), Vector2(358.0, 660.0), "1.25 秒後", HORIZONTAL_ALIGNMENT_LEFT, 115.0, 14, _instrument_text())
@@ -690,12 +726,9 @@ func _draw_bottom_instruments() -> void:
 	for rescue_index in 2:
 		var dot := Vector2(1092.0 + float(rescue_index) * 34.0, 657.0)
 		var used := rescue_index < _rescues_used
-		draw_circle(dot, 7.0, Color(CORAL if used else OCHRE, 0.84))
-		draw_arc(dot, 8.5, 0.0, TAU, 20, Color(PAPER, 0.92), 1.5)
+		Props.token(self, dot, 8.0, CORAL if used else OCHRE)
 		if not used:
 			draw_line(dot + Vector2(-3, 0), dot + Vector2(3, 0), Color(CREAM, 0.9), 1.3)
-	draw_string(FontProfiles.current_font(), Vector2(96.0, 692.0), "↑↓迎風　短按衝刺　收線降張力　↑氣流升高", HORIZONTAL_ALIGNMENT_LEFT, 450.0, 12, Color(_instrument_text(), 0.82))
-	draw_string(FontProfiles.current_font(), Vector2(700.0, 692.0), "五枚風環　中心最穩", HORIZONTAL_ALIGNMENT_LEFT, 280.0, 12, Color(_instrument_text(), 0.82))
 
 func _draw_actual_wind(origin: Vector2, value: float) -> void:
 	var normalized := clampf(value / 185.0, -1.0, 1.0)
@@ -721,8 +754,15 @@ func _draw_forecast_wind(origin: Vector2, value: float) -> void:
 
 func _draw_tension_gauge() -> void:
 	var gauge := Rect2(714.0, 648.0, 150.0, 17.0)
-	draw_rect(gauge, Color(INK, 0.7), true)
-	draw_rect(Rect2(gauge.position, Vector2(gauge.size.x * _tension, gauge.size.y)), _tension_color(), true)
+	# A brass-framed glass tube, filled from the left.
+	draw_rect(gauge.grow(4.0), Props.deepen(Props.BRASS))
+	draw_rect(gauge.grow(2.0), Props.BRASS)
+	draw_rect(Rect2(gauge.position - Vector2(2.0, 2.0), Vector2(gauge.size.x + 4.0, 2.0)), Props.lighten(Props.BRASS, 0.4))
+	draw_rect(gauge, Color("#12303c"), true)
+	var fill := Rect2(gauge.position, Vector2(gauge.size.x * _tension, gauge.size.y))
+	draw_rect(fill, _tension_color(), true)
+	draw_rect(Rect2(fill.position, Vector2(fill.size.x, 3.0)), Props.lighten(_tension_color(), 0.45), true)
+	draw_rect(Rect2(fill.position + Vector2(0.0, fill.size.y - 3.0), Vector2(fill.size.x, 3.0)), Props.deepen(_tension_color(), 0.2), true)
 	var risk_x := gauge.position.x + gauge.size.x * 0.78
 	draw_line(Vector2(risk_x, 645.0), Vector2(risk_x, 669.0), Color(CORAL, 0.98), 2.0, true)
 	if _tension_warning:

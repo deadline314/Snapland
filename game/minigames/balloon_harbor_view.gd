@@ -6,6 +6,8 @@ class_name BalloonHarborView
 ## transforms, visibility, and the existing lighting resources.
 
 const FontProfiles = preload("res://game/ui/font_profiles.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const StageProps = preload("res://game/minigames/stage_props.gd")
 const DESIGN_SIZE := Vector2(1280.0, 720.0)
 const MAILBOX_DESIGN_POINTS: Array[Vector2] = [Vector2(520.0, 305.0), Vector2(820.0, 480.0), Vector2(1080.0, 320.0)]
 const CAMERA_ORTHO_SIZE := 28.0
@@ -192,10 +194,12 @@ func _build_harbor() -> void:
 	var coral_material := _material("#db5b42", 0.74)
 	var ochre_material := _material("#d5a349", 0.7)
 	var roof_material := _material("#aa4434", 0.82)
-	var pale_material := _material("#f1deba", 0.78)
+	var pale_material := StageProps.painted(Color("#f1deba"))
 	var deep_material := _material("#183e4a", 0.86)
-	var wood_material := _material("#a7774e", 0.9)
-	var plank_materials: Array[StandardMaterial3D] = [_material("#c89865", 0.9), _material("#bd8758", 0.9), _material("#d2a572", 0.92)]
+	var footing_material := StageProps.stone(Color("#2f5560"), 1.0, 0.0)
+	var wood_material := StageProps.wood(Color("#a7774e"), 0.14)
+	var plank_materials: Array[Material] = [StageProps.wood(Color("#c89865"), 0.49, true), StageProps.wood(Color("#bd8758"), 0.49, true), StageProps.wood(Color("#d2a572"), 0.49, true)]
+	var apron_material := StageProps.stone(Color("#e4d2ab"))
 	# Asymmetric, tapered ribbons never intersect into a technical grid.
 	var crest_points: Array[Vector2] = [Vector2(135, 340), Vector2(355, 185), Vector2(685, 205), Vector2(960, 170), Vector2(175, 600), Vector2(280, 480), Vector2(1100, 610), Vector2(975, 465), Vector2(640, 645), Vector2(1210, 390)]
 	for wave_index in crest_points.size():
@@ -206,11 +210,11 @@ func _build_harbor() -> void:
 	for i in MAILBOX_DESIGN_POINTS.size():
 		var p := _design_to_world(MAILBOX_DESIGN_POINTS[i])
 		var base_mesh: Mesh = _box(Vector3(9.0, 0.5, 7.0)) if i == 0 else (_cylinder(3.7, 0.56) if i == 1 else _boat_hull_mesh())
-		_world.add_child(_mesh_node("RooftopIsland%d" % i, base_mesh, deep_material, Vector3(p.x, -0.06, p.z)))
+		_world.add_child(_mesh_node("RooftopIsland%d" % i, base_mesh, deep_material if i == 2 else footing_material, Vector3(p.x, -0.06, p.z)))
 		var ledge_mesh: Mesh = _box(Vector3(8.8, 0.16, 6.8)) if i == 0 else (_cylinder(3.61, 0.16) if i == 1 else _box(Vector3(7.3, 0.13, 3.0)))
 		_world.add_child(_mesh_node("QuayLedge%d" % i, ledge_mesh, pale_material, Vector3(p.x, 0.205, p.z)))
 		var deck_mesh: Mesh = _box(Vector3(8.5, 0.2, 6.5)) if i == 0 else (_cylinder(3.5, 0.20) if i == 1 else _box(Vector3(6.8, 0.20, 2.7)))
-		_world.add_child(_mesh_node("RoofCap%d" % i, deck_mesh, wood_material if i != 1 else pale_material, Vector3(p.x, 0.31, p.z)))
+		_world.add_child(_mesh_node("RoofCap%d" % i, deck_mesh, wood_material if i != 1 else apron_material, Vector3(p.x, 0.31, p.z)))
 		if i != 1:
 			for plank_index in (16 if i == 0 else 13):
 				var plank_x := -4.0 + float(plank_index) * 0.52 if i == 0 else -3.12 + float(plank_index) * 0.52
@@ -249,10 +253,10 @@ func _build_harbor() -> void:
 			_world.add_child(_mesh_node("LighthouseBase", _cylinder(1.13, 0.3), deep_material, c + Vector3(0,0.55,0)))
 			var tower_mesh := _cylinder(0.77, 4.4)
 			tower_mesh.top_radius = 0.56
-			_world.add_child(_mesh_node("LighthouseTower", tower_mesh, pale_material, c + Vector3(0,2.78,0)))
+			_world.add_child(_mesh_node("LighthouseTower", tower_mesh, StageProps.stone(Color("#efe2c4")), c + Vector3(0,2.78,0)))
 			for band_index in 3:
 				var radius := 0.748 - float(band_index) * 0.045
-				_world.add_child(_mesh_node("LighthouseBand%d" % band_index, _cylinder(radius,0.36), coral_material, c + Vector3(0,1.15+float(band_index)*1.24,0)))
+				_world.add_child(_mesh_node("LighthouseBand%d" % band_index, _cylinder(radius,0.36), StageProps.painted(Color("#db5b42")), c + Vector3(0,1.15+float(band_index)*1.24,0)))
 			_world.add_child(_mesh_node("LighthouseDoor", _box(Vector3(0.47,0.91,0.12)), deep_material, c + Vector3(0,1.14,0.76)))
 			for side in 2:
 				_add_window("ShedWindow1_%d" % side, c + Vector3(-0.15 + float(side)*0.3,3.27,0.67),Vector3(0.17,0.40,0.08),ochre_material)
@@ -297,7 +301,7 @@ func _build_harbor() -> void:
 			_world.add_child(_mesh_node("BoatCabinCap",_box(Vector3(1.13,0.12,1.38)),pale_material,p+Vector3(-2.15,1.18,-0.1)))
 			_world.add_child(_mesh_node("BoatPennant",_triangle_sail_mesh(),coral_material,mast+Vector3(0,5.8,0)))
 	# Small low-poly reef groups frame the route instead of reading as scattered dark disks.
-	var rock_materials: Array[StandardMaterial3D] = [_material("#526d68", 0.91), _material("#607d74", 0.94), _material("#46656a", 0.88)]
+	var rock_materials: Array[Material] = [StageProps.stone(Color("#526d68"), 1.0), StageProps.stone(Color("#607d74"), 1.0), StageProps.stone(Color("#46656a"), 1.0)]
 	var reef_centers: Array[Vector2] = [Vector2(160, 250), Vector2(370, 570), Vector2(1080, 575), Vector2(1150, 200)]
 	for reef_index in reef_centers.size():
 		var reef_point := _design_to_world(reef_centers[reef_index])
@@ -305,11 +309,12 @@ func _build_harbor() -> void:
 			var stone := _mesh_node("TideRock%d_%d" % [reef_index, stone_index], _sphere(1.0), rock_materials[stone_index], Vector3(reef_point.x + (float(stone_index) - 1.0) * 0.36, -0.20 + float(stone_index % 2) * 0.035, reef_point.z + (float(stone_index % 2) - 0.5) * 0.52))
 			stone.scale = Vector3(0.32 + float((reef_index + stone_index) % 3) * 0.10, 0.18 + float(stone_index % 2) * 0.045, 0.27 + float((reef_index + stone_index) % 2) * 0.10)
 			_world.add_child(stone)
+	var mast_material := StageProps.wood(Color("#c99a52"), 0.06)
 	# Pennants follow the supplied wind even when reduced motion is active.
 	for landmark_index in 3:
 		var design := Vector2(245.0 + float(landmark_index) * 330.0, 235.0 + float(landmark_index % 2) * 210.0)
 		var p := _design_to_world(design)
-		var mast := _mesh_node("HarborMast%d" % landmark_index, _cylinder(0.12, 3.7), ochre_material, Vector3(p.x, 1.5, p.z))
+		var mast := _mesh_node("HarborMast%d" % landmark_index, _cylinder(0.12, 3.7), mast_material, Vector3(p.x, 1.5, p.z))
 		_world.add_child(mast)
 		var mast_top := _mesh_node("MastCap%d" % landmark_index, _sphere(0.26), coral_material, Vector3(p.x, 3.4, p.z))
 		_world.add_child(mast_top)
@@ -323,14 +328,14 @@ func _build_harbor() -> void:
 	var pier_center := _design_to_world(Vector2(655.0, 555.0))
 	var pier_shadow := _mesh_node("PierShadow", _box(Vector3(16.2, 0.18, 3.8)), deep_material, pier_center + Vector3(0.0, -0.37, 0.0))
 	_world.add_child(pier_shadow)
-	var pier := _mesh_node("Pier", _box(Vector3(15.0, 0.42, 2.8)), roof_material, pier_center + Vector3(0.0, -0.05, 0.0))
+	var pier := _mesh_node("Pier", _box(Vector3(15.0, 0.42, 2.8)), StageProps.wood(Color("#8f4a3a"), 0.18), pier_center + Vector3(0.0, -0.05, 0.0))
 	_world.add_child(pier)
 	for board_index in 8:
 		var board := _mesh_node("PierDeckBoard%d" % board_index, _box(Vector3(1.82, 0.025, 2.72)), plank_materials[board_index % 3], pier.position + Vector3(-6.7 + float(board_index) * 1.9, 0.225, 0.0))
 		_world.add_child(board)
 	for post_index in 5:
 		var point := pier.position + Vector3(-6.0 + post_index * 3.0, 0.52, 0.0)
-		_world.add_child(_mesh_node("PierPost%d" % post_index, _cylinder(0.19, 1.45), ochre_material, point))
+		_world.add_child(_mesh_node("PierPost%d" % post_index, _cylinder(0.19, 1.45), mast_material, point))
 		var cap := _mesh_node("PierPostCap%d" % post_index, _sphere(0.22), coral_material, point + Vector3(0.0, 0.78, 0.0))
 		_world.add_child(cap)
 		var lantern := Node3D.new()
@@ -370,10 +375,10 @@ func _build_harbor() -> void:
 		_wind_streams.append(lane)
 
 func _build_mailboxes() -> void:
-	var post_materials: Array[StandardMaterial3D] = [
-		_material("#cf765f", 0.68),
-		_material("#d3b26f", 0.68),
-		_material("#558f86", 0.68),
+	var post_materials: Array[Material] = [
+		StageProps.painted(Color("#cf765f")),
+		StageProps.painted(Color("#d3b26f")),
+		StageProps.painted(Color("#558f86")),
 	]
 	var slot_material := _material("#594b4a", 0.92)
 	var ring_material := _material("#f0c477", 0.48, 0.08)
@@ -441,8 +446,8 @@ func _build_balloon() -> void:
 	_world.add_child(_balloon)
 	# The balloon root is also the sway pivot, preserving the public Ballon/Canopy path.
 	_envelope_pivot = _balloon
-	var canopy_material := _material("#e76448", 0.76)
-	var stripe_material := _material("#197f83", 0.74)
+	var canopy_material := StageProps.painted(Color("#e76448"))
+	var stripe_material := StageProps.painted(Color("#197f83"))
 	var crown_material := _material("#f1d59a", 0.64)
 	_canopy = _mesh_node("Canopy", _sphere(1.0), canopy_material, Vector3(0.0, 2.05, 0.0))
 	_canopy.scale = Vector3(1.7, 2.0, 1.36)
@@ -463,7 +468,7 @@ func _build_balloon() -> void:
 		var rope := _mesh_node("BasketRope%d" % rope_index, _cylinder(0.035, 0.72), rope_material, Vector3(x_offset, 0.28, z_offset))
 		rope.rotation.z = -0.12 if x_offset < 0.0 else 0.12
 		_envelope_pivot.add_child(rope)
-	var basket := _mesh_node("WickerBasket", _box(Vector3(0.88, 0.48, 0.72)), _material("#ad7650", 0.9), Vector3(0.0, -0.32, 0.0))
+	var basket := _mesh_node("WickerBasket", _box(Vector3(0.88, 0.48, 0.72)), StageProps.wood(Color("#ad7650"), 0.08, true), Vector3(0.0, -0.32, 0.0))
 	_envelope_pivot.add_child(basket)
 	_brake_glow = _mesh_node("BrakeGlow", _torus(0.74, 0.09), _material("#e7cc83", 0.45, 0.08), Vector3(0.0, 0.0, 0.0))
 	_brake_glow.visible = false
@@ -486,12 +491,8 @@ func _build_wind_arrows() -> void:
 	legend.position = Vector2(24,568)
 	legend.size = Vector2(256,134)
 	legend.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var border := StyleBoxFlat.new()
-	border.bg_color = Color("#102b35")
-	border.border_color = Color("#62c3b0")
-	border.set_border_width_all(2)
-	border.set_corner_radius_all(0)
-	legend.add_theme_stylebox_override("panel",border)
+	legend.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+	legend.draw.connect(func() -> void: Props.wood_panel(legend, Rect2(Vector2.ZERO, legend.size), Props.SIGN_TEAL, true))
 	_viewport.add_child(legend)
 	for row in 2:
 		var caption := Label.new()
