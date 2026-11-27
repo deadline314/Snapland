@@ -40,6 +40,26 @@
     ]
   },
   {
+    "id": "game-063",
+    "mode": "magnet_move",
+    "zone": "toy",
+    "local_index": 3,
+    "arcade": true,
+    "name": "磁鐵搬家",
+    "goal": "左右移動吊車、放下磁鐵，把輸送帶上的鐵皮玩具吸起來丟進新家的箱子；木頭玩具吸不起來。",
+    "instructions": "← → 或 A D 移動吊車，空白鍵、↓ 或手把 A 鈕放下磁鐵；吊著玩具到左邊的箱子上再按一次就放進去。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助搬家拿到金牌",
+    "ordinary": "用磁鐵把鐵皮玩具搬進箱子，拿到銅牌",
+    "attraction_tag": "磁鐵吊車",
+    "island_invitation": "玩具要搬家啦！磁鐵只吸鐵皮玩具；底下什麼鐵都沒有的話，它會吸走你的頭盔。",
+    "retake_props": [
+      "mascot",
+      "sign",
+      "bench"
+    ]
+  },
+  {
     "id": "game-065",
     "mode": "spring_frog",
     "zone": "toy",

@@ -15,6 +15,8 @@ const STANDS := {
 			"stand": Vector3(-2.9, 0.2, 1.0), "point": Vector3(-1.95, 0.2, 2.45), "prop": "windup", "paint": Color("#ad6356")},
 		{"id": "game-062", "title": "整點咕咕", "prompt": "整點咕咕 · 數滴答開門",
 			"stand": Vector3(-2.4, 0.2, -5.2), "point": Vector3(-1.3, 0.2, -3.75), "prop": "cuckoo", "paint": Color("#567f77")},
+		{"id": "game-063", "title": "磁鐵搬家", "prompt": "磁鐵搬家 · 吸起鐵皮玩具",
+			"stand": Vector3(10.5, 0.2, 6.2), "point": Vector3(9.4, 0.2, 7.55), "prop": "magnet", "paint": Color("#b5553c")},
 		{"id": "game-065", "title": "彈簧青蛙", "prompt": "彈簧青蛙 · 按住上發條跳積木",
 			"stand": Vector3(-6.2, 0.2, -2.5), "point": Vector3(-7.15, 0.2, -1.05), "prop": "frog", "paint": Color("#5f7d4a")},
 		{"id": "game-068", "title": "陀螺相撲", "prompt": "陀螺相撲 · 方向鍵撞陀螺",
@@ -56,6 +58,7 @@ static func build(world: Node3D, region: String) -> void:
 			"frog": _frog_prop(sculpt)
 			"tops": _tops_prop(sculpt)
 			"soldier": _soldier_prop(sculpt)
+			"magnet": _magnet_prop(sculpt)
 			"camera": _camera_prop(sculpt)
 			"lily": _lily_prop(sculpt)
 			"mushroom": _mushroom_prop(sculpt)
@@ -256,3 +259,33 @@ static func _soldier_prop(sculpt: Kit.Sculpt) -> void:
 	sculpt.tube(Vector3(-0.12, 2.72, -0.3), 0.13, 0.13, 0.36, Color("#c8a676"), 10, Basis(Vector3.BACK, PI * 0.5 + 0.5))
 	for band: float in [-0.14, 0.14]:
 		sculpt.tube(Vector3(-0.12, 2.72, -0.3) + Vector3(band, 0, 0).rotated(Vector3.BACK, 0.5), 0.14, 0.14, 0.05, red, 10, Basis(Vector3.BACK, PI * 0.5 + 0.5))
+
+
+## A little jib crane on the roof lifting a tin robot with a red horseshoe
+## magnet, and a toy crate with a wooden duck waiting on the counter.
+static func _magnet_prop(sculpt: Kit.Sculpt) -> void:
+	var red := Color("#c8423a")
+	var steel := Color("#c3c8cf")
+	var tin := Color("#a9b0b8")
+	var pine := Color("#d2a46a")
+	sculpt.box(Vector3(0.55, 2.8, -0.3), Vector3(0.08, 0.84, 0.08), TIMBER)
+	sculpt.box(Vector3(0.18, 3.2, -0.3), Vector3(0.82, 0.07, 0.07), Color("#b5553c"))
+	sculpt.box(Vector3(0.36, 3.02, -0.3), Vector3(0.04, 0.4, 0.04), Color("#b5553c"), Basis(Vector3.BACK, -0.8))
+	sculpt.box(Vector3(-0.15, 3.1, -0.3), Vector3(0.02, 0.18, 0.02), DARK)
+	sculpt.box(Vector3(-0.15, 2.97, -0.3), Vector3(0.34, 0.09, 0.12), red)
+	for side: float in [-1.0, 1.0]:
+		sculpt.box(Vector3(-0.15 + side * 0.12, 2.85, -0.3), Vector3(0.1, 0.16, 0.12), red)
+		sculpt.box(Vector3(-0.15 + side * 0.12, 2.74, -0.3), Vector3(0.1, 0.06, 0.12), steel)
+	sculpt.box(Vector3(-0.15, 2.62, -0.3), Vector3(0.12, 0.09, 0.1), tin)
+	sculpt.box(Vector3(-0.15, 2.5, -0.3), Vector3(0.16, 0.14, 0.11), tin)
+	sculpt.box(Vector3(-0.15, 2.51, -0.24), Vector3(0.04, 0.04, 0.01), red)
+	for eye: float in [-0.03, 0.03]:
+		sculpt.box(Vector3(-0.15 + eye, 2.63, -0.245), Vector3(0.02, 0.02, 0.01), DARK)
+	sculpt.box(Vector3(-0.3, 1.1, 0.1), Vector3(0.4, 0.24, 0.3), pine)
+	sculpt.box(Vector3(-0.3, 1.22, 0.1), Vector3(0.42, 0.03, 0.32), pine.darkened(0.25))
+	sculpt.box(Vector3(-0.3, 1.1, 0.26), Vector3(0.18, 0.1, 0.01), CREAM)
+	sculpt.box(Vector3(0.3, 1.05, 0.1), Vector3(0.22, 0.12, 0.14), Color("#e8b84a"))
+	sculpt.box(Vector3(0.21, 1.15, 0.1), Vector3(0.09, 0.09, 0.09), Color("#e8b84a"))
+	sculpt.box(Vector3(0.15, 1.14, 0.1), Vector3(0.05, 0.03, 0.04), Color("#e0773c"))
+	for wheel: float in [0.22, 0.38]:
+		sculpt.tube(Vector3(wheel, 0.99, 0.18), 0.03, 0.03, 0.02, DARK, 6, Basis(Vector3.RIGHT, PI * 0.5))

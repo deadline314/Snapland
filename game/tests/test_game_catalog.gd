@@ -20,7 +20,7 @@ func _run() -> void:
 	var garden: Array = catalog.definitions("garden")
 	var all_games: Array = catalog.all_definitions()
 	_check(welcome == JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json")), "default definitions preserve the original welcome row shape and order")
-	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 5 and toy.size() == 5 and garden.size() == 4 and all_games.size() == 62, "only the 62 delivered games are exposed")
+	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 5 and toy.size() == 6 and garden.size() == 4 and all_games.size() == 63, "only the 63 delivered games are exposed")
 	for index in range(welcome.size()):
 		_check(welcome[index].id == "game-%03d" % (index + 1), "welcome numbering stays ordered")
 	_check(all_games == welcome + harbor + candy + nightmarket + circus + toy + garden and catalog.definitions("hotel").is_empty(), "games retain global order and future regions remain unavailable")
@@ -32,13 +32,16 @@ func _run() -> void:
 	_check(catalog.identity("game-061") == dash and catalog.identity("windup_dash") == dash and toy[0].name == "發條衝刺" and toy[0].arcade == true, "first toy town game keeps its own global number and the arcade flow flag")
 	var cuckoo := {"id":"game-062", "mode":"cuckoo_cue", "zone":"toy", "local_index":2, "photo_id":"photo-toy-game-2", "devil_photo_id":"photo-toy-devil-2", "achievement_id":"ACH_GAME_062"}
 	_check(catalog.identity("game-062") == cuckoo and catalog.identity("cuckoo_cue") == cuckoo and toy[1].name == "整點咕咕" and toy[1].arcade == true, "second toy town game has stable identities and the arcade flow flag")
+	var magnet := {"id":"game-063", "mode":"magnet_move", "zone":"toy", "local_index":3, "photo_id":"photo-toy-game-3", "devil_photo_id":"photo-toy-devil-3", "achievement_id":"ACH_GAME_063"}
+	_check(catalog.identity("game-063") == magnet and catalog.identity("magnet_move") == magnet and toy[2].name == "磁鐵搬家" and toy[2].arcade == true,
+		"the third toy town slot fills in behind the fifth and keeps its own number")
 	var frog := {"id":"game-065", "mode":"spring_frog", "zone":"toy", "local_index":5, "photo_id":"photo-toy-game-5", "devil_photo_id":"photo-toy-devil-5", "achievement_id":"ACH_GAME_065"}
-	_check(catalog.identity("game-065") == frog and catalog.identity("spring_frog") == frog and toy[2].name == "彈簧青蛙" and toy[2].arcade == true,
-		"a zone may deliver out of order: the fifth toy town slot keeps its own number with slots three and four still open")
+	_check(catalog.identity("game-065") == frog and catalog.identity("spring_frog") == frog and toy[3].name == "彈簧青蛙" and toy[2].arcade == true,
+		"a zone may deliver out of order: the fifth toy town slot keeps its own number with slot four still open")
 	var tops := {"id":"game-068", "mode":"top_sumo", "zone":"toy", "local_index":8, "photo_id":"photo-toy-game-8", "devil_photo_id":"photo-toy-devil-8", "achievement_id":"ACH_GAME_068"}
-	_check(catalog.identity("game-068") == tops and catalog.identity("top_sumo") == tops and toy[3].name == "陀螺相撲" and toy[3].arcade == true, "eighth toy town game has stable identities and the arcade flow flag")
+	_check(catalog.identity("game-068") == tops and catalog.identity("top_sumo") == tops and toy[4].name == "陀螺相撲" and toy[3].arcade == true, "eighth toy town game has stable identities and the arcade flow flag")
 	var bonk := {"id":"game-070", "mode":"soldier_bonk", "zone":"toy", "local_index":10, "photo_id":"photo-toy-game-10", "devil_photo_id":"photo-toy-devil-10", "achievement_id":"ACH_GAME_070"}
-	_check(catalog.identity("game-070") == bonk and catalog.identity("soldier_bonk") == bonk and toy[4].name == "敲敲玩具兵" and toy[4].arcade == true, "tenth toy town game has stable identities and the arcade flow flag")
+	_check(catalog.identity("game-070") == bonk and catalog.identity("soldier_bonk") == bonk and toy[5].name == "敲敲玩具兵" and toy[4].arcade == true, "tenth toy town game has stable identities and the arcade flow flag")
 	var plates := {"id":"game-052", "mode":"plate_catch", "zone":"circus", "local_index":4, "photo_id":"photo-circus-game-4", "devil_photo_id":"photo-circus-devil-4", "achievement_id":"ACH_GAME_052"}
 	_check(catalog.identity("game-052") == plates and catalog.identity("plate_catch") == plates and circus[2].name == "接飛碟" and circus[2].arcade == true,
 		"a circus game delivered out of order keeps its catalogue slot four, its sticker and its achievement")
