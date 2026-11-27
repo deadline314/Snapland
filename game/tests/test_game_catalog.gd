@@ -16,17 +16,20 @@ func _run() -> void:
 	var candy: Array = catalog.definitions("candy")
 	var nightmarket: Array = catalog.definitions("nightmarket")
 	var circus: Array = catalog.definitions("circus")
+	var toy: Array = catalog.definitions("toy")
 	var all_games: Array = catalog.all_definitions()
 	_check(welcome == JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json")), "default definitions preserve the original welcome row shape and order")
-	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 2 and all_games.size() == 50, "only the 50 delivered games are exposed")
+	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 2 and toy.size() == 1 and all_games.size() == 51, "only the 51 delivered games are exposed")
 	for index in range(welcome.size()):
 		_check(welcome[index].id == "game-%03d" % (index + 1), "welcome numbering stays ordered")
-	_check(all_games == welcome + harbor + candy + nightmarket + circus and catalog.definitions("toy").is_empty(), "games retain global order and future regions remain unavailable")
+	_check(all_games == welcome + harbor + candy + nightmarket + circus + toy and catalog.definitions("garden").is_empty(), "games retain global order and future regions remain unavailable")
 	var booth := {"id":"game-049", "mode":"funhouse_booth", "zone":"circus", "local_index":1, "photo_id":"photo-circus-game-1", "devil_photo_id":"photo-circus-devil-1", "achievement_id":"ACH_GAME_049"}
 	_check(catalog.identity("game-049") == booth and catalog.identity("funhouse_booth") == booth and circus[0].name == "哈哈鏡大頭貼" and circus[0].arcade == true, "first circus game has stable identities and the arcade flow flag")
 	var reflection := {"id":"game-050", "mode":"fake_reflection", "zone":"circus", "local_index":2, "photo_id":"photo-circus-game-2", "devil_photo_id":"photo-circus-devil-2", "achievement_id":"ACH_GAME_050"}
 	_check(catalog.identity("game-050") == reflection and catalog.identity("fake_reflection") == reflection and circus[1].name == "誰是假倒影" and circus[1].arcade == true, "second circus game has stable identities and the arcade flow flag")
-	_check(all_games.filter(func(row: Dictionary) -> bool: return row.has("arcade") and row.zone != "circus").is_empty(), "earlier games keep their own flow")
+	var dash := {"id":"game-061", "mode":"windup_dash", "zone":"toy", "local_index":1, "photo_id":"photo-toy-game-1", "devil_photo_id":"photo-toy-devil-1", "achievement_id":"ACH_GAME_061"}
+	_check(catalog.identity("game-061") == dash and catalog.identity("windup_dash") == dash and toy[0].name == "發條衝刺" and toy[0].arcade == true, "first toy town game keeps its own global number and the arcade flow flag")
+	_check(all_games.filter(func(row: Dictionary) -> bool: return row.has("arcade") and row.zone not in ["circus", "toy"]).is_empty(), "earlier games keep their own flow")
 	_check(harbor[0].name == "浪間小艇" and harbor[0].instructions == "划槳、轉舵並側滑靠岸" and harbor[0].ordinary == "載三箱到兩座浮碼頭" and harbor[0].devil == "用浪峰側滑靠岸不撞箱", "harbor row uses the approved concise copy")
 	var expected := {"id": "game-013", "mode": "rowing_cargo", "zone": "harbor", "local_index": 1, "photo_id": "photo-harbor-game-1", "devil_photo_id": "photo-harbor-devil-1", "achievement_id": "ACH_GAME_013"}
 	_check(catalog.identity("game-013") == expected and catalog.identity("rowing_cargo") == expected, "global and mode lookup produce the same regional identity")
@@ -103,7 +106,7 @@ func _run() -> void:
 	var identity: Dictionary = catalog.identity("game-013")
 	identity.zone = "mutated"
 	_check(catalog.definitions()[0].name == "氣球快遞" and catalog.definitions("harbor")[0].name == "浪間小艇" and catalog.identity("game-013").zone == "harbor", "all catalog APIs return deep copies")
-	var sources := {"welcome": catalog.definitions(), "harbor": catalog.definitions("harbor"), "candy": catalog.definitions("candy"), "nightmarket": catalog.definitions("nightmarket"), "circus": catalog.definitions("circus")}
+	var sources := {"welcome": catalog.definitions(), "harbor": catalog.definitions("harbor"), "candy": catalog.definitions("candy"), "nightmarket": catalog.definitions("nightmarket"), "circus": catalog.definitions("circus"), "toy": catalog.definitions("toy")}
 	_check(catalog._validated_catalog(sources) == sources, "explicit parser boundary accepts delivered data")
 	var invalid_sources: Array = []
 	var bad: Dictionary = sources.duplicate(true)
@@ -144,9 +147,14 @@ func _run() -> void:
 		bad = sources.duplicate(true)
 		bad.circus[0][field_value[0]] = field_value[1]
 		invalid_sources.append(bad)
-	bad = sources.duplicate(true)
-	bad.erase("circus")
-	invalid_sources.append(bad)
+	for field_value in [["id","game-051"],["mode","fake_reflection"],["zone","circus"],["local_index",2]]:
+		bad = sources.duplicate(true)
+		bad.toy[0][field_value[0]] = field_value[1]
+		invalid_sources.append(bad)
+	for zone: String in ["circus", "toy"]:
+		bad = sources.duplicate(true)
+		bad.erase(zone)
+		invalid_sources.append(bad)
 	for invalid in invalid_sources:
 		_check(catalog._validated_catalog(invalid).is_empty(), "malformed, duplicate or mismatched catalog data fails closed")
 	_check(not ResourceLoader.has_cached("res://game/minigames/session.gd") and not ResourceLoader.has_cached("res://game/ui/tutorial_panel.gd"), "Progress and Catalog do not load Session or tutorial UI")

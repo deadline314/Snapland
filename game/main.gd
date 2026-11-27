@@ -2771,7 +2771,7 @@ func _show_ticket() -> void:
 		note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		body.add_child(note)
 	elif world_region=="toy":
-		var note := Paper.label("入口東側找阿浪合照。車站可換岔道，西北側維修台可重置列車。",18,Paper.TEAL)
+		var note := Paper.label("入口東側找阿浪合照。車站可換岔道，西北側維修台可重置列車。共開放 %d / 12 款遊戲。" % Catalog.definitions("toy").size(),18,Paper.TEAL)
 		note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		body.add_child(note)
 	elif world_region=="garden":
@@ -2786,7 +2786,7 @@ func _show_ticket() -> void:
 	groups.add_theme_constant_override("h_separation",16)
 	groups.add_theme_constant_override("v_separation",8)
 	body.add_child(groups)
-	var lesson_label: String = {"candy":"工廠圖解教學","nightmarket":"夜市圖解教學","circus":"馬戲團圖解教學"}.get(world_region,"園區圖解教學")
+	var lesson_label: String = {"candy":"工廠圖解教學","nightmarket":"夜市圖解教學","circus":"馬戲團圖解教學","toy":"玩具城圖解教學"}.get(world_region,"園區圖解教學")
 	var entries := [
 		["島嶼地圖",_show_map,"探索島嶼"], ["今日任務",_show_tasks,"探索島嶼"],
 		["拍貼收藏本",_show_album,"收藏記錄"], ["遊園成就",_show_achievements,"收藏記錄"],
@@ -2806,7 +2806,7 @@ func _show_ticket() -> void:
 	_back(body)
 
 func _show_region_tutorial() -> void:
-	var lessons: Dictionary = {"candy":["工廠圖解教學","CandyTutorial"],"nightmarket":["夜市圖解教學","NightmarketTutorial"],"circus":["馬戲團圖解教學","CircusTutorial"]}
+	var lessons: Dictionary = {"candy":["工廠圖解教學","CandyTutorial"],"nightmarket":["夜市圖解教學","NightmarketTutorial"],"circus":["馬戲團圖解教學","CircusTutorial"],"toy":["玩具城圖解教學","ToyTutorial"]}
 	if not lessons.has(world_region):
 		_open_tutorial("park","ticket")
 		return

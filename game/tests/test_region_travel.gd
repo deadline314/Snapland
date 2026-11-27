@@ -358,9 +358,10 @@ func _candy_ui() -> void:
 			_check(circus_ids == ["photo-circus-game-1", "photo-circus-game-2", "photo-circus-story-1"] and book._entries()[2].story_region == "circus"
 				and _labels(book).contains("哈哈鏡大頭貼") and _labels(book).contains("誰是假倒影"), "Circus lists its delivered games and its regional story source")
 		elif book._region == "toy":
-			_check(book._entries().size() == 1 and book._entries()[0].id == "photo-toy-story-1"
-				and book._entries()[0].story_region == "toy" and _labels(book).contains("阿浪"),
-				"Toy Town album lists its physical story and gives directions without fake collectible entries")
+			var toy_ids: Array = book._entries().map(func(entry: Dictionary) -> String: return entry.id)
+			_check(toy_ids == ["photo-toy-game-1", "photo-toy-story-1"] and book._entries()[1].story_region == "toy"
+				and _labels(book).contains("阿浪") and _labels(book).contains("發條衝刺"),
+				"Toy Town album lists its delivered game and its physical story without fake collectible entries")
 		elif book._region == "garden":
 			_check(book._entries().size() == 1 and book._entries()[0].id == "photo-garden-story-1"
 				and book._entries()[0].story_region == "garden" and _labels(book).contains("票票"),

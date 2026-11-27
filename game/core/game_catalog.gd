@@ -1,8 +1,8 @@
 extends RefCounted
 
-const DATA_PATHS := {"welcome": "res://game/data/welcome_games.json", "harbor": "res://game/data/harbor_games.json", "candy": "res://game/data/candy_games.json", "nightmarket": "res://game/data/nightmarket_games.json", "circus": "res://game/data/circus_games.json"}
-const ZONE_STARTS := {"welcome": 1, "harbor": 13, "candy": 25, "nightmarket": 37, "circus": 49}
-const ZONE_COUNTS := {"welcome": 12, "harbor": 12, "candy": 12, "nightmarket": 12, "circus": 2}
+const DATA_PATHS := {"welcome": "res://game/data/welcome_games.json", "harbor": "res://game/data/harbor_games.json", "candy": "res://game/data/candy_games.json", "nightmarket": "res://game/data/nightmarket_games.json", "circus": "res://game/data/circus_games.json", "toy": "res://game/data/toy_games.json"}
+const ZONE_STARTS := {"welcome": 1, "harbor": 13, "candy": 25, "nightmarket": 37, "circus": 49, "toy": 61}
+const ZONE_COUNTS := {"welcome": 12, "harbor": 12, "candy": 12, "nightmarket": 12, "circus": 2, "toy": 1}
 const TEXT_FIELDS := ["id", "mode", "name", "goal", "instructions", "devil_hint", "devil", "ordinary", "attraction_tag", "island_invitation"]
 static var _cache: Dictionary = {}
 

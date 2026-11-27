@@ -1,0 +1,22 @@
+[
+  {
+    "id": "game-061",
+    "mode": "windup_dash",
+    "zone": "toy",
+    "local_index": 1,
+    "arcade": true,
+    "name": "發條衝刺",
+    "goal": "連打上發條再放手，讓玩具貓衝得越遠越好；轉過頭彈簧會爆。",
+    "instructions": "空白鍵、E 或手把 A 鈕連打上發條；X 鍵、↓ 或手把 X 鈕放手，停手半秒也會自動放。點畫面也可以上發條。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助衝刺拿到金牌",
+    "ordinary": "連打上發條讓玩具衝刺，拿到銅牌",
+    "attraction_tag": "發條賽道",
+    "island_invitation": "轉越多跑越遠，可是彈簧會爆。你敢多轉幾圈？",
+    "retake_props": [
+      "mascot",
+      "sign",
+      "bench"
+    ]
+  }
+]

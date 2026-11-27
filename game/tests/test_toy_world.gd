@@ -2,6 +2,8 @@ extends SceneTree
 
 const World = preload("res://game/world/toy_world.gd")
 const Visit = preload("res://game/story/regional_visit.gd")
+const Catalog = preload("res://game/core/game_catalog.gd")
+const ArcadeStands = preload("res://game/world/arcade_stands.gd")
 const MapPanel = preload("res://game/ui/harbor_map_panel.gd")
 const SaveGuard = preload("res://game/core/test_save_guard.gd")
 const Scenery = preload("res://game/world/toy_scenery.gd")
@@ -37,6 +39,7 @@ func _run() -> void:
 	await _frames(40)
 	_check(_world._life.salute(0) > 0.9 and _world._life.salute(1) > 0.9 and _world._life.salute(4) == 0.0,
 		"the two gate guards salute the arriving visitor while the far patrol marches on")
+	await _check_arcade_stands()
 	await _reach([Vector2(0, 4.45), Vector2(-8, 4.45), Vector2(-8, 2.2)], "toy:blocks", "積木街")
 	await _reach([Vector2(-7.6, -6.95)], "toy:repair", "維修台")
 	await _reach([Vector2(-4.8, -6.95), Vector2(0, -6.95), Vector2(0, -7.6)], "toy:tower", "發條鐘樓")
@@ -64,6 +67,25 @@ func _run() -> void:
 		print("PASS: toy town walking routes, physical rail branches, reversible controls and truthful map")
 	print("%d checks, %d failures" % [_checks, _errors.size()])
 	quit(int(not _errors.is_empty()))
+
+
+## Every delivered game has a stand the visitor can walk up to; coordinates live in the stand table.
+func _check_arcade_stands() -> void:
+	var delivered: Array = Catalog.definitions("toy")
+	_check(ArcadeStands.rows("toy").size() == delivered.size(), "one entry stand per delivered Toy Town game")
+	for definition: Dictionary in delivered:
+		var point: Dictionary = _world._point_by_id(definition.id)
+		var stand := _world.get_node_or_null("ArcadeStand_" + str(definition.id)) as MeshInstance3D
+		_check(not point.is_empty() and stand != null and stand.find_children("*", "CollisionShape3D", true, false).size() == 1,
+			str(definition.id) + " has a solid stand and an interaction point")
+		if point.is_empty():
+			continue
+		var at: Vector3 = point.position
+		_check(_world._safe_footing(at) and str(point.label).contains(str(definition.name)), str(definition.id) + " is entered from safe ground and named on its prompt")
+		_check(await _walk(Vector2(0, 4.45)) and await _walk(Vector2(at.x, 4.45)) and await _walk(Vector2(at.x, at.z))
+			and _world.nearest.get("id") == definition.id and Catalog.identity(str(_world.nearest.get("id"))).zone == "toy",
+			str(definition.id) + " is reachable on foot and its prompt opens that game")
+	_check(await _walk(Vector2(0, 4.45)), "the way back to the foyer stays open")
 
 
 func _check_train() -> void:
@@ -245,8 +267,8 @@ func _check_map() -> void:
 	root.add_child(map)
 	var locations := map.find_child("ToyMapLocations", true, false)
 	var status := map.find_child("ToyMapStatus", true, false) as Label
-	_check(snapshot.region == "toy" and snapshot.player == _world.player.position and snapshot.points.size() == 7
-		and snapshot.areas.size() == 5 and locations != null and locations.get_child_count() == 7 and status != null
+	_check(snapshot.region == "toy" and snapshot.player == _world.player.position and snapshot.points.size() == 7 + ArcadeStands.rows("toy").size()
+		and snapshot.areas.size() == 5 and locations != null and locations.get_child_count() == snapshot.points.size() and status != null
 		and status.text.contains("逐站") and map.find_child("ToyMapTerrain", true, false) != null,
 		"shared map records real player, switches and stops")
 	_check(snapshot.points.any(func(point: Dictionary) -> bool:
