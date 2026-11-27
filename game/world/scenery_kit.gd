@@ -22,6 +22,7 @@ class Sculpt:
 	var frame := Transform3D.IDENTITY
 	var _tool := SurfaceTool.new()
 	var _triangles := 0
+	var _committed: ArrayMesh
 
 	func _init() -> void:
 		_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
@@ -106,9 +107,17 @@ class Sculpt:
 	func _on_ball(angle: float, latitude: float, radius: float, squash: float) -> Vector3:
 		return Vector3(cos(angle) * cos(latitude), sin(latitude) * squash, sin(angle) * cos(latitude)) * radius
 
+	## Commits once. The tool is released afterwards: a SurfaceTool keeps every
+	## vertex with all its attribute slots (hundreds of bytes each), which kept a
+	## second copy of each district's merged trim in memory for good.
 	func mesh() -> ArrayMesh:
-		_tool.generate_normals()
-		return _tool.commit()
+		if _committed == null:
+			_tool.generate_normals()
+			_committed = _tool.commit()
+			# clear() keeps the buffers allocated; only dropping the tool frees them.
+			_tool = SurfaceTool.new()
+			_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
+		return _committed
 
 ## Instances of one mesh drawn as a single multimesh.
 class Batch:

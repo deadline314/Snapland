@@ -3775,9 +3775,35 @@ func _apply_render_quality(level: String) -> void:
 	active_lamp_budget = mini(int(profile.active_lamps), ACTIVE_LAMP_LIMIT)
 	shadow_lamp_budget = mini(int(profile.lamp_shadows), SHADOW_LAMP_LIMIT)
 	if is_instance_valid(ambience): ambience.set_quality(bool(profile.cloud_shade), bool(profile.air_particles))
+	if sun != null:
+		sun.directional_shadow_mode = DirectionalLight3D.SHADOW_PARALLEL_4_SPLITS if int(profile.sun_splits) >= 4 else DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS
+	trim_small_shadows(self)
+	if is_instance_valid(district_host):
+		for region: String in district_host.districts: trim_small_shadows(district_host.districts[region])
 	RenderQuality.apply_renderer(profile)
 	if is_inside_tree(): RenderQuality.apply_viewport(get_viewport(), profile)
 	_update_lamp_selection(true)
+
+## Props smaller than this (world-space bounding diagonal, metres) drop their
+## shadow below "high": each caster costs a draw in every sun cascade and lamp
+## for a few pixels of shade. Shadow-only proxies (actors' shadows) always cast.
+const SMALL_CASTER_SPAN := 1.2
+
+## Apply the level's small-prop shadow rule under `root`; switching back to
+## "high" restores exactly the casters this switched off.
+func trim_small_shadows(root: Node) -> void:
+	var keep := bool(RenderQuality.profile(render_quality).small_shadows)
+	for node: Node in root.find_children("*", "GeometryInstance3D", true, false):
+		var geometry := node as GeometryInstance3D
+		if keep:
+			if geometry.has_meta(&"small_caster"):
+				geometry.cast_shadow = geometry.get_meta(&"small_caster")
+				geometry.remove_meta(&"small_caster")
+			continue
+		if geometry.cast_shadow in [GeometryInstance3D.SHADOW_CASTING_SETTING_OFF, GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY]: continue
+		if not geometry.is_inside_tree() or (geometry.global_transform * geometry.get_aabb()).size.length() >= SMALL_CASTER_SPAN: continue
+		geometry.set_meta(&"small_caster", geometry.cast_shadow)
+		geometry.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 
 func start_ride() -> bool:
 	if blocked or not is_instance_valid(island_attractions):

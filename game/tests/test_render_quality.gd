@@ -31,6 +31,19 @@ func _lamp_counts(world: Node3D) -> Vector2i:
 	return Vector2i(lit, shadowed)
 
 
+## Casters in the world: all of them, and those smaller than the small-prop span
+## (shadow-only proxies excluded; they exist to cast).
+func _casters(world: Node3D) -> Vector2i:
+	var all := 0
+	var small := 0
+	for node: Node in world.find_children("*", "GeometryInstance3D", true, false):
+		var geometry := node as GeometryInstance3D
+		if geometry.cast_shadow in [GeometryInstance3D.SHADOW_CASTING_SETTING_OFF, GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY]: continue
+		all += 1
+		if (geometry.global_transform * geometry.get_aabb()).size.length() < ParkWorld.SMALL_CASTER_SPAN: small += 1
+	return Vector2i(all, small)
+
+
 func _run() -> void:
 	_check(RenderQuality.LEVELS.has(RenderQuality.DEFAULT_LEVEL), "default level exists")
 	for level in RenderQuality.LEVELS:
@@ -70,6 +83,14 @@ func _run() -> void:
 			world.set_time_of_day("noon")
 			_check(world.ambience.cloud.visible == bool(profile.cloud_shade), "'%s' cloud shade matches at noon" % level)
 			world.set_time_of_day("night")
+	# Small props shed their shadows below "high" and get them back exactly.
+	world.apply_settings({"reduced_motion": false, "graphics_quality": "high"})
+	var high_casters := _casters(world)
+	_check(high_casters.y > 0 and world.sun.directional_shadow_mode == DirectionalLight3D.SHADOW_PARALLEL_4_SPLITS, "'high' keeps every small caster and four sun cascades")
+	world.apply_settings({"reduced_motion": false, "graphics_quality": "low"})
+	_check(_casters(world).y == 0 and world.sun.directional_shadow_mode == DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS, "'low' drops small casters and uses two sun cascades")
+	world.apply_settings({"reduced_motion": false, "graphics_quality": "high"})
+	_check(_casters(world) == high_casters, "returning to 'high' restores every caster")
 	world.apply_settings({"reduced_motion": false, "graphics_quality": "not-a-level"})
 	_check(world.render_quality == RenderQuality.DEFAULT_LEVEL, "the world falls back to the default level")
 	world.apply_settings({"reduced_motion": false})

@@ -12,10 +12,12 @@ const LEVELS: Array[String] = ["high", "balanced", "low"]
 ## lamp_shadows / active_lamps: night lamp budget (the world clamps to its limits).
 ## cloud_shade / air_particles: ambience layers. sun_shadow_size: shadow atlas edge.
 ## msaa: edge smoothing for world geometry; it never blurs pixel-art textures.
+## sun_splits: sun shadow cascades. small_shadows: whether props smaller than
+## ParkWorld.SMALL_CASTER_SPAN cast shadows (each costs a draw per cascade and lamp).
 const PROFILES := {
-	"high": {"ssao": true, "glow": true, "lamp_shadows": 2, "active_lamps": 8, "cloud_shade": true, "air_particles": true, "sun_shadow_size": 4096, "msaa": Viewport.MSAA_2X},
-	"balanced": {"ssao": true, "glow": true, "lamp_shadows": 1, "active_lamps": 8, "cloud_shade": true, "air_particles": true, "sun_shadow_size": 2048, "msaa": Viewport.MSAA_DISABLED},
-	"low": {"ssao": false, "glow": false, "lamp_shadows": 0, "active_lamps": 5, "cloud_shade": false, "air_particles": false, "sun_shadow_size": 2048, "msaa": Viewport.MSAA_DISABLED},
+	"high": {"ssao": true, "glow": true, "lamp_shadows": 2, "active_lamps": 8, "cloud_shade": true, "air_particles": true, "sun_shadow_size": 4096, "msaa": Viewport.MSAA_2X, "sun_splits": 4, "small_shadows": 1},
+	"balanced": {"ssao": true, "glow": true, "lamp_shadows": 1, "active_lamps": 8, "cloud_shade": true, "air_particles": true, "sun_shadow_size": 2048, "msaa": Viewport.MSAA_DISABLED, "sun_splits": 2, "small_shadows": 0},
+	"low": {"ssao": false, "glow": false, "lamp_shadows": 0, "active_lamps": 5, "cloud_shade": false, "air_particles": false, "sun_shadow_size": 2048, "msaa": Viewport.MSAA_DISABLED, "sun_splits": 2, "small_shadows": 0},
 }
 
 static var _renderer_level_applied := ""

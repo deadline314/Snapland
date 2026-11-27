@@ -133,6 +133,7 @@ func _finish_build(region: String, node: Node3D, lamps_before: int, started: int
 	node.steady_lights = node.find_children("*", "Light3D", true, false).filter(func(light: Light3D) -> bool: return not world.lamps.has(light)).size()
 	node.set_time_of_day(world.active_time_phase)
 	if not _settings.is_empty(): node.apply_settings(_settings)
+	world.trim_small_shadows(node)
 	if _look.size() == 2: node.set_avatar_look(_look[0], _look[1])
 	world.bind_district_ground(districts.keys())
 	if _stickers >= 0: _set_gate(region, _stickers >= RegionRoutes.threshold(region), false)

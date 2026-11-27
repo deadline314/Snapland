@@ -110,8 +110,6 @@ var _source_metrics_build_count := 0
 var _hair_cut_build_count := 0
 var _walk_scale_reference_height := 444.0
 var _walk_atlas_valid := false
-var _diagonal_hair_image: Image
-var _diagonal_hat_image: Image
 var _diagonal_hair_regions: Array = []
 var _diagonal_hat_regions: Array = []
 var _diagonal_hair_valid := false
@@ -1009,8 +1007,7 @@ func _load_diagonal_part(name: String, parts: Dictionary, target_regions: Array)
 				return false
 			stored_row.append(part.get_region(used))
 		target_regions.append(stored_row)
-	if name == "hair": _diagonal_hair_image = atlas_image
-	else: _diagonal_hat_image = atlas_image
+	# Only the cut regions are kept; the whole sheet would hold 6 MB for nothing.
 	return true
 
 func _apply_diagonal_hair(image: Image, hair_style: String, direction: String, hair_color: Color, vertical_offset: int, head_shift_x: int = 0, target_width_override: float = HAIR_TARGET_WIDTH, source_pose: Image = null, source_metrics: Dictionary = {}, skull_skin_color: Color = Color("#e8b991")) -> void:

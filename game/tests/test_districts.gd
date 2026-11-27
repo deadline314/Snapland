@@ -6,8 +6,21 @@ const DistrictSites = preload("res://game/world/district_sites.gd")
 const IslandShape = preload("res://game/world/island_shape.gd")
 const RegionRoutes = preload("res://game/core/region_routes.gd")
 const IslandLayout = preload("res://game/world/island_layout.gd")
-## A district stays well under the Welcome island's own node budget.
-const DISTRICT_NODE_BUDGET := 900
+const SceneryKit = preload("res://game/world/scenery_kit.gd")
+## Per-district cost ceilings (MAIN-64), about 15% over what each builds
+## today: nodes, drawn geometry (one draw each in the main pass), shadow casters
+## (one draw per sun cascade and lamp) and merged-mesh vertices. A district
+## without its own row (a new one) gets DEFAULT_BUDGET. Raise a row only with
+## a measured reason in its ticket.
+const DEFAULT_BUDGET := {"nodes": 450, "drawn": 320, "casters": 160, "vertices": 270000}
+const DISTRICT_BUDGETS := {
+	"harbor": {"nodes": 300, "drawn": 210, "casters": 110, "vertices": 60000},
+	"candy": {"nodes": 240, "drawn": 190, "casters": 110, "vertices": 266000},
+	"garden": {"nodes": 425, "drawn": 315, "casters": 155, "vertices": 87000},
+	"nightmarket": {"nodes": 365, "drawn": 255, "casters": 135, "vertices": 186000},
+	"toy": {"nodes": 355, "drawn": 257, "casters": 140, "vertices": 144000},
+	"circus": {"nodes": 415, "drawn": 270, "casters": 145, "vertices": 181000},
+}
 const GRID := 0.5
 const REACH := 2.0
 
@@ -22,6 +35,7 @@ func _initialize() -> void:
 	call_deferred("_run")
 
 func _run() -> void:
+	_check_sculpt_release()
 	var world: Node3D = (load("res://game/world/park_world.gd") as GDScript).new()
 	root.add_child(world)
 	await process_frame
@@ -109,13 +123,42 @@ func _check_builds(world: Node3D, host: Node) -> void:
 			"%s shares the island's walker, camera, sun and sky" % region)
 		_check(district.find_children("*", "Camera3D", true, false).is_empty() and district.find_children("*", "DirectionalLight3D", true, false).is_empty()
 			and district.find_children("*", "WorldEnvironment", true, false).is_empty(), "%s builds no camera, sun or sky of its own" % region)
-		_check(district.find_children("*", "Node", true, false).size() + 1 <= DISTRICT_NODE_BUDGET, "%s stays inside the district node budget" % region)
+		_check_budget(region, district)
 		var own_points: Array = world.points.filter(func(point: Dictionary) -> bool: return point.get("region", "") == region)
 		_check(own_points.size() == district.points.size() and not own_points.is_empty(), "%s lists every interaction point in the island" % region)
 		_check(district.points.any(func(point: Dictionary) -> bool: return point.id == "region:welcome"), "%s keeps its free return to the plaza" % region)
 		for point: Dictionary in own_points:
 			var local: Dictionary = district._point_by_id(point.id)
 			_check(Vector3(point.position).is_equal_approx(district.to_global(local.position)), "%s point %s sits at its world position" % [region, point.id])
+
+## A committed sculpt lets go of its SurfaceTool: kept, it held ~270 bytes per
+## vertex, a second copy of every district's merged trim (MAIN-64).
+func _check_sculpt_release() -> void:
+	var sculpt := SceneryKit.Sculpt.new()
+	sculpt.box(Vector3.ZERO, Vector3.ONE, Color.WHITE)
+	var mesh := sculpt.mesh()
+	var left: Array = sculpt._tool.commit_to_arrays()
+	_check(mesh.get_surface_count() == 1 and mesh.surface_get_array_len(0) == 36, "a sculpt commits its shapes")
+	_check(left.is_empty() or left[Mesh.ARRAY_VERTEX] == null or (left[Mesh.ARRAY_VERTEX] as PackedVector3Array).is_empty(), "a committed sculpt keeps no vertices in its tool")
+	_check(sculpt.mesh() == mesh, "a sculpt commits once and returns the same mesh")
+
+## Nodes, drawn geometry, shadow casters and merged vertices stay inside the
+## district's budget; the numbers print so a change can be compared.
+func _check_budget(region: String, district: Node3D) -> void:
+	var budget: Dictionary = DISTRICT_BUDGETS.get(region, DEFAULT_BUDGET)
+	var used := {"nodes": district.find_children("*", "Node", true, false).size() + 1, "drawn": 0, "casters": 0, "vertices": 0}
+	var meshes := {}
+	for node: Node in district.find_children("*", "GeometryInstance3D", true, false):
+		var geometry := node as GeometryInstance3D
+		used.drawn += 1
+		if geometry.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_OFF: used.casters += 1
+		var mesh: Mesh = (geometry as MeshInstance3D).mesh if geometry is MeshInstance3D else null
+		if mesh is ArrayMesh and not meshes.has(mesh):
+			meshes[mesh] = true
+			for surface in mesh.get_surface_count(): used.vertices += (mesh as ArrayMesh).surface_get_array_len(surface)
+	print("[district budget] %s %s" % [region, used])
+	for key: String in used:
+		_check(int(used[key]) <= int(budget[key]), "%s stays inside its %s budget (%d > %d)" % [region, key, used[key], budget[key]])
 
 ## Every district strews its own props over the island side of its band: on
 ## open lawn or sand, outside every claim, never overlapping, and where two
