@@ -363,9 +363,10 @@ func _candy_ui() -> void:
 				and _labels(book).contains("阿浪") and _labels(book).contains("發條衝刺") and _labels(book).contains("整點咕咕"),
 				"Toy Town album lists its delivered games and its physical story without fake collectible entries")
 		elif book._region == "garden":
-			_check(book._entries().size() == 1 and book._entries()[0].id == "photo-garden-story-1"
-				and book._entries()[0].story_region == "garden" and _labels(book).contains("票票"),
-				"Garden album offers guidance to the delivered story without speculative slots")
+			var garden_ids: Array = book._entries().map(func(entry: Dictionary) -> String: return entry.id)
+			_check(garden_ids == ["photo-garden-game-1", "photo-garden-story-1"] and book._entries()[1].story_region == "garden"
+				and _labels(book).contains("票票") and _labels(book).contains("螢火蟲長曝光"),
+				"Garden album lists its delivered game and its story without speculative slots")
 	main._close()
 	main._show_tasks()
 	_check(_labels(main.overlay).contains("糖果工廠目前沒有當地任務") and main.overlay.find_child("Task_quest-001",true,false)==null, "candy tasks name the current region and preserve welcome quest destination")

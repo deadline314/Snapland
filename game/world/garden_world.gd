@@ -9,6 +9,7 @@ const Scenery = preload("res://game/world/garden_scenery.gd")
 const Life = preload("res://game/world/garden_life.gd")
 const Louvers = preload("res://game/world/garden_louvers.gd")
 const RegionalVisit = preload("res://game/story/regional_visit.gd")
+const ArcadeStands = preload("res://game/world/arcade_stands.gd")
 const GROUND_Y := 0.20
 const LOWER_Y := 0.86
 const UPPER_Y := 1.12
@@ -102,6 +103,7 @@ func _build_region_geometry() -> void:
 	_point("garden:buds", "夜芽庭 · 看夜芽", BUDS)
 	_npc(STORY_HOST, IRON, RegionalVisit.host_name(RegionalVisit.GARDEN))
 	_point(RegionalVisit.GARDEN_POINT, "溫室迎賓 · 和票票合照", STORY_POINT)
+	ArcadeStands.build(self, "garden")
 	current_area = _area_at_position(ENTRY)
 
 

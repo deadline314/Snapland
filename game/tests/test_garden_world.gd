@@ -2,6 +2,8 @@ extends SceneTree
 
 const World = preload("res://game/world/garden_world.gd")
 const MapPanel = preload("res://game/ui/harbor_map_panel.gd")
+const Catalog = preload("res://game/core/game_catalog.gd")
+const ArcadeStands = preload("res://game/world/arcade_stands.gd")
 const SaveGuard = preload("res://game/core/test_save_guard.gd")
 const SceneStandards = preload("res://game/world/scene_standards.gd")
 ## Scene-building standards, section 8: nodes and draws for a region other than Welcome.
@@ -35,6 +37,7 @@ func _run() -> void:
 		"a grounded Garden arrival offers the actual free return")
 	_check(_world.npc_activity == null and _world.coastal_play == null, "only local Garden activity is built")
 	_check_budget()
+	await _check_arcade_stands()
 	await _reach([Vector2(0, 3.45)], "garden:louvers", "日照窗")
 	await _check_louvers()
 	await _reach([Vector2(0, 4.65), Vector2(-7.2, 4.65), Vector2(-7.2, 0.05)], "garden:wetland", "濕地床")
@@ -54,6 +57,25 @@ func _run() -> void:
 		print("PASS: garden rooms, physical terraces, louver illumination, safe footing and truthful map")
 	print("Garden: %d checks, %d failures" % [_checks, _errors.size()])
 	quit(int(not _errors.is_empty()))
+
+
+## Every delivered game has a stand the visitor can walk up to; coordinates live in the stand table.
+func _check_arcade_stands() -> void:
+	var delivered: Array = Catalog.definitions("garden")
+	_check(ArcadeStands.rows("garden").size() == delivered.size(), "one entry stand per delivered Garden game")
+	for definition: Dictionary in delivered:
+		var point: Dictionary = _world._point_by_id(definition.id)
+		var stand := _world.get_node_or_null("ArcadeStand_" + str(definition.id)) as MeshInstance3D
+		_check(not point.is_empty() and stand != null and stand.find_children("*", "CollisionShape3D", true, false).size() == 1,
+			str(definition.id) + " has a solid stand and an interaction point")
+		if point.is_empty():
+			continue
+		var at: Vector3 = point.position
+		_check(_world._safe_standing(at) and str(point.label).contains(str(definition.name)), str(definition.id) + " is entered from safe ground and named on its prompt")
+		_check(await _walk(Vector2(at.x, World.ENTRY.z)) and await _walk(Vector2(at.x, at.z))
+			and _world.nearest.get("id") == definition.id and Catalog.identity(str(_world.nearest.get("id"))).zone == "garden",
+			str(definition.id) + " is reachable on foot and its prompt opens that game")
+	_check(await _walk(Vector2(0, World.ENTRY.z)), "the way back to the entrance stays open")
 
 
 func _check_budget() -> void:
@@ -232,9 +254,9 @@ func _check_map() -> void:
 	root.add_child(map)
 	var locations := map.find_child("GardenMapLocations", true, false)
 	var status := map.find_child("GardenMapStatus", true, false) as Label
-	_check(snapshot.region == "garden" and snapshot.areas.size() == 4 and snapshot.points.size() == 6
+	_check(snapshot.region == "garden" and snapshot.areas.size() == 4 and snapshot.points.size() == 6 + ArcadeStands.rows("garden").size()
 		and snapshot.player == _world.player.position and snapshot.area == "夜芽庭" and locations != null
-		and locations.get_child_count() == 6 and status != null and status.text.contains("西植床")
+		and locations.get_child_count() == snapshot.points.size() and status != null and status.text.contains("西植床")
 		and map.find_child("GardenMapTerrain", true, false) != null, "map reports its four physical rooms, local light, traveler, and six real pins")
 	var water_only := Vector2(-10, 0)
 	_check(snapshot.water.has_point(water_only) and not snapshot.land.any(func(rect: Rect2) -> bool: return rect.has_point(water_only))

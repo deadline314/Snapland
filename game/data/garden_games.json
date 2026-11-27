@@ -1,0 +1,22 @@
+[
+  {
+    "id": "game-073",
+    "mode": "hold_still",
+    "zone": "garden",
+    "local_index": 1,
+    "arcade": true,
+    "name": "螢火蟲長曝光",
+    "goal": "長曝光期間什麼都別按，等真正的快門燈亮了才按一下，拍下清晰的螢火蟲光軌。",
+    "instructions": "曝光中任何按鍵都會手震。只在真快門燈（圓形、有相機圖示、叮咚兩聲）亮起時按一下：空白鍵、E、方向鍵或手把任一鈕都算。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助長曝光拿到金牌",
+    "ordinary": "忍住不按，等真快門燈亮才按，拿到銅牌",
+    "attraction_tag": "苔池長曝光",
+    "island_invitation": "快門開著的時候，連抓癢都不行。畫面會一直騙你按，忍得住嗎？",
+    "retake_props": [
+      "camera",
+      "lantern",
+      "bench"
+    ]
+  }
+]

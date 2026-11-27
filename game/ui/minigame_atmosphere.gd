@@ -17,6 +17,7 @@ const THEMES := {
 	"nightmarket": {"mote": Color("#ffb46a"), "shaft": Color("#ffb46a"), "drift": Vector2(4.0, -26.0), "count": 30},
 	"circus": {"mote": Color("#ffe6a8"), "shaft": Color("#ffc98a"), "drift": Vector2(-8.0, 10.0), "count": 28},
 	"toy": {"mote": Color("#ffe1b2"), "shaft": Color("#ffd9a0"), "drift": Vector2(10.0, 6.0), "count": 22},
+	"garden": {"mote": Color("#dcff8a"), "shaft": Color("#bfe6cf"), "drift": Vector2(-6.0, -8.0), "count": 18},
 }
 ## Light by time of day: [shaft strength, vignette strength, mote alpha].
 const PHASE_LIGHT := {

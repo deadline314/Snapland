@@ -16,6 +16,10 @@ const STANDS := {
 		{"id": "game-062", "title": "整點咕咕", "prompt": "整點咕咕 · 數滴答開門",
 			"stand": Vector3(-2.4, 0.2, -5.2), "point": Vector3(-1.3, 0.2, -3.75), "prop": "cuckoo", "paint": Color("#567f77")},
 	],
+	"garden": [
+		{"id": "game-073", "title": "螢火蟲長曝光", "prompt": "螢火蟲長曝光 · 忍住別按",
+			"stand": Vector3(-9.6, 0.2, 5.6), "point": Vector3(-8.5, 0.2, 6.9), "prop": "camera", "paint": Color("#38534e")},
+	],
 }
 const FOOTPRINT := Vector3(1.5, 2.0, 1.0)
 const DARK := Color("#343b42")
@@ -37,6 +41,7 @@ static func build(world: Node3D, region: String) -> void:
 		match str(row.prop):
 			"windup": _windup_prop(sculpt)
 			"cuckoo": _cuckoo_prop(sculpt)
+			"camera": _camera_prop(sculpt)
 		var stand: MeshInstance3D = world._mesh(sculpt.mesh(), Vector3.ZERO, world._vertex_color_material("arcade-stand"))
 		stand.name = "ArcadeStand_" + str(row.id)
 		var body := StaticBody3D.new()
@@ -102,3 +107,20 @@ static func _cuckoo_prop(sculpt: Kit.Sculpt) -> void:
 	sculpt.box(Vector3(0.3, 1.09, 0.1), Vector3(0.24, 0.24, 0.22), bird)
 	sculpt.box(Vector3(0.3, 1.08, 0.24), Vector3(0.08, 0.06, 0.08), Color("#e07b39"))
 	sculpt.box(Vector3(-0.3, 1.02, 0.1), Vector3(0.36, 0.12, 0.3), wall)
+
+
+## A camera on a tripod above the sign, and a jar of fireflies on the counter.
+static func _camera_prop(sculpt: Kit.Sculpt) -> void:
+	var facing := Basis(Vector3.RIGHT, PI * 0.5)
+	for lean: float in [-1.0, 0.0, 1.0]:
+		sculpt.box(Vector3(lean * 0.16, 2.6, -0.3 + absf(lean) * 0.06 - 0.06), Vector3(0.04, 0.5, 0.04), TIMBER, Basis(Vector3.BACK, lean * 0.32))
+	sculpt.box(Vector3(0, 3.0, -0.3), Vector3(0.5, 0.32, 0.26), DARK)
+	sculpt.box(Vector3(0, 3.19, -0.3), Vector3(0.52, 0.06, 0.28), Color("#8a8494"))
+	sculpt.tube(Vector3(0, 3.0, -0.12), 0.13, 0.11, 0.14, BRASS, 8, facing)
+	sculpt.tube(Vector3(0, 3.0, -0.04), 0.08, 0.08, 0.02, Color("#16303a"), 8, facing)
+	sculpt.box(Vector3(0.17, 3.24, -0.3), Vector3(0.08, 0.05, 0.08), Color("#6fd39a"))
+	sculpt.tube(Vector3(-0.28, 1.14, 0.1), 0.15, 0.15, 0.34, Color("#9fc9b4"), 8)
+	sculpt.tube(Vector3(-0.28, 1.33, 0.1), 0.12, 0.12, 0.05, TIMBER, 8)
+	for fly: Vector3 in [Vector3(-0.31, 1.1, 0.26), Vector3(-0.23, 1.2, 0.26), Vector3(-0.3, 1.24, 0.25)]:
+		sculpt.box(fly, Vector3(0.035, 0.035, 0.02), Color("#dcff8a"))
+	sculpt.box(Vector3(0.3, 1.0, 0.1), Vector3(0.4, 0.06, 0.3), CREAM)
