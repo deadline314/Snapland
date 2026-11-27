@@ -140,6 +140,26 @@
     ]
   },
   {
+    "id": "game-056",
+    "mode": "mirror_beam",
+    "zone": "circus",
+    "local_index": 8,
+    "arcade": true,
+    "name": "折鏡迷箱",
+    "goal": "轉動手上的鏡子，把頂棚照下來的光反射到場邊一閃一閃的氣球上打破它們；別讓光照到自己的臉。",
+    "instructions": "← → 或手把十字鍵：按住轉動頭上的鏡子，把頂棚照下來的光反射到兩旁的氣球上；金色氣球要連續照 2 秒，轉太過頭光會照到自己臉上。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助用鏡子打氣球拿到金牌",
+    "ordinary": "用反射光打破氣球，拿到銅牌",
+    "attraction_tag": "鏡光射氣球",
+    "island_invitation": "把頭頂的光轉到氣球上，一照就破。轉過頭的話……會曬出一副墨鏡。",
+    "retake_props": [
+      "camera",
+      "balloon",
+      "lantern"
+    ]
+  },
+  {
     "id": "game-057",
     "mode": "tightrope",
     "zone": "circus",

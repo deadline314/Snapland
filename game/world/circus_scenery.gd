@@ -582,6 +582,15 @@ func _topper(sculpt: Kit.Sculpt, top: Vector3, kind: String) -> void:
 			sculpt.box(top + Vector3(0.1, 1.04, 0), Vector3(0.1, 0.18, 0.08), Props.TEAL)
 			sculpt.box(top + Vector3(0.1, 1.18, 0), Vector3(0.08, 0.08, 0.08), Props.CREAM)
 			sculpt.box(top + Vector3(0.1, 1.06, 0.04), Vector3(0.7, 0.02, 0.02), Props.GOLD, Basis(Vector3.BACK, 0.12))
+		"mirror":
+			# A gilt hand mirror held up on a stand, a beam of light bouncing off it
+			# to a balloon tied to the canopy.
+			sculpt.box(top + Vector3(-0.15, 0.3, 0), Vector3(0.05, 0.6, 0.05), Props.GOLD)
+			sculpt.tube(top + Vector3(-0.15, 0.72, 0), 0.2, 0.2, 0.05, Props.GOLD, 12, Basis(Vector3.RIGHT, PI * 0.5) * Basis(Vector3.FORWARD, 0.4))
+			sculpt.tube(top + Vector3(-0.15, 0.72, 0.03), 0.16, 0.16, 0.02, Props.SKY.lightened(0.3), 12, Basis(Vector3.RIGHT, PI * 0.5) * Basis(Vector3.FORWARD, 0.4))
+			sculpt.box(top + Vector3(0.12, 0.88, 0.05), Vector3(0.5, 0.05, 0.03), Color("#ffe6a8"), Basis(Vector3.BACK, 0.55))
+			sculpt.tube(top + Vector3(0.42, 1.06, 0.05), 0.12, 0.12, 0.2, Props.RED, 10)
+			sculpt.box(top + Vector3(0.42, 0.86, 0.05), Vector3(0.01, 0.22, 0.01), Props.CREAM)
 		"spot":
 			# A can-lamp on a little gantry throwing light down onto a checkered
 			# floor where a tiny dancer stands with arms up.

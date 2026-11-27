@@ -363,8 +363,8 @@ func _candy_ui() -> void:
 		_check(book._region==Routes.ORDER[index] and book._entries().size()==ordinary_slots[index], "regional album retains its delivered sources")
 		if book._region == "circus":
 			var circus_ids: Array = book._entries().map(func(entry: Dictionary) -> String: return entry.id)
-			_check(circus_ids == ["photo-circus-game-1", "photo-circus-game-2", "photo-circus-game-3", "photo-circus-game-4", "photo-circus-game-5", "photo-circus-game-6", "photo-circus-game-7", "photo-circus-game-9", "photo-circus-story-1", "photo-circus-quest-1"] and book._entries()[8].story_region == "circus" and book._entries()[9].story_errand == "circus"
-				and _labels(book).contains("哈哈鏡大頭貼") and _labels(book).contains("誰是假倒影") and _labels(book).contains("接飛碟") and _labels(book).contains("人肉砲彈") and _labels(book).contains("走鋼索") and _labels(book).contains("舞台換景") and _labels(book).contains("帽中套物") and _labels(book).contains("追光躲步"),
+			_check(circus_ids == ["photo-circus-game-1", "photo-circus-game-2", "photo-circus-game-3", "photo-circus-game-4", "photo-circus-game-5", "photo-circus-game-6", "photo-circus-game-7", "photo-circus-game-8", "photo-circus-game-9", "photo-circus-story-1", "photo-circus-quest-1"] and book._entries()[9].story_region == "circus" and book._entries()[10].story_errand == "circus"
+				and _labels(book).contains("哈哈鏡大頭貼") and _labels(book).contains("誰是假倒影") and _labels(book).contains("接飛碟") and _labels(book).contains("人肉砲彈") and _labels(book).contains("走鋼索") and _labels(book).contains("舞台換景") and _labels(book).contains("帽中套物") and _labels(book).contains("追光躲步") and _labels(book).contains("折鏡迷箱"),
 				"Circus lists its delivered games under their own catalogue slots and its regional story source")
 		elif book._region == "toy":
 			var toy_ids: Array = book._entries().map(func(entry: Dictionary) -> String: return entry.id)
