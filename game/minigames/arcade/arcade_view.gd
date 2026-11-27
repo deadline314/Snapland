@@ -9,6 +9,7 @@ extends Control
 
 const Medal = preload("res://game/ui/arcade_medal.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
+const Pixels = preload("res://game/minigames/arcade/arcade_pixels.gd")
 const DESIGN := Vector2(1280, 720)
 const INK := Color("#1b1626")
 const CREAM := Color("#fff5dc")
@@ -19,6 +20,8 @@ const ROSE := Color("#ff6f7d")
 const PLAY_TOP := 122.0
 const STRIP := Rect2(410, 130, 460, 12)
 const WORD_SECONDS := 0.95
+## Screen pixels per texel of a baked sprite.
+const TEXEL := 4.0
 
 var state: Dictionary = {}
 var reduced_motion := false
@@ -114,6 +117,40 @@ func stage_floor(top: float, wood: Color, seam: Color) -> void:
 			x += step
 		y += height
 	draw_rect(Rect2(0, top - 4.0, DESIGN.x, 5), wood.lightened(0.32))
+
+## Draw a baked sprite (arcade_pixels.gd) so texel (0, 0) of its shape lands on `at`.
+func stamp(texture: Texture2D, at: Vector2, scale_factor := TEXEL, tint := Color.WHITE) -> void:
+	draw_texture_rect(texture, Rect2(at - Vector2.ONE * scale_factor, Vector2(texture.get_size()) * scale_factor), false, tint)
+
+
+## The shadow a hung or standing sprite throws on whatever is behind it.
+func cast_shadow(texture: Texture2D, at: Vector2, offset := Vector2(10, 14), scale_factor := TEXEL, strength := 0.3) -> void:
+	stamp(texture, at + offset, scale_factor, Color(0.05, 0.02, 0.09, strength))
+
+
+## Darkened side edges keep the eye on the middle and sink sprites into the painting.
+func vignette(strength := 0.5) -> void:
+	for band in 5:
+		var reach := 160.0 - band * 30.0
+		var shade := Color(0.04, 0.02, 0.07, strength * 0.2)
+		draw_rect(Rect2(0, PLAY_TOP, reach, DESIGN.y - PLAY_TOP), shade)
+		draw_rect(Rect2(DESIGN.x - reach, PLAY_TOP, reach, DESIGN.y - PLAY_TOP), shade)
+
+
+## A wooden bench or shelf from `top` to the bottom edge: grained boards, a lit
+## front lip, and dusk gathering where it meets the wall.
+func bench(top: float, wood: Color) -> void:
+	for band in 4:
+		draw_rect(Rect2(0, top - 72.0 + band * 18.0, DESIGN.x, 18), Color(0.09, 0.05, 0.14, 0.1 + band * 0.1))
+	var rows := int((DESIGN.y - top) / TEXEL) + 1
+	var boards := Pixels.bake("bench|%s|%d" % [wood.to_html(), rows], Vector2i(320, rows), func(x: int, y: int) -> Color:
+		if y < 2:
+			return Pixels.grainy(wood.lightened(0.24), x, y, 0.1)
+		if y == 2:
+			return wood.darkened(0.5)
+		return Pixels.wood(wood.darkened(minf(0.5, 0.1 + 0.012 * y)), x, y - 3, 11, false))
+	stamp(boards, Vector2(0, top))
+
 
 ## Seconds since a moment the driver stamped with its clock.
 func age(stamp: float) -> float:
