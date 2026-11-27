@@ -237,7 +237,7 @@ func _same_batch_trip(region: String) -> void:
 	var map: Node = main.overlay.find_child(prefix + "MapPanel", true, false)
 	var delivered: Array = Catalog.definitions(region)
 	var games_button := main.overlay.find_child("RegionGamesButton", true, false) as Button
-	_check(map != null and map.snapshot == main.region_world().map_snapshot() and (games_button != null) == (not delivered.is_empty()),
+	_check(map != null and map.snapshot == _with_picks(main.region_world().map_snapshot()) and (games_button != null) == (not delivered.is_empty()),
 		title + " map reports actual terrain and offers game entries only for delivered games")
 	for definition: Dictionary in delivered:
 		_check(not main.region_world()._point_by_id(definition.id).is_empty() and map != null and _labels(map).contains(str(definition.name)),
@@ -344,7 +344,7 @@ func _candy_ui() -> void:
 	var map: Node=main.overlay.find_child("CandyMapPanel",true,false)
 	_check(map!=null and main.overlay.find_child("MapStop_game-001",true,false)==null and main.overlay.find_child("HarborMapTide",true,false)==null, "candy map has factory terrain without welcome stations or harbor tide")
 	if map!=null:
-		_check(map.snapshot==expected_map and _labels(map).contains("觀察台") and _labels(map).contains("免費"), "candy map reflects real bounds terrain points position and temperature")
+		_check(map.snapshot==_with_picks(expected_map) and _labels(map).contains("觀察台") and _labels(map).contains("免費"), "candy map reflects real bounds terrain points position and temperature")
 		await _regional_map_location_flow(map)
 	main._close()
 	main._show_album()
@@ -611,3 +611,10 @@ func _finish() -> void:
 	for failure in failures: push_error("FAIL: "+failure)
 	if failures.is_empty(): print("PASS: region travel admission, lifecycle, scoped UI, restart, and unchanged rewards")
 	get_tree().quit(0 if failures.is_empty() else 1)
+
+
+## The map also carries today's recommended booths (MAIN-58); everything else must equal the world's own snapshot.
+func _with_picks(world_snapshot: Dictionary) -> Dictionary:
+	var expected := world_snapshot.duplicate(true)
+	expected["daily_picks"] = main._daily_picks()
+	return expected
