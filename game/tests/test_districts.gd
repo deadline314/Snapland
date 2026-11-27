@@ -30,6 +30,7 @@ func _run() -> void:
 	world.gate_opened.connect(func(region: String) -> void: opened.append(region))
 	await _check_gates(world, host)
 	_check_builds(world, host)
+	_check_bands(host)
 	_check_closed_built(world)
 	_check_reach(world, host)
 	_check_mechanics(world, host)
@@ -115,6 +116,29 @@ func _check_builds(world: Node3D, host: Node) -> void:
 		for point: Dictionary in own_points:
 			var local: Dictionary = district._point_by_id(point.id)
 			_check(Vector3(point.position).is_equal_approx(district.to_global(local.position)), "%s point %s sits at its world position" % [region, point.id])
+
+## Every district strews its own props over the island side of its band: on
+## open lawn or sand, outside every claim, never overlapping, and where two
+## bands meet each prop stands on ground its own district holds.
+func _check_bands(host: Node) -> void:
+	var everything: Array = []
+	for region: String in DistrictSites.regions():
+		var district: Node3D = host.built(region)
+		if district == null: continue
+		var props: Array = district.get_meta(&"band_props", [])
+		_check(props.size() >= 4 and district.find_child("BandProps", false, false) != null, "%s dresses its band with props (%d)" % [region, props.size()])
+		for prop: Dictionary in props:
+			var at: Vector2 = prop.at
+			_check(not DistrictSites.claims(at) and not IslandLayout.on_path(at) and DistrictSites.holds(region, at),
+				"%s band prop %s at %s stands on open island ground its district holds" % [region, prop.kind, at])
+			prop.region = region
+			everything.append(prop)
+	for index in everything.size():
+		for other in range(index + 1, everything.size()):
+			var a: Dictionary = everything[index]
+			var b: Dictionary = everything[other]
+			_check((a.at as Vector2).distance_to(b.at) >= float(a.radius) + float(b.radius),
+				"band props %s %s and %s %s overlap" % [a.region, a.kind, b.region, b.kind])
 
 ## Closed gates hold even once the district behind them is built.
 func _check_closed_built(world: Node3D) -> void:

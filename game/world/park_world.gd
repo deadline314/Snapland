@@ -30,6 +30,7 @@ signal district_changed(region: String)
 signal gate_opened(region: String)
 const DistrictSites = preload("res://game/world/district_sites.gd")
 const DistrictHostScript = preload("res://game/world/district_host.gd")
+const DistrictBand = preload("res://game/world/district_band.gd")
 const SceneryKit = preload("res://game/world/scenery_kit.gd")
 const CoastalCircuit = preload("res://game/world/coastal_circuit.gd")
 const CoastalPlay = preload("res://game/world/coastal_play.gd")
@@ -353,6 +354,8 @@ func _ready_embedded() -> void:
 	add_child(component_motion)
 	await _build_region_geometry()
 	await build_pause()
+	DistrictBand.new().build(self)
+	await build_pause()
 	_build_fitting_batches()
 	await build_pause()
 	_register_npc_activity()
@@ -429,7 +432,7 @@ func _open_ground(spot: Vector2) -> bool:
 func dresses(spot: Vector2) -> bool:
 	if embedded_in == null or (_site.claim as Rect2).has_point(spot): return true
 	var at := spot + Vector2(position.x, position.z)
-	return DistrictSites.ground_weight(district, at) > DistrictSites.chance(at) and embedded_in.band_site_clear(at)
+	return DistrictSites.ground_weight(district, at) > DistrictSites.chance(at) and DistrictSites.holds(district, at) and embedded_in.band_site_clear(at)
 
 ## How far this world's own ground reaches: `authored` standalone, the claim embedded.
 func dress_rect(authored: Rect2) -> Rect2:
@@ -3621,6 +3624,8 @@ func set_time_of_day(phase_id: Variant) -> void:
 		welcome_sea_material.set_shader_parameter("dock_glow", lamp_energy_for_phase)
 	if ferry_window_glow != null:
 		ferry_window_glow.emission_energy_multiplier = lamp_energy_for_phase * 1.8
+	var band_glow := material_cache.get(DistrictBand.GLOW_KEY) as StandardMaterial3D
+	if band_glow != null: band_glow.emission_energy_multiplier = lamp_energy_for_phase * 2.4
 	if is_instance_valid(ambience): ambience.set_phase(active_time_phase)
 	# The host chooses lamps, grades painted scenery and grounds shadows for every district.
 	if embedded_in != null: return

@@ -151,6 +151,19 @@ static func ground_weight(region: String, point: Vector2) -> float:
 	if reach >= BAND + EDGE_WOBBLE: return 0.0
 	return 1.0 - smoothstep(0.0, BAND, reach + (_noise(point) - 0.5) * 2.0 * EDGE_WOBBLE)
 
+## Where two bands overlap, how strongly a district holds `point`: its ground
+## weight scaled by its own slow noise, so the two districts' props and planting
+## interleave in patches instead of meeting at a straight midline.
+static func share(region: String, point: Vector2) -> float:
+	return ground_weight(region, point) * (0.5 + _noise(point * 1.4 + Vector2(float(region.hash() % 1000), 0.0)))
+
+## True unless another district holds `point` more strongly.
+static func holds(region: String, point: Vector2) -> bool:
+	var own := share(region, point)
+	for other: String in SITES:
+		if other != region and share(other, point) > own: return false
+	return true
+
 ## Repeatable 0..1 choice for a spot, to thin scattered props by weight.
 static func chance(point: Vector2) -> float:
 	return _hash(Vector2i(roundi(point.x * 7.0), roundi(point.y * 7.0)))
@@ -180,8 +193,11 @@ static func tint_texture(grid_origin: Vector2, columns: int, rows: int, cell: fl
 		for row in range(maxi(int(low.y), 0), mini(int(high.y), rows - 1) + 1):
 			for column in range(maxi(int(low.x), 0), mini(int(high.x), columns - 1) + 1):
 				var amount := ground_weight(region, grid_origin + Vector2(column, row) * cell) * float(site.ground_strength)
-				if amount > image.get_pixel(column, row).a:
-					image.set_pixel(column, row, Color(tone.r, tone.g, tone.b, amount))
+				if amount <= 0.0: continue
+				# Overlapping bands blend their colours by strength rather than meeting at a line.
+				var under := image.get_pixel(column, row)
+				var mixed := Color(under.r, under.g, under.b).lerp(tone, amount / (amount + under.a))
+				image.set_pixel(column, row, Color(mixed.r, mixed.g, mixed.b, maxf(amount, under.a)))
 	_tint = ImageTexture.create_from_image(image)
 	return _tint
 

@@ -8,6 +8,8 @@ render_mode diffuse_burley;
 
 uniform vec4 tint : source_color = vec4(1.0);
 uniform float surface_roughness : hint_range(0.0, 1.0) = 0.92;
+// Merged props carry their colours per vertex (linear); multiply them in.
+uniform bool vertex_tint = false;
 uniform float occlusion_cutaway_enabled = 0.0;
 uniform vec2 occlusion_viewport_size_px = vec2(1280.0, 720.0);
 uniform vec2 occlusion_body_center_px = vec2(640.0, 360.0);
@@ -80,7 +82,7 @@ void fragment() {
 		float seam = step(fract(surface.y / COURSE_HEIGHT), TEXEL / COURSE_HEIGHT);
 		shade -= seam * 0.075;
 	}
-	ALBEDO = tint.rgb * shade;
+	ALBEDO = tint.rgb * shade * (vertex_tint ? COLOR.rgb : vec3(1.0));
 	ROUGHNESS = surface_roughness;
 	SPECULAR = 0.14;
 }

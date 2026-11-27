@@ -132,7 +132,8 @@ func _build_ground() -> void:
 	# The way back to the welcome avenue runs south through the gateway.
 	var way: Rect2 = Rect2(-2.5, 10.0, 5.0, 24.0) if world.embedded_in == null else world._site.approach
 	slabs.add(Vector3(way.get_center().x, QUARTER_Y - 0.3, way.get_center().y), Vector3(way.size.x, 0.6, way.size.y))
-	# Loose flagstones break the quarter's edge up where it meets bare ground.
+	# Loose flagstones break the quarter's edge up where it meets bare ground;
+	# embedded, the island band crumbles everything beyond the claim.
 	var flags := kit.surface(world._coastal_surface(0, 2.2, Color("#59607a")))
 	for index in range(64):
 		var seed_value := float(index) * 7.31
@@ -145,7 +146,7 @@ func _build_ground() -> void:
 			2: at = Vector3(QUARTER.end.x + out, 0, lerpf(-26.0, 12.0, along))
 			_: at = Vector3((2.6 + out) * (1.0 if index % 8 < 4 else -1.0), 0, lerpf(10.5, 28.0, along))
 		if absf(at.x) < 2.6 and at.z > 10.0: continue
-		if not world.dresses(Vector2(at.x, at.z)): continue
+		if not world.in_dress_reach(Vector2(at.x, at.z)): continue
 		at.y = VALLEY_Y + 0.02
 		flags.add(at, Vector3(0.9 + 0.7 * Props.scatter(seed_value + 2.0), 0.06, 0.7 + 0.5 * Props.scatter(seed_value + 3.0)), Basis(Vector3.UP, seed_value))
 
