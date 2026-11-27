@@ -333,7 +333,7 @@ func _check_achievements() -> void:
 	var grid := _overlay.find_child("MinigameStampGrid", true, false) as GridContainer
 	var milestones := _overlay.find_child("ParkMilestoneStampSection", true, false) as Control
 	_check(grid != null and grid.get_child_count() == 12, "achievement book keeps all twelve minigame stamp records")
-	_check(milestones != null and milestones.get_child_count() == 5, "milestone collection retains its four eligibility records")
+	_check(milestones != null and milestones.get_child_count() == 6, "milestone collection retains its four eligibility records and adds the thief keepsake")
 	_check(_contains_text(_overlay.find_child("AchievementStamp_ACH_WELCOME_DEVILS", true, false), "12 張小惡魔"), "locked achievement still explains its unchanged requirement")
 	var content_scroll := _overlay.find_child("AdaptiveMenuScroll", true, false) as ScrollContainer
 	_check(content_scroll != null and content_scroll.vertical_scroll_mode==ScrollContainer.SCROLL_MODE_SHOW_NEVER, "achievement pages keep the real content viewport but hide manual scroll affordances")

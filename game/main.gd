@@ -5,6 +5,7 @@ const DistrictSites = preload("res://game/world/district_sites.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
 const PaperMotion = preload("res://game/ui/paper_motion.gd")
 const FieldGameChip = preload("res://game/ui/field_game_chip.gd")
+const RoamingThief = preload("res://game/world/roaming_thief.gd")
 const ArcadeMedal = preload("res://game/ui/arcade_medal.gd")
 const ParkVariety = preload("res://game/core/park_variety.gd")
 const RegionTransitionScript = preload("res://game/ui/region_transition.gd")
@@ -48,6 +49,8 @@ var context_bar: PanelContainer
 var ticket_button: Button
 var toast: Label
 var field_chip: FieldGameChip
+## The masked thief who roams the island world; null in a world of its own.
+var thief: Node3D
 var quest_label: Label
 var session: Control
 var modal_kind := ""
@@ -142,6 +145,12 @@ func _bind_world() -> void:
 		world.field_games.note_requested.connect(audio.play_note)
 		world.field_games.feedback_requested.connect(audio.play_sfx)
 	field_chip.bind(world.field_games)
+	if is_instance_valid(world.district_host):
+		thief=RoamingThief.attach(world)
+		thief.notice_requested.connect(_notice)
+		thief.sfx_requested.connect(audio.play_sfx)
+		thief.note_requested.connect(audio.play_note)
+		thief.arc_finished.connect(_on_thief_arc_finished)
 	world.interaction_requested.connect(_on_world_interaction_requested.bind(world))
 	world.area_changed.connect(_on_world_area_changed.bind(world))
 	world.district_changed.connect(_on_district_changed)
@@ -1452,6 +1461,8 @@ func _interact(id: String, title: String) -> void:
 	audio.play_sfx("interact")
 	if is_instance_valid(world.field_games) and world.field_games.activate(id):
 		return
+	if is_instance_valid(thief) and thief.activate(id):
+		return
 	if id=="region:welcome":
 		_travel_to_region("welcome")
 		return
@@ -2615,6 +2626,7 @@ func _show_island_map() -> void:
 	var park_data: Dictionary=world.park_data()
 	map_panel.setup(park_data.get("zones",[]),definitions,Progress.normal_count(),world.points,world.player.global_position)
 	map_panel.daily_picks=_daily_picks()
+	if is_instance_valid(thief): map_panel.thief_area=thief.map_area()
 	map_panel.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	map_panel.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	body.add_child(map_panel)
@@ -2673,12 +2685,21 @@ func _notice(message: String) -> void:
 	var timer := get_tree().create_timer(3.5)
 	timer.timeout.connect(func(): if is_instance_valid(toast) and toast.text==message: toast.text=""; toast.visible=false)
 
+## Third catch: the thief owns up and leaves his mask as a keepsake (already saved).
+func _on_thief_arc_finished() -> void:
+	if session!=null or modal_kind!="": return
+	_start_dialogue([
+		{"speaker":"怪盜","text":"哎呀呀，又被你抓到了！三次了，我認輸。"},
+		{"speaker":"怪盜","text":"偷來的東西都還回去了。這副面具送你，當作我們追來追去的紀念。"},
+		{"speaker":"旁白","text":"獲得紀念章「怪盜的面具」，在成就的島嶼里程碑裡。"},
+	],Callable())
+
 func _achievement_toast(id: String) -> void:
 	var label := ""
 	if id.begins_with("ACH_GAME_"):
 		label=str(_definition("game-%03d"%int(id.trim_prefix("ACH_GAME_"))).get("name","小遊戲"))+"的第一張照片"
 	else:
-		label={"ACH_WELCOME_CLEAR":"迎賓普通遊戲拍貼全收藏","ACH_WELCOME_DEVILS":"迎賓小惡魔全收藏","ACH_ALL_DEVILS":"全島小惡魔全收藏",TimeOfDay.ACHIEVEMENT_ALL_POSTCARDS:"四時留影"}.get(id,"新的旅途紀念")
+		label={"ACH_WELCOME_CLEAR":"迎賓普通遊戲拍貼全收藏","ACH_WELCOME_DEVILS":"迎賓小惡魔全收藏","ACH_ALL_DEVILS":"全島小惡魔全收藏",TimeOfDay.ACHIEVEMENT_ALL_POSTCARDS:"四時留影",Progress.THIEF_ACHIEVEMENT:"怪盜的面具"}.get(id,"新的旅途紀念")
 	_notice("成就解鎖  ✦  "+label)
 
 func _capture_sequence() -> void:

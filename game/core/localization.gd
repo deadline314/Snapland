@@ -25,6 +25,8 @@ const EMBEDDED_BASE_SOURCES := {
 	"settings.play.title": "遊玩方式與畫面",
 	"settings.assist": "輔助遊玩：放寬時間與判定，仍可收藏",
 	"settings.reduced_motion": "降低動態：停止水波與裝飾擺動",
+	"settings.roaming_thief": "怪盜出沒：逛園區時偶爾遇到怪盜",
+	"settings.roaming_thief.hint": "關閉後怪盜暫停出現，已抓到的次數會保留。",
 	"settings.fullscreen": "使用全螢幕",
 	"settings.ui_scale": "文字大小",
 	"settings.ui_scale.hint": "文字大小會放大介面文字；按鈕仍維持完整操作高度。",

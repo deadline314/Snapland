@@ -4,6 +4,7 @@ extends VBoxContainer
 const Paper = preload("res://game/ui/paper_ui.gd")
 const TimeOfDay = preload("res://game/core/time_of_day.gd")
 const GameCatalog = preload("res://game/core/game_catalog.gd")
+const ProgressScript = preload("res://game/core/progress.gd")
 
 class StampMark extends Control:
 	var number := "01"
@@ -171,11 +172,13 @@ func _ready() -> void:
 	for photo_id in TimeOfDay.all_postcard_ids():
 		if _progress.photos.has(photo_id):
 			time_count+=1
+	var thief_catches := int(_progress.get("thief_catches")) if "thief_catches" in _progress else 0
 	var milestones := [
 		{"id":"ACH_WELCOME_CLEAR","number":"N","title":"迎賓普通卡全收藏","condition":"集齊迎賓大道 12 張普通遊戲拍貼","current":normal_games,"target":12},
 		{"id":"ACH_WELCOME_DEVILS","number":"D","title":"尾巴藏不住","condition":"集齊迎賓大道 12 張小惡魔拍貼","current":welcome_devils,"target":12},
 		{"id":"ACH_ALL_DEVILS","number":"120","title":"每個小惡魔都入鏡","condition":"集齊十區共 120 張小惡魔拍貼","current":total_devils,"target":120},
 		{"id":TimeOfDay.ACHIEVEMENT_ALL_POSTCARDS,"number":"4","title":"四時留影","condition":"收藏凌晨、中午、傍晚與晚上明信片","current":time_count,"target":4},
+		{"id":ProgressScript.THIEF_ACHIEVEMENT,"number":"M","title":"怪盜的面具","condition":"在園區抓到怪盜三次","current":thief_catches,"target":ProgressScript.THIEF_CATCH_GOAL},
 	]
 	for item in milestones:
 		var unlocked: bool=_progress.achievements.has(item.id)

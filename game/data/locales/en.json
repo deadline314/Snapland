@@ -60,6 +60,14 @@
       "text": "Reduce motion: stop water and decorative movement",
       "source": "降低動態：停止水波與裝飾擺動"
     },
+    "settings.roaming_thief": {
+      "text": "Roaming thief: meet a thief now and then while wandering",
+      "source": "怪盜出沒：逛園區時偶爾遇到怪盜"
+    },
+    "settings.roaming_thief.hint": {
+      "text": "Off pauses his appearances; catches so far are kept.",
+      "source": "關閉後怪盜暫停出現，已抓到的次數會保留。"
+    },
     "settings.fullscreen": {
       "text": "Fullscreen",
       "source": "使用全螢幕"

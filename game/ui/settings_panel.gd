@@ -92,6 +92,8 @@ func _fill_play() -> void:
 	content.add_child(Paper.section_title(_t("settings.play.title"),Paper.TEAL))
 	_add_toggle("assist",_t("settings.assist"))
 	_add_toggle("reduced_motion",_t("settings.reduced_motion"))
+	_add_toggle("roaming_thief",_t("settings.roaming_thief"))
+	(content.get_node("Value_roaming_thief") as Control).tooltip_text = _t("settings.roaming_thief.hint")
 	_add_toggle("fullscreen",_t("settings.fullscreen"))
 	_add_slider("ui_scale",_t("settings.ui_scale"),1.0,1.25)
 	content.add_child(Paper.label(_t("settings.ui_scale.hint"),16,Paper.TEAL))

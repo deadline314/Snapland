@@ -353,7 +353,7 @@ func _test_achievements() -> void:
 	var unlocked: Node=_main.overlay.find_child("AchievementStamp_ACH_GAME_001",true,false)
 	_check(unlocked!=null and _has_label(unlocked,"已蓋章"),"earned achievement is shown as a stamped record")
 	var milestones: Node=_main.overlay.find_child("ParkMilestoneStampSection",true,false)
-	_check(milestones!=null and milestones.get_child_count()==5,"achievement page groups four island milestones after game stamps")
+	_check(milestones!=null and milestones.get_child_count()==6 and milestones.find_child("AchievementStamp_ACH_THIEF_MASK",true,false)!=null,"achievement page groups four island milestones and the thief keepsake after game stamps")
 	_check(_has_label(milestones,"十區共 120 張小惡魔拍貼"),"all-devil milestone states its unchanged 120-card requirement")
 	_main._close()
 

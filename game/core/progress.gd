@@ -17,6 +17,10 @@ const MAX_FAIL_STICKERS := 48
 const MAX_FAIL_REPLAY_CHARS := 24 * 1024
 const MAX_FAIL_FRAME_BYTES := 512 * 1024
 const MAX_FIELD_SCORE := 999999
+## The roaming thief: catches that end his arc, coins per catch and the keepsake stamp.
+const THIEF_CATCH_GOAL := 3
+const THIEF_CATCH_COINS := 20
+const THIEF_ACHIEVEMENT := "ACH_THIEF_MASK"
 const MAX_GAME_PHOTO_FRAMES := 3
 const MAX_GAME_PHOTO_FRAME_CANDIDATES := 12
 const MAX_GAME_PHOTO_FILE_BYTES := 16 * 1024 * 1024
@@ -45,6 +49,7 @@ const DEFAULT_SETTINGS := {
 	"locale": "zh_TW",
 	"font_style": "pixel",
 	"graphics_quality": RenderQuality.DEFAULT_LEVEL,
+	"roaming_thief": true,
 }
 const WELCOME_GAME_IDS := [
 	"game-001", "game-002", "game-003", "game-004", "game-005", "game-006",
@@ -78,6 +83,8 @@ var field_records: Dictionary = {}
 var daily_bonus: Dictionary = {}
 ## {game_id: {"frame": thumbnail path or "", "replay": JSON of the frozen picture state or ""}}
 var fail_stickers: Dictionary = {}
+## Times the roaming thief was caught, 0 to THIEF_CATCH_GOAL.
+var thief_catches := 0
 var _extra_fields: Dictionary = {}
 var _loading := false
 var _suppress_changed_save := false
@@ -221,6 +228,31 @@ func record_field_result(id: String, score: int, medal: int, coin_scale := 1) ->
 	result.medal = maxi(old_medal, medal)
 	result.new_best = score > old_best
 	return result
+
+## One more catch of the roaming thief: coins every time, the keepsake stamp
+## exactly once on the last catch. Nothing changes if the save fails.
+func record_thief_catch() -> Dictionary:
+	var result := {"saved": false, "catches": thief_catches, "coins": 0, "rewarded": false}
+	if thief_catches >= THIEF_CATCH_GOAL:
+		return result
+	var previous_coins := coins
+	var rewarded := thief_catches + 1 >= THIEF_CATCH_GOAL and not achievements.has(THIEF_ACHIEVEMENT)
+	thief_catches += 1
+	coins = mini(MAX_COINS, coins + THIEF_CATCH_COINS)
+	if rewarded:
+		achievements[THIEF_ACHIEVEMENT] = true
+	if not save_progress():
+		thief_catches -= 1
+		coins = previous_coins
+		if rewarded:
+			achievements.erase(THIEF_ACHIEVEMENT)
+		return result
+	_suppress_changed_save = true
+	changed.emit()
+	_suppress_changed_save = false
+	if rewarded:
+		achievement_unlocked.emit(THIEF_ACHIEVEMENT)
+	return {"saved": true, "catches": thief_catches, "coins": coins - previous_coins, "rewarded": rewarded}
 
 ## Pays a recommended booth's medal coins at the daily rate, once per medal
 ## tier per booth per day; nothing changes if the save fails.
@@ -814,6 +846,7 @@ func save_progress() -> bool:
 		"field_records": field_records,
 		"daily_bonus": daily_bonus,
 		"fail_stickers": fail_stickers,
+		"thief_catches": thief_catches,
 	}, true)
 	var temporary := path + ".tmp"
 	var file := FileAccess.open(temporary, FileAccess.WRITE)
@@ -1189,7 +1222,7 @@ func _apply_save(payload: Dictionary) -> void:
 	_loading = true
 	_reset_memory()
 	for key in payload:
-		if key not in ["version", "photos", "achievements", "quests", "settings", "visited", "intro_seen", "prologue_seen", "current_region", "platform_pending_achievements", "appearance", "equipped", "owned_clothes", "coins", "wardrobe_rewarded_games", "tutorial_seen_games", "attempted_games", "field_records", "daily_bonus", "fail_stickers", "player_position"]:
+		if key not in ["version", "photos", "achievements", "quests", "settings", "visited", "intro_seen", "prologue_seen", "current_region", "platform_pending_achievements", "appearance", "equipped", "owned_clothes", "coins", "wardrobe_rewarded_games", "tutorial_seen_games", "attempted_games", "field_records", "daily_bonus", "fail_stickers", "player_position", "thief_catches"]:
 			_extra_fields[key] = payload[key]
 	var loaded_photos: Variant = payload.get("photos", {})
 	if typeof(loaded_photos) == TYPE_DICTIONARY:
@@ -1277,6 +1310,11 @@ func _apply_save(payload: Dictionary) -> void:
 	field_records = _validated_field_records(payload.get("field_records", {}))
 	daily_bonus = _validated_daily_bonus(payload.get("daily_bonus", {}))
 	fail_stickers = _validated_fail_stickers(payload.get("fail_stickers", {}))
+	var loaded_catches: Variant = payload.get("thief_catches", 0)
+	if _valid_whole_number(loaded_catches, THIEF_CATCH_GOAL):
+		thief_catches = int(loaded_catches)
+	else:
+		push_warning("Invalid 'thief_catches' field in progress file '%s'; starting the thief over." % _save_path())
 	if not payload.has("attempted_games"):
 		for definition: Dictionary in GameCatalog.all_definitions():
 			var identity := GameCatalog.identity(definition.id)
@@ -1344,6 +1382,7 @@ func _reset_memory() -> void:
 	field_records = {}
 	daily_bonus = {}
 	fail_stickers = {}
+	thief_catches = 0
 	settings["time_phase"] = TimeOfDay.DEFAULT_PHASE
 	_extra_fields = {}
 

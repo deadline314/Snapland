@@ -77,6 +77,8 @@ class MapSurface extends Control:
 	var player := Vector3.INF
 	var dock := Vector3.INF
 	var destination := Vector3.INF
+	## The roaming thief's rough whereabouts: {"center", "radius"}, empty when away.
+	var thief_area: Dictionary = {}
 	var walk_chart := Rect2()
 	var station_index := Rect2()
 	var region_overview := Rect2()
@@ -182,6 +184,8 @@ class MapSurface extends Control:
 		return Rect2(_project_xz(claim.position), claim.size * _scale)
 
 	func _draw_markers() -> void:
+		if not thief_area.is_empty():
+			_draw_thief(project(thief_area.center), float(thief_area.radius) * _scale)
 		if destination.is_finite():
 			var point := project(destination)
 			var radius := 9.0 * _unit
@@ -193,6 +197,22 @@ class MapSurface extends Control:
 			var point := project(player)
 			draw_circle(point, 5.5 * _unit, Color("#18475b"), true, -1.0, true)
 			draw_circle(point, 3.7 * _unit, YOU, true, -1.0, true)
+
+	## A soft ring where the thief is roughly, and a small domino mask in it.
+	func _draw_thief(point: Vector2, radius: float) -> void:
+		radius = maxf(radius, 10.0 * _unit)
+		for ring in range(3):
+			draw_circle(point, radius * (1.0 - ring * 0.22), Color(0.62, 0.23, 0.35, 0.13), true, -1.0, true)
+		draw_arc(point, radius, 0.0, TAU, 32, Color(0.62, 0.23, 0.35, 0.55), 1.2 * _unit, true)
+		var u := _unit
+		var mask := PackedVector2Array([point + Vector2(-9, -2) * u, point + Vector2(-4, -4.5) * u, point + Vector2(0, -2.5) * u,
+			point + Vector2(4, -4.5) * u, point + Vector2(9, -2) * u, point + Vector2(7, 3.5) * u, point + Vector2(2, 3) * u,
+			point + Vector2(0, 1) * u, point + Vector2(-2, 3) * u, point + Vector2(-7, 3.5) * u])
+		draw_colored_polygon(mask, Color("#2c2a45"))
+		mask.append(mask[0])
+		draw_polyline(mask, Color("#fff0d5"), 1.2 * u, true)
+		draw_circle(point + Vector2(-4, -0.5) * u, 1.6 * u, Color("#fff7e8"), true, -1.0, true)
+		draw_circle(point + Vector2(4, -0.5) * u, 1.6 * u, Color("#fff7e8"), true, -1.0, true)
 
 	func _draw_headings() -> void:
 		var font := Paper.font()
@@ -209,6 +229,8 @@ class MapSurface extends Control:
 
 ## Today's recommended booths; their station buttons wear a star.
 var daily_picks: Array = []
+## The roaming thief's rough whereabouts (see RoamingThief.map_area); empty hides it.
+var thief_area: Dictionary = {}
 var _zones: Array = []
 var _games: Array = []
 var _normal_count := 0
@@ -275,6 +297,7 @@ func _ready() -> void:
 	_canvas.clip_contents = true
 	_canvas.player = _player_position
 	_canvas.dock = _position("arrival")
+	_canvas.thief_area = thief_area
 	_canvas.resized.connect(_layout_map_buttons)
 	frame.add_child(_canvas)
 	_normal_style = _map_button_style(false, false)
@@ -308,7 +331,7 @@ func _ready() -> void:
 	title_stack.add_child(_detail_title)
 	_detail_body.add_child(_detail_text)
 
-	var legend := Paper.label("藍點：你的位置　金菱：目的地　珊瑚線：迎賓大道　青綠線：海岸環線", 15, Paper.INK)
+	var legend := Paper.label("藍點：你的位置　金菱：目的地　珊瑚線：迎賓大道　青綠線：海岸環線" + ("　面具：怪盜出沒" if not thief_area.is_empty() else ""), 15, Paper.INK)
 	legend.name = "IslandMapLegend"
 	legend.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	add_child(legend)
