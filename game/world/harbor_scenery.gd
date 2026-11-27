@@ -75,10 +75,15 @@ func _init(owner: Node3D, scenery_kit: Kit) -> void:
 
 func build() -> void:
 	_build_water_and_ground()
+	await world.build_pause()
 	_build_edges()
+	await world.build_pause()
 	_build_piers_and_docks()
+	await world.build_pause()
 	_build_landmarks()
+	await world.build_pause()
 	_build_dressing()
+	await world.build_pause()
 
 ## Everything the tide level drives: sea height, wet sand, the sandbar bank and the clock.
 func apply_tide(eased: float, water_y: float) -> void:

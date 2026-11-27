@@ -75,7 +75,8 @@ var _story_photo_pose: Texture2D
 func _build_region_geometry() -> void:
 	_kit = Kit.new(self)
 	_scenery = Scenery.new(self, _kit)
-	_scenery.build()
+	await _scenery.build()
+	await build_pause()
 	_projection = ProjectionScript.new()
 	_projection.name = "CircusProjection"
 	_projection.position = Vector3(SHADOW_STAGE.x, GROUND_Y, 0)
@@ -85,6 +86,7 @@ func _build_region_geometry() -> void:
 	_build_local_lights()
 	_life = Life.new(self, _scenery)
 	_life.build()
+	await build_pause()
 	_kit.finish()
 	_life.hold_still()
 	# Everything the welcome photo would catch in front of its two subjects.

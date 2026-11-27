@@ -4,6 +4,22 @@ extends Node
 ## first time the walker comes near, puts far ones to sleep, works out how much
 ## of each district's light and air reaches the walker, and keeps the sticker
 ## gates. It owns no scenery of its own.
+##
+## For features that span the park (a roaming event, instant games in every
+## district), ask the host rather than reaching into districts:
+## - standing / district_changed: the district the walker is in ("welcome" on the island).
+## - weights: each district's 0..1 share at the walker; island_share() the rest.
+## - built(region) / is_awake(region): a district's world node, and whether it
+##   is near enough to process and draw. Anything placed inside a district should
+##   be a child of built(region) so it sleeps and wakes with it.
+## - gate_is_open(region) / gate_opened: the sticker gates.
+## - DistrictSites.ruling(point) / claims(point): who owns a spot of ground;
+##   island-wide props keep out of claims and off approaches.
+## Lifecycle: a district is built a little each frame once the walker comes
+## within DistrictSites.BUILD_RADIUS (ensure() builds at once, for fast travel
+## and restored saves), shown and processed inside ACTIVE_RADIUS and put to
+## sleep beyond DORMANT_RADIUS. A district that fails to build is logged, its
+## gate shows that it is closed for repairs, and the rest of the park runs on.
 
 const DistrictSites = preload("res://game/world/district_sites.gd")
 const RegionRoutes = preload("res://game/core/region_routes.gd")
@@ -22,6 +38,10 @@ var failed: Dictionary = {}
 var weights: Dictionary = {}
 var standing := HOME
 var last_build_msec := 0
+## The longest single frame of the last build, in ms.
+var longest_step_msec := 0.0
+## How long a staged build may take before it counts as failed.
+const BUILD_DEADLINE_MSEC := 15000
 
 var _open: Dictionary = {}
 var _stickers := -1
@@ -29,6 +49,8 @@ var _applied: Dictionary = {}
 var _stream_elapsed := STREAM_INTERVAL
 var _settings: Dictionary = {}
 var _look: Array = []
+## Districts being built over several frames: region -> {node, lamps, started}.
+var _building: Dictionary = {}
 
 func configure(owner_world: Node3D) -> void:
 	world = owner_world
@@ -53,14 +75,24 @@ func island_share() -> float:
 func gate_is_open(region: String) -> bool:
 	return bool(_open.get(region, false))
 
-## Build a district now. Returns null, and remembers the failure, when its
-## script is missing or its build did not finish; its gate then stays shut.
+## Build a district now, in this frame (fast travel behind the cover, a restored
+## save). Returns null, and remembers the failure, when its script is missing or
+## its build did not finish; its gate then stays shut.
 func ensure(region: String) -> Node3D:
 	if districts.has(region): return districts[region]
-	if failed.has(region) or not DistrictSites.has(region): return null
+	if failed.has(region) or not DistrictSites.has(region) or _building.has(region): return null
 	return _build(region, str(DistrictSites.SITES[region].script))
 
-func _build(region: String, script_path: String) -> Node3D:
+## True while a district is being built over several frames.
+func is_building(region: String) -> bool:
+	return _building.has(region)
+
+## Start building a district a little each frame (the walker is still far off);
+## it stays hidden and still until finished.
+func _build_in_steps(region: String) -> void:
+	_build(region, str(DistrictSites.SITES[region].script), true)
+
+func _build(region: String, script_path: String, staged := false) -> Node3D:
 	var started := Time.get_ticks_msec()
 	var site: Dictionary = DistrictSites.SITES[region]
 	var lamps_before: int = world.lamps.size()
@@ -69,9 +101,20 @@ func _build(region: String, script_path: String) -> Node3D:
 	if node != null:
 		node.set("embedded_in", world)
 		node.set("district", region)
+		node.set("build_in_steps", staged)
 		node.name = "District_" + region
 		node.position = site.at
+		if staged:
+			node.visible = false
+			node.process_mode = Node.PROCESS_MODE_DISABLED
+			_building[region] = {"node": node, "lamps": lamps_before, "started": started}
+			node.district_built.connect(_finish_build.bind(region, node, lamps_before, started), CONNECT_ONE_SHOT)
 		world.add_child(node)
+		if staged: return null
+	return _finish_build(region, node, lamps_before, started)
+
+func _finish_build(region: String, node: Node3D, lamps_before: int, started: int) -> Node3D:
+	_building.erase(region)
 	if node == null or not bool(node.get("district_ready")):
 		push_warning("District '%s' could not be built; its gate stays closed." % region)
 		failed[region] = true
@@ -92,7 +135,12 @@ func _build(region: String, script_path: String) -> Node3D:
 	world.bind_district_ground(districts.keys())
 	if _stickers >= 0: _set_gate(region, _stickers >= RegionRoutes.threshold(region), false)
 	last_build_msec = Time.get_ticks_msec() - started
-	print("[district] %s built in %d ms, %d nodes" % [region, last_build_msec, node.find_children("*", "Node", true, false).size() + 1])
+	longest_step_msec = float(node.longest_step_usec) / 1000.0 if node.build_in_steps else float(last_build_msec)
+	print("[district] %s built in %d ms over %d frames (longest frame %.0f ms), %d nodes" % [region, last_build_msec, node.build_steps + 1, longest_step_msec,
+		node.find_children("*", "Node", true, false).size() + 1])
+	if node.build_in_steps:
+		node.build_in_steps = false
+		_set_awake(node, true)
 	return node
 
 ## Once per physics tick: weights, the district the walker stands in, and the
@@ -172,15 +220,22 @@ func _set_gate(region: String, open: bool, celebrate: bool) -> void:
 	if celebrate: world.gate_opened.emit(region)
 
 func _stream(spot: Vector2) -> void:
-	var building := false
+	var building := not _building.is_empty()
+	for region: String in _building.keys():
+		# A build that stopped part way (a script error) never finishes: give up on it.
+		if Time.get_ticks_msec() - int(_building[region].started) > BUILD_DEADLINE_MSEC:
+			var record: Dictionary = _building[region]
+			for link: Dictionary in (record.node as Node3D).district_built.get_connections():
+				(record.node as Node3D).district_built.disconnect(link.callable)
+			_finish_build(region, record.node, record.lamps, record.started)
 	for region: String in DistrictSites.regions():
 		var gap := DistrictSites.distance(region, spot)
 		var node: Node3D = districts.get(region)
 		if node == null:
-			# At most one build per pass keeps a first approach to one short pause.
+			# One build at a time, spread over frames, so a first approach never stalls.
 			if gap < DistrictSites.BUILD_RADIUS and not building and not failed.has(region):
 				building = true
-				ensure(region)
+				_build_in_steps(region)
 			continue
 		var awake := node.process_mode != Node.PROCESS_MODE_DISABLED
 		if awake and gap > DistrictSites.DORMANT_RADIUS: _set_awake(node, false)

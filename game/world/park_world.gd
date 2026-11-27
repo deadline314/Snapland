@@ -248,6 +248,13 @@ var avatar_visual_lift := 0.0
 var embedded_in: Node3D
 var district := ""
 var district_ready := false
+## Set by the host to spread an embedded build over frames (see build_pause).
+var build_in_steps := false
+var build_steps := 0
+var longest_step_usec := 0
+var _step_started_usec := 0
+## An embedded build finished (it may span several frames).
+signal district_built
 ## The island world's keeper of embedded districts; null in a region world.
 var district_host: Node
 ## The sky, sun and air this world wants in the current phase (see environment_target).
@@ -283,7 +290,7 @@ func _ready() -> void:
 	_load_foliage_atlas()
 	_load_identity_atlas()
 	_build_lighting()
-	_build_region_geometry()
+	await _build_region_geometry()
 	_build_player()
 	_build_region_activities()
 	field_games = FieldGamesScript.attach(self)
@@ -336,14 +343,17 @@ const SHARED_WITH_HOST := [
 ]
 
 func _ready_embedded() -> void:
+	_step_started_usec = Time.get_ticks_usec()
 	_site = DistrictSites.SITES[district]
 	for shared: String in SHARED_WITH_HOST:
 		set(shared, embedded_in.get(shared))
 	component_motion = ComponentAnimationScript.new()
 	component_motion.name = "ComponentAnimation"
 	add_child(component_motion)
-	_build_region_geometry()
+	await _build_region_geometry()
+	await build_pause()
 	_build_fitting_batches()
+	await build_pause()
 	_register_npc_activity()
 	component_motion.finish_registration()
 	# The island already shades the ground with clouds; a district adds only its own air.
@@ -354,7 +364,20 @@ func _ready_embedded() -> void:
 	add_child(ambience)
 	ambience.configure(self, air)
 	_update_npc_name_labels(true)
+	if build_in_steps: longest_step_usec = maxi(longest_step_usec, Time.get_ticks_usec() - _step_started_usec)
 	district_ready = true
+	district_built.emit()
+
+## Embedded and built over several frames (see DistrictHost): wait for the next
+## frame so no single frame does too much. Otherwise returns at once.
+func build_pause() -> Variant:
+	if embedded_in == null or not build_in_steps or not is_inside_tree(): return null
+	var now := Time.get_ticks_usec()
+	longest_step_usec = maxi(longest_step_usec, now - _step_started_usec)
+	build_steps += 1
+	await get_tree().process_frame
+	_step_started_usec = Time.get_ticks_usec()
+	return null
 
 ## The world that owns the walker and the camera: the host, or this world itself.
 func _host() -> Node3D:
@@ -506,7 +529,9 @@ const PLAZA_ARRIVAL := Vector3(0, 0.3, 6.5)
 ## district is built first if needed. Vector3.INF when it cannot be reached.
 func arrival_point(region: String) -> Vector3:
 	if region == "welcome": return PLAZA_ARRIVAL
-	if not is_instance_valid(district_host) or district_host.ensure(region) == null: return Vector3.INF
+	if not is_instance_valid(district_host): return Vector3.INF
+	# A district still being built is finished within a few frames; set the walker down meanwhile.
+	if not district_host.is_building(region) and district_host.ensure(region) == null: return Vector3.INF
 	return DistrictSites.arrival(region)
 
 ## The built district for `region`, or this world for "welcome" and for a

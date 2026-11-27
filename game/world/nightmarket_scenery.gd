@@ -67,19 +67,29 @@ func _init(owner: Node3D, scenery_kit: Kit) -> void:
 
 func build() -> void:
 	_build_ground()
+	await world.build_pause()
 	_build_street_edges()
+	await world.build_pause()
 	_build_terraces()
+	await world.build_pause()
 	_build_covered_alley()
+	await world.build_pause()
 	_build_roof_terrace()
+	await world.build_pause()
 	for index in range(HOUSES.size()):
 		var house: Array = HOUSES[index]
 		# The first two stand right behind the north-street game stands.
 		props.shophouse(Rect2(float(house[0]), float(house[1]), float(house[2]), float(house[3])), QUARTER_Y, float(house[4]), str(house[5]), int(house[6]), index >= 2)
 	_build_approach()
+	await world.build_pause()
 	_build_poles_and_strings()
+	await world.build_pause()
 	_build_corner_shrine()
+	await world.build_pause()
 	_build_dressing()
+	await world.build_pause()
 	_build_lamps()
+	await world.build_pause()
 
 ## Commits the glowing mesh; the world then finishes the kit.
 func finish() -> void:

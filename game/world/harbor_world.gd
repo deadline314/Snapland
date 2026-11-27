@@ -49,10 +49,12 @@ var _life: Life
 func _build_region_geometry() -> void:
 	_kit = Kit.new(self)
 	_scenery = Scenery.new(self, _kit)
-	_scenery.build()
+	await _scenery.build()
+	await build_pause()
 	_build_entries()
 	_life = Life.new(self, _scenery)
 	_life.build()
+	await build_pause()
 	_kit.finish()
 	_apply_tide()
 	_life.hold_still()

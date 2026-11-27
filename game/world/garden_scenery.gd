@@ -83,14 +83,23 @@ func _init(owner: Node3D, scenery_kit: Kit) -> void:
 
 func build() -> void:
 	_build_terrain()
+	await world.build_pause()
 	_build_house()
+	await world.build_pause()
 	_build_doorway()
+	await world.build_pause()
 	_build_water()
+	await world.build_pause()
 	_build_furniture()
+	await world.build_pause()
 	_build_indoor_planting()
+	await world.build_pause()
 	_build_forecourt()
+	await world.build_pause()
 	_build_woodland()
+	await world.build_pause()
 	_build_light()
+	await world.build_pause()
 	var glow: MeshInstance3D = world._mesh(night_glow.mesh(), Vector3.ZERO, world._buds)
 	glow.name = "GardenNightGlow"
 	glow.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF

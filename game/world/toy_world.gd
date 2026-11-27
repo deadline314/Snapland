@@ -65,7 +65,8 @@ var _story_hidden_labels: Array[Label3D] = []
 func _build_region_geometry() -> void:
 	_kit = Kit.new(self)
 	_scenery = Scenery.new(self, _kit)
-	_scenery.build()
+	await _scenery.build()
+	await build_pause()
 	_station_label = _scenery.station_label
 	_control_lever = _scenery.lever
 	_clock_hour = _scenery.clock_hour
@@ -87,6 +88,7 @@ func _build_region_geometry() -> void:
 	ArcadeStands.build(self, "toy")
 	_life = Life.new(self, _scenery)
 	_life.build()
+	await build_pause()
 	_kit.finish()
 	_sync_station_controls()
 	current_area = _area_at_position(ENTRY)

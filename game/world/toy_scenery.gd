@@ -103,16 +103,27 @@ func _init(owner: Node3D, scenery_kit: Kit) -> void:
 func build() -> void:
 	flags = kit.batch("flags", Kit.cloth_mesh(Vector2(0.9, 0.5), 5, 1, false), kit.cloth_material("flag", 0.18))
 	_build_ground()
+	await world.build_pause()
 	_build_kerbs()
+	await world.build_pause()
 	_build_block_street()
+	await world.build_pause()
 	_build_workshop()
+	await world.build_pause()
 	_build_clock_tower()
+	await world.build_pause()
 	_build_station()
+	await world.build_pause()
 	_build_plaza()
+	await world.build_pause()
 	_build_back_lot()
+	await world.build_pause()
 	_build_gate()
+	await world.build_pause()
 	_build_town()
+	await world.build_pause()
 	_build_planting()
+	await world.build_pause()
 
 ## Windows, lantern bodies and the clock face follow the region's lamp level.
 func apply_time_of_day(lamp_level: float) -> void:

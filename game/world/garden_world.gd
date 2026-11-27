@@ -79,7 +79,8 @@ func _build_region_geometry() -> void:
 	_kit = Kit.new(self)
 	_scenery = Scenery.new(self, _kit)
 	_build_floors()
-	_scenery.build()
+	await _scenery.build()
+	await build_pause()
 	_water = _scenery.wetland_water
 	_foyer_sign = [_scenery.doorway]
 	_louvers = Louvers.new()
@@ -94,6 +95,7 @@ func _build_region_geometry() -> void:
 	add_child(_bud_pool)
 	_life = Life.new(self, _scenery)
 	_life.build()
+	await build_pause()
 	_kit.finish()
 	_coordinate_lighting()
 	_point("region:welcome", "返回迎賓大道 · 免費", ENTRY)
@@ -453,6 +455,12 @@ func _coordinate_lighting() -> void:
 	_buds.emission_energy_multiplier = {"dawn": 0.2, "noon": 0.1, "dusk": 0.9, "night": 2.0}[active_time_phase]
 	_bud_pool.light_energy = 0.68 if evening else 0.26
 	_scenery.apply_time_of_day(active_time_phase, lamp_energy_for_phase)
+
+
+## The bud pool burns whatever the hour, so on the island it holds one of the
+## lamp budget's places while the greenhouse is awake.
+func steady_light_count() -> int:
+	return 1 if is_instance_valid(_bud_pool) and is_visible_in_tree() else 0
 
 
 func map_snapshot() -> Dictionary:

@@ -163,6 +163,7 @@ func _on_district_changed(region: String) -> void:
 	if quitting or changing_region or region==world_region or not _on_island(world_region): return
 	var previous := world_region
 	world_region=region
+	Progress.player_position=world.player.global_position
 	if not Progress.set_current_region(region):
 		world_region=previous
 		return
@@ -207,7 +208,11 @@ func _travel_to_region(destination: String) -> bool:
 		_notice("還差 %d 張不同普通拍貼；收藏不消耗。" % (threshold-Progress.normal_count()))
 		return false
 	changing_region=true
+	# Until the walker lands, the save points at the destination's arrival point.
+	var saved_position: Vector3=Progress.player_position
+	Progress.player_position=Vector3.INF
 	if not Progress.set_current_region(destination):
+		Progress.player_position=saved_position
 		changing_region=false
 		_notice("旅程尚未保存，請再試一次。")
 		return false
@@ -2598,9 +2603,6 @@ func _show_map() -> void:
 			elif world_region=="garden":
 				return_button.name="GardenReturnButton"
 			return_button.tooltip_text="永久免費返回；不需要拍貼或遊園幣。"
-		var island_button := Paper.button("全島地圖",_show_island_map,modal_footer)
-		island_button.name="IslandMapButton"
-		island_button.tooltip_text="看全島與你所在的位置。"
 		_back(harbor_body)
 		return
 	_show_island_map()
