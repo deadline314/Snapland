@@ -4,6 +4,10 @@ extends Node3D
 ## This layer owns everything the games share (stand, prompt, countdown,
 ## clock, medals, saving, result, leaving) and stays free of interface
 ## nodes: the HUD listens to the signals below.
+##
+## The island's own games hang under this layer. Each district's games and
+## toys hang under that district (see add_district), so they are built with
+## it, sleep with it and go with it; this layer still runs their rounds.
 
 signal note_requested(note: int)
 signal feedback_requested(kind: String)
@@ -16,6 +20,7 @@ const Registry = preload("res://game/world/field/field_registry.gd")
 const Kit = preload("res://game/world/field/field_kit.gd")
 const Toys = preload("res://game/world/field/field_toys.gd")
 const AmbienceProfiles = preload("res://game/world/ambience_profiles.gd")
+const DistrictSites = preload("res://game/world/district_sites.gd")
 
 enum Phase { IDLE, COUNTDOWN, PLAYING, RESULT }
 
@@ -36,8 +41,10 @@ var region := ""
 var phase := Phase.IDLE
 var time_left := 0.0
 var toys: Node3D
-## One entry per game: {row, game, point, ground, pennant, pips, medal}.
+## One entry per island game: {row, game, point, ground, pennant, pips, medal}.
 var records: Array[Dictionary] = []
+## Districts with games, by region: {node, root, records, toys}.
+var groups: Dictionary = {}
 var active: Dictionary = {}
 
 var _progress: Node
@@ -75,10 +82,7 @@ func configure(owner_world: Node3D, owner_region: String) -> void:
 	world = owner_world
 	region = owner_region
 	_progress = get_node_or_null("/root/Progress")
-	var stands: Array[Vector3] = []
-	for row: Dictionary in Registry.games(region):
-		_add_game(row, stands)
-	Kit.posts(world, self, stands, STAND_HEIGHT, MEDAL_COLORS[3], 0.075)
+	records = _build_games(Registry.games(region), self, world)
 	toys = Toys.new()
 	toys.name = "FieldToys"
 	add_child(toys)
@@ -87,38 +91,110 @@ func configure(owner_world: Node3D, owner_region: String) -> void:
 	_caption = _banner_label(40, MEDAL_COLORS[0])
 	if is_instance_valid(_progress):
 		_progress.changed.connect(_refresh_pips)
+	# Districts built before this layer existed (a restored save) join now.
+	var host: Node = world.get("district_host")
+	if is_instance_valid(host):
+		for built: Node3D in host.districts.values():
+			add_district(built)
 	_refresh_pips()
 
 
-func _add_game(row: Dictionary, stands: Array[Vector3]) -> void:
-	var script := load(String(row.script)) as GDScript
-	if script == null or not script.can_instantiate():
-		push_warning("Field game '%s' has no usable script; it was skipped." % String(row.id))
+## A district's games and toys, built under the district while it builds so
+## its markers join its own animation. Rows are authored in the district's
+## coordinates; the group's root cancels the district's offset, so every game
+## works in island coordinates exactly like the island's own.
+func add_district(node: Node3D) -> void:
+	var owner_region := String(node.get("district"))
+	if groups.has(owner_region) or not Registry.has_region(owner_region):
 		return
-	var at: Vector3 = row.at
-	var ground := Vector3(at.x, world.ground_surface_y(at), at.z)
-	var record := {"row": row, "ground": ground}
-	stands.append(ground)
-	_build_stand(record)
-	var game: Node3D = script.new()
-	add_child(game)
-	game.setup(world, self, row)
-	record["game"] = game
-	world._point(Registry.point_id(row), String(row.prompt), ground, STAND_HEIGHT + 1.0)
-	record["point"] = world.points[-1]
-	world._local_label(String(row.title), ground + Vector3(0, STAND_HEIGHT + 0.5, 0), 32, MEDAL_COLORS[0])
-	records.append(record)
+	var root := Node3D.new()
+	root.name = "FieldGames"
+	node.add_child(root)
+	root.position = -node.position
+	var placed_games: Array = Registry.games(owner_region).map(func(row: Dictionary) -> Dictionary: return Registry.placed(row, owner_region))
+	var placed_toys: Array = Registry.toys(owner_region).map(func(row: Dictionary) -> Dictionary: return Registry.placed(row, owner_region))
+	var group := {"node": node, "root": root, "records": _build_games(placed_games, root, node)}
+	var district_toys: Node3D = Toys.new()
+	district_toys.name = "FieldToys"
+	root.add_child(district_toys)
+	district_toys.configure(world, self, placed_toys, node)
+	group["toys"] = district_toys
+	groups[owner_region] = group
+	# Rows on the island's edge band belong to the island on the map and in
+	# travel; only those inside the district's own ground carry its name.
+	var ids := _group_ids(group)
+	for point: Dictionary in world.points:
+		if ids.has(String(point.id)) and DistrictSites.ruling(Vector2(point.position.x, point.position.z)) != owner_region:
+			point.erase("region")
+	root.tree_exiting.connect(_drop_district.bind(owner_region), CONNECT_ONE_SHOT)
+	_refresh_pips()
+
+
+## The district is going away: its round ends and its points leave the island.
+func _drop_district(owner_region: String) -> void:
+	var group: Dictionary = groups.get(owner_region, {})
+	if group.is_empty():
+		return
+	groups.erase(owner_region)
+	if phase != Phase.IDLE and String(active.row.get("region", "")) == owner_region:
+		var id := String(active.row.id)
+		phase = Phase.IDLE
+		active = {}
+		_land()
+		_hide_banner()
+		round_aborted.emit(id)
+	var ids := _group_ids(group)
+	for index in range(world.points.size() - 1, -1, -1):
+		if ids.has(String(world.points[index].id)):
+			world.points.remove_at(index)
+
+
+func _group_ids(group: Dictionary) -> Dictionary:
+	var ids := {}
+	for record: Dictionary in group.records:
+		ids[Registry.point_id(record.row)] = true
+	for item: Dictionary in (group.toys as Node3D).items:
+		ids[item.id] = true
+	return ids
+
+
+## Each row's stand and game under `parent`; `owner` (the island or a
+## district) lists the interaction point and the title in its own coordinates.
+func _build_games(rows: Array, parent: Node3D, owner: Node3D) -> Array[Dictionary]:
+	var built: Array[Dictionary] = []
+	var stands: Array[Vector3] = []
+	for row: Dictionary in rows:
+		var script := load(String(row.script)) as GDScript
+		if script == null or not script.can_instantiate():
+			push_warning("Field game '%s' has no usable script; it was skipped." % String(row.id))
+			continue
+		var at: Vector3 = row.at
+		var ground := Vector3(at.x, world.ground_surface_y(at), at.z)
+		var record := {"row": row, "ground": ground}
+		stands.append(ground)
+		_build_stand(record, parent)
+		var game: Node3D = script.new()
+		parent.add_child(game)
+		game.setup(world, self, row)
+		record["game"] = game
+		owner._point(Registry.point_id(row), String(row.prompt), owner.to_local(ground), STAND_HEIGHT + 1.0)
+		record["point"] = world.points[-1]
+		owner._local_label(String(row.title), owner.to_local(ground + Vector3(0, STAND_HEIGHT + 0.5, 0)), 32, MEDAL_COLORS[0])
+		built.append(record)
+	if not stands.is_empty():
+		Kit.posts(world, parent, stands, STAND_HEIGHT, MEDAL_COLORS[3], 0.075)
+	return built
 
 
 ## A pennant and a painted sign with three medal pips, hung on a shared post.
-func _build_stand(record: Dictionary) -> void:
+func _build_stand(record: Dictionary, parent: Node3D) -> void:
 	var row: Dictionary = record.row
 	var ground: Vector3 = record.ground
 	if _pennant == null:
 		_pennant = _pennant_mesh()
-	var pennant := Kit.mesh(self, _pennant, ground + Vector3(0, STAND_HEIGHT - 0.16, 0), world._coastal_surface(Kit.TILE_CANVAS, 0.6, row.color), false)
+	var pennant := Kit.mesh(parent, _pennant, ground + Vector3(0, STAND_HEIGHT - 0.16, 0), world._coastal_surface(Kit.TILE_CANVAS, 0.6, row.color), false)
 	record["pennant"] = pennant
-	var board := Kit.box(self, ground + Vector3(0, 1.2, 0.12), Vector3(0.92, 0.92, 0.07), world._coastal_surface(Kit.TILE_PLANK, 0.9, Color("#f3e3c2")))
+	var board := Kit.box(parent, ground + Vector3(0, 1.2, 0.12), Vector3(0.92, 0.92, 0.07), world._coastal_surface(Kit.TILE_PLANK, 0.9, Color("#f3e3c2")))
 	board.rotation.x = -0.3
 	# Camera-facing, so the one character stays crisp on the tilted board.
 	Kit.label(board, String(row.glyph), Vector3(0, 0.12, 0.12), 46, Color("#fff6de"))
@@ -163,10 +239,34 @@ func _banner_label(size: int, color: Color) -> Label3D:
 
 
 func record_for(id: String) -> Dictionary:
-	for record in records:
+	for record in all_records():
 		if Registry.point_id(record.row) == id:
 			return record
 	return {}
+
+
+## The island's games and those of every built district.
+func all_records() -> Array[Dictionary]:
+	var every: Array[Dictionary] = records.duplicate()
+	for group: Dictionary in groups.values():
+		every.append_array(group.records)
+	return every
+
+
+## True while a district is near enough to run (the island always is).
+func is_awake(owner_region: String) -> bool:
+	var host: Node = world.get("district_host")
+	return not groups.has(owner_region) or not is_instance_valid(host) or host.is_awake(owner_region)
+
+
+func _toys_with(id: String) -> Node3D:
+	if not toys.item_for(id).is_empty():
+		return toys
+	for owner_region: String in groups:
+		var group_toys: Node3D = groups[owner_region].toys
+		if not group_toys.item_for(id).is_empty():
+			return group_toys if is_awake(owner_region) else null
+	return null
 
 
 static func medal_for(row: Dictionary, score: int) -> int:
@@ -194,7 +294,8 @@ func _paused() -> bool:
 ## The world interaction route: starts a game or plays with a toy.
 func activate(id: String) -> bool:
 	if id.begins_with("toy:"):
-		return not _paused() and not is_busy() and toys.activate(id)
+		var owner_toys := _toys_with(id)
+		return owner_toys != null and not _paused() and not is_busy() and owner_toys.activate(id)
 	var record := record_for(id)
 	if record.is_empty():
 		return false
@@ -246,6 +347,10 @@ func advance(delta: float) -> void:
 	_advance_hop(delta)
 	_sway_pennants()
 	toys.advance(delta, player)
+	for owner_region: String in groups:
+		# A sleeping district's toys hold still until the walker comes back.
+		if is_awake(owner_region):
+			groups[owner_region].toys.advance(delta, player)
 	if _headline.visible or _caption.visible:
 		_place_banner(player)
 	if _banner_time > 0.0:
@@ -268,7 +373,7 @@ func advance(delta: float) -> void:
 			game.elapsed += delta
 			game.step(delta, player)
 			time_left = maxf(0.0, game.seconds - game.elapsed)
-			if _left_arena(player):
+			if _left_arena(player) or not is_awake(String(active.row.get("region", ""))):
 				_leave()
 				return
 			_publish_progress()
@@ -429,13 +534,20 @@ func _advance_hop(delta: float) -> void:
 
 
 func _sway_pennants() -> void:
-	for index in range(records.size()):
-		var pennant: MeshInstance3D = records[index].pennant
-		pennant.rotation.y = 0.0 if world.reduced_motion else sin(world.time * 2.1 + index * 1.7) * 0.32
+	_sway(records, 0)
+	for owner_region: String in groups:
+		if is_awake(owner_region):
+			_sway(groups[owner_region].records, owner_region.length())
+
+
+func _sway(list: Array[Dictionary], offset: int) -> void:
+	for index in range(list.size()):
+		var pennant: MeshInstance3D = list[index].pennant
+		pennant.rotation.y = 0.0 if world.reduced_motion else sin(world.time * 2.1 + (index + offset) * 1.7) * 0.32
 
 
 func _refresh_pips() -> void:
-	for record in records:
+	for record in all_records():
 		var medal := int(best_for(record.row).get("medal", 0))
 		record["medal"] = medal
 		var pips: MultiMesh = record.pips

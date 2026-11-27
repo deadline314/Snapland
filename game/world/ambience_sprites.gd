@@ -36,15 +36,23 @@ const PALETTE := {
 	"h": Color("#ecca7e"), # straw hat
 	"j": Color("#c79c55"), # straw hat shade
 	"n": Color("#7a5a36"), # straw hat outline
+	"s": Color("#b8dbe6"), # fish silver
+	"u": Color("#4d84a6"), # fish back
+	"v": Color("#eef6f2"), # fish belly
+	"z": Color("#6aa3bf"), # fish fin, ripple
+	"y": Color("#f6d65e"), # duckling down
+	"i": Color("#dcaa3e"), # duckling wing
+	"a": Color("#ee8b3a"), # duckling beak and feet
 }
 
 # One row per animal; columns are that animal's frames.
 const CRITTER_ROWS := {
-	"pigeon": 0, "sparrow": 1, "gull": 2, "butterfly": 3, "crab": 4, "hat": 5,
+	"pigeon": 0, "sparrow": 1, "gull": 2, "butterfly": 3, "crab": 4, "hat": 5, "fish": 6, "duck": 7,
 }
 
 # Ground birds: stand, peck, wings up, wings down. Gull: glide, up, down.
 # Butterfly: open, half, closed. Crab: peek, stand, claws up, bonked flat.
+# Fish: straight, curled mid-leap, flopped. Duckling: stand, step, flap, swim.
 # Animals listed in MIRRORED are drawn as a left half plus the centre column.
 const MIRRORED := ["gull", "crab"]
 const CRITTER_FRAMES := {
@@ -254,6 +262,76 @@ const CRITTER_FRAMES := {
 			".nnjjjjjjjjnn.",
 			"nhhhhhhhhhhhhn",
 			".nnnnnnnnnnnn.",
+		],
+	],
+	"fish": [
+		[
+			"...oooooo.....",
+			"..ouuuuuuoo.oo",
+			".oesssssssuouo",
+			"osssssssssszzo",
+			".ovvvvvvvvoozo",
+			"..oooooooo..oo",
+		],
+		[
+			"...........oo.",
+			"...oooooo.ozo.",
+			"..ouuuuuuozzo.",
+			".oesssssssuo..",
+			"osssssssssso..",
+			".ovvvvvvvoo...",
+			"..oooooooo....",
+		],
+		[
+			"..oooooooo..oo",
+			".ovvvvvvvvoozo",
+			"oesssssssssszo",
+			".osssssssuouo.",
+			"..ouuuuuuoo.oo",
+			"...oooooo.....",
+		],
+	],
+	"duck": [
+		[
+			"..ooo......",
+			".oyyyo.....",
+			"aaeyyo.....",
+			".oyyyoooo..",
+			".oyyyyyyyo.",
+			".oyiiiiyyo.",
+			"..oyyyyyo..",
+			"...oooooo..",
+			"....a..a...",
+		],
+		[
+			"..ooo......",
+			".oyyyo.....",
+			"aaeyyo.....",
+			".oyyyoooo..",
+			".oyyyyyyyo.",
+			".oyiiiiyyo.",
+			"..oyyyyyo..",
+			"...oooooo..",
+			"...a....a..",
+		],
+		[
+			"..ooo...o..",
+			".oyyyo.oyo.",
+			"aaeyyooyyo.",
+			".oyyyoyyo..",
+			".oyyyyyyyo.",
+			".oyiiiiyyo.",
+			"..oyyyyyo..",
+			"...oooooo..",
+			"...a....a..",
+		],
+		[
+			"..ooo......",
+			".oyyyo.....",
+			"aaeyyo.....",
+			".oyyyoooo..",
+			".oyyyyyyyo.",
+			"ozzzzzzzzzo",
 		],
 	],
 }

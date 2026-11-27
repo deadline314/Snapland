@@ -101,6 +101,47 @@ static func posts(world: Node3D, parent: Node3D, grounds: Array[Vector3], height
 	batch(parent, cap, caps, world._mat(cap_color))
 
 
+## A soft round shadow lying on the ground under a moving prop.
+static func blob(world: Node3D, parent: Node3D, size: Vector2) -> MeshInstance3D:
+	var plane := PlaneMesh.new()
+	plane.size = size
+	return mesh(parent, plane, Vector3.ZERO, blob_material(world), false)
+
+
+static func blob_material(world: Node3D) -> StandardMaterial3D:
+	const KEY := "field:blob"
+	if world.material_cache.has(KEY):
+		return world.material_cache[KEY]
+	var shade := StandardMaterial3D.new()
+	shade.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	shade.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	shade.albedo_texture = Sprites.shadow_blob()
+	world.material_cache[KEY] = shade
+	return shade
+
+
+## The world's painted finish for a large face, its flat colour for a small one.
+static func finish(world: Node3D, color: Color, size: Vector3) -> Material:
+	return world._finish(color, size)
+
+
+## A see-through tinted surface (water, light, glass), cached by colour.
+static func clear_material(world: Node3D, color: Color, glow := 0.0) -> StandardMaterial3D:
+	var key := "field:clear:%s:%.2f" % [color.to_html(true), glow]
+	if world.material_cache.has(key):
+		return world.material_cache[key]
+	var clear := StandardMaterial3D.new()
+	clear.albedo_color = color
+	clear.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	clear.roughness = 0.3
+	if glow > 0.0:
+		clear.emission_enabled = true
+		clear.emission = Color(color.r, color.g, color.b)
+		clear.emission_energy_multiplier = glow
+	world.material_cache[key] = clear
+	return clear
+
+
 ## Changes a label only when it differs, so a per-frame caller rebuilds nothing.
 static func write(item: Label3D, text: String, color: Color) -> void:
 	if item.text != text:

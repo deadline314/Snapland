@@ -359,6 +359,8 @@ func _ready_embedded() -> void:
 	_build_fitting_batches()
 	await build_pause()
 	_register_npc_activity()
+	# Its instant games and toys join before its markers start to bob.
+	if is_instance_valid(embedded_in.field_games): embedded_in.field_games.add_district(self)
 	component_motion.finish_registration()
 	# The island already shades the ground with clouds; a district adds only its own air.
 	var air := _ambience_profile().duplicate()

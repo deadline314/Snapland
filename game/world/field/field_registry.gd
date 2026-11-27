@@ -1,13 +1,28 @@
 extends RefCounted
 ## Where every instant map game and small toy stands, per region.
-## Adding a game is one row here plus its script; adding a toy is one row.
-## All positions live in this table. `layout` entries are metres on the ground
-## (x, z) relative to `at`, so a row can be moved by changing `at` alone.
+## Adding a game is one row here plus its script; adding a toy is one row
+## (plus a script under toys/ for a new kind). All positions live in this
+## table. `layout` entries are metres on the ground (x, z) relative to the
+## arena, so a row can be moved by changing `at` and `arena` alone.
+##
+## Welcome rows are in island coordinates. A district's rows are in that
+## district's own coordinates (DistrictSites), are built when the district is
+## built, sleep with it and go when it goes; placed() turns them into island
+## coordinates. District rows may stand on the island ground of the district's
+## edge band, but never in another district's claim or on any approach.
 
+const DistrictSites = preload("res://game/world/district_sites.gd")
+
+const HOME := "welcome"
 const GAME_SPACING := 14.0
 const TOY_SPACING := 6.0
 const POINT_CLEARANCE := 4.0
+## Games keep this far from any approach strip, toys a little less.
+const APPROACH_CLEARANCE := 5.0
+const TOY_APPROACH_CLEARANCE := 3.0
 const MEDAL_COUNT := 3
+## Keys of a row that are positions; everything else is an offset or a setting.
+const POSITION_KEYS := ["at", "arena"]
 
 ## Game row: id, script, type (the kind of play), title, prompt (one line shown
 ## on approach), hint (the one thing to do, shown during the countdown), glyph
@@ -57,9 +72,119 @@ const GAMES := {
 			"frame": Vector3(4.6, 2.2, 9.6), "frame_size": Vector2(4.6, 2.5), "layout": [Vector2(1.3, -0.5)],
 		},
 	],
+	# Districts: positions in the district's own coordinates (see the header).
+	"harbor": [
+		{
+			"id": "harbor-fish-net", "script": "res://game/world/field/games/fish_net.gd",
+			"type": "接住", "title": "接飛魚", "prompt": "玩接飛魚", "hint": "站到圈圈上，接住跳上岸的魚！", "glyph": "魚", "color": Color("#7fc4f2"),
+			"at": Vector3(-27.6, 0, -9.4), "arena": Vector3(-29.4, 0, -11.4), "radius": 5.5, "seconds": 30.0,
+			"medals": [5, 10, 15],
+			"lines": ["魚在沙灘上跳了一整場踢踏舞", "接到幾條，晚餐有著落了", "身手俐落，海鷗都看呆了", "漁夫想請你上船"],
+			"layout": [Vector2(-1.6, -1.1), Vector2(0.2, -1.8), Vector2(1.7, -0.6), Vector2(1.2, 1.3), Vector2(-0.6, 1.6), Vector2(-1.8, 0.5), Vector2(0, 0)],
+		},
+		{
+			"id": "harbor-crate-stack", "script": "res://game/world/field/games/crate_stack.gd",
+			"type": "疊高", "title": "搖晃疊貨", "prompt": "玩搖晃疊貨", "hint": "吊鉤擺到船上方時按 E 放貨！", "glyph": "箱", "color": Color("#da705c"),
+			"at": Vector3(-12.6, 0, -7.4), "arena": Vector3(-12.0, 0, -5.6), "radius": 4.5, "seconds": 35.0,
+			"medals": [6, 12, 18],
+			"lines": ["貨箱全進了海，螃蟹撿到寶", "疊了幾層，船長勉強點頭", "穩穩一座小貨山", "這艘船可以直接出航了"],
+			"boat": Vector2(5.0, 0.2),
+		},
+	],
+	"candy": [
+		{
+			"id": "candy-gumball", "script": "res://game/world/field/games/gumball_header.gd",
+			"type": "頂球", "title": "頂糖球", "prompt": "玩頂糖球", "hint": "跑到影子下，把糖球頂回天上！", "glyph": "球", "color": Color("#e59ab0"),
+			"at": Vector3(-43.6, 0, -7.0), "arena": Vector3(-46.0, 0, -4.0), "radius": 6.5, "seconds": 30.0,
+			"medals": [6, 12, 18],
+			"lines": ["糖球黏在你頭上當帽子", "頂了幾下，脖子有點酸", "糖球在你頭上跳舞", "糖果工廠想請你當吉祥物"],
+			"layout": [Vector2(-2.4, 0), Vector2(2.4, 0), Vector2(0, -2.4), Vector2(0, 2.4), Vector2(1.7, 1.7), Vector2(-1.7, -1.7), Vector2(1.7, -1.7), Vector2(-1.7, 1.7)],
+		},
+		{
+			"id": "candy-sort", "script": "res://game/world/field/games/candy_sort.gd",
+			"type": "分流", "title": "糖果分流", "prompt": "玩糖果分流", "hint": "踩左右踏板，讓糖滾進同色的桶！", "glyph": "糖", "color": Color("#9fd8c4"),
+			"at": Vector3(-43.6, 0, 11.0), "arena": Vector3(-46.0, 0, 14.0), "radius": 6.0, "seconds": 35.0,
+			"medals": [7, 13, 19],
+			"lines": ["糖果機噴了你一身彩虹", "分得還行，有幾顆走錯桶", "桶桶都是對的顏色", "糖果師傅說你可以接班了"],
+			"layout": [Vector2(-0.8, 1.3), Vector2(0.8, 1.3), Vector2(-1.4, -0.7), Vector2(1.4, -0.7), Vector2(0, -2.8)],
+		},
+	],
+	"nightmarket": [
+		{
+			"id": "night-goldfish", "script": "res://game/world/field/games/goldfish_scoop.gd",
+			"type": "撈", "title": "撈金魚", "prompt": "玩撈金魚", "hint": "金魚游到你面前時按 E 撈！", "glyph": "撈", "color": Color("#e8674f"),
+			"at": Vector3(-9.8, 0, 17.6), "arena": Vector3(-12.6, 0, 20.4), "radius": 5.5, "seconds": 30.0,
+			"medals": [10, 22, 40],
+			"lines": ["紙網破光光，金魚對你吐泡泡", "撈到幾隻，夠養一缸了", "老闆開始擔心他的魚", "老闆把紙網藏起來了"],
+			"layout": [Vector2(2.3, 0), Vector2(-2.3, 0), Vector2(0, 2.3), Vector2(0, -2.3)],
+		},
+		{
+			"id": "night-order", "script": "res://game/world/field/games/skewer_order.gd",
+			"type": "記憶", "title": "夜市點單", "prompt": "玩夜市點單", "hint": "記住客人點的串，照順序踩烤盤！", "glyph": "串", "color": Color("#f2c75a"),
+			"at": Vector3(16.6, 0, 17.6), "arena": Vector3(14.0, 0, 20.4), "radius": 5.5, "seconds": 40.0,
+			"medals": [4, 9, 14],
+			"lines": ["客人收到一串神秘料理", "記得幾串，客人還算滿意", "點什麼來什麼，客人拍手", "整條街都來找你點單"],
+			"layout": [Vector2(-1.8, 0.4), Vector2(-0.7, -1.1), Vector2(0.9, -1.1), Vector2(2.0, 0.4)],
+		},
+	],
+	"circus": [
+		{
+			"id": "circus-spotlight", "script": "res://game/world/field/games/spotlight.gd",
+			"type": "跟隨", "title": "追聚光燈", "prompt": "玩追聚光燈", "hint": "一直站在聚光燈裡！", "glyph": "光", "color": Color("#f2c75a"),
+			"at": Vector3(-14.2, 0, 27.8), "arena": Vector3(-17.0, 0, 30.6), "radius": 6.5, "seconds": 30.0,
+			"medals": [24, 38, 50],
+			"lines": ["聚光燈照到了一隻路過的鴿子", "偶爾站上舞台，觀眾有在拍手", "全場的目光都在你身上", "馬戲團長想把你簽下來"],
+			"layout": [Vector2(-3.0, 0), Vector2(3.0, 0), Vector2(0, -2.6), Vector2(0, 2.6), Vector2(2.1, 1.8), Vector2(-2.1, -1.8)],
+		},
+		{
+			"id": "circus-cups", "script": "res://game/world/field/games/cup_shuffle.gd",
+			"type": "觀察", "title": "猜杯子", "prompt": "玩猜杯子", "hint": "盯住藏球的杯子，走過去按 E！", "glyph": "杯", "color": Color("#da705c"),
+			"at": Vector3(11.4, 0, 27.8), "arena": Vector3(14.0, 0, 30.4), "radius": 5.5, "seconds": 40.0,
+			"medals": [2, 4, 6],
+			"lines": ["小丑笑到滾在地上", "猜中幾次，小丑開始流汗", "眼睛比小丑的手還快", "小丑把杯子收起來不玩了"],
+			"layout": [Vector2(-2.1, -0.6), Vector2(-0.7, -0.6), Vector2(0.7, -0.6), Vector2(2.1, -0.6)],
+		},
+	],
+	"toy": [
+		{
+			"id": "toy-cans", "script": "res://game/world/field/games/tin_cans.gd",
+			"type": "瞄準", "title": "滾球打罐", "prompt": "玩滾球打罐", "hint": "走到罐子正前方按 E 滾球！", "glyph": "罐", "color": Color("#7fc4f2"),
+			"at": Vector3(-17.6, 0, 33.2), "arena": Vector3(-21.0, 0, 32.0), "radius": 6.0, "seconds": 35.0,
+			"medals": [15, 30, 45],
+			"lines": ["球滾回來敲了你的腳", "打倒幾罐，罐子不太服氣", "罐子倒成一片", "罐子們集體投降"],
+			"layout": [Vector2(-2.4, 2.2), Vector2(2.4, 2.2), Vector2(-2.4, -2.8), Vector2(2.4, -2.8)],
+		},
+		{
+			"id": "toy-statue", "script": "res://game/world/field/games/wind_soldier.gd",
+			"type": "定格", "title": "發條木頭人", "prompt": "玩發條木頭人", "hint": "兵兵轉頭時站好別動！", "glyph": "兵", "color": Color("#e8674f"),
+			"at": Vector3(17.6, 0, 33.2), "arena": Vector3(21.0, 0, 32.0), "radius": 6.5, "seconds": 35.0,
+			"medals": [3, 6, 9],
+			"lines": ["兵兵一直抓到你在偷跑", "摸到了，兵兵有點不甘心", "兵兵的發條都轉鬆了", "兵兵對你敬了一個禮"],
+			"layout": [Vector2(0, 3.0), Vector2(0, -3.2), Vector2(-1.5, 0), Vector2(1.5, 0)],
+		},
+	],
+	"garden": [
+		{
+			"id": "garden-water", "script": "res://game/world/field/games/water_flowers.gd",
+			"type": "澆灌", "title": "澆花救急", "prompt": "玩澆花救急", "hint": "花垂頭了就走過去按 E 澆水！", "glyph": "花", "color": Color("#e59ab0"),
+			"at": Vector3(7.4, 0, 29.0), "arena": Vector3(10.4, 0, 31.4), "radius": 5.5, "seconds": 30.0,
+			"medals": [4, 9, 14],
+			"lines": ["花全趴下，只剩雜草在笑", "救回幾朵，蜜蜂還是來了", "花圃精神抖擻", "連枯枝都發新芽了"],
+			"layout": [Vector2(-2.2, -0.9), Vector2(-0.8, -1.9), Vector2(0.9, -1.9), Vector2(2.3, -0.8), Vector2(1.6, 1.2), Vector2(-1.5, 1.3)],
+		},
+		{
+			"id": "garden-ducks", "script": "res://game/world/field/games/duck_herd.gd",
+			"type": "帶路", "title": "帶小鴨回家", "prompt": "玩帶小鴨", "hint": "碰一下小鴨，帶牠們走進池塘！", "glyph": "鴨", "color": Color("#ecca7e"),
+			"at": Vector3(24.8, 0, -1.4), "arena": Vector3(27.0, 0, 2.0), "radius": 6.5, "seconds": 35.0,
+			"medals": [4, 8, 11],
+			"lines": ["小鴨排隊在你後面散步", "趕回幾隻，鴨媽媽點點頭", "小鴨乖乖回家了", "鴨媽媽想認你當乾媽"],
+			"layout": [Vector2(0, -1.3), Vector2(-2.7, 0.9), Vector2(2.7, 0.9), Vector2(0, 2.6), Vector2(-2.6, -2.0), Vector2(2.6, -2.0)],
+		},
+	],
 }
 
-## Toy row: id, kind (see field_toys.gd), prompt, at, plus that kind's own layout.
+## Toy row: id, kind (see field_toys.gd, or a script toys/<kind>.gd), prompt,
+## at, plus that kind's own layout.
 ## The palm toy shakes a palm that already grows at `at`; it plants nothing.
 const TOYS := {
 	"welcome": [
@@ -70,6 +195,30 @@ const TOYS := {
 		{"id": "stones", "kind": "stones", "prompt": "聽踏石唱歌", "at": Vector3(-29.0, 0, -72.5),
 			"layout": [Vector2(-2.4, 0.5), Vector2(-1.2, -0.3), Vector2(0, 0.4), Vector2(1.2, -0.3), Vector2(2.4, 0.5)]},
 		{"id": "bench", "kind": "bench", "prompt": "坐下來等海鳥", "at": Vector3(57.0, 0, -38.0)},
+	],
+	"harbor": [
+		{"id": "harbor-bell", "kind": "ship_bell", "prompt": "敲一下船鐘", "at": Vector3(-28.0, 0, -1.0)},
+		{"id": "harbor-crab-pot", "kind": "crab_pot", "prompt": "掀開蟹簍", "at": Vector3(-30.0, 0, 12.0)},
+	],
+	"candy": [
+		{"id": "candy-gumball-machine", "kind": "gumball_machine", "prompt": "轉一顆糖球", "at": Vector3(-41.0, 0, 24.0)},
+		{"id": "candy-jelly", "kind": "jelly_pad", "prompt": "踩一下果凍", "at": Vector3(12.0, 0, 31.0)},
+	],
+	"nightmarket": [
+		{"id": "night-lanterns", "kind": "lantern_string", "prompt": "搖一搖燈籠", "at": Vector3(-30.0, 0, 0.0)},
+		{"id": "night-lucky-cat", "kind": "lucky_cat", "prompt": "摸摸招財貓", "at": Vector3(28.0, 0, 4.0)},
+	],
+	"circus": [
+		{"id": "circus-jack-box", "kind": "jack_box", "prompt": "轉轉驚喜盒", "at": Vector3(26.0, 0, 0.0)},
+		{"id": "circus-horn", "kind": "horn", "prompt": "按一下喇叭", "at": Vector3(-28.0, 0, 10.0)},
+	],
+	"toy": [
+		{"id": "toy-top", "kind": "spinning_top", "prompt": "轉一下陀螺", "at": Vector3(-35.0, 0, 0.0)},
+		{"id": "toy-horse", "kind": "rocking_horse", "prompt": "推推搖搖馬", "at": Vector3(37.0, 0, -10.0)},
+	],
+	"garden": [
+		{"id": "garden-dandelion", "kind": "dandelion", "prompt": "吹蒲公英", "at": Vector3(-21.0, 0, 5.0)},
+		{"id": "garden-sunflower", "kind": "sunflower", "prompt": "和向日葵打招呼", "at": Vector3(21.0, 0, 24.0)},
 	],
 }
 
@@ -88,6 +237,83 @@ static func has_region(region: String) -> bool:
 
 static func point_id(row: Dictionary, toy := false) -> String:
 	return ("toy:" if toy else "field:") + String(row.id)
+
+
+## Every region with rows, the island first.
+static func regions() -> Array:
+	var found: Array = [HOME]
+	for region: String in GAMES.keys() + TOYS.keys():
+		if not found.has(region):
+			found.append(region)
+	return found
+
+
+## A row in island coordinates (district rows are authored in their own).
+static func placed(row: Dictionary, region: String) -> Dictionary:
+	if region == HOME or not DistrictSites.has(region):
+		return row
+	var moved := row.duplicate()
+	for key: String in POSITION_KEYS:
+		if moved.has(key):
+			moved[key] = DistrictSites.to_world(region, moved[key])
+	moved["region"] = region
+	return moved
+
+
+static var _placed_games: Array = []
+static var _placed_toys: Array = []
+
+## Every game row of every region in island coordinates, built once.
+static func placed_games() -> Array:
+	if _placed_games.is_empty():
+		for region: String in regions():
+			for row: Dictionary in games(region):
+				_placed_games.append(placed(row, region))
+	return _placed_games
+
+
+static func placed_toys() -> Array:
+	if _placed_toys.is_empty():
+		for region: String in regions():
+			for row: Dictionary in toys(region):
+				_placed_toys.append(placed(row, region))
+	return _placed_toys
+
+
+## Problems with one district's rows on the island: the usual checks, run
+## against every other region's rows too (ids, spacing), plus the district
+## rules: no spot in another district's claim or near any approach strip.
+## `extra_games` (rows already in island coordinates) are checked as if they
+## were this district's too.
+static func district_problems(region: String, walkable: Callable, other_points: Array[Vector3], extra_games: Array = []) -> Array[String]:
+	var own_games: Array = games(region).map(func(row: Dictionary) -> Dictionary: return placed(row, region)) + extra_games
+	var own_toys: Array = toys(region).map(func(row: Dictionary) -> Dictionary: return placed(row, region))
+	var others := func(row: Dictionary) -> bool: return String(row.get("region", HOME)) != region
+	var found: Array[String] = []
+	var own: Array = own_games + own_toys
+	for problem in problems_in(placed_games().filter(others) + own_games, placed_toys().filter(others) + own_toys, walkable, other_points):
+		for index in range(own.size()):
+			var row: Dictionary = own[index]
+			if problem.begins_with(point_id(row, index >= own_games.size()) + " ") or problem.contains(" from %s (" % row.id):
+				found.append(problem)
+				break
+	for index in range(own.size()):
+		var is_toy := index >= own_games.size()
+		var row: Dictionary = own[index]
+		var id := point_id(row, is_toy)
+		for spot in footprint(row):
+			var flat := Vector2(spot.x, spot.z)
+			var owner := DistrictSites.ruling(flat)
+			if not owner.is_empty() and owner != region:
+				found.append("%s has a spot in the %s district at %s" % [id, owner, spot])
+			for other: String in DistrictSites.regions():
+				var strip := DistrictSites.world_rect(other, "approach")
+				var gap := flat.distance_to(flat.clamp(strip.position, strip.end))
+				if gap < (TOY_APPROACH_CLEARANCE if is_toy else APPROACH_CLEARANCE):
+					found.append("%s is %.1f m from the %s approach at %s" % [id, gap, other, spot])
+		if String(row.get("prompt", "")).length() > 8:
+			found.append("%s needs a prompt of at most eight characters" % id)
+	return found
 
 
 ## Ground positions a row occupies: its stand, its arena and every layout spot.

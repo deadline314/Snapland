@@ -267,9 +267,9 @@ static func keeps_clear(point: Vector2, margin := 0.0) -> bool:
 		if point.distance_to(Vector2(landmark.x, landmark.z)) < LANDMARK_CLEARANCE + margin: return true
 	# Instant map games need open ground to play on; small toys a little room.
 	# The palm toy shakes a palm that grows at its own spot, so it clears nothing.
-	for game: Dictionary in FieldRegistry.games("welcome"):
+	for game: Dictionary in FieldRegistry.placed_games():
 		var arena: Vector3 = game.get("arena", game.at)
 		if point.distance_to(Vector2(arena.x, arena.z)) < FIELD_GAME_CLEARANCE + margin or point.distance_to(Vector2(game.at.x, game.at.z)) < FIELD_TOY_CLEARANCE + margin: return true
-	for toy: Dictionary in FieldRegistry.toys("welcome"):
+	for toy: Dictionary in FieldRegistry.placed_toys():
 		if toy.kind != "palm" and point.distance_to(Vector2(toy.at.x, toy.at.z)) < FIELD_TOY_CLEARANCE + margin: return true
 	return false

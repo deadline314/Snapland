@@ -1,7 +1,8 @@
 extends Node3D
 ## Small unscored things to poke on the map. Each answers with a visible
 ## reaction and keeps scene memory only: no score, reward or save data.
-## A toy is one registry row; its `kind` picks the builder and reaction below.
+## A toy is one registry row; its `kind` picks the builder and reaction below,
+## or a script toys/<kind>.gd (see field_toy.gd) for kinds the districts use.
 
 const Kit = preload("res://game/world/field/field_kit.gd")
 const Registry = preload("res://game/world/field/field_registry.gd")
@@ -12,6 +13,7 @@ const STONE_REST := Color("#9a927e")
 const STONE_LIT := Color("#f2c75a")
 const DOVE_SIZE := 1.8
 const PALM_REACH := 2.0
+const TOY_SCRIPTS := "res://game/world/field/toys/%s.gd"
 
 var world: Node3D
 var field: Node3D
@@ -19,9 +21,13 @@ var field: Node3D
 var items: Array[Dictionary] = []
 
 
-func configure(owner_world: Node3D, owner_field: Node3D, rows: Array) -> void:
+## `owner` lists the interaction points in its own coordinates: the island,
+## or the district these toys belong to.
+func configure(owner_world: Node3D, owner_field: Node3D, rows: Array, owner: Node3D = null) -> void:
 	world = owner_world
 	field = owner_field
+	if owner == null:
+		owner = world
 	for row: Dictionary in rows:
 		var at: Vector3 = row.at
 		var ground := Vector3(at.x, world.ground_surface_y(at), at.z)
@@ -35,10 +41,26 @@ func configure(owner_world: Node3D, owner_field: Node3D, rows: Array) -> void:
 			"stones": _build_stones(item)
 			"bench": _build_bench(item)
 			_:
-				push_warning("Field toy kind '%s' is not defined; the row was skipped." % item.kind)
-				continue
-		world._point(item.id, String(row.prompt), item.ground, float(item.get("marker", 2.2)))
+				if not _build_scripted(item):
+					push_warning("Field toy kind '%s' is not defined; the row was skipped." % item.kind)
+					continue
+		owner._point(item.id, String(row.prompt), owner.to_local(item.ground), float(item.get("marker", 2.2)))
 		items.append(item)
+
+
+func _build_scripted(item: Dictionary) -> bool:
+	var path := TOY_SCRIPTS % item.kind
+	if not ResourceLoader.exists(path):
+		return false
+	var script := load(path) as GDScript
+	if script == null or not script.can_instantiate():
+		return false
+	var toy: Node3D = script.new()
+	toy.name = String(item.kind).to_pascal_case()
+	add_child(toy)
+	toy.setup(world, field, item)
+	item["toy"] = toy
+	return true
 
 
 func item_for(id: String) -> Dictionary:
@@ -80,6 +102,8 @@ func _poke(item: Dictionary) -> void:
 		"bench":
 			item.resting = true
 			field.note_requested.emit(0)
+		_:
+			item.toy.poke()
 
 
 func advance(delta: float, player: Vector3) -> void:
@@ -93,6 +117,7 @@ func advance(delta: float, player: Vector3) -> void:
 			"geyser": _advance_geyser(item, player, still)
 			"stones": _advance_stones(item, delta, player, still)
 			"bench": _advance_bench(item, delta, player, still)
+			_: item.toy.advance(delta, player, still)
 
 
 # --- Palm: shake it and coconuts drop while sparrows scatter. ---
