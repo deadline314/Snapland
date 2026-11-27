@@ -47,6 +47,7 @@ const PITCH_REACH := 1.65
 ## on the canopy (circus_scenery.gd).
 const PITCH_GAMES: Array[Dictionary] = [
 	{"pitch": 9, "id": "game-052", "title": "接飛碟", "prompt": "接飛碟 · 飛碟到圈裡就按", "body": Color("#b8553f"), "shape": "oval", "topper": "plates"},
+	{"pitch": 1, "id": "game-055", "title": "人肉砲彈", "prompt": "人肉砲彈 · 按住蓄力放開發射", "body": Color("#3f6f8a"), "shape": "arch", "topper": "cannon"},
 ]
 const VELVET := Color("#723e51")
 const POOL_SPECS := [

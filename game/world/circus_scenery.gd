@@ -549,6 +549,15 @@ func _topper(sculpt: Kit.Sculpt, top: Vector3, kind: String) -> void:
 			for plate in range(4):
 				sculpt.tube(top + Vector3(0.02 * plate, 0.62 + 0.07 * plate, 0), 0.2, 0.22, 0.05, Props.CREAM if plate % 2 == 0 else Props.SKY, 10)
 			sculpt.tube(top + Vector3(0.42, 0.78, 0.05), 0.16, 0.16, 0.04, Props.CREAM, 10, Basis(Vector3.BACK, 0.7))
+		"cannon":
+			# A little striped cannon aimed over the canopy with a helmeted clown in its mouth.
+			var aim := Basis(Vector3.BACK, -0.75)
+			sculpt.box(top + Vector3(0, 0.12, 0), Vector3(0.5, 0.2, 0.36), Props.WOOD)
+			for side: float in [-1.0, 1.0]:
+				sculpt.tube(top + Vector3(side * 0.18, 0.14, 0.2), 0.14, 0.14, 0.05, Props.IRON, 8, Basis(Vector3.RIGHT, PI * 0.5))
+			sculpt.tube(top + Vector3(0.08, 0.5, 0), 0.15, 0.12, 0.8, Props.RED, 8, aim)
+			sculpt.tube(top + Vector3(0.16, 0.58, 0), 0.16, 0.16, 0.06, Props.GOLD, 8, aim)
+			sculpt.tube(top + Vector3(0.36, 0.82, 0), 0.13, 0.08, 0.14, Props.RED.lightened(0.2), 8, aim)
 
 ## Name board with its label. On the ground it stands on two legs; with `sculpt`
 ## set it rides on a cabinet and is drawn into that cabinet's mesh.

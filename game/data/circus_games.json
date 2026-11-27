@@ -58,5 +58,25 @@
       "lantern",
       "sign"
     ]
+  },
+  {
+    "id": "game-055",
+    "mode": "human_cannon",
+    "zone": "circus",
+    "local_index": 7,
+    "arcade": true,
+    "name": "人肉砲彈",
+    "goal": "按住壓緊彈簧砲，放開把小丑射進左右滑動的救生網，越接近網心越高分。",
+    "instructions": "按住空白鍵、E 或手把 A 鈕壓彈簧，放開發射。點住畫面也可以。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助發射人肉砲彈拿到金牌",
+    "ordinary": "放開彈簧砲把小丑射進救生網，拿到銅牌",
+    "attraction_tag": "人肉砲彈台",
+    "island_invitation": "壓得越緊飛得越遠，可是壓到底會穿破帳篷。網子在動，要射到它待會兒在的地方。",
+    "retake_props": [
+      "mascot",
+      "hat",
+      "sign"
+    ]
   }
 ]
