@@ -60,6 +60,26 @@
     ]
   },
   {
+    "id": "game-064",
+    "mode": "block_bridge",
+    "zone": "toy",
+    "local_index": 4,
+    "arcade": true,
+    "name": "積木拱橋",
+    "goal": "積木掛在吊鉤上左右擺，看準了放下去疊橋墩；對不準的部分會被鋸掉，疊滿八塊火車就能過橋。",
+    "instructions": "空白鍵、↓ 或手把 A 鈕：放下積木。點一下畫面也可以。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助疊橋墩拿到金牌",
+    "ordinary": "看準了放下積木疊橋墩，拿到銅牌",
+    "attraction_tag": "積木橋墩",
+    "island_invitation": "積木在吊鉤上晃來晃去，對準了再放手。歪掉的地方會被鋸掉，整個沒對到，橋墩會一路倒到你頭上！",
+    "retake_props": [
+      "mascot",
+      "bench",
+      "lantern"
+    ]
+  },
+  {
     "id": "game-065",
     "mode": "spring_frog",
     "zone": "toy",

@@ -17,6 +17,8 @@ const STANDS := {
 			"stand": Vector3(-2.4, 0.2, -5.2), "point": Vector3(-1.3, 0.2, -3.75), "prop": "cuckoo", "paint": Color("#567f77")},
 		{"id": "game-063", "title": "磁鐵搬家", "prompt": "磁鐵搬家 · 吸起鐵皮玩具",
 			"stand": Vector3(10.5, 0.2, 6.2), "point": Vector3(9.4, 0.2, 7.55), "prop": "magnet", "paint": Color("#b5553c")},
+		{"id": "game-064", "title": "積木拱橋", "prompt": "積木拱橋 · 看準了放下積木",
+			"stand": Vector3(7.6, 0.2, 6.1), "point": Vector3(6.35, 0.2, 7.5), "prop": "bridge", "paint": Color("#4f8f86")},
 		{"id": "game-065", "title": "彈簧青蛙", "prompt": "彈簧青蛙 · 按住上發條跳積木",
 			"stand": Vector3(-6.2, 0.2, -2.5), "point": Vector3(-7.15, 0.2, -1.05), "prop": "frog", "paint": Color("#5f7d4a")},
 		{"id": "game-068", "title": "陀螺相撲", "prompt": "陀螺相撲 · 方向鍵撞陀螺",
@@ -59,6 +61,7 @@ static func build(world: Node3D, region: String) -> void:
 			"tops": _tops_prop(sculpt)
 			"soldier": _soldier_prop(sculpt)
 			"magnet": _magnet_prop(sculpt)
+			"bridge": _bridge_prop(sculpt)
 			"camera": _camera_prop(sculpt)
 			"lily": _lily_prop(sculpt)
 			"mushroom": _mushroom_prop(sculpt)
@@ -289,3 +292,26 @@ static func _magnet_prop(sculpt: Kit.Sculpt) -> void:
 	sculpt.box(Vector3(0.15, 1.14, 0.1), Vector3(0.05, 0.03, 0.04), Color("#e0773c"))
 	for wheel: float in [0.22, 0.38]:
 		sculpt.tube(Vector3(wheel, 0.99, 0.18), 0.03, 0.03, 0.02, DARK, 6, Basis(Vector3.RIGHT, PI * 0.5))
+
+
+## A stack of painted blocks swinging from a rope on the roof, and a little
+## wooden arch bridge with a toy engine on the counter.
+static func _bridge_prop(sculpt: Kit.Sculpt) -> void:
+	var paints: Array[Color] = [Color("#c0503f"), Color("#e0b04a"), Color("#4f79a8")]
+	var pine := Color("#d2a46a")
+	sculpt.box(Vector3(0.0, 3.25, -0.3), Vector3(0.9, 0.06, 0.06), TIMBER)
+	sculpt.box(Vector3(0.42, 2.82, -0.3), Vector3(0.06, 0.86, 0.06), TIMBER)
+	sculpt.box(Vector3(-0.12, 3.05, -0.3), Vector3(0.02, 0.4, 0.02), CREAM, Basis(Vector3.BACK, 0.25))
+	sculpt.box(Vector3(-0.17, 2.82, -0.3), Vector3(0.36, 0.14, 0.2), paints[0], Basis(Vector3.BACK, 0.25))
+	sculpt.box(Vector3(-0.42, 2.48, -0.3), Vector3(0.28, 0.14, 0.2), paints[1])
+	sculpt.box(Vector3(-0.42, 2.62, -0.3), Vector3(0.24, 0.14, 0.2), paints[2])
+	for side: float in [-1.0, 1.0]:
+		sculpt.box(Vector3(side * 0.34, 1.06, 0.1), Vector3(0.12, 0.2, 0.2), pine.darkened(0.15))
+	for step in 5:
+		var t := (step + 0.5) / 5.0
+		var x := lerpf(-0.36, 0.36, t)
+		sculpt.box(Vector3(x, 1.12 + 0.07 * sin(t * PI), 0.1), Vector3(0.16, 0.05, 0.2), pine, Basis(Vector3.BACK, -0.35 * cos(t * PI)))
+	sculpt.box(Vector3(0, 1.22, 0.1), Vector3(0.82, 0.04, 0.22), pine.darkened(0.1))
+	sculpt.box(Vector3(-0.08, 1.31, 0.1), Vector3(0.22, 0.12, 0.14), paints[0])
+	sculpt.box(Vector3(-0.15, 1.42, 0.1), Vector3(0.06, 0.1, 0.06), Color("#4a4e57"))
+	sculpt.box(Vector3(0.12, 1.3, 0.1), Vector3(0.14, 0.1, 0.14), paints[2])
