@@ -20,7 +20,7 @@ func _run() -> void:
 	var garden: Array = catalog.definitions("garden")
 	var all_games: Array = catalog.all_definitions()
 	_check(welcome == JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json")), "default definitions preserve the original welcome row shape and order")
-	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 2 and toy.size() == 4 and garden.size() == 4 and all_games.size() == 58, "only the 58 delivered games are exposed")
+	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 2 and toy.size() == 5 and garden.size() == 4 and all_games.size() == 59, "only the 59 delivered games are exposed")
 	for index in range(welcome.size()):
 		_check(welcome[index].id == "game-%03d" % (index + 1), "welcome numbering stays ordered")
 	_check(all_games == welcome + harbor + candy + nightmarket + circus + toy + garden and catalog.definitions("hotel").is_empty(), "games retain global order and future regions remain unavailable")
@@ -37,6 +37,8 @@ func _run() -> void:
 		"a zone may deliver out of order: the fifth toy town slot keeps its own number with slots three and four still open")
 	var tops := {"id":"game-068", "mode":"top_sumo", "zone":"toy", "local_index":8, "photo_id":"photo-toy-game-8", "devil_photo_id":"photo-toy-devil-8", "achievement_id":"ACH_GAME_068"}
 	_check(catalog.identity("game-068") == tops and catalog.identity("top_sumo") == tops and toy[3].name == "陀螺相撲" and toy[3].arcade == true, "eighth toy town game has stable identities and the arcade flow flag")
+	var bonk := {"id":"game-070", "mode":"soldier_bonk", "zone":"toy", "local_index":10, "photo_id":"photo-toy-game-10", "devil_photo_id":"photo-toy-devil-10", "achievement_id":"ACH_GAME_070"}
+	_check(catalog.identity("game-070") == bonk and catalog.identity("soldier_bonk") == bonk and toy[4].name == "敲敲玩具兵" and toy[4].arcade == true, "tenth toy town game has stable identities and the arcade flow flag")
 	var still := {"id":"game-073", "mode":"hold_still", "zone":"garden", "local_index":1, "photo_id":"photo-garden-game-1", "devil_photo_id":"photo-garden-devil-1", "achievement_id":"ACH_GAME_073"}
 	_check(catalog.identity("game-073") == still and catalog.identity("hold_still") == still and garden[0].name == "螢火蟲長曝光" and garden[0].arcade == true, "first greenhouse game keeps its own global number and the arcade flow flag")
 	var lily := {"id":"game-077", "mode":"lily_hop", "zone":"garden", "local_index":5, "photo_id":"photo-garden-game-5", "devil_photo_id":"photo-garden-devil-5", "achievement_id":"ACH_GAME_077"}

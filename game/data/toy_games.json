@@ -78,5 +78,25 @@
       "sign",
       "lantern"
     ]
+  },
+  {
+    "id": "game-070",
+    "mode": "soldier_bonk",
+    "zone": "toy",
+    "local_index": 10,
+    "arcade": true,
+    "name": "敲敲玩具兵",
+    "goal": "四座哨亭會冒出玩具兵，按那個方向用槌子敲回去；打瞌睡的貓咪不能敲。",
+    "instructions": "方向鍵、WASD 或手把十字鍵：敲對應那一座哨亭。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助敲玩具兵拿到金牌",
+    "ordinary": "按方向敲回冒出來的玩具兵，拿到銅牌",
+    "attraction_tag": "玩具兵哨亭",
+    "island_invitation": "玩具兵從哪座哨亭冒出來，就按那個方向敲回去。小心，貓咪被敲會把槌子搶走！",
+    "retake_props": [
+      "mascot",
+      "sign",
+      "bench"
+    ]
   }
 ]

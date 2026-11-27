@@ -19,6 +19,8 @@ const STANDS := {
 			"stand": Vector3(-6.2, 0.2, -2.5), "point": Vector3(-7.15, 0.2, -1.05), "prop": "frog", "paint": Color("#5f7d4a")},
 		{"id": "game-068", "title": "陀螺相撲", "prompt": "陀螺相撲 · 方向鍵撞陀螺",
 			"stand": Vector3(-7.3, 0.2, 5.7), "point": Vector3(-6.15, 0.2, 6.85), "prop": "tops", "paint": Color("#8a4a3e")},
+		{"id": "game-070", "title": "敲敲玩具兵", "prompt": "敲敲玩具兵 · 方向鍵敲回去",
+			"stand": Vector3(-6.0, 0.2, 1.6), "point": Vector3(-4.95, 0.2, 3.0), "prop": "soldier", "paint": Color("#5b6f9a")},
 	],
 	"garden": [
 		{"id": "game-073", "title": "螢火蟲長曝光", "prompt": "螢火蟲長曝光 · 忍住別按",
@@ -53,6 +55,7 @@ static func build(world: Node3D, region: String) -> void:
 			"cuckoo": _cuckoo_prop(sculpt)
 			"frog": _frog_prop(sculpt)
 			"tops": _tops_prop(sculpt)
+			"soldier": _soldier_prop(sculpt)
 			"camera": _camera_prop(sculpt)
 			"lily": _lily_prop(sculpt)
 			"mushroom": _mushroom_prop(sculpt)
@@ -235,3 +238,21 @@ static func _tops_prop(sculpt: Kit.Sculpt) -> void:
 	sculpt.tube(Vector3(0, 2.9, -0.3), 0.2, 0.08, 0.1, BRASS, 10)
 	sculpt.tube(Vector3(0, 3.02, -0.3), 0.04, 0.04, 0.14, TIMBER, 6)
 
+
+## A striped sentry box with a toy soldier popping out and a mallet on the counter, and a big mallet on the roof.
+static func _soldier_prop(sculpt: Kit.Sculpt) -> void:
+	var red := Color("#b8483a")
+	sculpt.box(Vector3(-0.22, 1.26, 0.0), Vector3(0.44, 0.6, 0.4), CREAM)
+	for stripe: float in [-0.36, -0.22, -0.08]:
+		sculpt.box(Vector3(stripe, 1.26, 0.205), Vector3(0.06, 0.6, 0.01), red)
+	sculpt.box(Vector3(-0.22, 1.62, 0.0), Vector3(0.52, 0.08, 0.48), Color("#5b6f9a"))
+	sculpt.box(Vector3(-0.22, 1.28, 0.21), Vector3(0.22, 0.34, 0.01), DARK)
+	sculpt.box(Vector3(-0.22, 1.38, 0.26), Vector3(0.14, 0.12, 0.1), Color("#ebb894"))
+	sculpt.box(Vector3(-0.22, 1.52, 0.26), Vector3(0.16, 0.2, 0.12), Color("#2f2838"))
+	sculpt.box(Vector3(-0.22, 1.18, 0.26), Vector3(0.18, 0.14, 0.1), red)
+	sculpt.box(Vector3(0.3, 1.02, 0.12), Vector3(0.4, 0.04, 0.04), TIMBER, Basis(Vector3.UP, 0.4))
+	sculpt.tube(Vector3(0.45, 1.06, 0.2), 0.08, 0.08, 0.2, Color("#c8a676"), 8, Basis(Vector3.FORWARD, PI * 0.5) * Basis(Vector3.UP, 0.4))
+	sculpt.box(Vector3(0, 2.5, -0.3), Vector3(0.06, 0.4, 0.06), TIMBER, Basis(Vector3.BACK, 0.5))
+	sculpt.tube(Vector3(-0.12, 2.72, -0.3), 0.13, 0.13, 0.36, Color("#c8a676"), 10, Basis(Vector3.BACK, PI * 0.5 + 0.5))
+	for band: float in [-0.14, 0.14]:
+		sculpt.tube(Vector3(-0.12, 2.72, -0.3) + Vector3(band, 0, 0).rotated(Vector3.BACK, 0.5), 0.14, 0.14, 0.05, red, 10, Basis(Vector3.BACK, PI * 0.5 + 0.5))

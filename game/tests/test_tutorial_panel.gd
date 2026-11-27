@@ -4,6 +4,8 @@ const Catalog = preload("res://game/ui/tutorial_catalog.gd")
 const TutorialPanelScript = preload("res://game/ui/tutorial_panel.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
 
+const WATCHDOG_PER_LESSON := 1.5
+
 var _failures: Array[String] = []
 var _finished := false
 
@@ -12,7 +14,8 @@ func _initialize() -> void:
 		push_error("tutorial checks require an isolated SNAPLAND_SAVE_PATH")
 		quit(1)
 		return
-	create_timer(45.0).timeout.connect(_on_watchdog_timeout)
+	# A hang guard: the layout sweep below visits every lesson, so it grows with them.
+	create_timer(maxf(45.0, WATCHDOG_PER_LESSON * Catalog.expected_lessons().size())).timeout.connect(_on_watchdog_timeout)
 	call_deferred("_run")
 
 func _check(condition: bool, message: String) -> void:
@@ -34,7 +37,7 @@ func _finish() -> void:
 func _on_watchdog_timeout() -> void:
 	if _finished:
 		return
-	push_error("FAIL: tutorial panel/catalog checks exceeded the 45 second watchdog")
+	push_error("FAIL: tutorial panel/catalog checks exceeded the watchdog (%.0f s)" % maxf(45.0, WATCHDOG_PER_LESSON * Catalog.expected_lessons().size()))
 	_finished = true
 	quit(1)
 
