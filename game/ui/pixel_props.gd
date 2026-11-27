@@ -70,6 +70,9 @@ const ICONS := {
 	"awning": ["#########", "#.#.#.#.#", ".#.#.#.#.", "#.......#", "#.......#", "#.......#", "#.......#", "#.......#", "#.......#"],
 	"walk": ["......##.", "......##.", ".......#.", "..##.....", "..##.....", "...#..##.", "......##.", ".......#.", "........."],
 	"reset": ["..####...", ".#....#.#", "#......##", "#.....###", "#........", "#.......#", ".#.....#.", "..#####..", "........."],
+	# Welcome photo and music keys.
+	"camera": ["..##.....", "#########", "#.......#", "#..###..#", "#.#...#.#", "#.#...#.#", "#..###..#", "#.......#", "#########"],
+	"replay": ["...###.#.", ".##...##.", "#....###.", "#........", "#........", "#.......#", ".#.....#.", "..#####..", "........."],
 }
 
 # --- colour -------------------------------------------------------------------
@@ -418,7 +421,7 @@ static func dust_puffs(canvas: CanvasItem, at: Vector2, elapsed: float, spread :
 static func bands(canvas: CanvasItem, rect: Rect2, top: Color, bottom: Color, steps := 8, ease := 1.0) -> void:
 	var y := rect.position.y
 	for band in steps:
-		var next := roundf(rect.position.y + rect.size.y * float(band + 1) / steps / PIXEL) * PIXEL
+		var next := roundf((rect.position.y + rect.size.y * float(band + 1) / steps) / PIXEL) * PIXEL
 		canvas.draw_rect(Rect2(rect.position.x, y, rect.size.x, next - y), top.lerp(bottom, pow(float(band) / maxf(1.0, steps - 1.0), ease)))
 		y = next
 

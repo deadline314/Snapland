@@ -8,6 +8,8 @@ signal shutter_requested
 
 const ModelScript = preload("res://game/minigames/shadow_theatre_model.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const StageProps = preload("res://game/minigames/stage_props.gd")
 const DESIGN_SIZE := Vector2(1280.0, 720.0)
 const HUD_SAFE_RECT := Rect2(0.0, 0.0, 1280.0, 130.0)
 const PLAYFIELD_RECT := Rect2(64.0, 136.0, 1152.0, 548.0)
@@ -57,6 +59,11 @@ var _resume_focus_pending := false
 var _fine_down := false
 var _pointer_down := false
 var geometry_build_count := 0
+## Seconds left on the paper puppet's rubbery shiver after a missed shot.
+var _miss_wobble_left := 0.0
+var _seen_misses := 0
+var _flicker_clock := 0.0
+const MISS_WOBBLE_SECONDS := 0.8
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -90,6 +97,12 @@ func present_state(snapshot: Dictionary, time_phase: String = "noon", reduced_mo
 		_environment.ambient_light_energy = float(PHASE_AMBIENT_ENERGY[_phase])
 	if _spot != null:
 		_spot.light_color = PHASE_LAMP[_phase]
+	# The fail gag: a missed shot makes the cut-out shiver like a wet noodle, so
+	# its shadow wobbles on the sheet. The result was already judged.
+	var misses := int(snapshot.get("misses", 0))
+	if misses > _seen_misses and not reduced_motion:
+		_miss_wobble_left = MISS_WOBBLE_SECONDS
+	_seen_misses = misses
 	var next_round := clampi(int(snapshot.get("round", 0)), 0, 2)
 	if next_round != _round:
 		_round = next_round
@@ -180,7 +193,8 @@ func target_marker(round_index: int = -1) -> MeshInstance3D:
 	var index := _round if round_index < 0 else clampi(round_index, 0, _target_markers.size() - 1)
 	return _target_markers[index] if index >= 0 and index < _target_markers.size() else null
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	_animate_idle(delta)
 	if _resume_focus_pending:
 		_resume_focus_pending = false
 		grab_focus()
@@ -189,6 +203,21 @@ func _process(_delta: float) -> void:
 	if horizontal != 0.0 or depth != 0.0:
 		var axis := Vector2(horizontal, depth).limit_length(1.0)
 		axis_requested.emit(axis.x * (0.25 if _fine_down else 1.0), axis.y * (0.25 if _fine_down else 1.0))
+
+## The oil lamp breathes a little and a missed shot sets the puppet shivering.
+func _animate_idle(delta: float) -> void:
+	if _spot == null or _puppet == null:
+		return
+	_flicker_clock += delta
+	_spot.light_energy = 1.6 if _reduced_motion else 1.6 + 0.05 * sin(_flicker_clock * 7.3) * sin(_flicker_clock * 2.1)
+	if _miss_wobble_left > 0.0:
+		_miss_wobble_left = maxf(0.0, _miss_wobble_left - delta)
+		var fade := _miss_wobble_left / MISS_WOBBLE_SECONDS
+		_puppet.rotation.z = sin((MISS_WOBBLE_SECONDS - _miss_wobble_left) * 30.0) * 0.16 * fade
+		_puppet.scale = Vector3(1.0 + 0.06 * fade * sin(_miss_wobble_left * 40.0), 1.0 - 0.05 * fade, 1.0)
+	elif _puppet.rotation.z != 0.0:
+		_puppet.rotation.z = 0.0
+		_puppet.scale = Vector3.ONE
 
 func clear_held_controls() -> void:
 	_left_down = false
@@ -323,24 +352,8 @@ func _build_shutter_button() -> void:
 	_shutter_button.add_theme_color_override("font_color", Color("#fff2d1"))
 	_shutter_button.add_theme_color_override("font_hover_color", Color("#fff9e8"))
 	_shutter_button.add_theme_color_override("font_pressed_color", Color("#f5d89a"))
-	var normal := StyleBoxFlat.new()
-	normal.bg_color = Color("#102b35")
-	normal.border_color = Color("#c3944f")
-	normal.set_border_width_all(2)
-	normal.set_corner_radius_all(0)
-	normal.shadow_color = Color(0.02, 0.04, 0.05, 0.0)
-	normal.shadow_size = 0
-	normal.shadow_offset = Vector2.ZERO
-	var hover := normal.duplicate() as StyleBoxFlat
-	hover.bg_color = Color("#19443f")
-	hover.border_color = Color("#62c3b0")
-	var pressed := normal.duplicate() as StyleBoxFlat
-	pressed.bg_color = Color("#263d46")
-	pressed.border_color = Color("#62c3b0")
-	_shutter_button.add_theme_stylebox_override("normal", normal)
-	_shutter_button.add_theme_stylebox_override("hover", hover)
-	_shutter_button.add_theme_stylebox_override("pressed", pressed)
-	_shutter_button.add_theme_stylebox_override("focus", hover)
+	# The shared physical key: a cap that sinks onto its lip, with a camera icon.
+	Props.skin_key(_shutter_button, Color("#2f6470"), "camera")
 	# Measure the owning Control in the main viewport; its SubViewport can report
 	# an identity/empty transform during headless setup before any physical scale exists.
 	var physical_scale := Paper.physical_scale(self)
@@ -355,7 +368,12 @@ func _build_shutter_button() -> void:
 
 func _build_wall_and_frame() -> void:
 	_wall_material = _material(Color("#ead3a5"), 0.9)
-	_wall_material.albedo_texture = _paper_fiber
+	# A printed backdrop sheet: watercolour mottling, a faint tide print along
+	# the foot and darker edges. BoxMesh packs its faces in a 3 x 2 UV grid, so
+	# this scale maps the whole sheet onto each face.
+	_wall_material.albedo_texture = _make_backdrop_texture()
+	_wall_material.uv1_scale = Vector3(3.0, 2.0, 1.0)
+	_wall_material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
 	_wall_material.shading_mode = BaseMaterial3D.SHADING_MODE_PER_PIXEL
 	_wall_material.disable_receive_shadows = false
 	# Restrained world fill keeps the real cast warm and readable without full black.
@@ -382,7 +400,17 @@ func _build_wall_and_frame() -> void:
 	bottom_bead.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_build_curtains()
 	_build_nameplate()
+	_build_backstage()
 	geometry_build_count += 12
+
+## The room behind the theatre: a painted plaster wall over a timber wainscot,
+## so the frame stands in a place instead of in one flat backdrop colour.
+func _build_backstage() -> void:
+	# Striped wallpaper panels above, panelled timber below the chair rail.
+	_add_box("BackstagePlasterWall", Vector3(18.0, 8.0, 0.1), Vector3(0.0, 1.2, ModelScript.WALL_Z + 1.2), StageProps.wood(Color("#36656c"), 0.6, true))
+	_add_box("BackstageWainscot", Vector3(18.0, 2.7, 0.12), Vector3(0.0, -1.65, ModelScript.WALL_Z + 1.12), StageProps.wood(Color("#4a3a2c"), 0.16, true))
+	_add_box("BackstageChairRail", Vector3(18.0, 0.08, 0.2), Vector3(0.0, -0.28, ModelScript.WALL_Z + 1.08), _material(Color("#8a6a45"), 0.6))
+	geometry_build_count += 3
 
 func _build_curtains() -> void:
 	var teal := _material(Color("#28646b"), 0.82)
@@ -603,7 +631,11 @@ func _build_lamp() -> void:
 func _build_rail() -> void:
 	var wood := _material(Color("#684e39"), 0.74)
 	var teal := _material(Color("#3f817e"), 0.72)
-	_add_box("MiniatureStageDeck", Vector3(7.2, 0.16, 5.8), Vector3(0.0, -1.47, -0.05), wood)
+	# Planked stage boards instead of one flat brown slab.
+	_add_box("MiniatureStageDeck", Vector3(7.2, 0.16, 5.8), Vector3(0.0, -1.47, -0.05), StageProps.wood(Color("#6d523b"), 0.3))
+	# A planked skirt under the deck front so the stage stands on a table, not in a void.
+	_add_box("StageApron", Vector3(7.4, 1.4, 0.08), Vector3(0.0, -2.25, -2.99), StageProps.wood(Color("#5a4230"), 0.2))
+	_add_box("StageApronSide", Vector3(0.08, 1.4, 5.9), Vector3(-3.66, -2.25, -0.05), StageProps.wood(Color("#4e3a2a"), 0.2))
 	_add_box("StageFrontSeaGlassInlay", Vector3(4.7, 0.045, 0.06), Vector3(0.0, -1.36, -2.68), teal)
 	for side in [-1.0, 1.0]:
 		_add_cylinder("DeckBrassPost%s" % str(side), 0.055, 0.22, Vector3(side * 3.35, -1.32, -1.9), _material(Color("#c39354"), 0.36, true))
@@ -701,6 +733,33 @@ func _make_grain_texture(midpoint: float, amplitude: float, seed_value: int) -> 
 			var hairline := sin(float(x) * 0.33 + float(y) * 0.07) * amplitude * 0.16
 			var value := clampf(midpoint + band + hairline + random.randf_range(-amplitude * 0.22, amplitude * 0.22), 0.78, 1.0)
 			image.set_pixel(x, y, Color(value, value, value, 1.0))
+	return ImageTexture.create_from_image(image)
+
+## Backdrop sheet (texels): fibres, soft blotches, a printed horizon and tide
+## rows near the foot, darkened toward every edge. Values stay above 0.8 so the
+## cast shadow keeps its full contrast.
+func _make_backdrop_texture() -> Texture2D:
+	const W := 192
+	const H := 96
+	var image := Image.create(W, H, false, Image.FORMAT_RGBA8)
+	var random := RandomNumberGenerator.new()
+	random.seed = 9026
+	for y in H:
+		for x in W:
+			var u := float(x) / W
+			var v := float(y) / H
+			var mottle := 0.025 * sin(u * 9.0 + sin(v * 5.0) * 1.7) + 0.02 * sin(v * 11.0 + u * 4.0)
+			var edge := minf(minf(u, 1.0 - u) * 2.2, minf(v, 1.0 - v) * 3.0)
+			var value := 0.95 + mottle - 0.1 * (1.0 - clampf(edge * 3.0, 0.0, 1.0)) + random.randf_range(-0.012, 0.012)
+			# Printed horizon and three rows of tide scallops low on the sheet.
+			if y == int(H * 0.66):
+				value -= 0.06
+			var row := (y - int(H * 0.7)) / 7 if y >= int(H * 0.7) else -1
+			if row >= 0 and row < 3:
+				var crest := int(H * 0.7) + row * 7 + int(round(2.0 * absf(sin((x + row * 5) * PI / 12.0))))
+				if y == crest:
+					value -= 0.07 - row * 0.012
+			image.set_pixel(x, y, Color(clampf(value, 0.8, 1.0), clampf(value, 0.8, 1.0), clampf(value * 0.995, 0.8, 1.0), 1.0))
 	return ImageTexture.create_from_image(image)
 
 func _add_box(label: String, dimensions: Vector3, at: Vector3, material: Material, parent: Node3D = null) -> MeshInstance3D:

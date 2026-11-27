@@ -4,6 +4,7 @@ class_name BubblePhotoView
 ## Close portrait view for SG-25. Session owns inputs and uses the model as truth.
 const BubblePhotoModelScript = preload("res://game/minigames/bubble_photo_model.gd")
 const AvatarRendererScript = preload("res://game/world/avatar_renderer.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
 const CAMERA_BODY := Rect2(190.0, 122.0, 900.0, 499.0)
 const CAMERA_INSET := Rect2(199.0, 131.0, 882.0, 489.0)
 const CAMERA_PLAQUE := Rect2(295.0, 130.0, 520.0, 30.0)
@@ -57,6 +58,11 @@ var _phase := "aim"
 var _reduced_motion := false
 var _time_phase := "noon"
 var _initialized := false
+## When the last bubble popped (ticks msec) and where, for the splash gag.
+var _pop_started_ms := -1
+var _pop_center := Vector2.ZERO
+var _pop_radius := 0.0
+const POP_SPLASH_MS := 520.0
 var _harbor_geometry_cached := false
 var _far_shore_left_points := PackedVector2Array()
 var _far_shore_right_points := PackedVector2Array()
@@ -75,6 +81,8 @@ func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	clip_contents = true
+	# Textured polygons (headlands, the tide line) tile their grain swatch.
+	texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	initialize()
 
 func initialize() -> void:
@@ -100,7 +108,13 @@ func set_appearance(appearance: Dictionary, equipped: Dictionary) -> void:
 func present_state(snapshot: Dictionary, phase: String, reduced: bool, timephase: String) -> void:
 	initialize()
 	_model_snapshot = snapshot
+	var was_floating := str(_bubble_state.get("phase", "idle")) in ["charging", "launched"]
+	if was_floating:
+		_pop_center = bubble_visual_center()
+		_pop_radius = bubble_visual_radius()
 	_bubble_state = snapshot.get("bubble", {}) if snapshot.get("bubble", {}) is Dictionary else {}
+	if was_floating and str(_bubble_state.get("phase", "idle")) == "popped":
+		_pop_started_ms = Time.get_ticks_msec()
 	_phase = phase if phase in ["aim", "exposure", "finished"] else str(snapshot.get("phase", "aim"))
 	_reduced_motion = reduced
 	_time_phase = _normalize_time_phase(timephase)
@@ -380,31 +394,36 @@ func _draw() -> void:
 	_draw_harbor_view()
 	_draw_bubble_envelope()
 	_draw_character()
+	_draw_pop_splash()
 	_draw_camera_frame()
 	_draw_camera_controls()
 	_draw_readouts()
 	_draw_photo_rail()
 
 func _draw_camera_shell() -> void:
-	draw_rect(CAMERA_BODY, SHELL_DARK, true)
-	# A stepped molded shell and inset glass lip make this a camera apparatus,
-	# while keeping all hardware outside the scored image window.
-	draw_rect(Rect2(CAMERA_BODY.position + Vector2(3, 3), CAMERA_BODY.size - Vector2(6, 6)), Color("#183a3e"), false, 2.0)
-	draw_rect(CAMERA_BODY, Color("#4e8990"), false, 4.0)
-	draw_rect(CAMERA_INSET, Color("#24464a"), false, 2.0)
-	draw_line(Vector2(CAMERA_BODY.position.x + 18, 187), Vector2(CAMERA_BODY.position.x + 18, 574), Color("#6f9991", 0.25), 1.0)
-	draw_line(Vector2(CAMERA_BODY.end.x - 18, 187), Vector2(CAMERA_BODY.end.x - 18, 574), Color("#6f9991", 0.25), 1.0)
-	# Restrained molded ribs and brass screws make the camera body read as one object.
-	for rib in 2:
-		var y := 137.0 + float(rib) * 7.0
-		draw_line(Vector2(224.0, y), Vector2(278.0, y), Color("#698987", 0.54), 2.0)
+	# Glossy enamel camera body with brass rivets, lit from the top left and
+	# casting its shadow on the night behind it; hardware stays outside the
+	# scored image window.
+	Props.block_shadow(self, CAMERA_BODY, Vector2(8.0, 10.0), 0.45)
+	Props.surface(self, CAMERA_BODY, "enamel", Color("#24474d"), Color("#c89454"))
+	draw_rect(CAMERA_BODY.grow(2.0), Props.deepen(Color("#4e8990")), false, 2.0)
+	draw_rect(CAMERA_BODY, Color("#4e8990"), false, 2.0)
+	draw_line(CAMERA_BODY.position + Vector2(2.0, 1.0), Vector2(CAMERA_BODY.end.x - 2.0, CAMERA_BODY.position.y + 1.0), Props.lighten(Color("#4e8990"), 0.4), 2.0)
+	# Moulded grip ribs down the left flank (the shutter column holds the right).
+	for rib in 12:
+		var y := 196.0 + float(rib) * 30.0
+		draw_rect(Rect2(CAMERA_BODY.position.x + 12.0, y, 10.0, 4.0), Props.deepen(Color("#24474d"), 0.3))
+		draw_rect(Rect2(CAMERA_BODY.position.x + 12.0, y, 10.0, 2.0), Props.lighten(Color("#24474d"), 0.2))
+	# An engraved brass nameplate carries the camera's name and the light cue.
+	Props.metal_plate(self, Rect2(CAMERA_PLAQUE.position.x - 8.0, CAMERA_PLAQUE.position.y + 2.0, 232.0, 26.0), Color("#1d3a40"), false)
 	for point in BODY_SCREWS:
-		draw_circle(point, 4.0, Color("#c89454"))
-		draw_circle(point, 1.5, Color("#f1d39a"))
+		Props.rivet(self, point, Color("#c89454"))
 	draw_string(ThemeDB.fallback_font, PLAQUE_TITLE_RECT.position + Vector2(0.0, 18.0), plaque_title_text(), HORIZONTAL_ALIGNMENT_LEFT, PLAQUE_TITLE_RECT.size.x, 15, SHELL_INK)
 	draw_string(ThemeDB.fallback_font, PLAQUE_LIGHT_RECT.position + Vector2(0.0, 17.0), light_label(), HORIZONTAL_ALIGNMENT_RIGHT, PLAQUE_LIGHT_RECT.size.x, 14, READOUT_INK)
-	draw_rect(PHOTO_RAIL, Color("#18353a"), true)
-	draw_line(PHOTO_RAIL.position, Vector2(PHOTO_RAIL.end.x, PHOTO_RAIL.position.y), Color("#c89454"), 2.0)
+	# The print tray is a walnut shelf with a brass lip.
+	Props.block_shadow(self, PHOTO_RAIL, Vector2(6.0, 6.0), 0.4)
+	Props.wood_panel(self, PHOTO_RAIL, Color("#5a4232"))
+	Props.metal_plate(self, Rect2(PHOTO_RAIL.position, Vector2(PHOTO_RAIL.size.x, 6.0)), Color("#c89454"), false)
 
 func _draw_harbor_view() -> void:
 	var sky := Color("#d7cba9")
@@ -418,15 +437,18 @@ func _draw_harbor_view() -> void:
 	var window := BubblePhotoModelScript.PLAY_RECT
 	draw_rect(Rect2(window.position - Vector2(4.0, 4.0), window.size + Vector2(8.0, 5.0)), Color("#0a1a20"), true)
 	draw_rect(Rect2(window.position - Vector2(3.0, 3.0), window.size + Vector2(6.0, 4.0)), Color("#ad8752"), false, 1.0)
-	draw_rect(window, sky, true)
-	draw_rect(Rect2(window.position.x, 356.0, window.size.x, window.end.y - 356.0), water, true)
+	# Sky and water in posterised bands, the sky paling to the horizon.
+	Props.bands(self, Rect2(window.position, Vector2(window.size.x, 356.0 - window.position.y)), sky.darkened(0.06), sky.lightened(0.14), 8)
+	Props.bands(self, Rect2(window.position.x, 356.0, window.size.x, window.end.y - 356.0), water.lightened(0.1), water.darkened(0.14), 7)
 	# Three cut-paper planes create a small optical postcard. Each is translated
 	# only by the model's actual frame pan; no ambient or independent camera drift.
 	var far_offset := harbor_layer_offset("far")
 	draw_set_transform(far_offset, 0.0, Vector2.ONE)
 	draw_rect(Rect2(334.0, 338.0, 612.0, 19.0), shore.darkened(0.03), true)
-	draw_colored_polygon(_far_shore_left_points, Color("#8eaa9c"))
-	draw_colored_polygon(_far_shore_right_points, Color("#91ad9e"))
+	Props.fill_polygon(self, _far_shore_left_points, Props.rock_grain(), Color("#8eaa9c"))
+	Props.fill_polygon(self, _far_shore_right_points, Props.rock_grain(), Color("#91ad9e"))
+	draw_polyline(_far_shore_left_points.slice(1, _far_shore_left_points.size() - 1), Color("#b3c9b8"), 2.0)
+	draw_polyline(_far_shore_right_points.slice(1, _far_shore_right_points.size() - 1), Color("#b3c9b8"), 2.0)
 	# Tiny beacon silhouettes on the far headlands reinforce the harbor scale.
 	draw_rect(Rect2(384, 298, 8, 31), Color("#7b8172"), true)
 	draw_rect(Rect2(379, 294, 18, 7), Color("#e6c890"), true)
@@ -448,9 +470,20 @@ func _draw_harbor_view() -> void:
 	draw_line(Vector2(921, 393), Vector2(921, 408), Color("#f0ddb2"), 1.0)
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 	draw_rect(Rect2(window.position.x, 356.0, window.size.x, 5.0), shore, true)
+	# Idle life: sun glints slide along the water at both edges of the frame,
+	# well clear of the subject box.
+	if not _reduced_motion:
+		var clock := float(_model_snapshot.get("round_elapsed", 0.0))
+		for glint_index in 4:
+			var lane := 0.0 if glint_index < 2 else 1.0
+			var x := lerpf(348.0, 452.0, fposmod(clock * 0.21 + glint_index * 0.37, 1.0)) + lane * 480.0
+			var y := 392.0 + float(glint_index % 2) * 64.0
+			var width := 10.0 + 6.0 * absf(sin(clock * 1.7 + glint_index))
+			draw_rect(Rect2(Vector2(x, y).snapped(Vector2(2.0, 2.0)), Vector2(width, 2.0).snapped(Vector2(2.0, 2.0))), Color("#f4ecd0", 0.55))
 	var near_offset := harbor_layer_offset("near")
 	draw_set_transform(near_offset, 0.0, Vector2.ONE)
-	draw_colored_polygon(_near_tideline_points, Color("#a98b69"))
+	Props.fill_polygon(self, _near_tideline_points, Props.rock_grain(), Color("#a98b69"))
+	draw_polyline(_near_tideline_points.slice(0, _near_tideline_points.size() - 2), Color("#cdb48a"), 2.0)
 	# A few restrained tide cuts and edge reeds give the close plane material
 	# without entering the avatar's target-box band (which ends above y=540).
 	for line in 3:
@@ -476,17 +509,24 @@ func _draw_harbor_view() -> void:
 		draw_circle(Vector2(847, 231 if _time_phase == "dawn" else 280), 24.0, sun_color)
 	# The image area is visibly a camera negative with a safe inset, not a second game backdrop.
 	draw_rect(window, Color("#10262d", 0.22 if _time_phase == "night" else 0.045), true)
-	draw_rect(window, Color("#e0c88e"), false, 2.0)
+	# A brass bezel with a lit upper-left lip seats the negative in the body.
+	draw_rect(window.grow(4.0), Props.deepen(Color("#c89454"), 0.35), false, 2.0)
+	draw_rect(window.grow(2.0), Color("#c89454"), false, 2.0)
+	draw_line(window.position - Vector2(2.0, 2.0), Vector2(window.end.x + 2.0, window.position.y - 2.0), Props.lighten(Color("#c89454"), 0.45), 1.0)
+	draw_line(window.position - Vector2(2.0, 2.0), Vector2(window.position.x - 2.0, window.end.y + 2.0), Props.lighten(Color("#c89454"), 0.45), 1.0)
+	draw_rect(window, Color("#e0c88e", 0.6), false, 1.0)
 
 func _draw_readouts() -> void:
 	var status := semantic_feedback()
-	_draw_badge(readout_badge_rect(0), "全身  " + str(status.coverage_text), str(status.coverage_shape))
-	_draw_badge(readout_badge_rect(1), "構圖  " + str(status.center_text), str(status.center_shape))
-	_draw_badge(readout_badge_rect(2), "姿勢  " + str(status.timing_text), str(status.timing_shape))
-	draw_rect(FOCUS_BACKPLATE_RECT, PHOTO_READOUT_PANEL, true)
-	draw_rect(PREVIEW_BACKPLATE_RECT, PHOTO_READOUT_PANEL, true)
-	draw_string(ThemeDB.fallback_font, FOCUS_TEXT_RECT.position + Vector2(0.0, 16.0), focus_label_text(), HORIZONTAL_ALIGNMENT_LEFT, FOCUS_TEXT_RECT.size.x, 14, READOUT_INK)
-	draw_string(ThemeDB.fallback_font, BUBBLE_STATUS_RECT.position + Vector2(0.0, 16.0), bubble_status_text(), HORIZONTAL_ALIGNMENT_CENTER, BUBBLE_STATUS_RECT.size.x, 13, Color("#a9e6dc") if bool(_bubble_state.get("enveloped", false)) else READOUT_INK)
+	# Two short lines at most: the three status tabs (icon plus one word; the
+	# timing tab already says when the pose is in focus) and the score estimate.
+	# The idle blowing hint lives in the help page; live bubble states still show.
+	_draw_badge(readout_badge_rect(0), str(status.coverage_text), str(status.coverage_shape))
+	_draw_badge(readout_badge_rect(1), str(status.center_text), str(status.center_shape))
+	_draw_badge(readout_badge_rect(2), str(status.timing_text), str(status.timing_shape))
+	Props.metal_plate(self, PREVIEW_BACKPLATE_RECT, PHOTO_READOUT_PANEL, false)
+	if str(_bubble_state.get("phase", "idle")) != "idle":
+		draw_string(ThemeDB.fallback_font, BUBBLE_STATUS_RECT.position + Vector2(0.0, 16.0), bubble_status_text(), HORIZONTAL_ALIGNMENT_CENTER, BUBBLE_STATUS_RECT.size.x, 13, Color("#a9e6dc") if bool(_bubble_state.get("enveloped", false)) else READOUT_INK)
 	draw_string(ThemeDB.fallback_font, PREVIEW_LABEL.position + Vector2(0.0, 16.0), preview_label_text(), HORIZONTAL_ALIGNMENT_RIGHT, PREVIEW_LABEL.size.x, 14, READOUT_INK)
 
 func _draw_bubble_envelope() -> void:
@@ -518,9 +558,27 @@ func _draw_bubble_envelope() -> void:
 		draw_line(cue_end, cue_end - direction.rotated(0.55) * 6.0, Color("#d9e9d5", 0.70), 2.0, true)
 		draw_line(cue_end, cue_end - direction.rotated(-0.55) * 6.0, Color("#d9e9d5", 0.70), 2.0, true)
 
+## The fail gag: the bubble bursts into a ring of pixel droplets that fly out
+## and drop, and a wet blot hangs where it was for a beat.
+func _draw_pop_splash() -> void:
+	if _pop_started_ms < 0 or _reduced_motion or _pop_radius <= 0.0:
+		return
+	var t := float(Time.get_ticks_msec() - _pop_started_ms) / POP_SPLASH_MS
+	if t >= 1.0:
+		_pop_started_ms = -1
+		return
+	var drop := Color("#d5edf0", 0.9 * (1.0 - t))
+	for index in 12:
+		var angle := TAU * float(index) / 12.0 + 0.3
+		var reach := _pop_radius * (0.9 + 0.5 * t)
+		var at := (_pop_center + Vector2(cos(angle), sin(angle)) * reach + Vector2(0.0, 60.0 * t * t)).snapped(Vector2(2.0, 2.0))
+		var size := 6.0 if index % 3 == 0 else 4.0
+		draw_rect(Rect2(at - Vector2(size, size) * 0.5, Vector2(size, size)), drop)
+		draw_rect(Rect2(at - Vector2(size, size) * 0.5, Vector2(2.0, 2.0)), Color(1, 1, 1, 0.8 * (1.0 - t)))
+
 func _draw_badge(rect: Rect2, label: String, shape: String) -> void:
-	draw_rect(rect, READOUT_PANEL, true)
-	draw_rect(rect, Color("#d6bd81", 0.74), false, 1.0)
+	Props.block_shadow(self, rect, Vector2(2.0, 3.0), 0.3)
+	Props.metal_plate(self, rect, PHOTO_READOUT_PANEL, false)
 	_draw_status_shape(shape, rect.position + Vector2(17, 15))
 	draw_string(ThemeDB.fallback_font, rect.position + Vector2(31, 21), label, HORIZONTAL_ALIGNMENT_LEFT, rect.size.x - 36, 15, READOUT_INK)
 
@@ -581,26 +639,32 @@ func _draw_camera_frame() -> void:
 func _draw_camera_controls() -> void:
 	var focus := bool(_model_snapshot.get("focus_available", false))
 	var button_color := Color("#d9ad67") if focus else Color("#906f4f")
-	draw_rect(SHUTTER_COLUMN, Color("#19383c"), true)
-	draw_rect(SHUTTER_COLUMN, Color("#5b817c"), false, 1.0)
+	# A gunmetal top plate carries a brass-collared release button.
+	Props.metal_plate(self, SHUTTER_COLUMN, Color("#2a4a4e"))
 	var button_depth := 2.0 if _phase == "exposure" else 0.0
 	var button_center := Vector2(1020.0, 184.0 + button_depth)
-	draw_circle(button_center + Vector2(0.0, 3.0), 23.0, Color("#08171b"))
-	draw_circle(button_center, 22.0, Color("#b48c57"))
-	draw_circle(button_center, 18.0, Color("#0d2026"))
-	draw_circle(button_center + Vector2(0.0, button_depth * 0.35), 15.0, button_color)
-	draw_circle(button_center + Vector2(-5.0, -5.0), 4.5, Color("#fff0c5", 0.82))
+	Props.oval_shadow(self, button_center + Vector2(3.0, 6.0), Vector2(24.0, 22.0), 0.5)
+	Props.token(self, button_center, 22.0, Color("#b48c57"))
+	draw_circle(button_center, 17.0, Color("#0d2026"))
+	Props.token(self, button_center + Vector2(0.0, button_depth * 0.35), 15.0, button_color, _phase == "exposure")
 	if exposure_flash_enabled():
 		draw_arc(button_center, 28.0, 0.0, TAU, 28, Color("#f5dda4"), 2.0)
 		for ray in 4:
 			var angle := TAU * float(ray) / 4.0 + PI / 4.0
 			var direction := Vector2(cos(angle), sin(angle))
 			draw_line(button_center + direction * 31.0, button_center + direction * 36.0, Color("#f5dda4"), 2.0)
-	draw_string(ThemeDB.fallback_font, SHUTTER_PRIMARY_RECT.position + Vector2(0.0, 15.0), "快門", HORIZONTAL_ALIGNMENT_CENTER, SHUTTER_PRIMARY_RECT.size.x, 13, READOUT_INK)
-	draw_string(ThemeDB.fallback_font, SHUTTER_KEY_RECT.position + Vector2(0.0, 15.0), "Space", HORIZONTAL_ALIGNMENT_CENTER, SHUTTER_KEY_RECT.size.x, 13, Color("#e5d7b7"))
-	draw_rect(Rect2(994, 256, 52, 7), Color("#0d2026"), true)
-	draw_rect(Rect2(996, 258, 48.0 * clampf(float(_model_snapshot.get("coverage", 0.0)), 0.0, 1.0), 3), Color("#9fd4bb") if float(_model_snapshot.get("coverage", 0.0)) >= 0.8 else Color("#e6ad75"), true)
-	draw_string(ThemeDB.fallback_font, COVERAGE_TEXT_RECT.position + Vector2(0.0, 14.0), "%d%% 入框" % roundi(float(_model_snapshot.get("coverage", 0.0)) * 100.0), HORIZONTAL_ALIGNMENT_CENTER, COVERAGE_TEXT_RECT.size.x, 12, READOUT_INK)
+	# The key name sits on a small key cap; framing shows as a lit glass slot
+	# (the coverage tab names it), so the column carries one word.
+	var key_rect := Rect2(SHUTTER_KEY_RECT.position + Vector2(14.0, -12.0), Vector2(SHUTTER_KEY_RECT.size.x - 28.0, 30.0))
+	Props.key_cap(self, key_rect, _phase == "exposure")
+	draw_string(ThemeDB.fallback_font, key_rect.position + Vector2(0.0, 16.0 + (6.0 if _phase == "exposure" else 0.0)), "Space", HORIZONTAL_ALIGNMENT_CENTER, key_rect.size.x, 13, Color("#f0f0d8"))
+	var coverage := clampf(float(_model_snapshot.get("coverage", 0.0)), 0.0, 1.0)
+	var slot := Rect2(996.0, 262.0, 68.0, 8.0)
+	draw_rect(slot.grow(2.0), Props.deepen(Color("#2a4a4e"), 0.5))
+	draw_rect(slot, Color("#0d2026"))
+	var lit := Color("#9fd4bb") if coverage >= 0.8 else Color("#e6ad75")
+	draw_rect(Rect2(slot.position, Vector2(slot.size.x * coverage, slot.size.y)), lit)
+	draw_rect(Rect2(slot.position, Vector2(slot.size.x * coverage, 2.0)), Props.lighten(lit, 0.45))
 	if _phase == "exposure":
 		draw_rect(BubblePhotoModelScript.PLAY_RECT, Color("#fff4db", 0.78), false, 3.0)
 		draw_string(ThemeDB.fallback_font, EXPOSURE_TEXT_RECT.position + Vector2(0.0, 18.0), "曝光中・相片顯影", HORIZONTAL_ALIGNMENT_RIGHT, EXPOSURE_TEXT_RECT.size.x, 15, READOUT_INK)
@@ -612,11 +676,13 @@ func _draw_photo_rail() -> void:
 		var has_photo := index < photos.size()
 		# Preserve the photograph itself while giving only its filmstrip chrome
 		# the same square-corner navy treatment as the game's other readouts.
-		draw_rect(card, READOUT_PANEL)
-		draw_rect(card, Color("#dfb95f"), false, 2.0)
+		# Warm print paper on the walnut tray, with its shadow and a dark photo slot.
+		Props.block_shadow(self, card, Vector2(4.0, 5.0), 0.4)
+		Props.surface(self, card, "paper", PRINT_PAPER)
+		draw_rect(card.grow(1.0), Props.deepen(PRINT_PAPER, 0.4), false, 1.0)
 		var image_rect := Rect2(card.position + Vector2(8, 7), Vector2(48, 62))
-		draw_rect(image_rect, Color("#203f4e"))
-		draw_rect(image_rect, Color("#71c7b5"), false, 1.0)
+		Props.surface(self, image_rect, "photo", Color("#3d6470") if has_photo else Color("#2a4650"))
+		draw_rect(image_rect, Props.deepen(PRINT_PAPER, 0.3), false, 1.0)
 		if has_photo:
 			var shot: Dictionary = photos[index]
 			if bool(shot.get("captured", false)) and not _avatar_frames.is_empty():
@@ -629,9 +695,12 @@ func _draw_photo_rail() -> void:
 				draw_line(Vector2(image_rect.end.x, image_rect.position.y), Vector2(image_rect.position.x, image_rect.end.y), Color("#dfb95f"), 2.0)
 		var text_rect := photo_text_rect(index)
 		var labels := photo_label_text(index)
-		draw_string(ThemeDB.fallback_font, text_rect.position + Vector2(0.0, 14.0), labels[0], HORIZONTAL_ALIGNMENT_LEFT, text_rect.size.x, 13, READOUT_INK)
-		draw_string(ThemeDB.fallback_font, text_rect.position + Vector2(0.0, 33.0), labels[1], HORIZONTAL_ALIGNMENT_LEFT, text_rect.size.x, 13, Color("#c7dbd4"))
-		draw_string(ThemeDB.fallback_font, text_rect.position + Vector2(0.0, 52.0), labels[2], HORIZONTAL_ALIGNMENT_LEFT, text_rect.size.x, 12, Color("#dfb95f"))
+		# An empty print shows only its number; a taken one its result and score.
+		if not has_photo:
+			draw_string(ThemeDB.fallback_font, text_rect.position + Vector2(0.0, 24.0), labels[0], HORIZONTAL_ALIGNMENT_LEFT, text_rect.size.x, 13, Color("#263a3d"))
+		else:
+			draw_string(ThemeDB.fallback_font, text_rect.position + Vector2(0.0, 22.0), labels[1], HORIZONTAL_ALIGNMENT_LEFT, text_rect.size.x, 13, Color("#17272b"))
+			draw_string(ThemeDB.fallback_font, text_rect.position + Vector2(0.0, 44.0), labels[2], HORIZONTAL_ALIGNMENT_LEFT, text_rect.size.x, 12, Color("#6b4a1e"))
 
 func _build_avatar_cache() -> void:
 	_avatar_frames.clear()
