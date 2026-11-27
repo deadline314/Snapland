@@ -45,7 +45,7 @@ func _run() -> void:
  await _frames(20)
  main._interact("play:recall","球架")
  await _frames(2)
- _check(play.ball.position.distance_to(Vector3(-24,0.7,5.1))<0.15,"explicit recall returns the toy safely through its physics state")
+ _check(play.ball.position.distance_to(play.ball.HOME)<0.15,"explicit recall returns the toy safely through its physics state")
  main.world.player.position=play.ball.global_position+Vector3(1,0,0)
  await _frames(8)
  _check(str(main.world.nearest.get("id",""))=="play:ball","recall cradle does not steal the side-kick interaction")
@@ -91,7 +91,7 @@ func _frames(count: int) -> void:
  for i in count:await physics_frame
 func _test_discoveries() -> void:
  var discovery: Node3D=play.discoveries
- main.world.player.position=Vector3(-27,0.3,-45)
+ main.world.player.position=main.world.coast_description("coast:lighthouse").position+Vector3(0,0.12,0)
  main.world.player.velocity=Vector3.ZERO
  await _frames(3)
  var start: Vector3=main.world.player.position
@@ -122,7 +122,7 @@ func _test_discoveries() -> void:
  main.world._update_lamp_selection(true)
  _check(main.world.lamps.has(discovery.beacon_light) and discovery.beacon_light.light_energy>0.0,"nearby steerable light joins the real night-light budget")
  _check(main.world.lamps.filter(func(light: Light3D):return light.light_energy>0.0).size()<=8 and main.world.lamps.filter(func(light: Light3D):return light.shadow_enabled).size()<=2,"manual optics preserve the global light and shadow caps")
- main.world.player.position=Vector3(27,0.3,-52)
+ main.world.player.position=main.world.coast_description("coast:glass-garden").position+Vector3(0,0.12,0)
  await _frames(15)
  main._interact("coast:glass-garden","溫室")
  _check(discovery.garden_open and discovery.droplets[0].visible,"opening the real garden valve shows water")

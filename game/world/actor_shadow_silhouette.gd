@@ -9,22 +9,31 @@ var source: Sprite3D
 var upright := false
 var scene_camera: Camera3D
 var fallback_volumes: Array[GeometryInstance3D] = []
-var silhouette_material := StandardMaterial3D.new()
+## Created when the caster is configured: a new material costs several
+## milliseconds on a GPU renderer, so scenery that shares one never makes its own.
+var silhouette_material: StandardMaterial3D
 var silhouette_quad := QuadMesh.new()
 
 func _init() -> void:
 	name = "ActorAlphaShadow"
 	mesh = silhouette_quad
-	material_override = silhouette_material
 	cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
-	silhouette_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
-	silhouette_material.alpha_scissor_threshold = 0.5
-	silhouette_material.cull_mode = BaseMaterial3D.CULL_DISABLED
-	silhouette_material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
 	# Pose updates happen in the world's physics step and hair's normal process.
 	process_priority = 100
 
+func _use_material(shared_material: StandardMaterial3D) -> void:
+	if shared_material == null and silhouette_material == null:
+		shared_material = StandardMaterial3D.new()
+		shared_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
+		shared_material.alpha_scissor_threshold = 0.5
+		shared_material.cull_mode = BaseMaterial3D.CULL_DISABLED
+		shared_material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+	if shared_material != null:
+		silhouette_material = shared_material
+		material_override = shared_material
+
 func configure(sprite: Sprite3D, camera: Camera3D, fallback: Array[GeometryInstance3D] = []) -> void:
+	_use_material(null)
 	source = sprite
 	scene_camera = camera
 	fallback_volumes = fallback
@@ -38,9 +47,7 @@ func _process(_delta: float) -> void:
 func configure_static(sprite: Sprite3D, base: Vector3, height: float, shared_material: StandardMaterial3D = null) -> bool:
 	source = sprite
 	set_process(false)
-	if shared_material != null:
-		silhouette_material = shared_material
-		material_override = shared_material
+	_use_material(shared_material)
 	if not _sync_source_art():
 		_set_caster_visible(false)
 		return false

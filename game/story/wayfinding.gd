@@ -5,7 +5,8 @@ extends RefCounted
 ## progress only. They never change progress themselves.
 
 const DATA_PATH := "res://game/data/wayfinding.json"
-const TARGET_KINDS := ["character", "quest", "games", "coast"]
+## "place" points at somewhere with nothing to collect; its "note" says where it is.
+const TARGET_KINDS := ["character", "quest", "games", "coast", "place"]
 const QUEST_STEP_COUNT := 3
 
 var _signposts: Array = []
@@ -52,6 +53,8 @@ func _signpost_problem(signpost: Variant, seen: Dictionary) -> String:
 			return "signpost '%s' has an entry with an unknown target" % id
 		if str(target.kind) == "games" and (not target.get("ids", null) is Array or (target.ids as Array).is_empty()):
 			return "signpost '%s' lists a game group without ids" % id
+		if str(target.kind) == "place" and str(target.get("note", "")).is_empty():
+			return "signpost '%s' points at a place without a note" % id
 	return ""
 
 func diagnostics() -> Array[String]:
@@ -84,6 +87,8 @@ static func entry_status(entry: Dictionary, snapshot: Dictionary) -> String:
 			return "拍貼 %d/%d" % [collected, ids.size()] + (" ✓" if collected == ids.size() else "")
 		"coast":
 			return "6 處地標"
+		"place":
+			return str(target.get("note", ""))
 	return ""
 
 ## One readable signpost line: arrow, destination and live status.

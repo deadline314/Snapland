@@ -98,7 +98,7 @@ func _test_map() -> void:
 	if station!=null:
 		await _activate(station)
 		_check(_has_label(map_detail,"泡泡"),"station detail shows the real game goal and instructions")
-		_check(chart.get("destination") == _world_point("game-010") and _has_label(map_detail,"迎賓大道東側"),
+		_check(chart.get("destination") == _world_point("game-010") and _has_label(map_detail,"東北｜海風觀景台"),
 			"station preview matches its actual interaction point and side")
 	_check(_progress.normal_count() == original_photo_count and _progress.coins == original_coins,
 		"previewing stations and gates preserves photos and coins")
@@ -217,7 +217,7 @@ func _check_map_direction(chart: Control, details: Node) -> void:
 	await _activate(west)
 	var west_point := _world_point("gate:nightmarket")
 	var west_marker: Vector2 = chart.call("project", west_point)
-	_check(chart.get("destination") == west_point and _has_label(details,"中央廣場西側"),
+	_check(chart.get("destination") == west_point and _has_label(details,"島的西北岸"),
 		"Nightmarket preview is the physical western gate")
 	var chosen_style := west.get_theme_stylebox("normal")
 	west.mouse_entered.emit()
@@ -227,7 +227,7 @@ func _check_map_direction(chart: Control, details: Node) -> void:
 	var east_point := _world_point("gate:candy")
 	var east_marker: Vector2 = chart.call("project", east_point)
 	var plaza: Vector2 = chart.call("project", Vector3.ZERO)
-	_check(chart.get("destination") == east_point and _has_label(details,"中央廣場東側")
+	_check(chart.get("destination") == east_point and _has_label(details,"島的東岸")
 		and west_marker.x < plaza.x and plaza.x < east_marker.x, "candy preview is the physical eastern gate in the north-up chart")
 	_check(is_same(chosen_style, east.get_theme_stylebox("normal")), "different gate selections reuse the cached style")
 	await _activate(_main.overlay.find_child("MapGate_circus",true,false) as Button)

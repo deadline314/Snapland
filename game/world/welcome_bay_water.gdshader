@@ -6,8 +6,10 @@ render_mode cull_disabled;
 uniform vec4 deep_color : source_color = vec4(0.067, 0.29, 0.37, 1.0);
 uniform vec4 shallow_color : source_color = vec4(0.24, 0.62, 0.58, 1.0);
 uniform vec4 foam_color : source_color = vec4(0.68, 0.82, 0.72, 1.0);
-uniform vec2 land_center;
-uniform vec2 land_half_size;
+// Signed distance to the island's waterline in metres (positive on land).
+uniform sampler2D shore_distance : filter_linear, repeat_disable;
+uniform vec2 sdf_origin;
+uniform vec2 sdf_inverse_size;
 uniform vec2 dock_center;
 uniform vec2 dock_half_size;
 uniform float dock_glow = 0.0;
@@ -21,17 +23,21 @@ float cell_seed(vec2 cell) {
 	return fract((seed.x + seed.y) * seed.z);
 }
 
+float inland(vec2 at) {
+	return texture(shore_distance, (at - sdf_origin) * sdf_inverse_size).r;
+}
+
 void vertex() {
 	world_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xz;
 }
 
 void fragment() {
-	// Snap detail to the same world pixel scale as the original sea. Measure
-	// depth from the continuous land and dock edges so the band cannot crawl.
+	// Snap detail to the same world pixel scale as the original sea. Depth is
+	// measured from the real coastline and the dock, so the band cannot crawl
+	// and the surf follows every cape and bay.
 	vec2 p = floor(world_position * 5.0) * 0.2;
-	vec2 land_delta = max(abs(world_position - land_center) - land_half_size, vec2(0.0));
+	float shore = max(-inland(p), 0.0);
 	vec2 dock_delta = max(abs(world_position - dock_center) - dock_half_size, vec2(0.0));
-	float shore = length(land_delta);
 	float dock = length(dock_delta);
 	float shelf = 1.0 - smoothstep(0.28, 4.15, shore);
 	float dock_shelf = 1.0 - smoothstep(0.18, 1.42, dock);
@@ -46,9 +52,13 @@ void fragment() {
 	float distance_to_edge = dock_edge ? dock : shore;
 	float foam = 0.0;
 	if (distance_to_edge > 0.025 && distance_to_edge < 1.55) {
-		// Offshore pixels skip the contact-wave work entirely.
-		vec2 edge_delta = dock_edge ? dock_delta : land_delta;
-		bool side_edge = edge_delta.x > edge_delta.y;
+		// Offshore pixels skip the contact-wave work entirely. Metres along the
+		// waterline are counted on whichever axis this stretch of shore runs along.
+		bool side_edge = dock_delta.x > dock_delta.y;
+		if (!dock_edge) {
+			vec2 slope = vec2(inland(p + vec2(0.6, 0.0)) - inland(p - vec2(0.6, 0.0)), inland(p + vec2(0.0, 0.6)) - inland(p - vec2(0.0, 0.6)));
+			side_edge = abs(slope.x) > abs(slope.y);
+		}
 		float tangent = side_edge ? p.y : p.x;
 		foam = sea_surf(distance_to_edge - 0.025, tangent, t, 1.5);
 		// A thin lapping line keeps the land and the dock seated in the water.

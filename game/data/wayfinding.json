@@ -26,10 +26,63 @@
       "title": "迎賓大道",
       "position": [0.0, -19.4],
       "entries": [
-        {"arrow": "←", "label": "風帆工坊", "target": {"kind": "games", "ids": ["game-001", "game-002", "game-003", "game-004"]}},
+        {"arrow": "↖", "label": "風帆工坊", "target": {"kind": "games", "ids": ["game-001", "game-002", "game-003", "game-004"]}},
         {"arrow": "↗", "label": "潮池廣場", "target": {"kind": "games", "ids": ["game-005", "game-006", "game-007", "game-008"]}},
         {"arrow": "↗", "label": "海風觀景台", "target": {"kind": "games", "ids": ["game-009", "game-010"]}},
         {"arrow": "↑", "label": "月影劇台", "target": {"kind": "games", "ids": ["game-011", "game-012"]}}
+      ]
+    },
+    {
+      "id": "crossroads",
+      "title": "風向路口",
+      "position": [-4.0, -58.0],
+      "entries": [
+        {"arrow": "←", "label": "風箏草坡・湧泉池", "target": {"kind": "games", "ids": ["game-002", "game-003"]}},
+        {"arrow": "→", "label": "潮池廣場・帽子沙灘", "target": {"kind": "games", "ids": ["game-005", "game-008"]}},
+        {"arrow": "↓", "label": "風帆工坊", "target": {"kind": "games", "ids": ["game-001"]}},
+        {"arrow": "↑", "label": "月影劇台", "target": {"kind": "games", "ids": ["game-011", "game-012"]}}
+      ]
+    },
+    {
+      "id": "meadow",
+      "title": "草原路口",
+      "position": [6.0, -90.0],
+      "entries": [
+        {"arrow": "→", "label": "糖果工廠閘口", "target": {"kind": "place", "note": "東岬"}},
+        {"arrow": "→", "label": "花壇園圃", "target": {"kind": "games", "ids": ["game-007"]}},
+        {"arrow": "↗", "label": "海風觀景台", "target": {"kind": "games", "ids": ["game-010"]}},
+        {"arrow": "←", "label": "長椅池畔", "target": {"kind": "games", "ids": ["game-011"]}}
+      ]
+    },
+    {
+      "id": "north",
+      "title": "北岸路口",
+      "position": [2.0, -108.0],
+      "entries": [
+        {"arrow": "←", "label": "霓虹夜市閘口", "target": {"kind": "place", "note": "西北岬"}},
+        {"arrow": "↗", "label": "林蔭空地", "target": {"kind": "games", "ids": ["game-009"]}},
+        {"arrow": "↗", "label": "玩具城・馬戲團閘口", "target": {"kind": "place", "note": "北岬與東北岸"}},
+        {"arrow": "↑", "label": "月影劇台", "target": {"kind": "games", "ids": ["game-012"]}}
+      ]
+    },
+    {
+      "id": "west-fork",
+      "title": "西岸岔路",
+      "position": [-38.0, -10.0],
+      "entries": [
+        {"arrow": "←", "label": "潮汐碼頭閘口", "target": {"kind": "place", "note": "西南岬"}},
+        {"arrow": "↑", "label": "湧泉池", "target": {"kind": "games", "ids": ["game-003"]}},
+        {"arrow": "→", "label": "中央廣場", "target": {"kind": "place", "note": "沿路回程"}}
+      ]
+    },
+    {
+      "id": "east-fork",
+      "title": "東岸岔路",
+      "position": [38.0, -12.0],
+      "entries": [
+        {"arrow": "→", "label": "苔光溫室閘口", "target": {"kind": "place", "note": "東南岬"}},
+        {"arrow": "↑", "label": "彩帶涼亭", "target": {"kind": "games", "ids": ["game-006"]}},
+        {"arrow": "←", "label": "中央廣場", "target": {"kind": "place", "note": "沿路回程"}}
       ]
     }
   ]

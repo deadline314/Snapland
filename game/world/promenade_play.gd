@@ -1,7 +1,7 @@
 extends Node3D
 ## Unscored walk-up toys; scene memory only, with no Progress dependency.
 signal note_requested(note: int)
-const PADS := [Vector2(-1.4,-16),Vector2(1.4,-23),Vector2(-1.4,-30),Vector2(1.4,-37)]
+const PADS: Array = preload("res://game/world/island_layout.gd").WINDMILL_PADS
 const COLORS := [Color("#da705c"),Color("#4b9b9c"),Color("#edbb65"),Color("#d5dfc0")]
 var world: Node3D
 var records: Array[Dictionary] = []
@@ -13,10 +13,10 @@ func configure(owner_world: Node3D) -> void:
 	for index in PADS.size(): _build(index)
 
 func _build(index: int) -> void:
-	var pad: Vector2=PADS[index]
+	var pad: Vector3=PADS[index]
 	var surface: float=world._ground_surface_y(Vector3(pad.x,0,pad.y))
 	var center:=Vector3(pad.x,surface,pad.y)
-	var side:=signf(pad.x)
+	var side:=pad.z
 	var stand:=center+Vector3(side*1.05,0,0)
 	var base: MeshInstance3D=world._box(stand+Vector3(0,0.14,0),Vector3(0.42,0.28,0.42),Color("#8a6a48"))
 	base.name="PromenadeWindmillBase%d"%index

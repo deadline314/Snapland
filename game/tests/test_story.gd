@@ -128,9 +128,11 @@ func _test_conversations() -> void:
 
 func _test_wayfinding() -> void:
 	var wayfinding := Wayfinding.new()
-	_check(wayfinding.diagnostics().is_empty() and wayfinding.signposts().size() == 3, "three signposts load without diagnostics")
+	_check(wayfinding.diagnostics().is_empty() and wayfinding.signposts().size() == 8, "eight signposts load without diagnostics")
 	var ids: Array = wayfinding.signposts().map(func(signpost: Dictionary) -> String: return str(signpost.id))
-	_check(ids == ["dock", "plaza", "avenue"], "signposts cover the dock, plaza and avenue forks")
+	_check(ids == ["dock", "plaza", "avenue", "crossroads", "meadow", "north", "west-fork", "east-fork"], "signposts cover the dock, the plaza, the avenue and every major fork")
+	var place_entry := {"arrow": "→", "label": "gate", "target": {"kind": "place", "note": "east cape"}}
+	_check(Wayfinding.entry_status(place_entry, snapshot_free()) == "east cape" and Wayfinding.entry_line(place_entry, snapshot_free()).ends_with("east cape"), "a direction to a place with nothing to collect shows where it is")
 	var snapshot := {"story_photo": false, "steps": {"quest-001": 1, "quest-002": 3}, "photos": {"photo-welcome-game-1": {}, "photo-welcome-game-3": {}}}
 	var quest_entry := {"arrow": "↖", "label": "小角", "target": {"kind": "quest", "id": "quest-001"}}
 	_check(Wayfinding.entry_status(quest_entry, snapshot) == "委託 1/3" and Wayfinding.entry_line(quest_entry, snapshot) == "↖ 小角　委託 1/3", "quest direction counts finished steps like the HUD")
@@ -145,11 +147,14 @@ func _test_wayfinding() -> void:
 	_check(Wayfinding.entry_status(met_entry, {"story_photo": true}) == "已見面 ✓" and met_line.count("導覽亭") == 1, "after meeting 票票 the sign says so without repeating the place name: %s" % met_line)
 	var bad_path := "user://wayfinding-negative.json"
 	var file := FileAccess.open(bad_path, FileAccess.WRITE)
-	file.store_string(JSON.stringify({"schema_version": 1, "signposts": [{"id": "x", "position": [0, 0], "entries": [{"arrow": "↑", "label": "?", "target": {"kind": "teleport"}}]}, {"id": "y", "position": [1], "entries": []}]}))
+	file.store_string(JSON.stringify({"schema_version": 1, "signposts": [{"id": "x", "position": [0, 0], "entries": [{"arrow": "↑", "label": "?", "target": {"kind": "teleport"}}]}, {"id": "y", "position": [1], "entries": []}, {"id": "z", "position": [0, 0], "entries": [{"arrow": "→", "label": "?", "target": {"kind": "place"}}]}]}))
 	file.close()
 	var broken := Wayfinding.new(bad_path)
-	_check(broken.signposts().is_empty() and broken.diagnostics().size() == 2, "invalid signposts are skipped with diagnostics")
+	_check(broken.signposts().is_empty() and broken.diagnostics().size() == 3, "invalid signposts, including a place without a note, are skipped with diagnostics")
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(bad_path))
+
+func snapshot_free() -> Dictionary:
+	return {"story_photo": false, "steps": {}, "photos": {}}
 
 func _test_mission_one(story: RefCounted) -> void:
 	var progress := 0

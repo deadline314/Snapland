@@ -135,6 +135,13 @@ const REGIONS := {
 			{"kind": "sparrow", "count": 4, "at": Vector3(-3.0, 0, -5.6), "spread": 1.0},
 			{"kind": "sparrow", "count": 3, "at": Vector3(2.4, 0, -21.0), "spread": 1.0},
 			{"kind": "gull", "count": 3, "at": Vector3(-5.0, 0, 27.0), "spread": 8.0, "height": 4.0},
+			# The lagoon and the west bay have their own gulls; meadows and ponds their own small life.
+			{"kind": "gull", "count": 2, "at": Vector3(80.0, 0, -116.0), "spread": 7.0, "height": 4.0},
+			{"kind": "gull", "count": 2, "at": Vector3(-82.0, 0, -32.0), "spread": 6.0, "height": 4.0},
+			{"kind": "pigeon", "count": 3, "at": Vector3(-1.5, 0, -57.0), "spread": 1.2},
+			{"kind": "sparrow", "count": 3, "at": Vector3(-25.0, 0, -91.5), "spread": 1.0},
+			{"kind": "butterfly", "count": 2, "at": Vector3(34.0, 0, -99.0), "spread": 2.0, "height": 1.0},
+			{"kind": "butterfly", "count": 2, "at": Vector3(-57.0, 0, -52.0), "spread": 3.0, "height": 1.0},
 			# Beside each planter, over open paving where the wings read clearly.
 			{"kind": "butterfly", "count": 2, "at": Vector3(5.2, 0, -5.3), "spread": 0.5, "height": 1.1},
 			{"kind": "butterfly", "count": 2, "at": Vector3(-5.2, 0, -5.3), "spread": 0.5, "height": 1.1},

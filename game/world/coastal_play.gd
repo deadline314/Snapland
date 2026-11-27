@@ -5,6 +5,10 @@ const Ball = preload("res://game/world/drift_ball.gd")
 const Promenade = preload("res://game/world/promenade_play.gd")
 var promenade: Node3D
 const Discoveries = preload("res://game/world/coastal_discoveries.gd")
+const CoastalCircuit = preload("res://game/world/coastal_circuit.gd")
+const IslandLayout = preload("res://game/world/island_layout.gd")
+## The cradle on the trail where the drift ball is called back.
+const RECALL_POINT := Vector3(-63.6,0.18,20.4)
 var discoveries: Node3D
 var world: Node3D
 var ball: RigidBody3D
@@ -23,6 +27,7 @@ var _flow_clock := 0.0
 var _focused := true
 var _ball_velocity := Vector3.ZERO
 var _ball_spin := Vector3.ZERO
+var _wheel := Vector3.ZERO
 
 func configure(owner_world: Node3D) -> void:
  world=owner_world
@@ -34,16 +39,18 @@ func configure(owner_world: Node3D) -> void:
  _build_ball()
  # Put the movable gate on the camera-facing end, so its open/closed result
  # can be read from the trail rather than being hidden behind the wheel.
- gate=world._box(Vector3(32,0.65,-18),Vector3(2.3,0.7,0.14),Color("#b79459"))
+ _wheel=CoastalCircuit.landmark("tide-wheel")
+ _wheel.y=0.0
+ gate=world._box(_wheel+Vector3(0,0.65,2),Vector3(2.3,0.7,0.14),Color("#b79459"))
  gate.name="PlayerSluiceGate"
  for side in [-1,1]:
-  world._box(Vector3(32+side*1.3,0.95,-18),Vector3(0.16,1.9,0.2),Color("#71583c"))
- world._box(Vector3(32,1.85,-18),Vector3(2.85,0.16,0.2),Color("#9b8055"))
- spill=world._box(Vector3(32,0.61,-17.9),Vector3(1.9,0.6,0.045),Color("#8dc6bb"))
- var valve: MeshInstance3D=world._cylinder(Vector3(29.2,1.0,-19.4),0.32,0.08,Color("#c9995d"))
+  world._box(_wheel+Vector3(side*1.3,0.95,2),Vector3(0.16,1.9,0.2),Color("#71583c"))
+ world._box(_wheel+Vector3(0,1.85,2),Vector3(2.85,0.16,0.2),Color("#9b8055"))
+ spill=world._box(_wheel+Vector3(0,0.61,2.1),Vector3(1.9,0.6,0.045),Color("#8dc6bb"))
+ var valve: MeshInstance3D=world._cylinder(_wheel+Vector3(-2.8,1.0,0.6),0.32,0.08,Color("#c9995d"))
  valve.rotation.x=PI*0.5
  for index in 5:
-  var stream: MeshInstance3D=world._box(Vector3(31.15+index*0.38,0.31,-20.0),Vector3(0.12,0.035,0.6),Color("#a6e1d0"))
+  var stream: MeshInstance3D=world._box(_wheel+Vector3(-0.85+index*0.38,0.31,0),Vector3(0.12,0.035,0.6),Color("#a6e1d0"))
   streams.append(stream)
  _update_gate()
  discoveries=Discoveries.new()
@@ -86,10 +93,10 @@ func _build_ball() -> void:
   ball.add_child(stripe)
  var marker: Label3D=world._label("◇",Ball.HOME+Vector3(0,1.1,0),38,Color("#edbb65"))
  ball_point=world._register_interaction_point("play:ball","踢海漂球",Ball.HOME,marker)
- world._point("play:recall","拿回海漂球",Vector3(-21.4,0.18,8.0))
+ world._point("play:recall","拿回海漂球",RECALL_POINT)
  # A low cradle makes the recall position legible without another floating sign.
  for side in [-1,1]:
-  world._box(Vector3(-21.4+side*0.36,0.22,8.0),Vector3(0.12,0.32,0.9),Color("#8e7352"))
+  world._box(RECALL_POINT+Vector3(side*0.36,0.04,0),Vector3(0.12,0.32,0.9),Color("#8e7352"))
 
 func activate(id: String) -> bool:
  if not is_instance_valid(world) or world.blocked or not world.is_processing() or not _focused:return false
@@ -159,7 +166,7 @@ func _physics_process(delta: float) -> void:
  _flow_clock+=delta
  bell.rotation.z=0.0 if world.reduced_motion else sin(bell_elapsed*9.0)*0.24*exp(-bell_elapsed*1.8)
  if valve_open and not world.reduced_motion:
-  for index in streams.size():streams[index].position.z=-22.2+fposmod(_flow_clock*1.5+index*0.8,4.3)
+  for index in streams.size():streams[index].position.z=_wheel.z-2.2+fposmod(_flow_clock*1.5+index*0.8,4.3)
 
 func _notification(what: int) -> void:
  if what==NOTIFICATION_APPLICATION_FOCUS_OUT:

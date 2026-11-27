@@ -1,63 +1,46 @@
 extends RefCounted
-## Original, traversable coastal extension. Authored profiles create solid 3D
-## silhouettes; the existing inner park and its stable interaction IDs stay put.
+## The coastal loop's six landmarks, rock ridges and offshore islets. Authored
+## profiles create solid 3D silhouettes; the trail itself is an IslandLayout path.
 
-const LAND_CENTER := Vector3(0, 0, -29)
-const LAND_SIZE := Vector3(72, 1.4, 96)
-const WALK_BOUNDS := Rect2(-33.6, -73.6, 67.2, 91.6)
-## Grass footprint in world x/z. Every side stops short of LAND_SIZE so a sand
-## band always separates lawn and water; the south side keeps a real beach.
-const LAWN_RECT := Rect2(-34.75, -74.6, 69.5, 90.8)
-const LAWN_CORNER_RADIUS := 5.0
-## The drawn edge wanders inward by up to this much; it never leaves LAWN_RECT.
-const LAWN_EDGE_WOBBLE := 0.4
-const ROUTE := [Vector2(0,16),Vector2(-19,16),Vector2(-25,4),Vector2(-29,-8),Vector2(-28,-27),Vector2(-27,-45),Vector2(-22,-60),Vector2(-9,-66),Vector2(12,-66),Vector2(26,-56),Vector2(29,-38),Vector2(28,-20),Vector2(26,-4),Vector2(21,6),Vector2(12,6)]
-const CONNECTORS := [[Vector2(-28,-27),Vector2(-14,-27)],[Vector2(14,-38),Vector2(29,-38)]]
+const IslandLayout = preload("res://game/world/island_layout.gd")
+## Six landmarks on the coastal loop. Where each plaque and landmark stands is
+## IslandLayout.COAST_STOPS; this table holds what the visitor reads.
 const STOPS := [
-	{"id":"sail-loft", "name":"風帆修繕所", "position":Vector3(-25,0.18,4), "text":"帆布上每一道補線，都記著晚風號走過的海路。屋架朝海的一邊特意留空，讓剛上岸的帆慢慢吹乾。"},
-	{"id":"storm-bell", "name":"聽潮鐘亭", "position":Vector3(-29,0.18,-20), "text":"舊鐘不報時，只在海霧來時替船指路。往北看，燈塔的銅頂正從岩脊後露出來。"},
-	{"id":"lighthouse", "name":"回聲燈塔", "position":Vector3(-27,0.18,-45), "text":"燈塔的三道環廊分別記錄低潮、滿潮和最遠的一次浪。沿著石路繞過岩脊，還能從北岸看見園區的另一面。"},
-	{"id":"star-court", "name":"北岸觀星庭", "position":Vector3(0,0.18,-66), "text":"銅環把海風和星軌收在同一個圓裡。這裡遠離大道的熱鬧，坐下來時，只剩潮聲替旅程留白。"},
-	{"id":"glass-garden", "name":"海玻璃溫室", "position":Vector3(27,0.18,-52), "text":"被海水磨圓的玻璃，成了溫室一格格青綠的窗。花匠把耐鹽的植物留在外側，替裡面的小苗擋風。"},
-	{"id":"tide-wheel", "name":"潮汐水車", "position":Vector3(28,0.18,-20), "text":"水車把潮水帶進高處的木槽，再緩緩送回海裡。穿過前面的林隙，就會接回廣場；不必原路折返。"},
+	{"id":"sail-loft", "name":"風帆修繕所", "text":"帆布上每一道補線，都記著晚風號走過的海路。屋架朝海的一邊特意留空，讓剛上岸的帆慢慢吹乾。"},
+	{"id":"storm-bell", "name":"聽潮鐘亭", "text":"舊鐘不報時，只在海霧來時替船指路。往北看，燈塔的銅頂正從岩脊後露出來。"},
+	{"id":"lighthouse", "name":"回聲燈塔", "text":"燈塔的三道環廊分別記錄低潮、滿潮和最遠的一次浪。沿著石路繞過岩脊，還能從北岸看見園區的另一面。"},
+	{"id":"star-court", "name":"北岸觀星庭", "text":"銅環把海風和星軌收在同一個圓裡。這裡遠離大道的熱鬧，坐下來時，只剩潮聲替旅程留白。"},
+	{"id":"glass-garden", "name":"海玻璃溫室", "text":"被海水磨圓的玻璃，成了溫室一格格青綠的窗。花匠把耐鹽的植物留在外側，替裡面的小苗擋風。"},
+	{"id":"tide-wheel", "name":"潮汐水車", "text":"水車把潮水帶進高處的木槽，再緩緩送回海裡。沿著岸邊的石路再走一段，就會回到碼頭；不必原路折返。"},
 ]
+## Offshore rocks that give the open sea a horizon: x, z.
+const ISLETS := [Vector2(-62,-168), Vector2(-34,-171), Vector2(-14,-186), Vector2(34,-178), Vector2(62,-170), Vector2(108,-110), Vector2(-100,-98)]
+const RIDGE_VARIANTS := 2
+## The faceted meshes are costly to generate; every Welcome world shares them.
+static var _ridge_shapes: Array[ArrayMesh] = []
 
-static func ground_y(position: Vector3) -> float:
-	var point := Vector2(position.x, position.z)
-	for index in range(ROUTE.size()-1):
-		if point.distance_to(Geometry2D.get_closest_point_to_segment(point,ROUTE[index],ROUTE[index+1])) <= 1.7:
-			return 0.18
-	for connector in CONNECTORS:
-		if point.distance_to(Geometry2D.get_closest_point_to_segment(point,connector[0],connector[1])) <= 1.7:
-			return 0.18
-	return 0.055
-
-## Distance from `point` to the lawn's outer limit: positive inside the grass.
-static func lawn_inset(point: Vector2) -> float:
-	var half := LAWN_RECT.size * 0.5 - Vector2(LAWN_CORNER_RADIUS, LAWN_CORNER_RADIUS)
-	var q := (point - LAWN_RECT.get_center()).abs() - half
-	return LAWN_CORNER_RADIUS - Vector2(maxf(q.x, 0.0), maxf(q.y, 0.0)).length() - minf(maxf(q.x, q.y), 0.0)
-
-## True when `point` is on grass at least `margin` metres from the drawn edge.
-static func on_lawn(point: Vector2, margin := 0.0) -> bool:
-	return lawn_inset(point) >= LAWN_EDGE_WOBBLE + margin
-
+## The stop behind an interaction id, with its plaque "position" filled in.
 static func description(id: String) -> Dictionary:
-	for stop in STOPS:
-		if id == "coast:" + str(stop.id): return stop
+	return stop(id.trim_prefix("coast:")) if id.begins_with("coast:") else {}
+
+static func stop(id: String) -> Dictionary:
+	for record: Dictionary in STOPS:
+		if id == str(record.id):
+			var placed := record.duplicate()
+			placed["position"] = IslandLayout.COAST_STOPS[id].position
+			return placed
 	return {}
 
+## Where a stop's landmark stands: beside its plaque, clear of the trail.
+static func landmark(id: String) -> Vector3:
+	return IslandLayout.stop_landmark(id)
+
 static func build(world: Node3D) -> void:
-	_build_trail(world)
 	_build_rocks(world)
 	for index in STOPS.size():
-		var stop: Dictionary = STOPS[index]
-		var p: Vector3 = stop.position
-		# The model sits outside the three-metre trail. The plaque is reachable
-		# from its center, with a clear view of the destination and next turn.
-		var outward := Vector3(-4.0 if p.x < -18 else 4.0,0,0)
-		if index == 3: outward = Vector3(0,0,-4)
-		var origin := p + outward
+		var stop_record := stop(str(STOPS[index].id))
+		var p: Vector3 = stop_record.position
+		var origin := landmark(str(stop_record.id))
 		match index:
 			0: _sail_loft(world,origin)
 			1: _bell(world,origin)
@@ -65,8 +48,8 @@ static func build(world: Node3D) -> void:
 			3: _star_court(world,origin)
 			4: _glasshouse(world,origin)
 			5: _waterwheel(world,origin)
-		world._point("coast:"+str(stop.id),str(stop.name),p)
-		world._local_label(str(stop.name),p+Vector3(0,1.2,-1.9),20)
+		world._point("coast:"+str(stop_record.id),str(stop_record.name),p)
+		world._local_label(str(stop_record.name),p+Vector3(0,1.2,-1.9),20)
 		world._box(p+Vector3(1.9,0.55,0.3),Vector3(0.1,1.1,0.1),Color("#715842"))
 		var plaque: MeshInstance3D = world._box(p+Vector3(1.9,1.05,0.3),Vector3(0.75,0.46,0.1),Color("#366c69"))
 		plaque.rotation.x = -0.18
@@ -81,60 +64,38 @@ static func build(world: Node3D) -> void:
 		light.light_energy = 0.0
 		world.add_child(light)
 		world.lamps.append(light)
-	# A mid-route return keeps the longer loop optional.
-	for connector in CONNECTORS:
-		_trail_segment(world,connector[0],connector[1])
-
-static func _build_trail(world: Node3D) -> void:
-	for index in range(ROUTE.size()-1):
-		_trail_segment(world,ROUTE[index],ROUTE[index+1])
-		var a: Vector2 = ROUTE[index]
-		var b: Vector2 = ROUTE[index+1]
-		var tangent := (b-a).normalized()
-		var normal := Vector2(-tangent.y,tangent.x)
-		for distance in range(2,int(a.distance_to(b)),10):
-			var p := a+tangent*float(distance)
-			# Deliberately spaced planting, never a wall of repeated sprites.
-			var side := -1.0 if index%2 == 0 else 1.0
-			# Step toward the trail when the usual spot would leave the open lawn;
-			# a tree with no clear spot (the beach side of the south trail) is left out.
-			for offset: float in [4.1, 3.3]:
-				var tree_pos := p+normal*side*offset
-				var near_stop := false
-				for stop in STOPS:
-					var stop_pos: Vector3 = stop.position
-					if tree_pos.distance_to(Vector2(stop_pos.x,stop_pos.z)) < 7.5: near_stop = true
-				if not near_stop and world.tree_site_clear(Vector3(tree_pos.x,0,tree_pos.y)):
-					world._tree(Vector3(tree_pos.x,0,tree_pos.y),index*19+distance)
-					break
-
-static func _trail_segment(world: Node3D, a: Vector2, b: Vector2) -> void:
-	var mid := (a+b)*0.5
-	var mesh: MeshInstance3D = world._box(Vector3(mid.x,0.12,mid.y),Vector3(3.1,0.12,a.distance_to(b)+0.8),Color("#bcb69e"))
-	mesh.rotation.y = atan2(b.x-a.x,b.y-a.y)
-	mesh.material_override = world._coastal_surface(4,3.8,Color("#c9c4ac"))
-	mesh.set_meta("coastal_trail",true)
 
 static func _build_rocks(world: Node3D) -> void:
-	# Separate ridges interrupt the long axial view without sealing the loop.
-	var ridge_positions := [Vector2(-20.6,-13),Vector2(-22.2,-35),Vector2(-17.7,-51),Vector2(-12,-57),Vector2(20.5,-22),Vector2(20.5,-46),Vector2(16,-53.5),Vector2(8,-58)]
-	for index in ridge_positions.size():
-		var p := Vector3(ridge_positions[index].x,0,ridge_positions[index].y)
-		var height := 2.7+fposmod(float(index)*1.37,2.8)
+	# Separate ridges interrupt long views across the lawns without sealing a path.
+	# A few shared shapes, turned and stretched per site, stand in for unique meshes.
+	var heights: Array[float] = []
+	for variant in RIDGE_VARIANTS:
+		var height := 3.2 + float(variant) * 1.5
+		heights.append(height)
+		if _ridge_shapes.size() > variant: continue
 		var profile: Array[Vector2] = [Vector2(0,0),Vector2(3.1,0),Vector2(3.4,0.35),Vector2(2.8,height*0.45),Vector2(3.1,height*0.57),Vector2(1.7,height),Vector2(0,height+0.12)]
+		_ridge_shapes.append(_profile_mesh(profile,7,variant,true))
+	var shapes := _ridge_shapes
+	var cap_mesh := _profile_mesh([Vector2(0,0),Vector2(1.75,0),Vector2(1.6,0.22),Vector2(0,0.22)],7,0)
+	for index in IslandLayout.RIDGES.size():
+		var site: Vector2 = IslandLayout.RIDGES[index]
+		var p := Vector3(site.x,0,site.y)
+		var variant := index % RIDGE_VARIANTS
 		world.occlusion_controller.begin_building()
-		var rock: MeshInstance3D = world._mesh(_profile_mesh(profile,7,index,true),p,world._vertex_color_material("coastal-mineral"))
+		var rock: MeshInstance3D = world._mesh(shapes[variant],p,world._vertex_color_material("coastal-mineral"))
 		rock.scale = Vector3(1.0,1.0,1.2+fposmod(float(index)*0.33,0.6))
+		rock.rotation.y = float(index)*0.9
 		rock.name = "CoastalRidge%02d" % index
 		rock.create_convex_collision()
 		# A low grass cap catches the sunlight; the faceted side remains stone.
-		var cap: MeshInstance3D = world._mesh(_profile_mesh([Vector2(0,0),Vector2(1.75,0),Vector2(1.6,0.22),Vector2(0,0.22)],7,index),p+Vector3(0,height,0),world._mat(Color("#385b37")))
+		var cap: MeshInstance3D = world._mesh(cap_mesh,p+Vector3(0,heights[variant],0),world._mat(Color("#385b37")))
 		cap.scale = rock.scale
+		cap.rotation.y = rock.rotation.y
 		cap.name = "RidgeGrass%02d" % index
 		world.occlusion_controller.finish_building(rock.get_child(0) as StaticBody3D)
 	# Far islets create a horizon beyond the playable shoreline.
-	for index in 7:
-		var p := Vector3(-60+float(index)*19, -0.3, -94-sin(float(index))*8)
+	for index in ISLETS.size():
+		var p := Vector3(ISLETS[index].x, -0.3, ISLETS[index].y)
 		var profile: Array[Vector2] = [Vector2(0,0),Vector2(5.0,0),Vector2(4.0,1.4),Vector2(1.8,3.6),Vector2(0,3.9)]
 		world._mesh(_profile_mesh(profile,7,index+31),p,world._mat(Color("#6f8b83")))
 

@@ -3,7 +3,8 @@ extends VBoxContainer
 
 const Paper = preload("res://game/ui/paper_ui.gd")
 const RegionRoutes = preload("res://game/core/region_routes.gd")
-const CoastalCircuit = preload("res://game/world/coastal_circuit.gd")
+const IslandShape = preload("res://game/world/island_shape.gd")
+const IslandLayout = preload("res://game/world/island_layout.gd")
 
 class StationIcon extends Control:
 	var station := 0
@@ -63,6 +64,8 @@ class StationIcon extends Control:
 class MapSurface extends Control:
 	const WATER := Color("#347078")
 	const SHORE := Color("#e7d6ae")
+	const LAWN := Color("#cfdcab")
+	const LANE := Color("#b79a6b")
 	const COAST := Color("#438878")
 	const AVENUE := Color("#cf7965")
 	const PLAZA := Color("#946745")
@@ -91,9 +94,7 @@ class MapSurface extends Control:
 		station_index = Rect2(Vector2(walk_chart.end.x + gap, area.position.y), Vector2(station_width, area.size.y))
 		region_overview = Rect2(Vector2(station_index.end.x + gap, area.position.y), Vector2(overview_width, area.size.y))
 
-		var land_center := Vector2(CoastalCircuit.LAND_CENTER.x, CoastalCircuit.LAND_CENTER.z)
-		var land_size := Vector2(CoastalCircuit.LAND_SIZE.x, CoastalCircuit.LAND_SIZE.z)
-		var bounds := Rect2(land_center - land_size * 0.5, land_size)
+		var bounds := IslandShape.bounds()
 		if dock.is_finite():
 			bounds = bounds.expand(Vector2(dock.x, dock.z + 3.5))
 		var plot := walk_chart.grow(-10.0 * _unit)
@@ -126,26 +127,37 @@ class MapSurface extends Control:
 		_draw_markers()
 		_draw_headings()
 
+	## The island's coastline in chart pixels: the shape the chart fills.
+	func terrain_outline() -> PackedVector2Array:
+		return _projected(IslandShape.coast())
+
+	func _projected(points: PackedVector2Array) -> PackedVector2Array:
+		var projected := PackedVector2Array()
+		for point in points:
+			projected.append(_project_xz(point))
+		return projected
+
 	func _draw_terrain() -> void:
-		var center := Vector2(CoastalCircuit.LAND_CENTER.x, CoastalCircuit.LAND_CENTER.z)
-		var extent := Vector2(CoastalCircuit.LAND_SIZE.x, CoastalCircuit.LAND_SIZE.z) * 0.5
-		var corners := PackedVector2Array()
-		for point: Vector2 in [Vector2(-1, -0.96), Vector2(-0.94, -1), Vector2(0.94, -1), Vector2(1, -0.96), Vector2(1, 0.96), Vector2(0.94, 1), Vector2(-0.94, 1), Vector2(-1, 0.96)]:
-			corners.append(_project_xz(center + point * extent))
+		var coast := terrain_outline()
 		draw_set_transform(Vector2(0.0, 3.0 * _unit))
-		draw_colored_polygon(corners, Color("#254e52"))
+		draw_colored_polygon(coast, Color("#254e52"))
 		draw_set_transform(Vector2.ZERO)
-		draw_colored_polygon(corners, SHORE)
-		corners.append(corners[0])
-		draw_polyline(corners, Color("#b49b75"), _unit, true)
-		var path := PackedVector2Array()
-		for point: Vector2 in CoastalCircuit.ROUTE:
-			path.append(_project_xz(point))
-		draw_polyline(path, COAST, 2.4 * _unit, true)
-		for connector in CoastalCircuit.CONNECTORS:
-			draw_line(_project_xz(connector[0]), _project_xz(connector[1]), COAST, 1.5 * _unit, true)
+		draw_colored_polygon(coast, SHORE)
+		for lawn in IslandShape.lawns():
+			draw_colored_polygon(_projected(lawn), LAWN)
+		coast.append(coast[0])
+		draw_polyline(coast, Color("#b49b75"), _unit, true)
+		for pond: Vector3 in IslandLayout.PONDS:
+			draw_circle(_project_xz(Vector2(pond.x, pond.y)), pond.z * _scale, WATER, true, -1.0, true)
+		# Lanes first, then the coastal loop, then the promenade on top.
+		for path in IslandLayout.paths():
+			if path.id in ["spine", IslandLayout.COAST_ROUTE_ID]: continue
+			draw_polyline(_projected(path.line), LANE, 1.6 * _unit, true)
+		draw_polyline(_projected(IslandLayout.coast_route()), COAST, 2.4 * _unit, true)
+		for path in IslandLayout.paths():
+			if path.id == "spine":
+				draw_polyline(_projected(path.line), AVENUE, 3.5 * _unit, true)
 		var plaza := _project_xz(Vector2.ZERO)
-		draw_line(_project_xz(Vector2(0, -43)), _project_xz(Vector2(0, -5)), AVENUE, 3.5 * _unit, true)
 		draw_circle(plaza, 5.0 * _scale, PLAZA, false, 1.4 * _unit, true)
 		draw_circle(plaza, 2.4 * _scale, WATER, true, -1.0, true)
 		if dock.is_finite():
@@ -414,12 +426,10 @@ func _place_buttons(buttons: Array[Button], area: Rect2, columns: int, hit: Vect
 func _position(point_id: String) -> Vector3:
 	return _positions.get(point_id, Vector3.INF)
 
-func _side(place: String, point: Vector3) -> String:
-	if not point.is_finite():
-		return ""
-	if absf(point.x) < 1.0:
-		return place + "中央"
-	return place + ("西側" if point.x < 0.0 else "東側")
+## Which side of the island `point` is on, as a compass word.
+func _bearing(point: Vector3) -> String:
+	const BEARINGS := ["東", "東南", "南", "西南", "西", "西北", "北", "東北"]
+	return BEARINGS[posmod(roundi((Vector2(point.x, point.z) - IslandShape.CENTER).angle() / (TAU / 8.0)), 8)]
 
 func _select_hub() -> void:
 	if not _set_map_selection(_hub, _position("arrival")):
@@ -433,8 +443,7 @@ func _select_game(button: Button, game_id: String, number: int, game: Dictionary
 		return
 	_detail_title.text = "第 %02d 站｜%s" % [number, str(game.get("name", game_id))]
 	var goal := str(game.get("goal", "完成設施挑戰。"))
-	var side := _side("迎賓大道", point)
-	_detail_text.text = goal if side.is_empty() else "%s\n%s" % [side, goal]
+	_detail_text.text = goal if not point.is_finite() else "%s｜%s\n%s" % [_bearing(point), IslandShape.area_at(Vector2(point.x, point.z)), goal]
 
 func _select_zone(button: Button, zone: Dictionary) -> void:
 	var region := str(zone.get("id", ""))
@@ -449,8 +458,7 @@ func _select_zone(button: Button, zone: Dictionary) -> void:
 	var qualification := "已達入園資格" if remaining == 0 else "還差 %d 張不同普通拍貼" % remaining
 	var progress := "普通拍貼：%d / %d 張\n%s；收藏不消耗。" % [_normal_count, threshold, qualification]
 	if playable:
-		var side := _side("中央廣場", point)
-		var location := side + "路口，返回免費。" if not side.is_empty() else "返回免費。"
+		var location := "島的%s岸，返回免費。" % _bearing(point) if point.is_finite() else "返回免費。"
 		_detail_text.text = progress + "\n" + location
 	else:
 		_detail_text.text = "主題：%s\n%s" % [str(zone.get("theme", "主題資料準備中。")), progress]

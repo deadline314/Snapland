@@ -1,11 +1,15 @@
 extends Node3D
 ## Optional, scene-owned toys: manual optics and a garden that responds to water.
 ## No score, quest event, item, timer pressure or persistent reward.
+const CoastalCircuit = preload("res://game/world/coastal_circuit.gd")
 var world: Node3D
 const RAY_LENGTH := 11.5
 var controlling := false
 var lens_angle := -0.72
-var lens_origin := Vector3(-31, 6.65, -45)
+## The lens sits in the lantern room; the tower and the trail plaque come from the stop table.
+var lens_origin := Vector3.ZERO
+var lighthouse_stop := Vector3.ZERO
+var glasshouse := Vector3.ZERO
 var lens: Node3D
 var beam: MeshInstance3D
 var beacon_light: SpotLight3D
@@ -22,6 +26,10 @@ var _cooldown := 0.0
 
 func configure(owner_world: Node3D) -> void:
 	world = owner_world
+	lighthouse_stop = CoastalCircuit.stop("lighthouse").position as Vector3
+	lens_origin = CoastalCircuit.landmark("lighthouse") + Vector3(0, 6.47, 0)
+	glasshouse = CoastalCircuit.landmark("glass-garden")
+	glasshouse.y = 0.0
 	_build_optics()
 	_build_garden()
 	_update_optics()
@@ -71,17 +79,18 @@ func _build_optics() -> void:
 		reflector.material_override = reflector.material_override.duplicate()
 		receivers.append(reflector)
 	# The low wheel is beside the reachable trail, not on the inaccessible tower.
-	world._cylinder(Vector3(-27.9, 0.7, -45), 0.12, 1.2, Color("#755d40"))
-	var wheel: MeshInstance3D = world._cylinder(Vector3(-27.9, 1.25, -45), 0.37, 0.10, Color("#c49d62"))
+	var helm := Vector3(lighthouse_stop.x - 0.9, 0, lighthouse_stop.z)
+	world._cylinder(helm + Vector3(0, 0.7, 0), 0.12, 1.2, Color("#755d40"))
+	var wheel: MeshInstance3D = world._cylinder(helm + Vector3(0, 1.25, 0), 0.37, 0.10, Color("#c49d62"))
 	wheel.rotation.x = PI * 0.5
-	world._box(Vector3(-27.9, 1.25, -44.9), Vector3(0.60, 0.08, 0.08), Color("#486c68"))
+	world._box(helm + Vector3(0, 1.25, 0.1), Vector3(0.60, 0.08, 0.08), Color("#486c68"))
 
 func _build_garden() -> void:
 	# Keep the four established pots and stems; add distinct buds and petals.
 	for index in 4:
 		var flower := Node3D.new()
 		flower.name = "SeaGlassBloom%d" % index
-		flower.position = Vector3(29.8 + float(index) * 0.8, 1.5, -49.35)
+		flower.position = glasshouse + Vector3(-1.2 + float(index) * 0.8, 1.5, 2.65)
 		add_child(flower)
 		var color := Color("#edbd73") if index % 2 == 0 else Color("#d98283")
 		var center: MeshInstance3D = world._sphere(flower.position, 0.13, Color("#e5d4a0"))
@@ -93,12 +102,15 @@ func _build_garden() -> void:
 			mesh.scale = Vector3(1.0, 0.40, 1.0)
 			mesh.reparent(flower)
 		flowers.append(flower)
-	world._box(Vector3(29.7, 0.35, -50.5), Vector3(3.6, 0.12, 0.16), Color("#668d8b"))
+	world._box(glasshouse + Vector3(0, 0.35, 2.4), Vector3(3.6, 0.12, 0.16), Color("#668d8b"))
 	for index in 8:
-		var drop: MeshInstance3D = world._sphere(Vector3(29.8 + float(index % 4) * 0.8, 1.9, -49.35), 0.035, Color("#a6ded7"))
+		var drop: MeshInstance3D = world._sphere(glasshouse + Vector3(-1.2 + float(index % 4) * 0.8, 1.9, 2.65), 0.035, Color("#a6ded7"))
 		drop.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		droplets.append(drop)
-	garden_handle = world._cylinder(Vector3(28.0, 1.0, -52), 0.3, 0.10, Color("#bd925a"))
+	# The valve stands on a short post between the trail plaque and the glasshouse door.
+	var valve := glasshouse + Vector3(-0.6, 0, 3.6)
+	world._cylinder(valve + Vector3(0, 0.5, -0.12), 0.06, 1.0, Color("#755d40"))
+	garden_handle = world._cylinder(valve + Vector3(0, 1.0, 0), 0.3, 0.10, Color("#bd925a"))
 	garden_handle.rotation.x = PI * 0.5
 
 func activate(id: String) -> bool:
@@ -128,7 +140,7 @@ func advance(delta: float) -> void:
 	_clock += delta
 	_cooldown = maxf(0.0, _cooldown - delta)
 	if controlling:
-		if world.player.position.distance_to(Vector3(-27, 0.18, -45)) > 3.2:
+		if world.player.position.distance_to(lighthouse_stop) > 3.2:
 			end_control()
 		else:
 			var axis := Input.get_axis("move_left", "move_right")

@@ -4,7 +4,7 @@ extends SceneTree
 
 const Registry = preload("res://game/world/field/field_registry.gd")
 const FieldGames = preload("res://game/world/field/field_games.gd")
-const CoastalCircuit = preload("res://game/world/coastal_circuit.gd")
+const IslandShape = preload("res://game/world/island_shape.gd")
 const STEP := 1.0 / 60.0
 const RUN_SPEED := 1.5
 const STROLL_SPEED := 0.8
@@ -182,11 +182,11 @@ func _test_registry() -> void:
 	# Props stand wholly on the lawn, never straddling the beach.
 	for entry: Dictionary in games + toys:
 		for spot in Registry.footprint(entry):
-			check(CoastalCircuit.on_lawn(Vector2(spot.x, spot.z), 0.5), "%s keeps %s on the lawn" % [entry.id, spot])
+			check(IslandShape.on_lawn(Vector2(spot.x, spot.z), 0.5), "%s keeps %s on the lawn" % [entry.id, spot])
 	var pit: float = game("crab-stomp").PIT_RADIUS + 0.2
 	for step in range(8):
 		var rim := arena("crab-stomp") + Vector3(cos(step * TAU / 8.0), 0, sin(step * TAU / 8.0)) * pit
-		check(CoastalCircuit.on_lawn(Vector2(rim.x, rim.z)), "the sand pit lies wholly on the lawn at %s" % rim)
+		check(IslandShape.on_lawn(Vector2(rim.x, rim.z)), "the sand pit lies wholly on the lawn at %s" % rim)
 	var found := Registry.problems("welcome", world.is_walkable, other_points())
 	check(found.is_empty(), "placement table is sound: %s" % str(found))
 	# The checker itself must notice each kind of bad row.
@@ -198,7 +198,7 @@ func _test_registry() -> void:
 	close.arena = close.at
 	check(_has_problem([good, close], [], "needs 14 m"), "games nearer than 14 m are rejected")
 	var wet := good.duplicate(true)
-	wet.at = Vector3(60, 0, 0)
+	wet.at = Vector3(60, 0, 60)
 	check(_has_problem([wet], [], "off walkable land"), "a stand in the sea is rejected")
 	var stray := good.duplicate(true)
 	stray.layout = [Vector2(200, 0)]

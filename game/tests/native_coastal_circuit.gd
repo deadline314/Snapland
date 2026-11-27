@@ -20,7 +20,11 @@ func _run():
  for frame in 8: await process_frame
  world=main.world
  await physics_frame
- var stops=[Vector2(0,15),Vector2(-19,15),Vector2(-25,4),Vector2(-29,-8),Vector2(-28,-20),Vector2(-28,-27),Vector2(-27,-45),Vector2(-22,-60),Vector2(-9,-66),Vector2(0,-66),Vector2(12,-66),Vector2(26,-56),Vector2(27,-52),Vector2(29,-38),Vector2(28,-20),Vector2(26,-4),Vector2(21,6),Vector2(12,6),Vector2(12,7),Vector2(3,7),Vector2(3,10),Vector2(0,10),Vector2(0,23.2)]
+ # Follow the coastal loop itself, then come back through the arch to the dock.
+ var route: PackedVector2Array=preload("res://game/world/island_layout.gd").coast_route()
+ var stops: Array[Vector2]=[]
+ for index in range(0,route.size(),3): stops.append(route[index])
+ stops.append_array([route[route.size()-1],Vector2(0,11),Vector2(0,23.2)])
  for stop in stops:
   if not await _walk(stop): break
   for action in ["move_left","move_right","move_up","move_down"]: Input.action_release(action)

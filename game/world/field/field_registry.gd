@@ -19,7 +19,7 @@ const GAMES := {
 		{
 			"id": "crab-stomp", "script": "res://game/world/field/games/crab_stomp.gd",
 			"type": "踩踏", "title": "踩螃蟹", "prompt": "玩踩螃蟹", "hint": "跑過去踩冒出來的螃蟹！", "glyph": "蟹", "color": Color("#e2734d"),
-			"at": Vector3(24.6, 0, 9.4), "arena": Vector3(28.2, 0, 11.6), "radius": 7.5, "seconds": 25.0,
+			"at": Vector3(26.0, 0, 8.2), "arena": Vector3(30.0, 0, 10.0), "radius": 7.5, "seconds": 25.0,
 			"medals": [5, 9, 13],
 			"lines": ["螃蟹們為你跳了一支嘲笑舞", "踩得不錯，螃蟹有點怕你了", "沙灘上都是你的腳印", "螃蟹連夜搬家了"],
 			"layout": [Vector2(0, 0), Vector2(1.9, 0.4), Vector2(-1.8, 0.6), Vector2(0.7, 1.9), Vector2(-0.9, -1.8), Vector2(1.5, -1.5), Vector2(-1.9, -1.0), Vector2(-0.6, 2.2), Vector2(2.3, 1.8)],
@@ -27,7 +27,7 @@ const GAMES := {
 		{
 			"id": "hat-chase", "script": "res://game/world/field/games/hat_chase.gd",
 			"type": "追逐", "title": "追帽子", "prompt": "玩追帽子", "hint": "追上海鷗，摸牠三下！", "glyph": "帽", "color": Color("#ecca7e"),
-			"at": Vector3(-1.5, 0, -50.6), "arena": Vector3(-1.5, 0, -56.2), "radius": 10.0, "seconds": 30.0,
+			"at": Vector3(-12.4, 0, -65.4), "arena": Vector3(-14.0, 0, -72.0), "radius": 10.0, "seconds": 30.0,
 			"medals": [10, 30, 38],
 			"lines": ["海鷗戴著你的帽子去兜風了", "摸到了！可惜帽子還在牠嘴上", "帽子搶回來了，還有點鳥味", "海鷗甘拜下風，帽子雙手奉還"],
 			"roam": 4.6,
@@ -43,7 +43,7 @@ const GAMES := {
 		{
 			"id": "flag-run", "script": "res://game/world/field/games/flag_run.gd",
 			"type": "收集競速", "title": "彩旗繞行", "prompt": "玩彩旗繞行", "hint": "照號碼穿過旗門！", "glyph": "旗", "color": Color("#da705c"),
-			"at": Vector3(26.2, 0, -61.6), "arena": Vector3(29.4, 0, -66.4), "radius": 9.0, "seconds": 35.0,
+			"at": Vector3(56.5, 0, -20.0), "arena": Vector3(60.0, 0, -24.0), "radius": 9.0, "seconds": 35.0,
 			"medals": [4, 8, 11],
 			"lines": ["旗子都被你繞暈了", "順順地繞完幾面，腳還在", "一路綠燈，旗子直點頭", "風都追不上你"],
 			"layout": [Vector2(1.9, 3.1), Vector2(-1.7, 3.2), Vector2(-3.6, 0.2), Vector2(-1.9, -3.1), Vector2(1.7, -3.2), Vector2(3.6, -0.2)],
@@ -63,13 +63,13 @@ const GAMES := {
 ## The palm toy shakes a palm that already grows at `at`; it plants nothing.
 const TOYS := {
 	"welcome": [
-		{"id": "palm", "kind": "palm", "prompt": "搖一搖椰子樹", "at": Vector3(16.3, 0, 14.5)},
-		{"id": "swing", "kind": "swing", "prompt": "推一下鞦韆", "at": Vector3(-22.4, 0, -21.8)},
-		{"id": "chime", "kind": "chime", "prompt": "搖響許願風鈴", "at": Vector3(-9.2, 0, -49.2)},
-		{"id": "geyser", "kind": "geyser", "prompt": "踩一下噴水洞", "at": Vector3(31.4, 0, -9.0)},
-		{"id": "stones", "kind": "stones", "prompt": "聽踏石唱歌", "at": Vector3(-29.0, 0, -68.6),
+		{"id": "palm", "kind": "palm", "prompt": "搖一搖椰子樹", "at": Vector3(17.1, 0, 5.5)},
+		{"id": "swing", "kind": "swing", "prompt": "推一下鞦韆", "at": Vector3(-20.5, 0, -14.5)},
+		{"id": "chime", "kind": "chime", "prompt": "搖響許願風鈴", "at": Vector3(-22.0, 0, -41.5)},
+		{"id": "geyser", "kind": "geyser", "prompt": "踩一下噴水洞", "at": Vector3(30.0, 0, -16.5)},
+		{"id": "stones", "kind": "stones", "prompt": "聽踏石唱歌", "at": Vector3(-29.0, 0, -72.5),
 			"layout": [Vector2(-2.4, 0.5), Vector2(-1.2, -0.3), Vector2(0, 0.4), Vector2(1.2, -0.3), Vector2(2.4, 0.5)]},
-		{"id": "bench", "kind": "bench", "prompt": "坐下來等海鳥", "at": Vector3(11.0, 0, -72.2)},
+		{"id": "bench", "kind": "bench", "prompt": "坐下來等海鳥", "at": Vector3(57.0, 0, -38.0)},
 	],
 }
 

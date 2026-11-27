@@ -4,6 +4,9 @@ signal interaction_requested(id: String, label: String)
 signal area_changed(label: String)
 const CoastalCircuit = preload("res://game/world/coastal_circuit.gd")
 const CoastalPlay = preload("res://game/world/coastal_play.gd")
+const IslandShape = preload("res://game/world/island_shape.gd")
+const IslandLayout = preload("res://game/world/island_layout.gd")
+const IslandScenery = preload("res://game/world/island_scenery.gd")
 const WelcomeFerry = preload("res://game/world/welcome_ferry.gd")
 const WATER = preload("res://game/world/water.gdshader")
 const WELCOME_BAY_WATER = preload("res://game/world/welcome_bay_water.gdshader")
@@ -240,6 +243,7 @@ func _ready() -> void:
 	_build_player()
 	_build_region_activities()
 	field_games = FieldGamesScript.attach(self)
+	_build_fitting_batches()
 	_build_camera()
 	_update_sprite_grounding()
 	occlusion_controller.configure(player,camera)
@@ -256,6 +260,7 @@ func _ready() -> void:
 
 
 func _build_region_geometry() -> void:
+	_batch_fittings = true
 	_build_land()
 	_build_shoreline()
 	_build_dock()
@@ -479,34 +484,21 @@ func ground_surface_y(world_position: Vector3) -> float:
 	return _ground_surface_y(world_position)
 
 static func _ground_surface_y(world_position: Vector3) -> float:
-	# Match the tops of the raised boardwalk and authored district floors as well
-	# as the plaza/avenue path; the lawn is the fallback.
+	# Match the tops of the raised boardwalk, the courts and the walkways; open
+	# ground is lawn, or sand where the shore and the beaches leave no grass.
 	if world_position.z >= 8.4 and world_position.z <= 11.6 and world_position.x >= -5.7 and world_position.x <= -3.2:
 		return lerpf(0.26,0.18,clampf(inverse_lerp(-5.7,-4.2,world_position.x),0.0,1.0))
 	if world_position.x >= -13.5 and world_position.x <= -5.7 and world_position.z >= 7.2 and world_position.z <= 13.0:
 		return 0.26
-	if absf(world_position.z + 36.2) <= 1.8:
-		if world_position.x >= 9.0 and world_position.x <= 13.8:
-			return 0.58
-		if world_position.x >= 6.5 and world_position.x < 9.0:
-			return lerpf(0.2,0.60,inverse_lerp(6.5,9.0,world_position.x))
-		if world_position.x >= 4.4 and world_position.x < 6.5:
-			return 0.18
-	if world_position.x >= -13.5 and world_position.x <= -4.5 and world_position.z >= -25.5 and world_position.z <= -15.5:
-		return 0.17
-	if world_position.x >= 4.3 and world_position.x <= 13.7 and world_position.z >= -33.8 and world_position.z <= -26.4:
-		return 0.15
-	if absf(world_position.x) <= 7.0 and world_position.z >= -43.75 and world_position.z <= -37.15:
-		return 0.18
+	var spot := Vector2(world_position.x,world_position.z)
+	var court := IslandLayout.district_surface_y(spot)
+	if court >= 0.0:
+		return court
 	if absf(world_position.x) <= 2.46 and world_position.z >= 14.825 and world_position.z <= 26.975:
 		return 0.22
-	if absf(world_position.x) <= 12.5 and absf(world_position.z) <= 8.0:
-		return 0.18
-	if world_position.x >= 4.4 and world_position.x <= 6.5 and absf(world_position.z + 36.2) <= 1.4:
-		return 0.18
-	if absf(world_position.x) <= 4.5 and world_position.z >= -47.0 and world_position.z <= 17.0:
-		return 0.18
-	return CoastalCircuit.ground_y(world_position)
+	if IslandLayout.PLAZA.has_point(spot) or IslandLayout.STEM.has_point(spot) or IslandLayout.on_path(spot):
+		return IslandLayout.PATH_TOP_Y
+	return IslandLayout.LAWN_Y if IslandShape.on_lawn(spot) else IslandLayout.BEACH_TOP_Y
 
 func coast_description(id: String) -> Dictionary:
 	return CoastalCircuit.description(id)
@@ -889,37 +881,13 @@ func _build_land() -> void:
 	sea_material.shader = WATER
 	welcome_sea_material = ShaderMaterial.new()
 	welcome_sea_material.shader = WELCOME_BAY_WATER
-	welcome_sea_material.set_shader_parameter("land_center", Vector2(CoastalCircuit.LAND_CENTER.x, CoastalCircuit.LAND_CENTER.z))
-	welcome_sea_material.set_shader_parameter("land_half_size", Vector2(CoastalCircuit.LAND_SIZE.x, CoastalCircuit.LAND_SIZE.z) * 0.5)
+	_bind_shore(welcome_sea_material)
 	welcome_sea_material.set_shader_parameter("dock_center", Vector2(WELCOME_DOCK_CENTER.x, WELCOME_DOCK_CENTER.z))
 	welcome_sea_material.set_shader_parameter("dock_half_size", Vector2(WELCOME_DOCK_SIZE.x, WELCOME_DOCK_SIZE.z) * 0.5)
-	var sea_mesh := PlaneMesh.new()
-	sea_mesh.size = Vector2(240,240)
-	_mesh(sea_mesh,Vector3(0,-0.42,0),welcome_sea_material).name = "WelcomeBayWater"
-	# The land block is the beach: its top sits just under the lawn and its rim
-	# darkens into wet sand where the bay's foam line meets it.
-	var beach := _box(CoastalCircuit.LAND_CENTER+Vector3(0,BEACH_TOP_Y-CoastalCircuit.LAND_SIZE.y*0.5,0),CoastalCircuit.LAND_SIZE,Color("#b89b70"))
-	beach.name = "WelcomeBeach"
-	beach.material_override = _beach_material()
-	var grass_material := ShaderMaterial.new()
-	grass_material.shader=GRASS
-	_mesh(_island_lawn_mesh(),CoastalCircuit.LAND_CENTER+Vector3(0,0.055,0),grass_material).name = "WelcomeLawn"
-	# A larger, quieter tile scale keeps the avenue legible as a route instead of a single loud cobblestone stripe.
-	var stone_material := _coastal_surface(4,3.0,Color("#ddd8c8"))
-	var path_mesh := BoxMesh.new()
-	path_mesh.size = Vector3(9,0.12,64)
-	_mesh(path_mesh,Vector3(0,0.12,-15),stone_material)
-	var square_mesh := BoxMesh.new()
-	square_mesh.size = Vector3(25,0.12,16)
-	_mesh(square_mesh,Vector3(0,0.12,0),stone_material)
+	IslandScenery.build_ground(self)
+	IslandScenery.build_planting(self)
+	# One low garden pocket per side keeps the promenade readable around guests.
 	for side in [-1,1]:
-		for i in range(14):
-			# Open the tree rhythm without shifting any gameplay landmarks.
-			if i % 4 == 2:
-				continue
-			var z := -44.0 + i*4.5
-			_tree(Vector3(side*(16.0+sin(i*1.2)*1.8),0,z),i)
-		# One low garden pocket per side keeps the promenade readable around guests.
 		_flowerbed(Vector3(side*6.5,0,-6.4),side+1)
 	# A few low, irregular pebbles soften the fountain court edge without a rigid ring of identical blocks.
 	var pebble_mesh := SphereMesh.new()
@@ -970,91 +938,28 @@ func _build_coastal_planting_pockets() -> void:
 	_multi_mesh(blade_mesh, Vector3.ZERO, blade_transforms, blade_colors, _vertex_color_material("coastal-pocket-leaves"))
 	_multi_mesh(flower_mesh, Vector3.ZERO, flower_transforms, flower_colors, _vertex_color_material("coastal-pocket-flowers"))
 
-const BEACH_TOP_Y := 0.03
+const BEACH_TOP_Y := IslandLayout.BEACH_TOP_Y
+
+## Give a shore-aware shader the island's signed-distance field.
+func _bind_shore(material: ShaderMaterial) -> void:
+	material.set_shader_parameter("shore_distance", IslandShape.sdf_texture())
+	material.set_shader_parameter("sdf_origin", IslandShape.sdf_origin())
+	material.set_shader_parameter("sdf_inverse_size", IslandShape.sdf_inverse_size())
 
 func _beach_material() -> Material:
 	if material_cache.has("welcome-beach"): return material_cache["welcome-beach"]
 	var material := ShaderMaterial.new()
 	material.shader = SAND
-	material.set_shader_parameter("land_center", Vector2(CoastalCircuit.LAND_CENTER.x, CoastalCircuit.LAND_CENTER.z))
-	material.set_shader_parameter("land_half_size", Vector2(CoastalCircuit.LAND_SIZE.x, CoastalCircuit.LAND_SIZE.z) * 0.5)
-	material.set_shader_parameter("lawn_center", CoastalCircuit.LAWN_RECT.get_center())
-	material.set_shader_parameter("lawn_half_size", CoastalCircuit.LAWN_RECT.size * 0.5)
-	material.set_shader_parameter("lawn_corner_radius", CoastalCircuit.LAWN_CORNER_RADIUS)
+	_bind_shore(material)
+	material.set_shader_parameter("sand_width", IslandShape.SAND_WIDTH)
+	material.set_shader_parameter("beaches", PackedVector3Array(IslandShape.BEACHES))
+	material.set_shader_parameter("beach_count", IslandShape.BEACHES.size())
 	material_cache["welcome-beach"] = material
 	return material
 
-func _island_lawn_mesh() -> ArrayMesh:
-	# A rounded footprint that always stays inside CoastalCircuit.LAWN_RECT, so
-	# the grass can never run across the beach to the water again.
-	var mesh := ArrayMesh.new()
-	var mesh_origin := Vector2(CoastalCircuit.LAND_CENTER.x, CoastalCircuit.LAND_CENTER.z)
-	var fan_center := CoastalCircuit.LAWN_RECT.get_center() - mesh_origin
-	var vertices := PackedVector3Array([Vector3(fan_center.x,0,fan_center.y)])
-	var indices := PackedInt32Array()
-	var radius := CoastalCircuit.LAWN_CORNER_RADIUS
-	var core := CoastalCircuit.LAWN_RECT.grow(-radius)
-	# Corner centres in the fan's winding order (east -> south -> west -> north).
-	var arc_centers: Array[Vector2] = [core.end, Vector2(core.position.x,core.end.y), core.position, Vector2(core.end.x,core.position.y)]
-	const ARC_STEPS := 8
-	const EDGE_SPACING := 1.4
-	for corner in range(4):
-		var outline: Array[Vector2] = []
-		for step in range(ARC_STEPS+1):
-			var angle := (float(corner)+float(step)/ARC_STEPS)*PI*0.5
-			outline.append(arc_centers[corner]+Vector2(cos(angle),sin(angle))*radius)
-		var edge_normal := Vector2(cos(float(corner+1)*PI*0.5),sin(float(corner+1)*PI*0.5))
-		var edge_end: Vector2 = arc_centers[(corner+1)%4]+edge_normal*radius
-		var edge_start := outline[ARC_STEPS]
-		var edge_steps := ceili(edge_start.distance_to(edge_end)/EDGE_SPACING)
-		for step in range(1,edge_steps):
-			outline.append(edge_start.lerp(edge_end,float(step)/edge_steps))
-		for index in range(outline.size()):
-			var point := outline[index]
-			var inward := (arc_centers[corner]-point).normalized() if index <= ARC_STEPS else -edge_normal
-			var wander := 0.5 + 0.3*sin(point.x*0.83+point.y*0.61) + 0.2*sin(point.x*2.1-point.y*1.7)
-			var rim := point + inward*CoastalCircuit.LAWN_EDGE_WOBBLE*wander - mesh_origin
-			vertices.append(Vector3(rim.x,0,rim.y))
-	var segments := vertices.size()-1
-	# Godot treats clockwise triangles as front faces. Seen from above, the fan
-	# must run centre -> current rim -> next rim so the lawn's top side faces up;
-	# the reverse order made the sunlit side a flipped back face that ignored the
-	# key light and every cast shadow.
-	for i in range(segments):
-		indices.append(0)
-		indices.append(i+1)
-		indices.append((i+1)%segments+1)
-	var arrays: Array=[]
-	arrays.resize(Mesh.ARRAY_MAX)
-	arrays[Mesh.ARRAY_VERTEX]=vertices
-	var normals := PackedVector3Array()
-	for i in range(vertices.size()): normals.append(Vector3.UP)
-	arrays[Mesh.ARRAY_NORMAL]=normals
-	arrays[Mesh.ARRAY_INDEX]=indices
-	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays)
-	return mesh
-
 func _build_shoreline() -> void:
-	# Layered cut-paper rocks stay outside the playable lawn. The bay draws foam at the actual waterline.
-	var shore_clusters := [-69.0,-43.0,-17.0,7.0]
-	for side: float in [-1.0, 1.0]:
-		for cluster_index in range(shore_clusters.size()):
-			var center_z: float = shore_clusters[cluster_index]
-			var rock_count := 2 + cluster_index % 2
-			for rock_index in range(rock_count):
-				var stagger := float(rock_index) - float(rock_count-1)*0.5
-				var z := center_z + stagger*1.08 + sin(float(cluster_index*7+rock_index)*1.73)*0.24
-				var x := side*(35.3 + cos(float(cluster_index*3+rock_index)*1.31)*0.2 + stagger*0.06)
-				_add_shore_rock(Vector3(x,0,z),cluster_index*5+rock_index)
-			if cluster_index == 1 or cluster_index == 3:
-				_sea_grass(Vector3(side*35.2,BEACH_TOP_Y,center_z+0.45),cluster_index)
-	for cluster_index in range(4):
-		var center_x := -27.0 + cluster_index*18.0
-		for rock_index in range(2):
-			var stagger := float(rock_index)*0.9-0.45
-			var x := center_x + stagger + sin(float(cluster_index*5+rock_index))*0.28
-			var z := 18.25 + cos(float(cluster_index+rock_index)*1.7)*0.3
-			_add_shore_rock(Vector3(x,0,z),20+cluster_index*2+rock_index)
+	# Layered cut-paper rocks stay on the sand. The bay draws foam at the actual waterline.
+	IslandScenery.build_shore_rocks(self)
 
 func _add_shore_rock(pos: Vector3, seed_value: int) -> void:
 	# Tide-pool rocks belong to the beach: they rest on the sand by the waterline.
@@ -1077,32 +982,25 @@ func _sea_grass(pos: Vector3, seed_value: int) -> void:
 	if seed_value % 2 == 0:
 		_sphere(pos+Vector3(0,0.82,0),0.12,CORAL)
 
-## Trees keep to open lawn: clear of paths and decks, and far enough inland that
-## the trunk stays off the beach and its noon shadow stays out of the bay.
-const TREE_SHORE_MARGIN := 1.2
-
 static func tree_site_clear(pos: Vector3) -> bool:
-	if not CoastalCircuit.on_lawn(Vector2(pos.x,pos.z),TREE_SHORE_MARGIN): return false
-	# The painted base meets the ground about 0.64 m in front of the anchor.
-	for offset in [Vector3.ZERO, Vector3(0,0,0.64), Vector3(0.9,0,0.64), Vector3(-0.9,0,0.64), Vector3(0,0,1.2)]:
-		if _ground_surface_y(pos+offset) > 0.06: return false
-	return true
+	return IslandLayout.tree_site_clear(Vector2(pos.x,pos.z))
 
-func _tree(pos: Vector3, seed_value: int) -> void:
-	if not tree_site_clear(pos): return
-	# Give each avenue band a coherent canopy instead of cycling through a
-	# repeated random-looking row of unrelated tree silhouettes.
+func _tree(pos: Vector3, seed_value: int, site_checked := false) -> void:
+	if not site_checked and not tree_site_clear(pos): return
+	# Each part of the island keeps a coherent canopy: palms by the sea and the
+	# plaza, pines across the north-west, ginkgo scattered through the east.
 	var key := "oak"
 	var tree_height := 4.35
-	if pos.z > -16.0:
+	if pos.z > -14.0 or IslandShape.distance_to_coast(Vector2(pos.x,pos.z)) < 15.0:
 		key = "palm"
 		tree_height = 4.15
-	elif pos.z < -32.0 and pos.x < 0.0:
+	elif pos.z < -84.0 and pos.x < 12.0:
 		key = "pine"
 		tree_height = 4.6
-	elif pos.z > -30.0 and pos.x > 0.0 and seed_value in [4, 7]:
+	elif pos.x > 10.0 and seed_value % 3 == 0:
 		key = "ginkgo"
 		tree_height = 4.3
+	tree_height *= 0.94 + fposmod(float(seed_value) * 0.137, 0.14)
 	if _foliage_has(key):
 		_foliage_sprite(key,pos,tree_height)
 		return
@@ -1288,13 +1186,48 @@ func _set_living_sprite_material(sprite: Sprite3D, kind: int, phase: float, brea
 		component_motion.register_shader(material)
 	return material
 
+## Small repeated fittings (lantern holders, bench boards) that the Welcome
+## island collects while it builds and draws as a few batches, not hundreds of nodes.
+var _fitting_batches := {}
+var _batch_fittings := false
+## Where the piece being built will end up, for parts made at the origin and then set in place.
+var _fitting_space := Transform3D.IDENTITY
+
+## Adds one piece to a named batch. `shape` is "box", "cylinder" or "cone" at
+## unit size; `placed` scales and positions it.
+func _fitting(batch: String, shape: String, material: Material, placed: Transform3D, color := Color.WHITE) -> void:
+	if not _fitting_batches.has(batch):
+		var mesh: Mesh = BoxMesh.new()
+		if shape != "box":
+			var round_mesh := CylinderMesh.new()
+			round_mesh.top_radius = 0.0 if shape == "cone" else 0.5
+			round_mesh.bottom_radius = 0.5
+			round_mesh.height = 1.0
+			round_mesh.radial_segments = 8 if shape == "cone" else 16
+			mesh = round_mesh
+		var transforms: Array[Transform3D] = []
+		var colors: Array[Color] = []
+		_fitting_batches[batch] = {"mesh": mesh, "material": material, "transforms": transforms, "colors": colors}
+	_fitting_batches[batch].transforms.append(_fitting_space * placed)
+	_fitting_batches[batch].colors.append(color)
+
+func _build_fitting_batches() -> void:
+	for batch: String in _fitting_batches:
+		var record: Dictionary = _fitting_batches[batch]
+		_multi_mesh(record.mesh, Vector3.ZERO, record.transforms, record.colors, record.material).name = "Fittings_" + batch
+	_fitting_batches.clear()
+
 func _lantern(pos: Vector3) -> void:
-	_cylinder(pos,0.14,0.36,Color("#805b39"))
+	if _batch_fittings:
+		_fitting("lantern-holder","cylinder",_vertex_color_material("lantern-fittings"),Transform3D(Basis().scaled(Vector3(0.28,0.36,0.28)),pos),Color("#805b39"))
+		_fitting("lantern-cap","cone",_vertex_color_material("lantern-fittings"),Transform3D(Basis().scaled(Vector3(0.2,0.12,0.2)),pos+Vector3(0,0.24,0)),Color("#7d6345"))
+	else:
+		_cylinder(pos,0.14,0.36,Color("#805b39"))
+		var cap := _cone(pos+Vector3(0,0.24,0),Color("#7d6345"))
+		cap.scale=Vector3(0.2,0.12,0.2)
 	var shade := _box(pos+Vector3(0,0.05,0),Vector3(0.3,0.3,0.3),Color("#f6ca78"))
 	shade.material_override = _mat(Color("#ffd68b"),true)
 	component_motion.register_component(shade,"soft_scale",float(lamps.size())*0.23)
-	var cap := _cone(pos+Vector3(0,0.24,0),Color("#7d6345"))
-	cap.scale=Vector3(0.2,0.12,0.2)
 	if lamps.size() < 12:
 		var light := OmniLight3D.new()
 		light.position = pos
@@ -1332,11 +1265,26 @@ func _arch(pos: Vector3, title: String, color: Color, wide := 5.0) -> void:
 func _build_dock() -> void:
 	var dock_base := _box(WELCOME_DOCK_CENTER,WELCOME_DOCK_SIZE,Color("#8d6d4c"))
 	dock_base.material_override = _coastal_surface(1,1.7)
+	# Planks and their nails are two batched draws, not eighty-one nodes.
+	var planks: Array[Transform3D] = []
+	var nails: Array[Transform3D] = []
 	for i in range(27):
-		var plank := _box(Vector3(0,0.18,15+i*0.45),Vector3(4.92,0.08,0.35),Color("#9a7149"))
-		plank.material_override = _wood_material(Color("#9a7149"))
+		planks.append(Transform3D(Basis().scaled(Vector3(4.92,0.08,0.35)),Vector3(0,0.18,15+i*0.45)))
 		for side in [-1,1]:
-			_cylinder(Vector3(side*2.18,0.25,15+i*0.45),0.035,0.025,Color("#d2b47d"))
+			nails.append(Transform3D(Basis().scaled(Vector3(0.07,0.025,0.07)),Vector3(side*2.18,0.25,15+i*0.45)))
+	var plank_colors: Array[Color] = []
+	plank_colors.resize(planks.size())
+	plank_colors.fill(Color.WHITE)
+	_multi_mesh(BoxMesh.new(),Vector3.ZERO,planks,plank_colors,_wood_material(Color("#9a7149"))).name = "DockPlanks"
+	var nail_colors: Array[Color] = []
+	nail_colors.resize(nails.size())
+	nail_colors.fill(Color("#d2b47d"))
+	var nail_mesh := CylinderMesh.new()
+	nail_mesh.radial_segments = 8
+	nail_mesh.height = 1.0
+	var dock_nails := _multi_mesh(nail_mesh,Vector3.ZERO,nails,nail_colors,_vertex_color_material("dock-nails"))
+	dock_nails.name = "DockNails"
+	dock_nails.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	for side in [-1,1]:
 		for i in range(5):
 			var z := 16.0+i*2.7
@@ -1364,10 +1312,13 @@ func _build_plaza() -> void:
 	# Tiered fountain anchors the main area's visual silhouette.
 	var fountain_base := _cylinder(Vector3(0,0.45,0),2.8,0.6,Color("#ac9875"))
 	fountain_base.material_override = _coastal_surface(4,2.0,Color("#e1cfab"))
+	var rim_tiles: Array[Transform3D] = []
+	var rim_colors: Array[Color] = []
 	for i in range(24):
 		var a := i*TAU/24.0
-		var tile := _box(Vector3(cos(a)*2.57,0.79,sin(a)*2.57),Vector3(0.47,0.07,0.2),[Color("#dfc99e"),Color("#e7d7b8")][i%2])
-		tile.rotation.y = -a
+		rim_tiles.append(Transform3D(Basis().rotated(Vector3.UP,-a).scaled(Vector3(0.47,0.07,0.2)),Vector3(cos(a)*2.57,0.79,sin(a)*2.57)))
+		rim_colors.append([Color("#dfc99e"),Color("#e7d7b8")][i%2])
+	_multi_mesh(BoxMesh.new(),Vector3.ZERO,rim_tiles,rim_colors,_vertex_color_material("fountain-rim-tiles")).name = "FountainRimTiles"
 	var fountain_rim := _cylinder(Vector3(0,0.78,0),2.5,0.13,Color("#7ac3c8"))
 	fountain_rim.material_override = _coastal_surface(5,0.8,Color("#d9eee5"))
 	fountain_water = ShaderMaterial.new()
@@ -1432,6 +1383,16 @@ func _build_plaza() -> void:
 
 func _bench(pos: Vector3) -> void:
 	var wood := Color("#956d48")
+	if _batch_fittings:
+		for board in range(3):
+			var tone := wood if board%2==0 else Color("#a77b50")
+			_fitting("bench-" + tone.to_html(false),"box",_wood_material(tone),Transform3D(Basis().scaled(Vector3(2.0,0.09,0.13)),pos+Vector3(0,0.72,board*0.16-0.16)))
+		for side in [-1.0,1.0]:
+			_fitting("bench-iron","box",_vertex_color_material("bench-iron"),Transform3D(Basis().scaled(Vector3(0.11,0.7,0.12)),pos+Vector3(side*0.78,0.38,0)),Color("#5f5142"))
+			_fitting("bench-iron","box",_vertex_color_material("bench-iron"),Transform3D(Basis().scaled(Vector3(0.12,1.05,0.12)),pos+Vector3(side*0.78,1.12,-0.26)),Color("#5f5142"))
+			_fitting("bench-studs","cylinder",_vertex_color_material("bench-iron"),Transform3D(Basis().scaled(Vector3(0.26,0.12,0.26)),pos+Vector3(side*0.78,0.87,0.16)),GOLD)
+		_fitting("bench-" + wood.to_html(false),"box",_wood_material(wood),Transform3D(Basis().scaled(Vector3(1.82,0.16,0.13)),pos+Vector3(0,1.17,-0.26)))
+		return
 	for board in range(3):
 		var seat := _box(pos+Vector3(0,0.72,board*0.16-0.16),Vector3(2.0,0.09,0.13),wood if board%2==0 else Color("#a77b50"))
 		seat.material_override=_wood_material(Color("#956d48") if board%2==0 else Color("#a77b50"))
@@ -1544,27 +1505,23 @@ func _lamppost(pos: Vector3) -> void:
 
 func _build_avenue() -> void:
 	var names := ["氣球快遞","風箏穿環","噴泉跳拍","人潮指揮","帽子救援","彩帶節拍","花壇拼圖","招牌平衡","影子捉迷藏","泡泡合照","長椅換位","迎賓大合奏"]
-	# Each destination has its own approach and footprint; IDs stay stable while the old
-	# alternating kiosk coordinates are retired.
-	var game_positions: Array[Vector3] = [
-		Vector3(-6.0,0,-17.0), Vector3(-10.2,0,-17.8), Vector3(-7.6,0,-22.7), Vector3(-11.6,0,-23.2),
-		Vector3(6.0,0,-27.0), Vector3(10.1,0,-27.5), Vector3(6.3,0,-32.2), Vector3(11.8,0,-32.5),
-		Vector3(9.55,0.88,-35.0), Vector3(13.0,0.88,-37.6),
-		Vector3(-6.0,0,-39.0), Vector3(6.0,0,-40.5),
-	]
+	# Each entry stands in its own place along the branching walkways; IDs stay stable.
 	for i in range(12):
-		_point("game-%03d"%(i+1),names[i],game_positions[i],1.45)
+		var entry_position: Vector3 = IslandLayout.GAME_ENTRIES[i].position
+		_point("game-%03d"%(i+1),names[i],entry_position,1.45)
 		var feature_color: Color = [CORAL,TEAL,GOLD][i%3]
 		var feature_start := get_child_count()
 		occlusion_controller.begin_building()
-		_game_feature(i,game_positions[i],feature_color)
+		_game_feature(i,entry_position,feature_color)
 		var feature_root := Node3D.new()
 		feature_root.name = "GameFeature%03d" % (i+1)
 		add_child(feature_root)
 		_adopt_district_geometry(feature_root,feature_start)
 		var feature_blocker := _district_occlusion_blocker(feature_root, "FeatureOcclusionBlocker")
 		occlusion_controller.finish_building(feature_blocker)
+	IslandScenery.build_entry_frames(self)
 	_build_attraction_districts()
+	_build_place_dressing()
 	# Keep both story characters in the open foreground of the avenue arch, where
 	# their whole billboards and ground anchors stay visible in the lowered camera.
 	# Leave the complete imp silhouette clear of the foreground lamp planter.
@@ -1574,39 +1531,121 @@ func _build_avenue() -> void:
 	_npc(Vector3(3.4,0,-4.0),TEAL,"阿浪")
 	_point("quest-002","廣播即興救場",Vector3(3.4,0,-4.0))
 	_point("explore-001","花壇會眨眼",Vector3(-3,0,-25))
-	_point("explore-002","歡迎字樣的影子",Vector3(3,0,-31))
-	_box(Vector3(-3,0.7,-37),Vector3(2,0.3,0.7),GOLD,true)
-	_point("explore-003","長椅雙人份",Vector3(-3,0,-35.7))
-	_arch(Vector3(0,0,-45),"倒影大道",Color("#655178"),5)
-	_point("rift","查看倒影大道",Vector3(0,0,-43))
+	_flowerbed(Vector3(-4.6,0,-25.6),3)
+	_point("explore-002","歡迎字樣的影子",Vector3(0.6,0,-31))
+	var bench := _box(Vector3(-0.4,0.7,-37.4),Vector3(2,0.3,0.7),GOLD,true)
+	bench.material_override = _wood_material(Color("#c9a25e"))
+	_point("explore-003","長椅雙人份",Vector3(-0.4,0,-36.1))
+	_arch(IslandLayout.district_point("stage",Vector3(0,0,-45)),"倒影大道",Color("#655178"),5)
+	_point("rift","查看倒影大道",IslandLayout.district_point("stage",Vector3(0,0,-43)))
 	_point("ride-tide","搭乘潮汐貝殼輪",Vector3(-6.7,0.26,11.2))
+
+## Small dressing that turns the free-standing entries into places: a bandstand,
+## beach parasols, a ring of planters, benches and the lamps that light the way.
+func _build_place_dressing() -> void:
+	_bandstand(Vector3(45.2,0,-31.4))
+	var poles: Array[Transform3D] = []
+	var canopies: Array[Transform3D] = []
+	var towels: Array[Transform3D] = []
+	for index in IslandLayout.PARASOLS.size():
+		var spot: Vector2 = IslandLayout.PARASOLS[index]
+		var base := Vector3(spot.x,BEACH_TOP_Y,spot.y)
+		var lean := Basis().rotated(Vector3.FORWARD,0.12 if index%2==0 else -0.1)
+		poles.append(Transform3D(lean.scaled(Vector3(0.07,2.3,0.07)),base+Vector3(0,1.15,0)))
+		canopies.append(Transform3D(lean.scaled(Vector3(3.0,0.75,3.0)),base+lean*Vector3(0,2.45,0)))
+		towels.append(Transform3D(Basis().rotated(Vector3.UP,0.4+float(index)*0.7).scaled(Vector3(0.95,0.03,1.9)),base+Vector3(-1.4,0.02,0.6)))
+	var whites: Array[Color] = []
+	whites.resize(poles.size())
+	whites.fill(Color.WHITE)
+	_multi_mesh(BoxMesh.new(),Vector3.ZERO,poles,whites,_wood_material(Color("#8a6a48"))).name = "BeachParasolPoles"
+	var cone := CylinderMesh.new()
+	cone.top_radius = 0.02
+	cone.bottom_radius = 0.5
+	cone.height = 1.0
+	cone.radial_segments = 10
+	_multi_mesh(cone,Vector3.ZERO,canopies,whites,_coastal_surface(6,1.1,Color("#e9b8a0"))).name = "BeachParasolCanopies"
+	_multi_mesh(BoxMesh.new(),Vector3.ZERO,towels,whites,_coastal_surface(6,0.9,Color("#a9cfc6"))).name = "BeachTowels"
+	for index in IslandLayout.PLANTERS.size():
+		var spot: Vector2 = IslandLayout.PLANTERS[index]
+		_flowerbed(Vector3(spot.x,0,spot.y),index)
+	for spot: Vector2 in IslandLayout.BENCHES:
+		_bench(Vector3(spot.x,0,spot.y))
+	for spot: Vector2 in IslandLayout.LAMPPOSTS:
+		_lamppost(Vector3(spot.x,0,spot.y))
+
+func _bandstand(pos: Vector3) -> void:
+	occlusion_controller.begin_building()
+	var plinth := _cylinder(pos+Vector3(0,0.2,0),2.9,0.3,Color("#ac9875"))
+	plinth.name = "BandstandPlinth"
+	_set_registered_surface(plinth,_coastal_surface(4,1.6,Color("#e1cfab")))
+	var step := _cylinder(pos+Vector3(0,0.1,0),3.3,0.12,Color("#9c8a6a"))
+	_set_registered_surface(step,_coastal_surface(0,1.4,Color("#cbb995")))
+	var posts: Array[Transform3D] = []
+	var rails: Array[Transform3D] = []
+	for index in 6:
+		var angle := TAU*float(index)/6.0+PI/6.0
+		var foot := Vector3(cos(angle)*2.5,0,sin(angle)*2.5)
+		posts.append(Transform3D(Basis().scaled(Vector3(0.16,2.5,0.16)),foot+Vector3(0,1.6,0)))
+		# The south side stays open as the way in.
+		if index in [0,1]: continue
+		var next_angle := angle+TAU/6.0
+		var middle := (foot+Vector3(cos(next_angle)*2.5,0,sin(next_angle)*2.5))*0.5
+		rails.append(Transform3D(Basis().rotated(Vector3.UP,-(angle+next_angle)*0.5-PI*0.5).scaled(Vector3(2.5,0.09,0.09)),middle+Vector3(0,1.05,0)))
+	var post_colors: Array[Color] = []
+	post_colors.resize(posts.size()+rails.size())
+	post_colors.fill(Color.WHITE)
+	_multi_mesh(BoxMesh.new(),pos,posts+rails,post_colors,_coastal_surface(1,1.2,Color("#bd9c6b")))
+	var roof_mesh := CylinderMesh.new()
+	roof_mesh.top_radius = 0.25
+	roof_mesh.bottom_radius = 3.5
+	roof_mesh.height = 1.5
+	roof_mesh.radial_segments = 12
+	var roof := _mesh(roof_mesh,pos+Vector3(0,3.6,0),_coastal_surface(3,1.6,Color("#e8b9a2")))
+	roof.name = "BandstandRoof"
+	var eave := _cylinder(pos+Vector3(0,2.9,0),3.55,0.12,Color("#f1d9a9"))
+	_set_registered_surface(eave,_coastal_surface(7,0.9,Color("#d8bd84")))
+	_sphere(pos+Vector3(0,4.5,0),0.24,GOLD)
+	for index in 6:
+		var angle := TAU*float(index)/6.0
+		var pennant := _box(pos+Vector3(cos(angle)*3.3,2.62,sin(angle)*3.3),Vector3(0.34,0.4,0.04),[CORAL,GOLD,Color("#64b9bd")][index%3])
+		pennant.rotation.y = -angle+PI*0.5
+		component_motion.register_component(pennant,"flag",float(index)*0.5)
+	var blocker := StaticBody3D.new()
+	blocker.name = "BandstandOcclusionBlocker"
+	blocker.collision_layer = 0
+	blocker.collision_mask = 0
+	blocker.position = pos
+	add_child(blocker)
+	occlusion_controller.finish_building(blocker)
 
 func _build_attraction_districts() -> void:
 	var districts := Node3D.new()
 	districts.name = "AttractionDistricts"
 	add_child(districts)
-	var wind := _district(districts, "WindSailTerrace", "風帆工坊", ["game-001", "game-002", "game-003", "game-004"])
+	# Each court is authored around its old avenue coordinates and then set down,
+	# whole, where the layout table places it.
+	var wind := _district(districts, "WindSailTerrace", "風帆工坊", ["game-001", "game-002", "game-003", "game-004"], "wind")
 	var scenery_start := get_child_count()
 	var wind_blocker := _district_occlusion_blocker(wind, "DistrictOcclusionBlocker")
 	occlusion_controller.begin_building()
 	_build_wind_sail_terrace(wind)
 	_adopt_district_geometry(wind, scenery_start)
 	occlusion_controller.finish_building(wind_blocker)
-	var tide := _district(districts, "TidepoolCourt", "潮池廣場", ["game-005", "game-006", "game-007", "game-008"])
+	var tide := _district(districts, "TidepoolCourt", "潮池廣場", ["game-005", "game-006", "game-007", "game-008"], "tide")
 	scenery_start = get_child_count()
 	var tide_blocker := _district_occlusion_blocker(tide, "DistrictOcclusionBlocker")
 	occlusion_controller.begin_building()
 	_build_tidepool_court(tide)
 	_adopt_district_geometry(tide, scenery_start)
 	occlusion_controller.finish_building(tide_blocker)
-	var lens := _district(districts, "LighthouseLookout", "海風觀景台", ["game-009", "game-010"])
+	var lens := _district(districts, "LighthouseLookout", "海風觀景台", ["game-009", "game-010"], "lookout")
 	scenery_start = get_child_count()
 	var lens_blocker := _district_occlusion_blocker(lens, "DistrictOcclusionBlocker")
 	occlusion_controller.begin_building()
 	_build_lighthouse_lookout(lens)
 	_adopt_district_geometry(lens, scenery_start)
 	occlusion_controller.finish_building(lens_blocker)
-	var moon := _district(districts, "MoonshadowStage", "月影劇台", ["game-011", "game-012"])
+	var moon := _district(districts, "MoonshadowStage", "月影劇台", ["game-011", "game-012"], "stage")
 	scenery_start = get_child_count()
 	var moon_blocker := _district_occlusion_blocker(moon, "DistrictOcclusionBlocker")
 	occlusion_controller.begin_building()
@@ -1631,9 +1670,10 @@ func _adopt_district_geometry(district: Node3D, first_child_index: int) -> void:
 		remove_child(scenery)
 		district.add_child(scenery)
 
-func _district(parent: Node3D, node_name: String, title: String, game_ids: Array[String]) -> Node3D:
+func _district(parent: Node3D, node_name: String, title: String, game_ids: Array[String], layout_id: String) -> Node3D:
 	var district := Node3D.new()
 	district.name = node_name
+	district.position = IslandLayout.district_point(layout_id, Vector3.ZERO)
 	district.set_meta("title", title)
 	district.set_meta("game_ids", game_ids.duplicate())
 	parent.add_child(district)
@@ -1644,10 +1684,13 @@ func _build_wind_sail_terrace(district: Node3D) -> void:
 	var deck := _box(Vector3(-9.0,0.11,-20.5),Vector3(9.0,0.12,10.0),Color("#775b42"))
 	deck.name = "WindWorkshopBoardwalk"
 	deck.material_override = _coastal_surface(1,1.8,Color("#ead8b4"))
+	var deck_seams: Array[Transform3D] = []
+	var seam_colors: Array[Color] = []
 	for plank_index in range(12):
-		var plank_x := -13.3 + plank_index*0.74
-		var seam := _box(Vector3(plank_x,0.178,-20.5),Vector3(0.035,0.012,9.85),Color("#c3a16c"))
-		seam.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		deck_seams.append(Transform3D(Basis().scaled(Vector3(0.035,0.012,9.85)),Vector3(-13.3 + plank_index*0.74,0.178,-20.5)))
+		seam_colors.append(Color("#c3a16c"))
+	var seams := _multi_mesh(BoxMesh.new(),Vector3.ZERO,deck_seams,seam_colors,_vertex_color_material("deck-seams"))
+	seams.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	# Narrow, separated canvas slats leave the kite and balloon silhouettes visible above the counter.
 	for post_x in [-11.7,-6.7]:
 		for post_z in [-21.65,-19.35]:
@@ -1746,11 +1789,13 @@ func _build_lighthouse_lookout(district: Node3D) -> void:
 	var ramp_box := BoxShape3D.new()
 	ramp_box.size=Vector3(ramp_length,0.06,3.2)
 	ramp_shape.shape=ramp_box
+	var treads: Array[Transform3D] = []
+	var tread_colors: Array[Color] = []
 	for index in range(8):
 		var x := 6.6+index*0.35
-		var plank := _box(Vector3(x,0.41+(x-7.75)*0.16,tower_z),Vector3(0.06,0.04,3.08),Color("#ddc79d"))
-		plank.material_override = _coastal_surface(7,0.45,Color("#c4a06e"))
-		plank.rotation.z=ramp_angle
+		treads.append(Transform3D(Basis().rotated(Vector3.BACK,ramp_angle).scaled(Vector3(0.06,0.04,3.08)),Vector3(x,0.41+(x-7.75)*0.16,tower_z)))
+		tread_colors.append(Color.WHITE)
+	_multi_mesh(BoxMesh.new(),Vector3.ZERO,treads,tread_colors,_coastal_surface(7,0.45,Color("#c4a06e")))
 	_cylinder(Vector3(tower_x,0.42,tower_z),1.55,0.32,Color("#685944"))
 	var tower_wall := _cylinder(Vector3(tower_x,1.55,tower_z),0.65,2.0,Color("#b99a6c"),0.78,true)
 	tower_wall.name="LighthouseWall"
@@ -1800,11 +1845,13 @@ func _build_moonshadow_stage(district: Node3D) -> void:
 	var deck := _box(Vector3(0,0.105,-40.45),Vector3(14.0,0.10,6.6),Color("#73563e"))
 	deck.name = "MoonshadowStageDeck"
 	deck.material_override = _coastal_surface(1,1.7,Color("#d2b893"))
+	var stage_seams: Array[Transform3D] = []
+	var seam_colors: Array[Color] = []
 	for plank_index in range(14):
-		var plank_z := -43.6 + plank_index*0.48
-		var seam := _box(Vector3(0,0.16,plank_z),Vector3(13.7,0.018,0.035),Color("#b8915f"))
-		seam.material_override = _coastal_surface(7,0.7,Color("#ba9a64"))
-		seam.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		stage_seams.append(Transform3D(Basis().scaled(Vector3(13.7,0.018,0.035)),Vector3(0,0.16,-43.6 + plank_index*0.48)))
+		seam_colors.append(Color.WHITE)
+	var seams := _multi_mesh(BoxMesh.new(),Vector3.ZERO,stage_seams,seam_colors,_coastal_surface(7,0.7,Color("#ba9a64")))
+	seams.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_district_label("月影劇台",Vector3(0,4.05,-40.0),24,Color("#e2d2b0"))
 
 func _game_feature(index: int, pos: Vector3, color: Color) -> void:
@@ -1950,13 +1997,24 @@ func _wayfinding_mesh(plaque: Node3D, position: Vector3, size: Vector3, color: C
 
 
 func _build_gates() -> void:
-	var data := park_data()
-	var zones: Array = data.get("zones",[])
+	# Every region gate stands at the island's edge, at the end of the road that
+	# heads toward its district. Each is built at the origin and then set in place.
+	var zones: Array = park_data().get("zones",[])
 	for i in range(1,zones.size()):
 		var zone: Dictionary=zones[i]
-		var side := -1 if i%2==1 else 1
-		var pos := Vector3(side*15.5,0,8-float((i-1)/2)*4.5)
+		var region: String = zone["id"]
+		if not IslandLayout.GATES.has(region):
+			push_warning("No gate site for region '%s'; gate omitted." % region)
+			continue
+		var gate := Node3D.new()
+		gate.name = "Gate_" + region
+		add_child(gate)
+		gate.position = IslandLayout.gate_position(region)
+		gate.rotation.y = IslandLayout.gate_yaw(region)
+		_fitting_space = gate.transform
+		var first_part := get_child_count()
 		var zone_color: Color = [Color("#28737a"),Color("#e2795e"),Color("#e2ae4f"),Color("#725985"),Color("#47718a"),Color("#678858"),Color("#5295a0"),Color("#42638a"),Color("#865d71")][i-1]
+		var pos := Vector3.ZERO
 		var gate_floor := _box(pos+Vector3(0,0.18,0),Vector3(3.9,0.22,1.5),Color("#958064"))
 		gate_floor.material_override = _coastal_surface(0,1.6,Color("#d8c39f"))
 		for pillar_side in [-1,1]:
@@ -1973,12 +2031,22 @@ func _build_gates() -> void:
 		_zone_crown(i,pos,zone_color)
 		_local_label(zone["name"],pos+Vector3(0,2.76,0.37),20)
 		_local_label(ZONE_ICONS[i-1],pos+Vector3(0,1.75,0.43),28,GOLD)
-		_point("gate:"+zone["id"],zone["name"],pos+Vector3(0,0,2))
-		var region: String = zone["id"]
+		_adopt_district_geometry(gate,first_part)
+		_fitting_space = Transform3D.IDENTITY
+		_point("gate:"+region,zone["name"],IslandLayout.gate_point(region))
 		var open := RegionRoutes.supports(region)
 		var required: int = RegionRoutes.threshold(region) if open else int(zone["threshold"])
 		var status := "%d 張 · %s" % [required, "不消耗" if open else "準備中"]
-		_local_label(status, pos + Vector3(0,1.1,0.48), 19).name = "GateStatus_" + region
+		_local_label(status, gate.transform * Vector3(0,1.1,0.48), 19).name = "GateStatus_" + region
+		# A gate far from the plaza needs its own light after dark; it joins the shared budget.
+		var light := OmniLight3D.new()
+		light.name = "GateLamp_" + region
+		light.position = gate.transform * Vector3(0,2.3,1.2)
+		light.light_color = Color("#ffd49a")
+		light.omni_range = 6.5
+		light.light_energy = 0.0
+		add_child(light)
+		lamps.append(light)
 
 func _zone_crown(index: int, pos: Vector3, color: Color) -> void:
 	match index:
@@ -2403,10 +2471,12 @@ func _player_spawn_position() -> Vector3:
 	return Vector3(0,0.3,23.2)
 
 func _build_player_floor() -> void:
-	# Ground collision covers walkable land and dock. Sea never traps the player.
-	for geometry in [Vector3(72,0.2,96),Vector3(5,0.2,13)]:
+	# One slab under the whole island and one under the dock. The shore itself is
+	# kept by _constrain_player, so the slab only has to reach past every coast.
+	var island := IslandShape.bounds().grow(4.0)
+	for geometry in [Vector3(island.size.x,0.2,island.size.y),Vector3(5,0.2,13)]:
 		var floor_body := StaticBody3D.new()
-		floor_body.position=Vector3(0,0.1,-29) if geometry.x>6 else Vector3(0,0.12,21)
+		floor_body.position=Vector3(island.get_center().x,0.1,island.get_center().y) if geometry.x>6 else Vector3(0,0.12,21)
 		var shape := CollisionShape3D.new()
 		var box := BoxShape3D.new()
 		box.size=geometry
@@ -2529,17 +2599,16 @@ static func motion_sources_ready(records: Dictionary) -> bool:
 		if not record is Dictionary or not bool(record.get("valid",false)): return false
 	return true
 
-func _constrain_player(previous_position: Vector3) -> bool:
-	player.position.z=clampf(player.position.z,CoastalCircuit.WALK_BOUNDS.position.y,26.5)
-	player.position.x=clampf(player.position.x,CoastalCircuit.WALK_BOUNDS.position.x,CoastalCircuit.WALK_BOUNDS.end.x)
-	# Terrain edge: prevent stepping from the land directly into water.
-	if player.position.z>18.0 and absf(player.position.x)>2.05:
-		if previous_position.z>18.0:
-			player.position.x=clampf(player.position.x,-2.05,2.05)
-		else:
-			player.position.z=18.0
-	if player.position.z>18.6:
-		player.position.x=clampf(player.position.x,-2.05,2.05)
+func _constrain_player(_previous_position: Vector3) -> bool:
+	# The walker stays on the island or on the dock planks; whichever limit is
+	# nearer wins, so stepping off the dock's side never jumps back to the beach.
+	var spot := Vector2(player.position.x,player.position.z)
+	if not IslandLayout.DOCK_WALK.has_point(spot) and not IslandShape.contains(spot,IslandShape.WALK_MARGIN):
+		var ashore := IslandShape.clamp_inside(spot)
+		var on_planks := spot.clamp(IslandLayout.DOCK_WALK.position,IslandLayout.DOCK_WALK.end)
+		var kept := on_planks if spot.distance_squared_to(on_planks) < spot.distance_squared_to(ashore) else ashore
+		player.position.x=kept.x
+		player.position.z=kept.y
 	if player.position.y < -1.0:
 		player.position=Vector3(0,0.3,10)
 		return true
@@ -2548,13 +2617,11 @@ func _constrain_player(previous_position: Vector3) -> bool:
 ## True where the avatar can stand. Placement data asks this instead of
 ## assuming the island's current outline.
 func is_walkable(position: Vector3) -> bool:
-	var bounds := CoastalCircuit.WALK_BOUNDS
-	if position.x < bounds.position.x or position.x > bounds.end.x or position.z < bounds.position.y or position.z > 26.5:
-		return false
-	return position.z <= 18.0 or absf(position.x) <= 2.05
+	var spot := Vector2(position.x,position.z)
+	return IslandLayout.DOCK_WALK.has_point(spot) or (IslandShape.contains(spot,IslandShape.WALK_MARGIN) and not IslandLayout.in_pond(spot))
 
 func _area_at_position(position: Vector3) -> String:
-	return "海岸環線" if absf(position.x)>20.0 or position.z < -48.0 else ("海風碼頭" if position.z>12 else ("迎賓大道" if position.z < -11 else "中央廣場"))
+	return IslandShape.area_at(Vector2(position.x,position.z))
 
 func _physics_process(delta: float) -> void:
 	if not is_instance_valid(player): return
