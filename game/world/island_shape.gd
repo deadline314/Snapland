@@ -9,13 +9,16 @@ const DistrictSites = preload("res://game/world/district_sites.gd")
 ## Coordinates are world x/z in metres (x east, z south). Nothing is random and
 ## the bake is cached for the life of the process.
 
-## Clockwise from the dock bay: east headland, the greenhouse peninsula, east
+## Clockwise from the dock bay: the sky park peninsula off the east breakwater, east headland, the greenhouse peninsula, east
 ## bay, the candy peninsula, lagoon and its sand spit, the circus and toy town
 ## headland, the star-court cove, the night-market valley, west inlet, west cape, west bay, south-west cape, the harbor spit that
 ## hooks round the south-west bay, the hotel peninsula off the west breakwater, west headland. District sites (see
 ## DistrictSites) stand on the peninsulas and in the bay.
 const COAST_CONTROL := [
-	Vector2(0,19), Vector2(11,19.4), Vector2(20,22), Vector2(28,27), Vector2(38,32.5), Vector2(50,36), Vector2(59.5,32), Vector2(65,22.5), Vector2(67,11.5), Vector2(72.5,1.5),
+	Vector2(0,19), Vector2(11,19.4), Vector2(20,22), Vector2(28,27),
+	Vector2(37,33), Vector2(40.5,40), Vector2(40.5,47), Vector2(37,52.5), Vector2(29,55.5), Vector2(25,62), Vector2(24.5,74), Vector2(25,86), Vector2(27.5,95), Vector2(35,100.5),
+	Vector2(48,103), Vector2(61,102), Vector2(73,99.5), Vector2(79,92), Vector2(80,80), Vector2(79.5,68), Vector2(78,58.5), Vector2(70,53.5), Vector2(61.5,48.5), Vector2(59.5,40), Vector2(62,30),
+	Vector2(65,22.5), Vector2(67,11.5), Vector2(72.5,1.5),
 	Vector2(84,6), Vector2(92,16), Vector2(100,27), Vector2(112,33.5), Vector2(125,31.5), Vector2(138,33), Vector2(151,24), Vector2(158,10), Vector2(164,-4), Vector2(160,-19), Vector2(153,-30), Vector2(141,-35.5), Vector2(128,-32), Vector2(115,-35.5), Vector2(104,-32.5), Vector2(95,-34), Vector2(83.5,-33),
 	Vector2(74.5,-36), Vector2(67,-43.5), Vector2(65,-54.5), Vector2(70.5,-64.5),
 	Vector2(82,-67), Vector2(92,-65.5), Vector2(101,-58), Vector2(112,-55.5), Vector2(123,-48.5), Vector2(136,-52), Vector2(150,-47.5), Vector2(166,-52), Vector2(180,-61), Vector2(187,-74), Vector2(184.5,-88), Vector2(188,-101), Vector2(183,-114), Vector2(173,-123.5), Vector2(159,-125.5), Vector2(147,-131), Vector2(134,-126.5), Vector2(123,-128.5), Vector2(113,-124.5), Vector2(106,-116), Vector2(99,-105.5), Vector2(85.5,-97),
@@ -50,7 +53,7 @@ const AREAS := [
 	["林蔭空地", 30, -112, 9], ["海風觀景台", 54, -121, 9], ["長椅池畔", -27, -95, 11], ["月影劇台", 2, -117, 12],
 	["潟湖沙洲", 80, -135, 16],
 	["西南岬", -86, 8, 11], ["東岬", 88, -81, 11], ["西北岬", -69, -122, 11], ["東北岸", 52, -139, 8], ["北岬", 10, -156, 11],
-	["東南岬", 88, -17, 11], ["西堤", -38, 33, 11], ["旅館堤道", -27, 50, 9], ["東堤", 50, 29, 11], ["燈塔岬", -96, -62, 12],
+	["東南岬", 88, -17, 11], ["西堤", -38, 33, 11], ["旅館堤道", -27, 50, 9], ["東堤", 50, 29, 11], ["雲端步橋", 49, 42, 8], ["燈塔岬", -96, -62, 12],
 ]
 const DOCK_AREA := "海風碼頭"
 const PLAZA_AREA := "中央廣場"

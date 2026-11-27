@@ -1598,7 +1598,7 @@ func _interact(id: String, title: String) -> void:
 	if not id.is_empty() and id == RegionalVisit.point_id(here):
 		if not _talk_errand(here): _start_region_story_visit(here)
 		return
-	if id.begins_with("game-") and here in ["circus","toy","garden","hotel"] and Catalog.identity(id).get("zone","")==here:
+	if id.begins_with("game-") and here in ["circus","toy","garden","hotel","sky"] and Catalog.identity(id).get("zone","")==here:
 		_show_game_info(id)
 		return
 	if here=="hotel":
@@ -1607,6 +1607,13 @@ func _interact(id: String, title: String) -> void:
 			"hotel:corridor": _notice(place.rustle_pages())
 			"hotel:lost": _notice(place.browse_lost())
 			"hotel:dream": _notice(place.fluff_dream())
+		return
+	if here=="sky":
+		match id:
+			"sky:wheel": _notice(place.push_wheel())
+			"sky:balloon": _notice(place.tug_balloon())
+			"sky:kites": _notice(place.fly_kites())
+			"sky:photo": _notice(place.take_photo())
 		return
 	if here=="garden":
 		match id:
@@ -2812,7 +2819,7 @@ func _show_map() -> void:
 		if not Catalog.definitions(world_region).is_empty():
 			var games_button := Paper.button("遊戲入口",_show_region_games,modal_footer)
 			games_button.name="RegionGamesButton"
-		if world_region in ["candy", "nightmarket", "circus", "toy", "garden", "hotel"]:
+		if world_region in ["candy", "nightmarket", "circus", "toy", "garden", "hotel", "sky"]:
 			var return_button := Paper.button("免費返回迎賓大道",_travel_to_region.bind("welcome"),modal_footer)
 			if world_region=="nightmarket":
 				return_button.name="NightmarketReturnButton"
@@ -2824,6 +2831,8 @@ func _show_map() -> void:
 				return_button.name="GardenReturnButton"
 			elif world_region=="hotel":
 				return_button.name="HotelReturnButton"
+			elif world_region=="sky":
+				return_button.name="SkyReturnButton"
 			return_button.tooltip_text="永久免費返回；不需要拍貼或遊園幣。"
 		_back(harbor_body)
 		return

@@ -17,6 +17,7 @@ const REGIONS := {
 	"toy": "res://game/world/toy_world.gd",
 	"garden": "res://game/world/garden_world.gd",
 	"hotel": "res://game/world/hotel_world.gd",
+	"sky": "res://game/world/sky_world.gd",
 }
 
 var failures := 0

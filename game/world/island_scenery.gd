@@ -162,9 +162,15 @@ static func _build_ponds(world: Node3D) -> void:
 	world._multi_mesh(stone_mesh, Vector3.ZERO, stones, stone_colors, world._vertex_color_material("pond-bank-stones")).name = "IslandPondStones"
 	world._multi_mesh(reed_mesh, Vector3.ZERO, reeds, reed_colors, world._vertex_color_material("pond-reeds")).name = "IslandPondReeds"
 
-## Tide-pool rocks in loose groups on the sand all round the coast, except beside the dock.
+## Tide-pool rocks in loose groups on the sand all round the coast, except
+## beside the dock and where a district dresses its own shore, with tufts of
+## sea grass between some of them (all the tufts are two batched draws).
 static func build_shore_rocks(world: Node3D) -> void:
 	var coast := IslandShape.coast()
+	var blades: Array[Transform3D] = []
+	var blade_colors: Array[Color] = []
+	var buds: Array[Transform3D] = []
+	var bud_colors: Array[Color] = []
 	var travelled := ROCK_CLUSTER_SPACING * 0.4
 	var cluster := 0
 	for index in coast.size():
@@ -176,6 +182,7 @@ static func build_shore_rocks(world: Node3D) -> void:
 		var along := (next - here).normalized()
 		var inland := IslandShape.inland_direction(here)
 		if absf(here.x) < 12.0 and here.y > 12.0: continue
+		if IslandShape.DistrictSites.dresses_shore(here): continue
 		var rocks := 2 + cluster % 2
 		for rock in rocks:
 			var spot := here + inland * (1.25 + _hash(cluster * 11 + rock) * 0.25) + along * (float(rock) - float(rocks - 1) * 0.5) * 1.1
@@ -184,8 +191,20 @@ static func build_shore_rocks(world: Node3D) -> void:
 		if cluster % 3 == 1:
 			var tuft := here + inland * 1.7 + along * 1.6
 			if IslandShape.lawn_inset(tuft) < -0.2 and IslandShape.distance_to_coast(tuft) > 0.8 and not IslandLayout.on_path(tuft):
-				world._sea_grass(Vector3(tuft.x, IslandLayout.BEACH_TOP_Y, tuft.y), cluster)
+				var foot := Vector3(tuft.x, IslandLayout.BEACH_TOP_Y, tuft.y)
+				for blade in 3:
+					blades.append(Transform3D(Basis(Vector3.BACK, float(blade - 1) * 0.22).scaled(Vector3(0.09, 0.82, 0.07)), foot + Vector3(float(blade - 1) * 0.12, 0.4, 0)))
+					blade_colors.append(Color("#557961"))
+				if cluster % 2 == 0:
+					buds.append(Transform3D(Basis().scaled(Vector3.ONE * 0.24), foot + Vector3(0, 0.82, 0)))
+					bud_colors.append(Color("#da705c"))
 		cluster += 1
+	var blade_mesh := BoxMesh.new()
+	var bud_mesh := SphereMesh.new()
+	bud_mesh.radial_segments = 8
+	bud_mesh.rings = 4
+	world._multi_mesh(blade_mesh, Vector3.ZERO, blades, blade_colors, world._vertex_color_material("sea-grass")).name = "IslandSeaGrass"
+	world._multi_mesh(bud_mesh, Vector3.ZERO, buds, bud_colors, world._vertex_color_material("sea-grass")).name = "IslandSeaGrassBuds"
 
 ## Groves, trees beside the walkways and flower meadows. Every site is checked
 ## against paths, courts, ponds and the shore, so the tables can stay loose.

@@ -244,6 +244,9 @@ func _check_map_direction(chart: Control, details: Node) -> void:
 	_check(chart.get("destination") == _world_point("gate:hotel") and _has_label(details,"60 張") and _has_label(details,"尚未達資格"),
 		"Hotel map displays its actual gate and 60-card threshold")
 	await _activate(_main.overlay.find_child("MapGate_sky",true,false) as Button)
+	_check(chart.get("destination") == _world_point("gate:sky") and _has_label(details,"60 張") and _has_label(details,"尚未達資格"),
+		"Sky park map displays its actual gate and 60-card threshold")
+	await _activate(_main.overlay.find_child("MapGate_cinema",true,false) as Button)
 	var unavailable: Vector3 = chart.get("destination")
 	_check(not unavailable.is_finite() and _has_label(details,"準備中"), "the regional overview preserves future eligibility without marking a playable destination")
 

@@ -11,6 +11,7 @@ const Kit := preload("res://game/world/scenery_kit.gd")
 const Scenery := preload("res://game/world/hotel_scenery.gd")
 const Life := preload("res://game/world/hotel_life.gd")
 const ArcadeStands := preload("res://game/world/arcade_stands.gd")
+const StandSites := preload("res://game/world/stand_sites.gd")
 const GROUND_Y := 0.20
 ## Island lawn height; outside its floors the hotel stands on lawn.
 const LAWN_Y := 0.055
@@ -87,11 +88,7 @@ func _build_region_geometry() -> void:
 
 ## Sites still waiting for a game: no ArcadeStands row stands on them yet.
 static func open_sites() -> Array[Dictionary]:
-	var free: Array[Dictionary] = []
-	for site: Dictionary in STAND_SITES:
-		var taken := ArcadeStands.rows("hotel").any(func(row: Dictionary) -> bool: return (row.stand as Vector3).distance_to(site.stand) < 0.3)
-		if not taken: free.append(site)
-	return free
+	return StandSites.open("hotel", STAND_SITES)
 
 
 func _build_region_activities() -> void:

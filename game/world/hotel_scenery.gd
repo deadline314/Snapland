@@ -658,10 +658,7 @@ func _build_sites() -> void:
 		var tag := at + turn * Vector3(0.45, 0, 0.62)
 		structure.box(tag + Vector3(0, 0.36, 0), Vector3(0.05, 0.72, 0.05), WOOD)
 		structure.box(tag + Vector3(0, 0.78, 0), Vector3(0.6, 0.3, 0.05), MOON.darkened(0.06))
-		var label: Label3D = world._local_label("準備中", tag + Vector3(0, 0.78, 0.08), 20, PLUM)
-		label.outline_modulate = CREAM
-		label.pixel_size = 0.0105
-		site_tags.append(label)
+		site_tags.append(world.StandSites.tag(world, tag + Vector3(0, 0.78, 0.08), PLUM, CREAM))
 		kit.blocker(at + Vector3(0, 1.0, 0), world.ArcadeStands.FOOTPRINT)
 		index += 1
 

@@ -82,6 +82,13 @@ const BANDS := {
 		"tiles": [Color("#b9a8d2"), Color("#a796c2"), Color("#cbbfdc"), Color("#e2d6bd")],
 		"lamps": 1,
 	},
+	"sky": {
+		# Little clouds have drifted down onto the lawn; windsocks and pinwheels
+		# point downwind and small kites fly from stakes toward the park.
+		"density": 0.5, "props": [["cloud_puff", 3.0, 0.0], ["pinwheel", 2.5, 0.0], ["windsock", 2.0, 0.15], ["kite_stake", 1.4, 0.3]],
+		"colors": [Color("#ff8a6b"), Color("#7cc4ec"), Color("#ffd35c"), Color("#8fe0c4"), Color("#fbfdff")],
+		"tiles": [Color("#c9bfa8"), Color("#b8ae98"), Color("#d4cbb5"), Color("#a9bccb")],
+	},
 	"harbor": {
 		# The bay keeps the harbour off the island: only the headland by its pier is band.
 		"density": 8.0, "props": [["crates", 3.0, 0.0], ["rope_coil", 3.0, 0.0], ["net_poles", 1.5, 0.15], ["dinghy", 1.2, 0.25]],
@@ -99,9 +106,10 @@ const RADIUS := {
 	"pots": 0.55, "moss_stone": 0.6, "trellis": 0.8, "watering_can": 0.35,
 	"crates": 0.85, "rope_coil": 0.45, "net_poles": 1.2, "dinghy": 1.4,
 	"luggage": 0.6, "umbrella_stand": 0.35, "paper_crane": 0.4, "number_post": 0.4,
+	"cloud_puff": 0.7, "windsock": 0.4, "kite_stake": 0.5,
 }
 ## Kinds that face the camera (signs, wheels, lattices) turn only a little.
-const FACING := ["pinwheel", "windup_key", "ticket_sign", "wagon", "vending_cart", "trellis", "net_poles", "pennant_stake", "dinghy", "number_post", "paper_crane"]
+const FACING := ["pinwheel", "windup_key", "ticket_sign", "wagon", "vending_cart", "trellis", "net_poles", "pennant_stake", "dinghy", "number_post", "paper_crane", "kite_stake"]
 ## Kinds that lie flat: no contact shadow, no grass at the foot.
 const FLAT := ["puddle", "slate_patch"]
 ## Kinds big enough to walk into: they get an invisible obstacle.
@@ -952,6 +960,49 @@ func _number_post(h: PackedFloat32Array, pal: Array) -> Array[Vector3]:
 	for digit in 3:
 		props.box(plaque + Vector3((float(digit) - 1.0) * 0.08, 0, 0.05), Vector3(0.035, 0.1 + 0.02 * float(int(h[0] * 7.0 + digit) % 2), 0.01), pal[0].darkened(0.3))
 	return [plaque + Vector3(0, 0, 0.1)]
+
+## A little cloud resting on the grass, as if it drifted down from the park.
+func _cloud_puff(h: PackedFloat32Array, pal: Array) -> Array[Vector3]:
+	var white: Color = pal[4]
+	var shade := Color("#d5e3f6")
+	for lobe in 3 + int(h[0] * 2.5):
+		var t := float(lobe) - 1.0
+		var spot := Vector3(t * 0.26 + (h[1] - 0.5) * 0.1, 0.16 + (0.1 if lobe == 1 else 0.0) + h[2] * 0.06, (h[3] - 0.5) * 0.2 * t)
+		props.ball(spot, 0.22 + 0.06 * fposmod(h[0] * 3.0 + float(lobe), 1.0), white, Color.TRANSPARENT, 8, 3, 0.8)
+		props.ball(spot - Vector3(0, 0.08, 0), 0.21, shade, Color.TRANSPARENT, 8, 2, 0.35)
+	return []
+
+## A striped windsock on a pole, its tail pointing the way the island's wind blows.
+func _windsock(h: PackedFloat32Array, pal: Array) -> Array[Vector3]:
+	props.tube(Vector3(0, 0.75, 0), 0.03, 0.025, 1.5, Color("#f4efe2"), 6)
+	props.tube(Vector3(0, 0.06, 0), 0.1, 0.12, 0.12, pal[1], 6)
+	# Undo the prop's own turn so every sock agrees on the wind.
+	var undo := props.frame.basis.orthonormalized().inverse()
+	var down := undo * Vector3(0.86, 0, 0.51)
+	var along := Basis(Vector3.UP, -atan2(down.z, down.x)) * Basis(Vector3.BACK, -0.25 - h[0] * 0.2)
+	for ring in 4:
+		var t := float(ring) / 4.0
+		var radius := lerpf(0.12, 0.06, t)
+		props.tube(Vector3(0, 1.44, 0) + along * Vector3(0.1 + t * 0.6 + 0.075, 0, 0), radius, radius * 0.88, 0.16, pal[0] if ring % 2 == 0 else pal[4], 8, along * Basis(Vector3.BACK, PI * 0.5))
+	return []
+
+## A small diamond kite flying from a stake on a taut string, downwind.
+func _kite_stake(h: PackedFloat32Array, pal: Array) -> Array[Vector3]:
+	props.tube(Vector3(0, 0.15, 0), 0.03, 0.02, 0.3, WOOD, 5)
+	var undo := props.frame.basis.orthonormalized().inverse()
+	var down := undo * Vector3(0.86, 0, 0.51)
+	var kite := Vector3(down.x * 1.1, 1.9 + h[0] * 0.5, down.z * 1.1)
+	var span := kite - Vector3(0, 0.3, 0)
+	props.box((kite + Vector3(0, 0.3, 0)) * 0.5, Vector3(0.015, 0.015, span.length()), Color("#f2f2f2"), Basis.looking_at(span.normalized(), Vector3.UP))
+	var tone: Color = pal[int(h[1] * 4.0) % 4]
+	var top := kite + Vector3(0, 0.3, 0)
+	var bottom := kite + Vector3(0, -0.42, 0)
+	props.sheet(top, kite + Vector3(0.26, 0, 0), bottom, tone)
+	props.sheet(top, bottom, kite + Vector3(-0.26, 0, 0), tone.lightened(0.25))
+	for bow in 3:
+		var at := bottom + Vector3(0.06 * sin(float(bow) * 1.6), -0.18 * float(bow + 1), 0)
+		props.sheet(at, at + Vector3(0.08, 0.04, 0), at + Vector3(0.08, -0.04, 0), pal[(bow + 1) % 4])
+	return []
 
 ## Smooth 1D value noise in 0..1.
 static func _smooth(t: float) -> float:

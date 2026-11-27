@@ -31,6 +31,10 @@ class TerrainChart extends Control:
 		"lobby": Color("#8a5a5e"), "corridor": Color("#6e6690"),
 		"lost": Color("#7a6450"), "dream": Color("#5a4f8a"),
 	}
+	const SKY_DECKS := {
+		"wheel": Color("#8f8a7c"), "isles": Color("#5f8a5a"),
+		"kites": Color("#8d6c4c"), "photo": Color("#7d93b3"),
+	}
 	var data: Dictionary
 	## Cream guide sheet showing round each printed plan (the compass sits on it).
 	const SHEET_MARGIN := 16.0
@@ -72,7 +76,7 @@ class TerrainChart extends Control:
 		if region=="nightmarket":
 			_draw_market(bounds)
 			return
-		if region in ["circus", "toy", "garden", "hotel"]:
+		if region in ["circus", "toy", "garden", "hotel", "sky"]:
 			_draw_room_plan(bounds, region)
 			return
 		var scale_factor := minf((size.x-SHEET_MARGIN*2.0)/bounds.size.x,(size.y-SHEET_MARGIN*2.0)/bounds.size.y)
@@ -111,13 +115,15 @@ class TerrainChart extends Control:
 		var plan := Rect2((size - plan_size) * 0.5, plan_size)
 		var origin := plan.position - bounds.position * unit
 		var panel := plan.grow(7.0)
-		var backing: Color = {"garden": Color("#253d37"), "toy": Color("#302b31"), "hotel": Color("#2a2340")}.get(region, Color("#291f36"))
+		var backing: Color = {"garden": Color("#253d37"), "toy": Color("#302b31"), "hotel": Color("#2a2340"), "sky": Color("#2b4566")}.get(region, Color("#291f36"))
 		_paper_under(panel)
 		draw_rect(panel, backing)
-		var border: Color = {"garden": Color("#77958c"), "toy": Color("#7e6a5c"), "hotel": Color("#9d8cc8")}.get(region, Color("#72556b"))
+		var border: Color = {"garden": Color("#77958c"), "toy": Color("#7e6a5c"), "hotel": Color("#9d8cc8"), "sky": Color("#a9cbe6")}.get(region, Color("#72556b"))
 		draw_rect(panel, border, false, 1.0)
-		var swatches: Dictionary = {"garden": GARDEN_FLOORS, "toy": TOY_FLOORS, "hotel": HOTEL_FLOORS}.get(region, CIRCUS_FLOORS)
-		for room: Dictionary in data.areas:
+		var swatches: Dictionary = {"garden": GARDEN_FLOORS, "toy": TOY_FLOORS, "hotel": HOTEL_FLOORS, "sky": SKY_DECKS}.get(region, CIRCUS_FLOORS)
+		if region == "sky":
+			_draw_sky_plan(origin, unit)
+		for room: Dictionary in data.areas if region != "sky" else []:
 			var rect: Rect2 = room.rect
 			var floor := Rect2(origin + rect.position * unit, rect.size * unit)
 			draw_rect(floor, swatches.get(room.id, MARKET_PAVING))
@@ -195,6 +201,35 @@ class TerrainChart extends Control:
 		var beam: Vector3 = data.light_center
 		var current := origin + Vector2(beam.x, beam.z) * unit
 		draw_arc(current, leaf_size * 1.5, 0.0, TAU, 20, Paper.GOLD, 1.25, true)
+
+	## Cloud park: oval decks shaded by height, the ramps and the cloud stair
+	## between them, and the kept stand sites as outlines.
+	func _draw_sky_plan(origin: Vector2, unit: float) -> void:
+		for link: Dictionary in data.get("links", []):
+			var a := origin + (link.a as Vector2) * unit
+			var b := origin + (link.b as Vector2) * unit
+			draw_line(a, b, Color("#e9e2cf"), maxf(float(link.width) * unit, 2.0), true)
+			if link.kind == "stair":
+				var along := (b - a).normalized()
+				var across := Vector2(-along.y, along.x) * float(link.width) * unit * 0.5
+				for step in 8:
+					var at := a.lerp(b, (float(step) + 0.5) / 8.0)
+					draw_line(at - across, at + across, Color("#7cc4ec"), 1.0, true)
+		for deck: Dictionary in data.areas:
+			var centre := origin + (deck.centre as Vector2) * unit
+			var reach := (deck.radius as Vector2) * unit
+			var ring := PackedVector2Array()
+			for index in 28:
+				var angle := TAU * float(index) / 28.0
+				ring.append(centre + Vector2(cos(angle) * reach.x, sin(angle) * reach.y))
+			var lift := clampf(float(deck.y) / 2.4, 0.0, 1.0)
+			draw_colored_polygon(ring, (SKY_DECKS.get(deck.id, MARKET_PAVING) as Color).lightened(lift * 0.3))
+			ring.append(ring[0])
+			draw_polyline(ring, Color("#e9e2cf"), 1.0, true)
+		var ink := Color(ROOM_PLAN_INK, 0.45)
+		for site: Vector3 in data.get("sites", []):
+			var at := origin + Vector2(site.x, site.z) * unit
+			draw_rect(Rect2(at - Vector2(0.75, 0.5) * unit, Vector2(1.5, 1.0) * unit), ink, false, 1.0)
 
 	## Room-number plates as gold dots with their numbers, and the kept stand sites as outlines.
 	func _draw_hotel_signs(origin: Vector2, unit: float) -> void:
@@ -430,14 +465,14 @@ func setup(value: Dictionary) -> void:
 
 func _ready() -> void:
 	var region: String = snapshot.get("region","harbor")
-	var prefix: String = {"candy":"CandyMap","nightmarket":"NightmarketMap","circus":"CircusMap","toy":"ToyMap","garden":"GardenMap","hotel":"HotelMap"}.get(region,"HarborMap")
+	var prefix: String = {"candy":"CandyMap","nightmarket":"NightmarketMap","circus":"CircusMap","toy":"ToyMap","garden":"GardenMap","hotel":"HotelMap","sky":"SkyMap"}.get(region,"HarborMap")
 	name=prefix+"Panel"
 	size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	size_flags_vertical=Control.SIZE_EXPAND_FILL
 	add_theme_constant_override("separation",6)
 	var status := _status_text(region)
 	var tide := Paper.label(status,18,Paper.DEEP_TEAL)
-	tide.name=prefix+str({"candy":"Temperature","nightmarket":"Status","circus":"Status","toy":"Status","garden":"Status","hotel":"Status"}.get(region,"Tide"))
+	tide.name=prefix+str({"candy":"Temperature","nightmarket":"Status","circus":"Status","toy":"Status","garden":"Status","hotel":"Status","sky":"Status"}.get(region,"Tide"))
 	add_child(tide)
 	if snapshot.has("errand"):
 		var errand := Paper.label("小旗：委託目標｜" + str(snapshot.errand.goal), 17, Paper.CORAL)
@@ -482,7 +517,7 @@ func _status_text(region: String) -> String:
 		"candy": return "材料觀察："+str(["冷 · 糖塊挺立","溫 · 糖團柔軟","熱 · 糖漿流動"][int(snapshot.temperature)])
 		"nightmarket":
 			return "%s · %s" % ["營業中" if snapshot.operating else "已收攤","你在雨棚下" if snapshot.covered else "你在露天區"]
-		"circus", "hotel": return "你在" + String(snapshot.area)
+		"circus", "hotel", "sky": return "你在" + String(snapshot.area)
 		"garden": return "你在%s · %s" % [snapshot.area, snapshot.light_label]
 		"toy":
 			var train: Dictionary = snapshot.train
@@ -502,6 +537,8 @@ func _legend_text(region: String) -> String:
 		"circus": return "金環是你。中央通道通往北側安全墊。\n兩側步道可繞回入口，返回迎賓大道免費。"
 		"toy": return "金環是你；實線為選中岔道，方點是列車。\n積木街連到維修台，返回迎賓大道免費。"
 		"garden": return "金環是你，植床上的光圈是日照位置。\n西側走木棧道，東側可上葉臺或沿寬路繞行。"
+		"sky": return "金環是你，越亮的平台越高。
+斜坡與長雲梯連起各區，不必跳躍；返回迎賓大道免費。"
 		"hotel": return "金環是你，金色圓牌是房號路標。
 四間房都向南開到外廊，北邊大門通往海岸環線，返回迎賓大道免費。"
 	return "金點：你的位置　珊瑚編號：互動地點\n環岸步道全年可通；兩端免費渡船在漲退潮都可使用。返回迎賓大道永久免費。"

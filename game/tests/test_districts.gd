@@ -272,6 +272,8 @@ func _check_mechanics(world: Node3D, host: Node) -> void:
 	_check(circus.projection_side() != side, "circus projection switches embedded")
 	var hotel: Node3D = host.built("hotel")
 	_check(hotel.ring_bell().contains("歡迎") and hotel._life._ring > 0.0, "the hotel desk bell rings embedded")
+	var sky: Node3D = host.built("sky")
+	_check(sky.push_wheel().contains("摩天輪") and sky._life._push > 0.0, "the sky park's wheel answers a push embedded")
 	world.place_player(DistrictSites.arrival("candy"))
 	candy.reset_to_entry()
 	_check(world.player.global_position.distance_to(candy.to_global(candy.ENTRY)) < 0.05, "candy reset returns the island walker to the factory entry")

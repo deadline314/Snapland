@@ -1340,14 +1340,6 @@ func _add_shore_rock(pos: Vector3, seed_value: int) -> void:
 	rock.name = "ShoreRock%02d" % shoreline_rock_count
 	shoreline_rock_count += 1
 
-func _sea_grass(pos: Vector3, seed_value: int) -> void:
-	var stem_color := Color("#557961")
-	for i in range(3):
-		var blade := _box(pos+Vector3((i-1)*0.12,0.4,0),Vector3(0.09,0.82,0.07),stem_color)
-		blade.rotation.z = (i-1)*0.22
-	if seed_value % 2 == 0:
-		_sphere(pos+Vector3(0,0.82,0),0.12,CORAL)
-
 static func tree_site_clear(pos: Vector3) -> bool:
 	return IslandLayout.tree_site_clear(Vector2(pos.x,pos.z))
 

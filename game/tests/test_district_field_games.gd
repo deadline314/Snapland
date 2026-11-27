@@ -13,7 +13,7 @@ const RUN_SPEED := 1.5
 const STROLL_SPEED := 0.8
 const WELCOME_TYPES := ["踩踏", "追逐", "時機", "收集競速", "拍照"]
 ## The districts MAIN-61 gave instant games and toys. A district joins this list
-## with its own rows; the hotel (MAIN-63) has none yet.
+## with its own rows; the hotel (MAIN-63) and the sky park (MAIN-65) have none yet.
 const FIELD_DISTRICTS := ["harbor", "candy", "nightmarket", "circus", "toy", "garden"]
 
 var failures: Array[String] = []

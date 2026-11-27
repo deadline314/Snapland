@@ -35,6 +35,12 @@
 		"node_budget": 0,
 		"primitive_shadow": 0
 	},
+	"sky": {
+		"flat_block": 0,
+		"floating_sprite": 0,
+		"node_budget": 0,
+		"primitive_shadow": 0
+	},
 	"toy": {
 		"flat_block": 0,
 		"floating_sprite": 0,

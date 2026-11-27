@@ -38,6 +38,7 @@ const PATHS := [
 	{"id": "bench-pond", "width": 3.0, "surface": "trail", "points": [Vector2(6,-90), Vector2(-8,-90), Vector2(-20,-92), Vector2(-22,-100), Vector2(-12,-110)]},
 	{"id": "hotel", "width": 3.6, "surface": "paving", "points": [Vector2(-30,28.2), Vector2(-28.4,34), Vector2(-27.2,41), Vector2(-26.2,48), Vector2(-25.4,53.5), Vector2(-25,57.4)]},
 	{"id": "spit", "width": 2.6, "surface": "boardwalk", "points": [Vector2(47,-134.5), Vector2(56,-134.2), Vector2(65,-136.5), Vector2(74,-135.5), Vector2(83.6,-134.6)]},
+	{"id": "sky", "width": 3.6, "surface": "paving", "points": [Vector2(48.6,25.4), Vector2(47.6,31), Vector2(48.4,37), Vector2(47.8,41), Vector2(48,44)]},
 ]
 ## The coastal loop: a trail a few metres inland from the waterline. It leaves
 ## the dock stem westward and comes back to the stem from the east.
@@ -83,7 +84,7 @@ const MIN_ENTRY_SPACING := 14.0
 ## degrees (0 faces south). A district that stands on the island keeps its gate
 ## at its own door instead (see DistrictSites).
 const GATES := {
-	"sky": Vector3(49.5,29,-160), "cinema": Vector3(85.5,-135.5,-60),
+	"cinema": Vector3(85.5,-135.5,-60),
 }
 ## The coastal loop's six landmarks. "position" is the plaque on the trail and
 ## "outward" the step from it to the landmark itself, which stands clear of the
@@ -245,7 +246,7 @@ const TREE_PATH_MARGIN := 1.3
 
 static func tree_site_clear(spot: Vector2) -> bool:
 	# The painted base meets the ground about 0.64 m in front of the anchor.
-	return IslandShape.on_lawn(spot, TREE_SHORE_MARGIN) and not on_path(spot + Vector2(0, 0.64), TREE_PATH_MARGIN) and not keeps_clear(spot)
+	return IslandShape.on_lawn(spot, TREE_SHORE_MARGIN) and not on_path(spot + Vector2(0, 0.64), TREE_PATH_MARGIN) and not keeps_clear(spot) 		and not DistrictSites.dresses_shore(spot)
 
 ## True where planting would crowd a court, a pond, a gate or a game entry.
 static func keeps_clear(point: Vector2, margin := 0.0) -> bool:

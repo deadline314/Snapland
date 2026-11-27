@@ -18,6 +18,8 @@ extends RefCounted
 ## - cutouts: rects where the island's lawn and beach give way to features the
 ##   district sinks below ground level (water, channels).
 ## - ground: tint the island lawn takes on toward the district, and how far.
+## - shore (optional): true when the district dresses the coast inside its band
+##   itself (shore rocks and trees sleep with it), so the island leaves it bare.
 
 const BAND := 14.0
 ## The planted and tinted edge wanders this far either side of the smooth one.
@@ -106,6 +108,19 @@ const SITES := {
 		"cutouts": [],
 		"ground": Color("#9a8fc0"), "ground_strength": 0.55,
 	},
+	# The south end of the east breakwater: a cloud bridge runs down from the
+	# coastal loop to a plaza of floating walkways over a sea of cloud.
+	"sky": {
+		"script": "res://game/world/sky_world.gd",
+		"at": Vector3(52, 0, 76),
+		"claim": Rect2(-22, -18, 44, 36),
+		"approach": Rect2(-6.2, -30.4, 4.4, 14.8), "approach_y": 0.18,
+		"arrival": Vector3(-4, 0.2, -13.6),
+		"gate": Vector3(-4, -30.0, 180),
+		"cutouts": [],
+		"ground": Color("#b9d3e6"), "ground_strength": 0.5,
+		"shore": true,
+	},
 }
 
 static var _tint: ImageTexture
@@ -179,6 +194,12 @@ static func holds(region: String, point: Vector2) -> bool:
 ## Repeatable 0..1 choice for a spot, to thin scattered props by weight.
 static func chance(point: Vector2) -> float:
 	return _hash(Vector2i(roundi(point.x * 7.0), roundi(point.y * 7.0)))
+
+## True where a district that dresses its own shore holds the ground (its band).
+static func dresses_shore(point: Vector2) -> bool:
+	for region: String in SITES:
+		if SITES[region].get("shore", false) and distance(region, point) <= BAND: return true
+	return false
 
 static func gate_position(region: String) -> Vector3:
 	var gate: Vector3 = SITES[region].gate

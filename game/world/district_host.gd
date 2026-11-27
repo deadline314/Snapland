@@ -40,8 +40,10 @@ var standing := HOME
 var last_build_msec := 0
 ## The longest single frame of the last build, in ms.
 var longest_step_msec := 0.0
-## How long a staged build may take before it counts as failed.
-const BUILD_DEADLINE_MSEC := 15000
+## How many frames a staged build may take before it counts as failed. Counted
+## in frames, not wall time, so a long frame elsewhere (a loading hitch, a check
+## that works without yielding) never fails a build that is still progressing.
+const BUILD_DEADLINE_FRAMES := 900
 
 var _open: Dictionary = {}
 var _stickers := -1
@@ -107,7 +109,7 @@ func _build(region: String, script_path: String, staged := false) -> Node3D:
 		if staged:
 			node.visible = false
 			node.process_mode = Node.PROCESS_MODE_DISABLED
-			_building[region] = {"node": node, "lamps": lamps_before, "started": started}
+			_building[region] = {"node": node, "lamps": lamps_before, "started": started, "frame": Engine.get_process_frames()}
 			node.district_built.connect(_finish_build.bind(region, node, lamps_before, started), CONNECT_ONE_SHOT)
 		world.add_child(node)
 		if staged: return null
@@ -226,7 +228,7 @@ func _stream(spot: Vector2) -> void:
 	var building := not _building.is_empty()
 	for region: String in _building.keys():
 		# A build that stopped part way (a script error) never finishes: give up on it.
-		if Time.get_ticks_msec() - int(_building[region].started) > BUILD_DEADLINE_MSEC:
+		if Engine.get_process_frames() - int(_building[region].frame) > BUILD_DEADLINE_FRAMES:
 			var record: Dictionary = _building[region]
 			for link: Dictionary in (record.node as Node3D).district_built.get_connections():
 				(record.node as Node3D).district_built.disconnect(link.callable)
