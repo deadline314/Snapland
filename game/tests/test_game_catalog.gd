@@ -20,7 +20,7 @@ func _run() -> void:
 	var garden: Array = catalog.definitions("garden")
 	var all_games: Array = catalog.all_definitions()
 	_check(welcome == JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json")), "default definitions preserve the original welcome row shape and order")
-	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 2 and toy.size() == 2 and garden.size() == 2 and all_games.size() == 54, "only the 54 delivered games are exposed")
+	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 2 and toy.size() == 2 and garden.size() == 3 and all_games.size() == 55, "only the 55 delivered games are exposed")
 	for index in range(welcome.size()):
 		_check(welcome[index].id == "game-%03d" % (index + 1), "welcome numbering stays ordered")
 	_check(all_games == welcome + harbor + candy + nightmarket + circus + toy + garden and catalog.definitions("hotel").is_empty(), "games retain global order and future regions remain unavailable")
@@ -37,6 +37,9 @@ func _run() -> void:
 	var lily := {"id":"game-077", "mode":"lily_hop", "zone":"garden", "local_index":5, "photo_id":"photo-garden-game-5", "devil_photo_id":"photo-garden-devil-5", "achievement_id":"ACH_GAME_077"}
 	_check(catalog.identity("game-077") == lily and catalog.identity("lily_hop") == lily and garden[1].name == "睡蓮踏浪" and garden[1].arcade == true,
 		"a greenhouse game keeps the number of the slot it fills, leaving slots still in design empty")
+	var brolly := {"id":"game-079", "mode":"mushroom_brolly", "zone":"garden", "local_index":7, "photo_id":"photo-garden-game-7", "devil_photo_id":"photo-garden-devil-7", "achievement_id":"ACH_GAME_079"}
+	_check(catalog.identity("game-079") == brolly and catalog.identity("mushroom_brolly") == brolly and garden[2].name == "蘑菇撐傘" and garden[2].arcade == true,
+		"the next greenhouse game keeps its own slot number too")
 	_check(all_games.filter(func(row: Dictionary) -> bool: return row.has("arcade") and row.zone not in ["circus", "toy", "garden"]).is_empty(), "earlier games keep their own flow")
 	_check(harbor[0].name == "浪間小艇" and harbor[0].instructions == "划槳、轉舵並側滑靠岸" and harbor[0].ordinary == "載三箱到兩座浮碼頭" and harbor[0].devil == "用浪峰側滑靠岸不撞箱", "harbor row uses the approved concise copy")
 	var expected := {"id": "game-013", "mode": "rowing_cargo", "zone": "harbor", "local_index": 1, "photo_id": "photo-harbor-game-1", "devil_photo_id": "photo-harbor-devil-1", "achievement_id": "ACH_GAME_013"}

@@ -21,6 +21,8 @@ const STANDS := {
 			"stand": Vector3(-9.6, 0.2, 5.6), "point": Vector3(-8.5, 0.2, 6.9), "prop": "camera", "paint": Color("#38534e")},
 		{"id": "game-077", "title": "睡蓮踏浪", "prompt": "睡蓮踏浪 · 踩葉過池",
 			"stand": Vector3(-2.6, 0.2, -7.7), "point": Vector3(-1.55, 0.2, -6.35), "prop": "lily", "paint": Color("#3f6f5a")},
+		{"id": "game-079", "title": "蘑菇撐傘", "prompt": "蘑菇撐傘 · 替幼苗接雨",
+			"stand": Vector3(7.0, 0.2, 6.0), "point": Vector3(5.85, 0.2, 7.35), "prop": "mushroom", "paint": Color("#8a4a3a")},
 	],
 }
 const FOOTPRINT := Vector3(1.5, 2.0, 1.0)
@@ -45,6 +47,7 @@ static func build(world: Node3D, region: String) -> void:
 			"cuckoo": _cuckoo_prop(sculpt)
 			"camera": _camera_prop(sculpt)
 			"lily": _lily_prop(sculpt)
+			"mushroom": _mushroom_prop(sculpt)
 		var stand: MeshInstance3D = world._mesh(sculpt.mesh(), Vector3.ZERO, world._vertex_color_material("arcade-stand"))
 		stand.name = "ArcadeStand_" + str(row.id)
 		var body := StaticBody3D.new()
@@ -145,3 +148,20 @@ static func _lily_prop(sculpt: Kit.Sculpt) -> void:
 		sculpt.tube(pad, 0.1, 0.1, 0.02, leaf, 8)
 	sculpt.box(Vector3(-0.02, 1.11, 0.2), Vector3(0.06, 0.05, 0.06), Color("#f2a7b8"))
 	sculpt.box(Vector3(0.38, 1.0, 0.1), Vector3(0.3, 0.06, 0.26), CREAM)
+
+
+## A spotted mushroom umbrella over the sign, and a seedling in a clay pot on the counter.
+static func _mushroom_prop(sculpt: Kit.Sculpt) -> void:
+	var cap := Color("#c8483e")
+	var spot := Color("#fff2dc")
+	sculpt.box(Vector3(0, 2.62, -0.3), Vector3(0.08, 0.36, 0.08), Color("#efe2c4"))
+	sculpt.tube(Vector3(0, 2.84, -0.3), 0.62, 0.5, 0.14, cap, 12)
+	sculpt.tube(Vector3(0, 3.02, -0.3), 0.48, 0.18, 0.22, cap, 12)
+	for dot: Vector3 in [Vector3(-0.3, 2.98, -0.06), Vector3(0.18, 3.06, -0.12), Vector3(0.42, 2.92, -0.14), Vector3(-0.08, 3.14, -0.2)]:
+		sculpt.box(dot, Vector3(0.1, 0.06, 0.06), spot)
+	sculpt.tube(Vector3(-0.3, 1.06, 0.1), 0.14, 0.11, 0.22, Color("#b8643f"), 8)
+	sculpt.tube(Vector3(-0.3, 1.18, 0.1), 0.12, 0.12, 0.02, Color("#4f3f2e"), 8)
+	sculpt.box(Vector3(-0.3, 1.3, 0.1), Vector3(0.03, 0.22, 0.03), Color("#5c9c62"))
+	for side: float in [-1.0, 1.0]:
+		sculpt.box(Vector3(-0.3 + side * 0.07, 1.4, 0.1), Vector3(0.12, 0.03, 0.07), Color("#6fae5c"), Basis(Vector3.BACK, side * 0.3))
+	sculpt.box(Vector3(0.3, 1.0, 0.1), Vector3(0.4, 0.06, 0.3), CREAM)

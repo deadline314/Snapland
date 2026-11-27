@@ -38,5 +38,25 @@
       "hat",
       "bench"
     ]
+  },
+  {
+    "id": "game-079",
+    "mode": "mushroom_brolly",
+    "zone": "garden",
+    "local_index": 7,
+    "arcade": true,
+    "name": "蘑菇撐傘",
+    "goal": "左右移動蘑菇傘，替頭上冒水滴的口渴幼苗接雨，也替幼苗擋開冰雹。",
+    "instructions": "←、→ 或手把十字鍵左右移動蘑菇傘。傘接到的雨會順著傘柄滴進正下方的盆子；冰雹打在傘上會彈開。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助撐傘拿到金牌",
+    "ordinary": "替口渴的幼苗接雨、擋冰雹，拿到銅牌",
+    "attraction_tag": "漏雨育苗室",
+    "island_invitation": "溫室屋頂漏雨了！幼苗渴、冰雹又兇，一把蘑菇傘忙得過來嗎？",
+    "retake_props": [
+      "flower_horn",
+      "bench",
+      "sign"
+    ]
   }
 ]
