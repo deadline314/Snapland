@@ -8,7 +8,10 @@ const Paper = preload("res://game/ui/paper_ui.gd")
 const FontProfiles = preload("res://game/ui/font_profiles.gd")
 const Model = preload("res://game/minigames/buoy_relay_model.gd")
 const AvatarRendererScript = preload("res://game/world/avatar_renderer.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const StageProps = preload("res://game/minigames/stage_props.gd")
 const DESIGN_SIZE := Vector2(1280, 720)
+const STATUS_PLATE := Rect2(24, 140, 1232, 62)
 const STAGE := Rect2(24, 208, 1232, 364)
 const METER := Rect2(1086, 222, 158, 336)
 const COMMANDS := ["action"]
@@ -25,6 +28,7 @@ var _camera: Camera3D
 var _sun: DirectionalLight3D
 var _environment: Environment
 var _materials: Dictionary = {}
+var _sky: MeshInstance3D
 var _figures: Array[Sprite3D] = []
 var _tubes: Dictionary = {}
 var _ring: MeshInstance3D
@@ -106,14 +110,6 @@ func present(state: Dictionary, time_phase: String, reduced_motion: bool) -> voi
 		_apply_snapshot()
 	queue_redraw()
 
-func _material(color: Color, alpha: float = 1.0) -> StandardMaterial3D:
-	var material := StandardMaterial3D.new()
-	material.albedo_color = Color(color, alpha)
-	material.roughness = 0.85
-	if alpha < 1.0:
-		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	return material
-
 func _mesh(node_name: String, mesh: Mesh, at: Vector3, parent: Node3D, material: Material) -> MeshInstance3D:
 	var node := MeshInstance3D.new()
 	node.name = node_name
@@ -172,7 +168,9 @@ func _create_stage() -> void:
 	_world.add_child(environment_node)
 	_sun = DirectionalLight3D.new()
 	_sun.name = "RelaySun"
+	_sun.shadow_enabled = true
 	_world.add_child(_sun)
+	StageProps.dress_lighting(_environment, _sun)
 	_camera = Camera3D.new()
 	_camera.name = "RelayCamera"
 	_camera.projection = Camera3D.PROJECTION_ORTHOGONAL
@@ -181,12 +179,21 @@ func _create_stage() -> void:
 	_camera.rotation_degrees = Vector3(-12, 0, 0)
 	_world.add_child(_camera)
 	_camera.current = true
-	for item in [["sea", "#3e8197"], ["deep", "#2b5f72"], ["sand", "#e3cf9c"], ["post", "#6d5236"], ["deck", "#b48a5c"], ["tube", "#d9543f"],
-			["cap", "#f2e3b8"], ["ring", "#ff8a3d"], ["rope", "#f0e2b8"], ["landing", "#ffd36a"]]:
-		_materials[item[0]] = _material(Color(item[1]))
-	_box("Sea", Vector3(60, 8.0, 4.0), Vector3(10, -4.05, -0.4), _world, _materials.sea)
+	_materials.sea = StageProps.water(Color("#2f7f8f"))
+	_materials.deep = StageProps.water(Color("#29677a"))
+	_materials.deck = StageProps.wood(Color("#b48a5c"))
+	_materials.sculpt = StageProps.sculpt_material()
+	_materials.foam = StageProps.foam_material()
+	_materials.rope = StageProps.solid(Color("#f0e2b8"))
+	_materials.landing = StageProps.solid(Color("#ffd36a"), 0.55)
+	_sky = StageProps.sky_card(_world, Vector3(10, 4.2, -3.6), Vector2(70, 9), 1.4)
+	# The sea runs out under the camera, so its cut face never crosses the play.
+	_box("Sea", Vector3(60, 8.0, 22.0), Vector3(10, -4.05, 8.6), _world, _materials.sea)
 	_box("SeaBack", Vector3(60, 3.0, 0.2), Vector3(10, 0.0, -3.0), _world, _materials.deep)
-	_box("Beach", Vector3(6.0, 0.8, 4.0), Vector3(-3.4, -0.2, -0.4), _world, _materials.sand)
+	_box("Beach", Vector3(6.0, 0.8, 4.0), Vector3(-3.4, -0.2, -0.4), _world, StageProps.painted(Color("#dcc596")))
+	for rock in [[-5.6, 0.55, -1.2], [-1.0, 0.35, 1.0], [-4.2, 0.3, 1.3]]:
+		StageProps.add(_world, "ShoreRock", StageProps.rock_mesh(rock[1], rock[1] * 0.9, Color("#8a8f84")), _materials.sculpt, Vector3(rock[0], 0.15, rock[2]))
+	StageProps.add(_world, "ShoreFoam", StageProps.foam_ring_mesh(0.4, 2.1), _materials.foam, Vector3(-0.42, 0.0, -0.4))
 	var renderer = AvatarRendererScript.new()
 	var progress := get_node_or_null("/root/Progress")
 	var appearance: Dictionary = progress.appearance if progress != null and progress.get("appearance") is Dictionary else AvatarRendererScript.DEFAULT_APPEARANCE
@@ -197,7 +204,16 @@ func _create_stage() -> void:
 		var x: float = Model.STATIONS[index]
 		if index > 0:
 			_box("Platform%d" % index, Vector3(1.2, 0.2, 1.0), Vector3(x, 0.2, 0), _world, _materials.deck)
-			_box("Float%d" % index, Vector3(0.9, 0.4, 0.8), Vector3(x, -0.05, 0), _world, _materials.ring)
+			# Two painted drums float the platform; a foam ring sits them in the sea.
+			var drums := Node3D.new()
+			drums.name = "Float%d" % index
+			drums.position = Vector3(x, 0.0, 0)
+			_world.add_child(drums)
+			for z: float in [-0.24, 0.24]:
+				StageProps.add(drums, "Drum", StageProps.log_mesh(1.0, 0.2, Color("#d9543f")), _materials.sculpt, Vector3(0, -0.06, z))
+			StageProps.add(drums, "DrumFoam", StageProps.foam_ring_mesh(0.62, 0.52), _materials.foam)
+			for corner: float in [-0.52, 0.52]:
+				StageProps.add(drums, "Stanchion", StageProps.pile_mesh(0.05, 0.75, Color("#6d5236")), _materials.sculpt, Vector3(corner, 0.25, -0.4))
 		var sprite := Sprite3D.new()
 		sprite.name = "Figure%d" % index
 		sprite.billboard = BaseMaterial3D.BILLBOARD_FIXED_Y
@@ -213,25 +229,17 @@ func _create_stage() -> void:
 		_world.add_child(sprite)
 		_figures.append(sprite)
 		_station_labels.append(_label3d(Model.STATION_NAMES[index], Vector3(x, 2.2, 0.2), _world, 30))
+	# Mail tubes: painted canisters with a brass screw cap.
+	var tube_mesh := StageProps.canister_mesh(0.18, 0.7, Color("#d9543f"), Color("#f2e3b8"))
+	var cap_mesh := StageProps.canister_mesh(0.2, 0.1, Color("#c9a45a"), Color("#e6c97a"))
 	for tube: Dictionary in _snapshot.tubes:
 		var node := Node3D.new()
 		node.name = "Tube%d" % tube.id
 		_world.add_child(node)
-		var body := CylinderMesh.new()
-		body.top_radius = 0.18
-		body.bottom_radius = 0.18
-		body.height = 0.7
-		_mesh("Body", body, Vector3(0, 0.15, 0), node, _materials.tube)
-		var cap := CylinderMesh.new()
-		cap.top_radius = 0.2
-		cap.bottom_radius = 0.2
-		cap.height = 0.1
-		_mesh("Cap", cap, Vector3(0, 0.52, 0), node, _materials.cap)
+		_mesh("Body", tube_mesh, Vector3(0, 0.15, 0), node, _materials.sculpt)
+		_mesh("Cap", cap_mesh, Vector3(0, 0.52, 0), node, _materials.sculpt)
 		_tubes[tube.id] = node
-	var torus := TorusMesh.new()
-	torus.inner_radius = 0.2
-	torus.outer_radius = 0.3
-	_ring = _mesh("Ring", torus, Vector3.ZERO, _world, _materials.ring)
+	_ring = _mesh("Ring", StageProps.life_ring_mesh(0.25, 0.1), Vector3.ZERO, _world, _materials.sculpt)
 	_rope = _box("Rope", Vector3(1, 0.035, 0.035), Vector3.ZERO, _world, _materials.rope)
 	var marker := CylinderMesh.new()
 	marker.top_radius = Model.CATCH_RADIUS
@@ -290,6 +298,9 @@ func _apply_snapshot() -> void:
 	_sun.light_color = {"dawn": Color("#f2caad"), "noon": Color("#f8efcf"), "dusk": Color("#e2b19c"), "night": Color("#a5c2d8")}.get(_time_phase, Color("#f8efcf"))
 	_sun.light_energy = 0.7 if night else 1.1
 	_sun.rotation_degrees = Vector3(-40, -30, 0)
+	StageProps.set_motion(_materials.sea, _reduced_motion)
+	StageProps.set_motion(_materials.deep, _reduced_motion)
+	StageProps.set_sky_phase(_sky, _time_phase, _reduced_motion)
 
 func status_text() -> String:
 	if _snapshot.is_empty():
@@ -311,30 +322,30 @@ func rope_text() -> String:
 func _text(at: Vector2, text: String, width: float, font_size: int = 18, color: Color = Paper.PAPER) -> void:
 	draw_string(Paper.font(), at, text, HORIZONTAL_ALIGNMENT_LEFT, width, roundi(font_size * Paper.text_scale()), color)
 
+## The fine print stays one hover away instead of filling the screen.
+func _get_tooltip(at_position: Vector2) -> String:
+	if _snapshot.is_empty() or not STATUS_PLATE.has_point(at_position):
+		return ""
+	return rope_text() + "\n蓄力越久丟越遠；郵筒晃到高點時硬拉會滑脫。鏡頭會切到你接手的浮標，郵筒不會掉。"
+
 func _draw() -> void:
-	draw_rect(Rect2(24, 140, 1232, 62), Paper.DEEP_TEAL)
+	Props.wood_panel(self, STATUS_PLATE, Props.SIGN_TEAL, true)
 	if not _snapshot.is_empty():
-		_text(Vector2(40, 164), status_text(), 1200)
-		_text(Vector2(40, 191), rope_text(), 1200, 17, Paper.GOLD if int(_snapshot.lock) >= 0 else Paper.PAPER)
+		_text(Vector2(46, 166), status_text(), 1190, 17)
+		var feedback := str(_snapshot.get("feedback", ""))
+		var urgent: bool = int(_snapshot.lock) >= 0 or _snapshot.phase == "reeling" or feedback.is_empty()
+		_text(Vector2(46, 193), rope_text() if urgent else feedback, 1190, 18, Paper.GOLD)
 		_draw_meter()
-	var rect := button_rect("action")
-	var held := not _pointer_owners.is_empty()
-	draw_rect(rect, Paper.FRAME if held else Paper.DEEP_TEAL)
-	draw_rect(rect, Paper.GOLD if held else Paper.TEAL, false, 2)
-	_text(rect.position + Vector2(14, 34), BUTTON_LABELS[0], rect.size.x - 24, 18)
-	_text(Vector2(30, 673), str(_snapshot.get("feedback", "")), 1210, 20, Paper.GOLD)
-	_text(Vector2(30, 704), "蓄力越久丟越遠；郵筒晃到高點時硬拉會滑脫。鏡頭會切到你接手的浮標，郵筒不會掉。", 1210, 17)
+	Props.control_key(self, button_rect("action"), not _pointer_owners.is_empty(), "power", BUTTON_LABELS[0], Paper.font(), roundi(18 * Paper.text_scale()), true)
 
 ## Charge bar and rope strain, each with a number.
 func _draw_meter() -> void:
-	draw_rect(METER, Color(Paper.DEEP, 0.86))
-	draw_rect(METER, Paper.TEAL, false, 2)
-	_text(METER.position + Vector2(10, 22), "力道／繩力", 140, 16, Paper.GOLD)
+	Props.wood_panel(self, METER, Props.SIGN_TEAL, true)
+	_text(METER.position + Vector2(12, 24), "力道／繩力", 140, 16, Paper.GOLD)
 	var top := METER.position.y + 40
 	var bottom := METER.end.y - 40
 	for column in 2:
 		var value := float(_snapshot.power) if column == 0 else clampf(float(_snapshot.strain), 0.0, 1.0)
 		var bar := Rect2(METER.position.x + 22 + column * 64, top, 36, bottom - top)
-		draw_rect(bar, Color("#22404a"))
-		draw_rect(Rect2(bar.position.x, bottom - value * bar.size.y, bar.size.x, value * bar.size.y), Color("#ffe27a") if column == 0 else Color("#ff8a6a"))
+		Props.gauge(self, bar, value, Color("#ffe27a") if column == 0 else Color("#ff8a6a"))
 		_text(Vector2(bar.position.x - 2, bottom + 24), "%d%%" % roundi(value * 100), 60, 14)

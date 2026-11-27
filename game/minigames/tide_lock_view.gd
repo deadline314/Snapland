@@ -7,7 +7,11 @@ signal command_requested(command: String, pressed: bool, source: String)
 const Paper = preload("res://game/ui/paper_ui.gd")
 const FontProfiles = preload("res://game/ui/font_profiles.gd")
 const Model = preload("res://game/minigames/tide_lock_model.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const StageProps = preload("res://game/minigames/stage_props.gd")
 const DESIGN_SIZE := Vector2(1280, 720)
+const STATUS_PLATE := Rect2(24, 140, 1232, 62)
+const BUTTON_ICONS := ["gate", "gate", "down", "up", "lamp"]
 const STAGE := Rect2(24, 208, 1232, 364)
 const METER := Rect2(1046, 222, 198, 336)
 const COMMANDS := ["lower", "upper", "drain", "fill", "helper"]
@@ -33,6 +37,7 @@ var _lights: Array[MeshInstance3D] = []
 var _bell: Node3D
 var _ship_nodes: Array[Node3D] = []
 var _layout_variant := -1
+var _sky: MeshInstance3D
 
 static func button_rect(command: String) -> Rect2:
 	return Rect2(28 + COMMANDS.find(command) * 246, 590, 236, 56)
@@ -110,14 +115,6 @@ func present(state: Dictionary, time_phase: String, reduced_motion: bool) -> voi
 		_apply_snapshot()
 	queue_redraw()
 
-func _material(color: Color, alpha: float = 1.0) -> StandardMaterial3D:
-	var material := StandardMaterial3D.new()
-	material.albedo_color = Color(color, alpha)
-	material.roughness = 0.85
-	if alpha < 1.0:
-		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	return material
-
 func _box(node_name: String, size: Vector3, at: Vector3, parent: Node3D, material: Material) -> MeshInstance3D:
 	var node := MeshInstance3D.new()
 	node.name = node_name
@@ -178,7 +175,9 @@ func _create_stage() -> void:
 	_world.add_child(environment_node)
 	_sun = DirectionalLight3D.new()
 	_sun.name = "LockSun"
+	_sun.shadow_enabled = true
 	_world.add_child(_sun)
+	StageProps.dress_lighting(_environment, _sun)
 	_camera = Camera3D.new()
 	_camera.name = "SectionCamera"
 	_camera.projection = Camera3D.PROJECTION_ORTHOGONAL
@@ -188,18 +187,35 @@ func _create_stage() -> void:
 	_camera.position = Vector3(4.6, 2.4 + tan(deg_to_rad(8.0)) * 20.0, 20.0)
 	_world.add_child(_camera)
 	_camera.current = true
-	for item in [["stone", "#8d8a80"], ["floor", "#5d5a52"], ["gate", "#6b4f35"], ["safe", "#7fe0a0"], ["unsafe", "#e2674f"], ["bell", "#e2c25c"],
-			["hull", "#c9573f"], ["deck", "#efe2bd"], ["grounded", "#7a2d24"]]:
-		_materials[item[0]] = _material(Color(item[1]))
-	_materials["water"] = _material(Color("#3d86a0"), 0.72)
+	_materials.stone = StageProps.stone(Color("#8f8b7e"), 0.0, 3.3)
+	_materials.floor = StageProps.stone(Color("#6a665c"), 0.0, 3.3)
+	_materials.gate = StageProps.wood(Color("#7a5a3d"), 0.3, true)
+	_materials.safe = StageProps.solid(Color("#7fe0a0"), 1.0, 1.6)
+	_materials.unsafe = StageProps.solid(Color("#e2674f"), 1.0, 1.4)
+	_materials.hull = StageProps.wood(Color("#c9573f"), 0.18)
+	_materials.grounded = StageProps.wood(Color("#7a2d24"), 0.18)
+	_materials.deck = StageProps.painted(Color("#efe2bd"))
+	_materials.sculpt = StageProps.sculpt_material()
+	_materials.water = StageProps.water(Color("#2f7f8f"), true)
+	_sky = StageProps.sky_card(_world, Vector3(4.6, 6.2, -3.2), Vector2(48, 9), 2.0)
 	_box("Floor", Vector3(BASIN_TO - SEA_FROM, 0.4, 3.4), Vector3((SEA_FROM + BASIN_TO) * 0.5, -0.2, 0), _world, _materials.floor)
+	# The far quay wall of the lock, so the chamber reads as a stone basin.
+	_box("ChamberWall", Vector3(Model.CHAMBER + 0.3, WALL_TOP - 0.4, 0.3), Vector3(Model.CHAMBER * 0.5, (WALL_TOP - 0.4) * 0.5, -1.7), _world, _materials.stone)
+	_box("ChamberCoping", Vector3(Model.CHAMBER + 0.6, 0.18, 0.5), Vector3(Model.CHAMBER * 0.5, WALL_TOP - 0.3, -1.6), _world, StageProps.stone(Color("#bdb6a2")))
 	_sea = _water("SeaWater", SEA_FROM, -0.15)
 	_chamber = _water("ChamberWater", 0.15, Model.CHAMBER - 0.15)
 	_basin = _water("BasinWater", Model.CHAMBER + 0.15, BASIN_TO)
+	var bollard := StageProps.pile_mesh(0.14, 0.4, Color("#4f5b60"))
 	for gate_x in [0.0, Model.CHAMBER]:
 		_box("Wall%d" % roundi(gate_x), Vector3(0.3, WALL_TOP, 0.5), Vector3(gate_x, WALL_TOP * 0.5, -1.45), _world, _materials.stone)
-		_gates.append(_box("Gate%d" % roundi(gate_x), Vector3(0.24, WALL_TOP, 2.9), Vector3(gate_x, WALL_TOP * 0.5, 0), _world, _materials.gate))
+		var gate := _box("Gate%d" % roundi(gate_x), Vector3(0.24, WALL_TOP, 2.9), Vector3(gate_x, WALL_TOP * 0.5, 0), _world, _materials.gate)
+		# Iron straps across the timber leaf.
+		for strap in 3:
+			_box("GateStrap", Vector3(0.28, 0.12, 2.94), Vector3(0, -WALL_TOP * 0.35 + strap * WALL_TOP * 0.35, 0), gate, StageProps.solid(Color("#4f5b60")))
+		_gates.append(gate)
 		_lights.append(_box("Light%d" % roundi(gate_x), Vector3(0.4, 0.4, 0.4), Vector3(gate_x, WALL_TOP + 0.5, -1.45), _world, _materials.unsafe))
+		_box("LightPost", Vector3(0.12, 0.5, 0.12), Vector3(gate_x, WALL_TOP + 0.1, -1.45), _world, StageProps.solid(Color("#4f5b60")))
+		StageProps.add(_world, "Bollard", bollard, _materials.sculpt, Vector3(gate_x + 0.7, WALL_TOP - 0.2, -1.6))
 	_label3d("外海", Vector3(-5.0, WALL_TOP + 0.3, 0), _world)
 	_label3d("閘室", Vector3(Model.CHAMBER * 0.5, WALL_TOP + 0.3, 0), _world)
 	_label3d("港池", Vector3(Model.CHAMBER + 2.0, WALL_TOP + 0.3, 0), _world)
@@ -207,7 +223,8 @@ func _create_stage() -> void:
 	_bell.name = "TideBell"
 	_bell.position = Vector3(-3.0, WALL_TOP + 0.9, -1.4)
 	_world.add_child(_bell)
-	_box("Bell", Vector3(0.6, 0.7, 0.6), Vector3(0, -0.35, 0), _bell, _materials.bell)
+	StageProps.add(_bell, "Bell", StageProps.canister_mesh(0.32, 0.7, Color("#d7b24e"), Color("#a9802f")), _materials.sculpt, Vector3(0, -0.35, 0))
+	_box("BellYoke", Vector3(0.9, 0.1, 0.12), Vector3(0, 0.05, 0), _bell, StageProps.wood(Color("#6d5236")))
 
 func _build_ships() -> void:
 	_layout_variant = int(_snapshot.variant)
@@ -222,7 +239,12 @@ func _build_ships() -> void:
 		_world.add_child(node)
 		var hull := _box("Hull", Vector3(ship.length, ship.draft + 0.4, 1.6), Vector3(-ship.length * 0.5, (0.4 - ship.draft) * 0.5, 0), node, _materials.hull)
 		hull.set_meta("draft", ship.draft)
-		_box("Deck", Vector3(ship.length * 0.5, 0.4, 1.0), Vector3(-ship.length * 0.55, 0.6, 0), node, _materials.deck)
+		_box("Gunwale", Vector3(ship.length + 0.06, 0.1, 1.66), Vector3(-ship.length * 0.5, 0.42, 0), node, StageProps.wood(Color("#efe2bd")))
+		_box("Boot", Vector3(ship.length + 0.02, 0.12, 1.62), Vector3(-ship.length * 0.5, 0.06, 0), node, StageProps.solid(Color("#2f566a")))
+		var deck := _box("Deck", Vector3(ship.length * 0.5, 0.4, 1.0), Vector3(-ship.length * 0.55, 0.6, 0), node, _materials.deck)
+		_box("Windows", Vector3(ship.length * 0.42, 0.1, 1.02), Vector3(0, 0.04, 0), deck, StageProps.solid(Color("#2f4f63")))
+		_box("Roof", Vector3(ship.length * 0.54, 0.06, 1.1), Vector3(0, 0.23, 0), deck, StageProps.solid(Color("#c9573f")))
+		_box("Funnel", Vector3(0.22, 0.5, 0.22), Vector3(-ship.length * 0.7, 1.0, 0), node, StageProps.solid(Color("#2f566a")))
 		_label3d("%s 吃水%.1f" % [ship.name, ship.draft], Vector3(-ship.length * 0.5, 1.3, 0.8), node, 22)
 		_ship_nodes.append(node)
 		index += 1
@@ -263,6 +285,8 @@ func _apply_snapshot() -> void:
 	_sun.light_color = {"dawn": Color("#f2caad"), "noon": Color("#f8efcf"), "dusk": Color("#e2b19c"), "night": Color("#a5c2d8")}.get(_time_phase, Color("#f8efcf"))
 	_sun.light_energy = 0.75 if night else 1.15
 	_sun.rotation_degrees = Vector3(-50, {"dawn": -60.0, "noon": -20.0, "dusk": 30.0, "night": 60.0}.get(_time_phase, -20.0), 0)
+	StageProps.set_motion(_materials.water, _reduced_motion)
+	StageProps.set_sky_phase(_sky, _time_phase, _reduced_motion)
 
 func status_text() -> String:
 	if _snapshot.is_empty():
@@ -281,29 +305,28 @@ func bell_text() -> String:
 func _text(at: Vector2, text: String, width: float, font_size: int = 18, color: Color = Paper.PAPER) -> void:
 	draw_string(Paper.font(), at, text, HORIZONTAL_ALIGNMENT_LEFT, width, roundi(font_size * Paper.text_scale()), color)
 
+## The fine print stays one hover away instead of filling the screen.
+func _get_tooltip(at_position: Vector2) -> String:
+	if _snapshot.is_empty() or not STATUS_PLATE.has_point(at_position):
+		return ""
+	return "閘室水位要和那一側對齊、而且另一道閘關著才亮綠燈。兩船能擠進同一閘可省一次蓄水，但退潮時等太久會擱淺。"
+
 func _draw() -> void:
-	draw_rect(Rect2(24, 140, 1232, 62), Paper.DEEP_TEAL)
+	Props.wood_panel(self, STATUS_PLATE, Props.SIGN_TEAL, true)
 	if not _snapshot.is_empty():
-		_text(Vector2(40, 164), status_text(), 1200, 17)
-		_text(Vector2(40, 191), bell_text(), 1200, 17, Paper.GOLD if str(_snapshot.last_event) == "bell" else Paper.PAPER)
+		_text(Vector2(46, 166), status_text(), 1190, 17)
+		_text(Vector2(46, 193), bell_text(), 1190, 17, Paper.GOLD)
 		_draw_meter()
 	for i in COMMANDS.size():
 		var command: String = COMMANDS[i]
-		var rect := button_rect(command)
-		var held := _pointer_owners.values().has(command)
 		var active: bool = {"lower": _snapshot.get("lower_open", false), "upper": _snapshot.get("upper_open", false), "drain": int(_snapshot.get("valve", 0)) < 0,
 			"fill": int(_snapshot.get("valve", 0)) > 0, "helper": _snapshot.get("helper", false)}[command]
-		draw_rect(rect, Paper.FRAME if held or active else Paper.DEEP_TEAL)
-		draw_rect(rect, Paper.GOLD if held or active else Paper.TEAL, false, 2)
-		_text(rect.position + Vector2(12, 35), BUTTON_LABELS[i], rect.size.x - 16, 16)
-	_text(Vector2(30, 673), str(_snapshot.get("feedback", "")), 1210, 20, Paper.GOLD)
-	_text(Vector2(30, 704), "閘室水位要和那一側對齊、而且另一道閘關著才亮綠燈。兩船能擠進同一閘可省一次蓄水，但退潮時等太久會擱淺。", 1210, 17)
+		Props.control_key(self, button_rect(command), _pointer_owners.values().has(command) or active, BUTTON_ICONS[i], BUTTON_LABELS[i], Paper.font(), roundi(16 * Paper.text_scale()), true)
 
 ## Levels against each ship's draft; assisted rounds also preview the next 20 s of tide.
 func _draw_meter() -> void:
-	draw_rect(METER, Color(Paper.DEEP, 0.86))
-	draw_rect(METER, Paper.TEAL, false, 2)
-	_text(METER.position + Vector2(10, 22), "水位與吃水", 180, 16, Paper.GOLD)
+	Props.wood_panel(self, METER, Props.SIGN_TEAL, true)
+	_text(METER.position + Vector2(12, 24), "水位與吃水", 180, 16, Paper.GOLD)
 	var top := METER.position.y + 44
 	var bottom := METER.end.y - 30
 	var to_y := func(height: float) -> float: return bottom - clampf(height / 4.0, 0.0, 1.0) * (bottom - top)
@@ -311,8 +334,7 @@ func _draw_meter() -> void:
 	for i in columns.size():
 		var x := METER.position.x + 16 + i * 44
 		var y: float = to_y.call(columns[i][1])
-		draw_rect(Rect2(x, top, 30, bottom - top), Color("#22404a"))
-		draw_rect(Rect2(x, y, 30, bottom - y), Color("#3d86a0"))
+		Props.gauge(self, Rect2(x, top, 30, bottom - top), (bottom - y) / (bottom - top), Color("#3d96a8"))
 		_text(Vector2(x - 2, bottom + 20), columns[i][0], 44, 13)
 	for ship: Dictionary in _snapshot.ships:
 		if ship.present and not ship.passed:

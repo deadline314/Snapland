@@ -7,7 +7,11 @@ signal command_requested(command: String, pressed: bool, source: String)
 const Paper = preload("res://game/ui/paper_ui.gd")
 const FontProfiles = preload("res://game/ui/font_profiles.gd")
 const Model = preload("res://game/minigames/cargo_balance_model.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const StageProps = preload("res://game/minigames/stage_props.gd")
 const DESIGN_SIZE := Vector2(1280, 720)
+const STATUS_PLATE := Rect2(24, 140, 1232, 62)
+const BUTTON_ICONS := ["left", "right", "up", "down", "grab", "strap", "sail"]
 const STAGE := Rect2(24, 208, 1232, 364)
 const GAUGE := Rect2(1046, 222, 198, 336)
 const COMMANDS := ["left", "right", "up", "down", "grab", "strap", "confirm"]
@@ -34,6 +38,7 @@ var _crate_labels: Dictionary = {}
 var _straps: Dictionary = {}
 var _draft_marks: Array[Label3D] = []
 var _cog: MeshInstance3D
+var _sky: MeshInstance3D
 
 static func button_rect(command: String) -> Rect2:
 	return Rect2(28 + COMMANDS.find(command) * 176, 590, 168, 56)
@@ -117,14 +122,6 @@ func present(state: Dictionary, time_phase: String, reduced_motion: bool) -> voi
 		_apply_snapshot()
 	queue_redraw()
 
-func _material(color: Color, alpha: float = 1.0) -> StandardMaterial3D:
-	var material := StandardMaterial3D.new()
-	material.albedo_color = Color(color, alpha)
-	material.roughness = 0.85
-	if alpha < 1.0:
-		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	return material
-
 func _box(node_name: String, size: Vector3, at: Vector3, parent: Node3D, material: Material) -> MeshInstance3D:
 	var node := MeshInstance3D.new()
 	node.name = node_name
@@ -179,7 +176,9 @@ func _create_stage() -> void:
 	_world.add_child(environment_node)
 	_sun = DirectionalLight3D.new()
 	_sun.name = "HoldSun"
+	_sun.shadow_enabled = true
 	_world.add_child(_sun)
+	StageProps.dress_lighting(_environment, _sun)
 	_camera = Camera3D.new()
 	_camera.name = "HoldCamera"
 	_camera.projection = Camera3D.PROJECTION_ORTHOGONAL
@@ -189,30 +188,42 @@ func _create_stage() -> void:
 	_world.add_child(_camera)
 	_camera.look_at(Vector3(-1.2, 1.2, 0))
 	_camera.current = true
-	for item in [["hull", "#b5533c"], ["hull_dark", "#6b3427"], ["deck", "#d9c39a"], ["slot", "#8a7356"], ["pier", "#8c6a46"], ["strap", "#f3d36b"],
-			["cursor", "#ffd36a"], ["mark", "#ffffff"], ["mast", "#ead9af"]]:
-		_materials[item[0]] = _material(Color(item[1]))
-	_materials.water = _material(Color("#3d7f93"), 0.72)
+	for item in [["hull", "#b5533c"], ["deck", "#c9a878"], ["pier", "#9a7248"], ["mast", "#8a6a48"]]:
+		_materials[item[0]] = StageProps.wood(Color(item[1]))
+	_materials.strap = StageProps.solid(Color("#f3d36b"))
+	_materials.cursor = StageProps.solid(Color("#ffd36a"))
+	_materials.slot = StageProps.solid(Color("#6d5236"))
+	_materials.sculpt = StageProps.sculpt_material()
+	_materials.water = StageProps.water(Color("#2f7f8f"), true)
+	_sky = StageProps.sky_card(_world, Vector3(-1.2, 3.4, -4.0), Vector2(34, 11), 0.4)
 	_water = _box("Water", Vector3(30, 2.0, 2.2), Vector3(0, -0.6, 0.4), _world, _materials.water)
 	_pier = Node3D.new()
 	_pier.name = "Pier"
 	_world.add_child(_pier)
-	_box("PierDeck", Vector3(3.8, 0.3, 1.4), Vector3(PIER_OFFSET - 2.2, 0.25, 0), _pier, _materials.pier)
-	for x in [-7.8, -5.6]:
-		_box("PierPost", Vector3(0.2, 1.4, 0.2), Vector3(x, -0.4, 0.5), _pier, _materials.pier)
+	# Deck top level with the lightest crate's base, so pier cargo stands on it.
+	_box("PierDeck", Vector3(3.8, 0.3, 1.4), Vector3(PIER_OFFSET - 2.2, 0.35, 0), _pier, _materials.pier)
+	var pile := StageProps.pile_mesh(0.13, 1.5)
+	for x in [-7.8, -6.7, -5.6]:
+		StageProps.add(_pier, "PierPost", pile, _materials.sculpt, Vector3(x, -1.1, 0.62))
+	StageProps.add(_pier, "PierBollard", StageProps.pile_mesh(0.1, 0.32, Color("#4f5b60")), _materials.sculpt, Vector3(PIER_OFFSET - 0.6, 0.4, 0.4))
 	_label3d("碼頭", Vector3(PIER_OFFSET - 2.2, 3.4, 0.2), _pier, 34)
 	_ship = Node3D.new()
 	_ship.name = "Ship"
 	_world.add_child(_ship)
 	_box("Keel", Vector3(5.6, 0.4, 1.4), Vector3(0, -0.2, 0), _ship, _materials.hull)
+	_box("Boot", Vector3(5.64, 0.12, 1.44), Vector3(0, -0.06, 0), _ship, StageProps.wood(Color("#2f566a")))
 	for side in [-1, 1]:
 		var wall := _box("HullSide", Vector3(0.25, 2.6, 1.4), Vector3(side * 3.0, 0.9, 0), _ship, _materials.hull)
 		wall.rotation.z = side * 0.18
+		_box("Gunwale", Vector3(0.38, 0.1, 1.5), Vector3(0, 1.32, 0), wall, StageProps.wood(Color("#ead9af")))
 		_draft_marks.append(_label3d("", Vector3(side * 3.45, 0.2, 0.75), _ship, 26))
 	_box("HoldFloor", Vector3(5.2, 0.08, 1.2), Vector3(0, 0.02, 0), _ship, _materials.deck)
+	# The far inside of the hull, so crates stand in a room and not in the sky.
+	_box("HoldBack", Vector3(5.8, 2.4, 0.06), Vector3(0, 1.1, -0.66), _ship, StageProps.wood(Color("#6f5236"), 0.3))
 	for column in Model.HOLD_COLUMNS:
-		_box("SlotLine", Vector3(0.04, 2.2, 0.05), Vector3(Model.HOLD_X[column] + CELL * 0.68, 1.1, -0.6), _ship, _materials.slot)
-	_box("Mast", Vector3(0.12, 3.6, 0.12), Vector3(-2.9, 2.0, -0.5), _ship, _materials.mast)
+		_box("SlotLine", Vector3(0.06, 2.2, 0.05), Vector3(Model.HOLD_X[column] + CELL * 0.68, 1.1, -0.6), _ship, _materials.slot)
+	_box("Mast", Vector3(0.14, 3.6, 0.14), Vector3(-2.9, 2.0, -0.5), _ship, _materials.mast)
+	_box("Yard", Vector3(1.4, 0.08, 0.08), Vector3(-2.9, 3.4, -0.5), _ship, _materials.mast)
 	# Assistance projects the cargo centre of gravity onto the hold floor.
 	_cog = _box("GravityProjection", Vector3(0.06, 2.4, 0.06), Vector3(0, 1.2, 0.62), _ship, _materials.strap)
 	_cursor = _box("Cursor", Vector3(CELL * 1.25, CELL * 0.95, 0.06), Vector3.ZERO, _world, _materials.cursor)
@@ -220,9 +231,11 @@ func _create_stage() -> void:
 	(_cursor.material_override as StandardMaterial3D).albedo_color = Color("#ffd36a", 0.35)
 	for crate: Dictionary in _snapshot.crates:
 		var edge: float = 0.55 + float(crate.weight) * 0.12
-		var node := _box("Crate%d" % crate.id, Vector3(edge * 1.15, edge, 0.9), Vector3.ZERO, _world, _material(PORT_COLORS[crate.port]))
+		# Slatted timber crates; the destination port shows as a painted band.
+		var tone := Color("#b98a57") if int(crate.id) % 2 == 0 else Color("#a07850")
+		var node := StageProps.add(_world, "Crate%d" % crate.id, StageProps.crate_mesh(Vector3(edge * 1.15, edge, 0.9), tone, PORT_COLORS[crate.port], -edge * 0.5), _materials.sculpt)
 		_crate_labels[crate.id] = _label3d("", Vector3(0, 0, 0.5), node, 28)
-		_straps[crate.id] = _box("Strap", Vector3(edge * 1.2, 0.08, 0.95), Vector3(0, 0, 0), node, _materials.strap)
+		_straps[crate.id] = _box("Strap", Vector3(edge * 1.2, 0.08, 0.95), Vector3(0, 0, 0), node, StageProps.solid(Color("#f3d36b")))
 		_crates[crate.id] = node
 
 func _apply_snapshot() -> void:
@@ -259,6 +272,8 @@ func _apply_snapshot() -> void:
 	_sun.light_color = {"dawn": Color("#f2caad"), "noon": Color("#f8efcf"), "dusk": Color("#e2b19c"), "night": Color("#a5c2d8")}.get(_time_phase, Color("#f8efcf"))
 	_sun.light_energy = 0.75 if night else 1.1
 	_sun.rotation_degrees = Vector3(-35, -25, 0)
+	StageProps.set_motion(_materials.water, _reduced_motion)
+	StageProps.set_sky_phase(_sky, _time_phase, _reduced_motion)
 
 func status_text() -> String:
 	if _snapshot.is_empty():
@@ -289,34 +304,39 @@ func _total_weight() -> float:
 func _text(at: Vector2, text: String, width: float, font_size: int = 18, color: Color = Paper.PAPER) -> void:
 	draw_string(Paper.font(), at, text, HORIZONTAL_ALIGNMENT_LEFT, width, roundi(font_size * Paper.text_scale()), color)
 
+## The fine print stays one hover away instead of filling the screen.
+func _get_tooltip(at_position: Vector2) -> String:
+	if _snapshot.is_empty() or not STATUS_PLATE.has_point(at_position):
+		return ""
+	return wave_text() + "\n重箱放低放中間船最穩；上層方便卸貨但更容易傾斜。沒繫帶的箱子在大傾斜時會滑動。"
+
 func _draw() -> void:
-	draw_rect(Rect2(24, 140, 1232, 62), Paper.DEEP_TEAL)
+	Props.wood_panel(self, STATUS_PLATE, Props.SIGN_TEAL, true)
 	if not _snapshot.is_empty():
-		_text(Vector2(40, 164), status_text(), 1200)
-		_text(Vector2(40, 191), wave_text(), 1200, 17, Paper.GOLD if not _snapshot.upcoming.is_empty() and _snapshot.upcoming.visible else Paper.PAPER)
+		_text(Vector2(46, 166), status_text(), 1190, 17)
+		var warning: bool = not _snapshot.upcoming.is_empty() and _snapshot.upcoming.visible
+		var feedback := str(_snapshot.get("feedback", ""))
+		_text(Vector2(46, 193), wave_text() if warning or feedback.is_empty() else feedback, 1190, 18, Paper.GOLD)
 		_draw_gauge()
 	for i in COMMANDS.size():
-		var command: String = COMMANDS[i]
-		var rect := button_rect(command)
-		var held := _pointer_owners.values().has(command)
-		draw_rect(rect, Paper.FRAME if held else Paper.DEEP_TEAL)
-		draw_rect(rect, Paper.GOLD if held else Paper.TEAL, false, 2)
-		_text(rect.position + Vector2(10, 34), BUTTON_LABELS[i], rect.size.x - 16, 16)
-	_text(Vector2(30, 673), str(_snapshot.get("feedback", "")), 1210, 20, Paper.GOLD)
-	_text(Vector2(30, 704), "重箱放低放中間船最穩；上層方便卸貨但更容易傾斜。沒繫帶的箱子在大傾斜時會滑動。", 1210, 17)
+		Props.control_key(self, button_rect(COMMANDS[i]), _pointer_owners.values().has(COMMANDS[i]), BUTTON_ICONS[i], BUTTON_LABELS[i], Paper.font(), roundi(16 * Paper.text_scale()), true)
 
 ## Heel gauge with safe, slide and capsize bands plus the predicted wave peak.
 func _draw_gauge() -> void:
-	draw_rect(GAUGE, Color(Paper.DEEP, 0.86))
-	draw_rect(GAUGE, Paper.TEAL, false, 2)
-	_text(GAUGE.position + Vector2(10, 22), "傾斜儀", 170, 16, Paper.GOLD)
+	Props.wood_panel(self, GAUGE, Props.SIGN_TEAL, true)
+	_text(GAUGE.position + Vector2(12, 24), "傾斜儀", 170, 16, Paper.GOLD)
 	var center := Vector2(GAUGE.get_center().x, GAUGE.position.y + 150)
 	var radius := 80.0
+	# A brass dial with a dark face, so the needle sits on an instrument.
+	Props.metal_plate(self, Rect2(center - Vector2(radius + 18, radius + 18), Vector2(radius * 2 + 36, radius + 40)), Props.BRASS)
+	draw_rect(Rect2(center - Vector2(radius + 8, radius + 8), Vector2(radius * 2 + 16, radius + 20)), Color("#14323d"))
 	for band in [[Model.CAPSIZE_HEEL, Color("#a03a2c")], [Model.SLIDE_HEEL, Color("#c97b3d")], [Model.SAFE_HEEL, Color("#3f7f6c")]]:
 		var limit := deg_to_rad(float(band[0]) * 2.0)
 		draw_arc(center, radius, -PI / 2.0 - limit, -PI / 2.0 + limit, 24, band[1], 14)
 	var needle := deg_to_rad(float(_snapshot.heel) * 2.0)
-	draw_line(center, center + Vector2(sin(needle), -cos(needle)) * (radius + 8), Paper.PAPER, 4)
+	draw_line(center + Vector2(2, 3), center + Vector2(2, 3) + Vector2(sin(needle), -cos(needle)) * (radius + 2), Color(Props.SHADOW, 0.6), 4)
+	draw_line(center, center + Vector2(sin(needle), -cos(needle)) * (radius + 2), Paper.PAPER, 4)
+	Props.token(self, center, 8.0, Props.BRASS)
 	var wave: Dictionary = _snapshot.upcoming
 	if not wave.is_empty() and wave.visible:
 		var predicted := deg_to_rad(clampf(float(wave.predicted), -30.0, 30.0) * 2.0)

@@ -6,6 +6,9 @@ extends RefCounted
 ## lit top-left edge, a shaded lower-right edge and a one-texel outline in a
 ## deepened local colour. Views draw the result with nearest filtering through
 ## `arcade_view.stamp()`. See 畫面下限 in design/00-principles/simple-fun-minigames.md.
+##
+## This is the texel layer of the one minigame drawing kit; the canvas layer
+## every view calls, arcade or not, is game/ui/pixel_props.gd.
 
 const CLEAR := Color(0, 0, 0, 0)
 const NEIGHBOURS: Array[Vector2i] = [Vector2i(0, 1), Vector2i(1, 0), Vector2i(0, -1), Vector2i(-1, 0)]
@@ -57,6 +60,14 @@ static func bake_blocks(key: String, size: Vector2i, origin: Vector2i, blocks: A
 			if (blocks[index][0] as Rect2).has_point(at):
 				return grainy(blocks[index][1], x, y, wear)
 		return CLEAR)
+
+
+## Cache a texture built by `build.call() -> Image` as it is, with no outline
+## pass: tileable materials, soft blobs and icons share the sprites' cache.
+static func cached(key: String, build: Callable) -> ImageTexture:
+	if not _cache.has(key):
+		_cache[key] = ImageTexture.create_from_image(build.call())
+	return _cache[key]
 
 
 static func _open(image: Image, x: int, y: int) -> bool:

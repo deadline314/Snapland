@@ -7,7 +7,11 @@ signal command_requested(command: String, pressed: bool, source: String)
 const Paper = preload("res://game/ui/paper_ui.gd")
 const FontProfiles = preload("res://game/ui/font_profiles.gd")
 const Model = preload("res://game/minigames/rope_tug_model.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const StageProps = preload("res://game/minigames/stage_props.gd")
 const DESIGN_SIZE := Vector2(1280, 720)
+const STATUS_PLATE := Rect2(24, 140, 1232, 62)
+const BUTTON_ICONS := ["turn_left", "turn_right", "up", "down", "less", "more", "hook"]
 const STAGE := Rect2(24, 208, 1232, 364)
 const METER := Rect2(1066, 222, 178, 336)
 const COMMANDS := ["left", "right", "ahead", "astern", "reel_in", "reel_out", "hook"]
@@ -108,12 +112,6 @@ func present(state: Dictionary, time_phase: String, reduced_motion: bool) -> voi
 		_apply_snapshot()
 	queue_redraw()
 
-func _material(color: Color) -> StandardMaterial3D:
-	var material := StandardMaterial3D.new()
-	material.albedo_color = color
-	material.roughness = 0.85
-	return material
-
 func _box(node_name: String, dimensions: Vector3, at: Vector3, parent: Node3D, material: Material) -> MeshInstance3D:
 	var node := MeshInstance3D.new()
 	node.name = node_name
@@ -172,6 +170,7 @@ func _create_stage() -> void:
 	_sun.shadow_enabled = true
 	_sun.directional_shadow_max_distance = 40
 	_world.add_child(_sun)
+	StageProps.dress_lighting(_environment, _sun)
 	_camera = Camera3D.new()
 	_camera.name = "TugCamera"
 	_camera.projection = Camera3D.PROJECTION_ORTHOGONAL
@@ -182,16 +181,23 @@ func _create_stage() -> void:
 	_world.add_child(_camera)
 	_camera.look_at(focus)
 	_camera.current = true
-	for item in [["water", "#3a6f80"], ["wall", "#6f8580"], ["wall_top", "#9db1a8"], ["hull", "#d56f55"], ["deck", "#ead9af"],
-			["cabin", "#2f566a"], ["pontoon", "#a07b52"], ["plank", "#6d5236"], ["cleat", "#f2d27a"], ["dock", "#8c6a46"], ["post", "#ead9af"]]:
-		_materials[item[0]] = _material(Color(item[1]))
+	for item in [["water", "#2f7f8f"], ["wall", "#8a968c"], ["wall_top", "#b5b9a4"], ["hull", "#d56f55"], ["deck", "#c9a878"],
+			["cabin", "#2f566a"], ["pontoon", "#a07b52"], ["plank", "#6d5236"], ["cleat", "#f2d27a"], ["dock", "#9a7248"], ["post", "#ead9af"]]:
+		_materials[item[0]] = StageProps.named(item[0], Color(item[1]))
+	_materials["sculpt"] = StageProps.sculpt_material()
+	_materials["foam"] = StageProps.foam_material()
 	var bounds: Rect2 = _snapshot.bounds
-	_box("Water", Vector3(bounds.size.x + 8, 0.1, bounds.size.y + 6), Vector3(bounds.get_center().x, -0.12, bounds.get_center().y), _world, _materials.water)
+	_box("Water", Vector3(bounds.size.x + 26, 0.1, bounds.size.y + 18), Vector3(bounds.get_center().x, -0.12, bounds.get_center().y), _world, _materials.water)
+	var pile := StageProps.pile_mesh(0.13, 0.95)
 	var walls: Array = _snapshot.walls
 	for index in walls.size():
 		var rect: Rect2 = walls[index]
 		var wall := _box("Breakwater%d" % index, Vector3(rect.size.x, 0.55, rect.size.y), Vector3(rect.get_center().x, 0.2, rect.get_center().y), _world, _materials.wall)
-		_box("WallTop", Vector3(rect.size.x + 0.04, 0.06, rect.size.y), Vector3(0, 0.3, 0), wall, _materials.wall_top)
+		_box("WallTop", Vector3(rect.size.x + 0.08, 0.08, rect.size.y + 0.08), Vector3(0, 0.3, 0), wall, _materials.wall_top)
+		# Channel piles mark the ends of every wall, so each gap reads as a gate.
+		for end: float in [-0.5, 0.5]:
+			if absf(rect.get_center().y + end * rect.size.y) < bounds.size.y * 0.5 - 0.3:
+				StageProps.add(wall, "GatePile", pile, _materials.sculpt, Vector3(0, -0.3, end * rect.size.y + signf(end) * 0.12))
 	for gate: Dictionary in _snapshot.gates:
 		for gap: Dictionary in gate.gaps:
 			_gate_labels.append(_label3d(("側灣" if gap.side else "第%d灣" % gate.id), Vector3(gate.x, 1.0, gap.center), _world, 32))
@@ -199,18 +205,23 @@ func _create_stage() -> void:
 	dock.name = "Dock"
 	_world.add_child(dock)
 	_box("DockDeck", Vector3(1.4, 0.25, bounds.size.y - 1.0), Vector3(bounds.end.x - 0.9, 0.08, bounds.get_center().y), dock, _materials.dock)
+	_box("DockQuay", Vector3(12.0, 0.5, bounds.size.y + 18), Vector3(bounds.end.x + 5.75, 0.0, bounds.get_center().y), dock, StageProps.stone(Color("#a9a48f")))
 	for z in range(-5, 6, 2):
-		_box("DockPost", Vector3(0.14, 0.7, 0.14), Vector3(bounds.end.x - 1.5, 0.3, z), dock, _materials.post)
+		StageProps.add(dock, "DockPost", pile, _materials.sculpt, Vector3(bounds.end.x - 1.5, -0.1, z))
+		StageProps.add(dock, "DockCargo", StageProps.crate_mesh(Vector3(0.5, 0.42, 0.5), Color("#b98a57") if z % 4 == 0 else Color("#8f6f4c")), _materials.sculpt, Vector3(bounds.end.x - 0.55 + 0.1 * (z % 3), 0.2, z + 0.8))
 	_box("DockLine", Vector3(0.05, 0.03, bounds.size.y - 1.0), Vector3(float(_snapshot.dock_x), 0.0, bounds.get_center().y), dock, _materials.cleat)
 	_label3d("碼頭（解繩靠港）", Vector3(bounds.end.x - 1.0, 1.2, bounds.position.y + 1.2), dock, 32)
 	_tug = Node3D.new()
 	_tug.name = "Tug"
 	_world.add_child(_tug)
-	_box("Hull", Vector3(1.0, 0.32, 0.62), Vector3(0, 0.08, 0), _tug, _materials.hull)
-	_box("Deck", Vector3(0.9, 0.06, 0.5), Vector3(-0.04, 0.27, 0), _tug, _materials.deck)
-	_box("Cabin", Vector3(0.36, 0.32, 0.4), Vector3(0.12, 0.45, 0), _tug, _materials.cabin)
-	var bow := _box("Bow", Vector3(0.22, 0.24, 0.22), Vector3(0.55, 0.1, 0), _tug, _materials.hull)
-	bow.rotation.y = PI / 4.0
+	StageProps.add(_tug, "Hull", StageProps.boat_mesh(1.3, 0.66, Color("#d56f55"), Color("#ead9af"), 0.3, false), _materials.sculpt, Vector3(0, -0.04, 0))
+	StageProps.add(_tug, "HullFoam", StageProps.foam_ring_mesh(0.7, 0.38), _materials.foam, Vector3(0, 0.0, 0))
+	_box("Deck", Vector3(0.84, 0.05, 0.4), Vector3(-0.04, 0.27, 0), _tug, _materials.deck)
+	_box("Cabin", Vector3(0.36, 0.3, 0.36), Vector3(0.12, 0.44, 0), _tug, _materials.cabin)
+	_box("CabinGlass", Vector3(0.38, 0.1, 0.3), Vector3(0.12, 0.5, 0), _tug, StageProps.solid(Color("#bfe6e0")))
+	_box("CabinRoof", Vector3(0.44, 0.05, 0.44), Vector3(0.12, 0.61, 0), _tug, _materials.post)
+	_box("Funnel", Vector3(0.14, 0.3, 0.14), Vector3(-0.1, 0.56, 0), _tug, _materials.hull)
+	_box("FunnelBand", Vector3(0.16, 0.07, 0.16), Vector3(-0.1, 0.66, 0), _tug, _materials.cabin)
 	_box("Winch", Vector3(0.16, 0.16, 0.26), Vector3(-0.38, 0.38, 0), _tug, _materials.cleat)
 	_pontoon = Node3D.new()
 	_pontoon.name = "Pontoon"
@@ -218,11 +229,13 @@ func _create_stage() -> void:
 	_box("Raft", Vector3(1.7, 0.26, 1.15), Vector3(0, 0.05, 0), _pontoon, _materials.pontoon)
 	for i in 5:
 		_box("Plank", Vector3(0.04, 0.03, 1.1), Vector3(-0.68 + i * 0.34, 0.2, 0), _pontoon, _materials.plank)
-	_box("Cargo", Vector3(0.6, 0.45, 0.5), Vector3(-0.2, 0.42, 0), _pontoon, _materials.cabin)
+	StageProps.add(_pontoon, "Cargo", StageProps.crate_mesh(Vector3(0.6, 0.45, 0.5), Color("#b98a57"), Color("#5fb7a4")), _materials.sculpt, Vector3(-0.2, 0.19, 0))
+	StageProps.add(_pontoon, "CargoSpare", StageProps.crate_mesh(Vector3(0.36, 0.3, 0.4), Color("#8f6f4c")), _materials.sculpt, Vector3(0.42, 0.19, 0.22))
+	StageProps.add(_pontoon, "RaftFoam", StageProps.foam_ring_mesh(0.98, 0.7), _materials.foam, Vector3(0, -0.02, 0))
 	for side in ["Bow", "Stern"]:
 		_box("Cleat" + side, Vector3(0.14, 0.14, 0.14), Vector3.ZERO, _pontoon, _materials.cleat)
 	for i in ROPE_LINKS:
-		var link := _box("Rope%d" % i, Vector3.ONE, Vector3.ZERO, _world, _material(Color("#f0e2b8")))
+		var link := _box("Rope%d" % i, Vector3.ONE, Vector3.ZERO, _world, StageProps.solid(Color("#f0e2b8")))
 		link.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		_rope.append(link)
 
@@ -265,6 +278,7 @@ func _apply_snapshot() -> void:
 		(link.material_override as StandardMaterial3D).albedo_color = color
 	var night := _time_phase == "night"
 	_environment.background_color = Color("#1d3443") if night else Color("#b1c4c0")
+	StageProps.set_motion(_materials.water, _reduced_motion)
 	_sun.light_color = {"dawn": Color("#f2caad"), "noon": Color("#f8efcf"), "dusk": Color("#e2b19c"), "night": Color("#a5c2d8")}.get(_time_phase, Color("#f8efcf"))
 	_sun.light_energy = 0.85 if night else 1.2
 	_sun.rotation_degrees = Vector3(-42, {"dawn": -70.0, "noon": -35.0, "dusk": 40.0, "night": 70.0}.get(_time_phase, -35.0), 0)
@@ -286,38 +300,32 @@ func route_text() -> String:
 func _text(at: Vector2, text: String, width: float, font_size: int = 18, color: Color = Paper.PAPER) -> void:
 	draw_string(Paper.font(), at, text, HORIZONTAL_ALIGNMENT_LEFT, width, roundi(font_size * Paper.text_scale()), color)
 
+## The fine readings stay one hover away instead of filling the screen.
+func _get_tooltip(at_position: Vector2) -> String:
+	return route_text() if STATUS_PLATE.has_point(at_position) and not _snapshot.is_empty() else ""
+
 func _draw() -> void:
-	draw_rect(Rect2(24, 140, 1232, 62), Paper.DEEP_TEAL)
+	Props.wood_panel(self, STATUS_PLATE, Props.SIGN_TEAL, true)
 	if not _snapshot.is_empty():
-		_text(Vector2(40, 164), status_text(), 1200)
-		_text(Vector2(40, 191), route_text(), 1200, 17)
+		_text(Vector2(46, 166), status_text(), 1190, 17)
+		_text(Vector2(46, 193), str(_snapshot.get("feedback", "")), 1190, 18, Paper.GOLD)
 		_draw_meter()
 	for i in COMMANDS.size():
-		var command: String = COMMANDS[i]
-		var rect := button_rect(command)
-		var held := _pointer_owners.values().has(command)
-		draw_rect(rect, Paper.FRAME if held else Paper.DEEP_TEAL)
-		draw_rect(rect, Paper.GOLD if held else Paper.TEAL, false, 2)
-		_text(rect.position + Vector2(10, 34), BUTTON_LABELS[i], rect.size.x - 16, 16)
-	_text(Vector2(30, 673), str(_snapshot.get("feedback", "")), 1210, 20, Paper.GOLD)
-	_text(Vector2(30, 704), "按住前進與舵；Q／E 按住收放繩。短繩跟得緊、長繩擺得開，張力到紅線會斷繩。", 1210, 17)
+		Props.control_key(self, button_rect(COMMANDS[i]), _pointer_owners.values().has(COMMANDS[i]), BUTTON_ICONS[i], BUTTON_LABELS[i], Paper.font(), roundi(16 * Paper.text_scale()), true)
 
 ## Tension and rope length gauges; numbers accompany every bar.
 func _draw_meter() -> void:
-	draw_rect(METER, Color(Paper.DEEP, 0.86))
-	draw_rect(METER, Paper.TEAL, false, 2)
+	Props.wood_panel(self, METER, Props.SIGN_TEAL, true)
 	_text(METER.position + Vector2(10, 22), "張力／繩長", 160, 16, Paper.GOLD)
 	var top := METER.position.y + 40
 	var bottom := METER.end.y - 36
 	var tension_bar := Rect2(METER.position.x + 24, top, 40, bottom - top)
-	draw_rect(tension_bar, Color("#22404a"))
 	var level := strain(_snapshot)
-	draw_rect(Rect2(tension_bar.position.x, bottom - level * tension_bar.size.y, tension_bar.size.x, level * tension_bar.size.y), Color("#ff8a6a") if level > 0.75 else Color("#ffe27a"))
+	Props.gauge(self, tension_bar, level, Color("#ff8a6a") if level > 0.75 else Color("#ffe27a"))
 	draw_line(Vector2(tension_bar.position.x - 5, top), Vector2(tension_bar.end.x + 5, top), Color("#ff6a4d"), 3)
 	_text(Vector2(tension_bar.position.x - 6, bottom + 22), "張力", 60, 14)
 	var rope_bar := Rect2(METER.position.x + 104, top, 40, bottom - top)
-	draw_rect(rope_bar, Color("#22404a"))
 	var fraction := clampf((float(_snapshot.rope_length) - Model.ROPE_MIN) / maxf(0.01, float(_snapshot.rope_max) - Model.ROPE_MIN), 0.0, 1.0)
-	draw_rect(Rect2(rope_bar.position.x, bottom - fraction * rope_bar.size.y, rope_bar.size.x, fraction * rope_bar.size.y), Color("#9fd7c8"))
+	Props.gauge(self, rope_bar, fraction, Color("#9fd7c8"))
 	_text(Vector2(rope_bar.position.x - 2, bottom + 22), "繩長", 60, 14)
 	_text(Vector2(tension_bar.end.x + 4, top + 14), "斷", 30, 13, Color("#ff9b7a"))

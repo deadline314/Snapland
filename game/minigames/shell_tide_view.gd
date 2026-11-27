@@ -6,7 +6,14 @@ class_name ShellTideView
 signal command_requested(command: String, pressed: bool, source: String)
 const Paper = preload("res://game/ui/paper_ui.gd")
 const Model = preload("res://game/minigames/shell_tide_model.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const Pixels = preload("res://game/minigames/arcade/arcade_pixels.gd")
 const DESIGN_SIZE := Vector2(1280, 720)
+const STATUS_PLATE := Rect2(24, 140, 1232, 62)
+const BUTTON_ICONS := ["shell", "shell", "shell", "shell", "wait", "left", "right"]
+## Design pixels per texel of the baked pool and shells.
+const TEXEL := 4.0
+const SAND_HEIGHT := 70.0
 const POOL := Rect2(24, 208, 1232, 364)
 const COMMANDS := ["shell_0", "shell_1", "shell_2", "shell_3", "wait", "earlier", "later"]
 const BUTTON_LABELS := ["1／A 珍珠貝", "2／S 扇貝", "3／D 海螺", "4／F 寶螺", "W 等長浪", "Q 校準提早", "E 校準延後"]
@@ -85,6 +92,7 @@ func _ready() -> void:
 	custom_minimum_size = DESIGN_SIZE
 	focus_mode = Control.FOCUS_ALL
 	mouse_filter = Control.MOUSE_FILTER_PASS
+	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 
 func present(state: Dictionary, time_phase: String, reduced_motion: bool) -> void:
 	_snapshot = state
@@ -117,15 +125,20 @@ func _active_event(time: float) -> Dictionary:
 			return event
 	return {}
 
+## The fine print stays one hover away instead of filling the screen.
+func _get_tooltip(at_position: Vector2) -> String:
+	if _snapshot.is_empty() or not STATUS_PLATE.has_point(at_position):
+		return ""
+	return "粗波紋是長音要按住，細波紋是短音；～靜默～那拍不要敲。底拍點是夥伴敲的背景拍。"
+
 func _draw() -> void:
-	draw_rect(Rect2(24, 140, 1232, 62), Paper.DEEP_TEAL)
+	Props.wood_panel(self, STATUS_PLATE, Props.SIGN_TEAL, true)
 	var night := _time_phase == "night"
-	draw_rect(POOL, Color("#173a48") if night else Color("#3f8a96"))
-	draw_rect(Rect2(POOL.position.x, POOL.end.y - 70, POOL.size.x, 70), Color("#c9b27f") if not night else Color("#6f6248"))
+	Props.stamp(self, _pool_texture(night), POOL.position, TEXEL)
 	if _snapshot.is_empty():
 		return
-	_text(Vector2(40, 164), status_text(), 1200)
-	_text(Vector2(40, 191), pattern_text(), 1200, 17)
+	_text(Vector2(46, 166), status_text(), 1190, 17)
+	_text(Vector2(46, 193), pattern_text(), 1190, 17, Paper.GOLD)
 	_draw_score_strip()
 	_draw_beat_dots()
 	var time := float(_snapshot.phase_time)
@@ -140,14 +153,10 @@ func _draw() -> void:
 			for ring in 3:
 				var radius := 50.0 + (progress * 70.0 if not _reduced_motion else 30.0) + ring * 22.0
 				draw_arc(center, radius, 0, TAU, 40, Color(SHELL_COLORS[shell], 0.8 - ring * 0.25), width)
-		draw_circle(center, 46.0, SHELL_COLORS[shell].darkened(0.0 if lit else 0.35))
-		# Scallop ridges fan from the hinge so each shell reads as a shell, not a button.
-		var hinge := center + Vector2(0, 40)
-		for ridge in 7:
-			var angle := lerpf(-2.5, -0.64, ridge / 6.0)
-			draw_line(hinge, hinge + Vector2.from_angle(angle) * 74.0 * 0.62, SHELL_COLORS[shell].darkened(0.45), 2.0)
-		draw_circle(center, 46.0, Paper.DEEP, false, 3.0)
-		draw_rect(Rect2(hinge - Vector2(12, 6), Vector2(24, 10)), SHELL_COLORS[shell].darkened(0.5))
+		Props.contact_shadow(self, center + Vector2(6, 40), 104.0, 0.55)
+		var sprite := _shell_texture(shell, lit)
+		var drop := Vector2(0, 4) if held else Vector2.ZERO
+		Props.stamp(self, sprite, center - Vector2(sprite.get_size() - Vector2(2, 2)) * TEXEL * 0.5 + drop, TEXEL)
 		_text(center + Vector2(-40, 76), "%d %s" % [shell + 1, SHELL_NAMES[shell]], 120, 17)
 	if not event.is_empty() and event.shell < 0:
 		var calm := Vector2(640, 330)
@@ -159,14 +168,93 @@ func _draw() -> void:
 		_text(SHELL_CENTERS[judgement.shell] + Vector2(-40, -70), text, 140, 20, Paper.GOLD)
 	for i in COMMANDS.size():
 		var command: String = COMMANDS[i]
-		var rect := button_rect(command)
-		var held_button := _pointer_owners.values().has(command)
 		var unavailable: bool = command in ["earlier", "later"] and not _snapshot.assisted
-		draw_rect(rect, Paper.FRAME if held_button else Paper.DEEP_TEAL)
-		draw_rect(rect, Paper.GOLD if held_button else (Paper.DEEP if unavailable else Paper.TEAL), false, 2)
-		_text(rect.position + Vector2(10, 34), BUTTON_LABELS[i] + ("（輔助）" if unavailable else ""), rect.size.x - 16, 15, Color(Paper.PAPER, 0.55) if unavailable else Paper.PAPER)
-	_text(Vector2(30, 673), str(_snapshot.get("feedback", "")), 1210, 20, Paper.GOLD)
-	_text(Vector2(30, 704), "粗波紋是長音要按住，細波紋是短音；～靜默～那拍不要敲。底拍點是夥伴敲的背景拍。", 1210, 17)
+		Props.control_key(self, button_rect(command), _pointer_owners.values().has(command), BUTTON_ICONS[i], BUTTON_LABELS[i] + ("（輔助）" if unavailable else ""), Paper.font(), roundi(15 * Paper.text_scale()), not unavailable)
+	_text(Vector2(30, 680), str(_snapshot.get("feedback", "")), 1210, 20, Paper.GOLD)
+
+## The tide pool, baked once per light: posterised ripple bands over a pebbly
+## floor, sunlit caustic flecks, then a wet sand shelf with grit and weed.
+static func _pool_texture(night: bool) -> Texture2D:
+	var size := Vector2i(int(POOL.size.x / TEXEL) - 2, int(POOL.size.y / TEXEL) - 2)
+	var shelf := size.y - int(SAND_HEIGHT / TEXEL)
+	var water := Color("#173a48") if night else Color("#3f8a96")
+	var sand := Color("#6f6248") if night else Color("#c9b27f")
+	return Pixels.bake("shell-pool|%s" % night, size, func(x: int, y: int) -> Color:
+		if y >= shelf:
+			var down := y - shelf
+			if down == 0:
+				return water.lerp(Color("#eef7ee"), 0.55)
+			var tone := Pixels.grainy(sand.darkened(0.18 if down < 3 else 0.0), x, y, 0.16)
+			if Pixels.noise(x / 3, y / 2, 5) > 0.9:
+				return tone.darkened(0.3)
+			if down > 4 and Pixels.noise(x, y, 9) > 0.985:
+				return Color("#5f8a4a") if not night else Color("#3a5233")
+			return tone
+		var depth := float(y) / float(shelf)
+		var swell := sin(x * 0.11 + sin(y * 0.19) * 2.0 + y * 0.05)
+		var band := floorf((swell * 0.5 + 0.5) * 3.0) / 3.0
+		var tone := water.darkened(0.12 * depth).lightened(0.06 * band)
+		var pebble := Pixels.noise(x / 4, y / 3, 3)
+		if pebble > 0.86 and depth > 0.35:
+			tone = tone.lerp(Color("#5d6b5f"), 0.35 + 0.2 * Pixels.noise(x / 4, y / 3, 4))
+		# Sun flecks gather on the swell crests in short dashes.
+		var fleck := Pixels.noise(x / 3, y, 7)
+		if fleck > 0.9 and band > 0.6 and not night:
+			tone = tone.lerp(Color("#e9f6ef"), 0.32)
+		return tone)
+
+## One baked sprite per shell kind: pearl oyster, scallop, conch and cowrie,
+## each with its own silhouette and ridges, lit from the top left.
+static func _shell_texture(shell: int, lit: bool) -> Texture2D:
+	var base: Color = SHELL_COLORS[shell] if lit else SHELL_COLORS[shell].darkened(0.3)
+	var size := Vector2i(24, 22)
+	return Pixels.bake("shell-%d|%s" % [shell, lit], size, func(x: int, y: int) -> Color:
+		var u := (x + 0.5) / 24.0 * 2.0 - 1.0
+		var v := (y + 0.5) / 22.0 * 2.0 - 1.0
+		match shell:
+			0:
+				# Pearl oyster: a rounded fan with growth rings and a pearly lip.
+				var reach := Vector2(u, v * 1.1 + 0.05).length()
+				if reach > 0.95 or v > 0.85:
+					return Pixels.CLEAR
+				var ring := floorf(reach * 5.0)
+				var tone := Pixels.rounded(base, Vector2(u, v) * 0.9).darkened(0.08 * fmod(ring, 2.0))
+				return tone.lightened(0.35) if reach > 0.82 else tone
+			1:
+				# Scallop: ribbed fan opening upward from a winged hinge.
+				var hinge := Vector2(0, 0.82)
+				var from := Vector2(u, v) - hinge
+				var reach := from.length()
+				if v > 0.7 and absf(u) < 0.4 and v < 0.98:
+					return base.darkened(0.25 if absf(u) > 0.2 else 0.1)
+				if reach > 1.7 or from.y > -0.05 or absf(from.angle() + PI * 0.5) > 1.15:
+					return Pixels.CLEAR
+				var rib := sin(from.angle() * 18.0)
+				return Pixels.rounded(base, Vector2(u, v) * 0.8).darkened(0.2 if rib < -0.3 else 0.0).lightened(0.12 if rib > 0.7 else 0.0)
+			2:
+				# Conch: a knobbed crown of whorls over a body that tapers to the
+				# siphon, with a pale flared lip on the right.
+				if v < -0.55:
+					var spire := 0.3 + (v + 1.0) * 1.2
+					var knob := absf(fposmod(u * 3.0 + 0.5, 1.0) - 0.5) < 0.22 and v > -0.72
+					if absf(u) > spire and not (knob and absf(u) < spire + 0.16):
+						return Pixels.CLEAR
+					return Pixels.rounded(base.lightened(0.1), Vector2(u, v + 0.6)).darkened(0.25 if fposmod((v + 1.0) * 6.0, 1.0) < 0.25 else 0.0)
+				var width := 0.92 - (v + 0.55) * 0.55
+				if absf(u + (v + 0.55) * 0.1) > width or v > 0.95:
+					return Pixels.CLEAR
+				if u > width * 0.35 and v < 0.35:
+					return Color("#f6dcc8").lerp(base, 0.3) if u < width * 0.75 else Color("#e9a28a")
+				var tone := Pixels.rounded(base, Vector2(u / maxf(0.2, width), v))
+				return tone.darkened(0.28) if fposmod((v + 1.0) * 3.4 + u * 0.7, 1.0) < 0.13 else tone
+		# Cowrie: a glossy oval with a toothed slit down the middle.
+		var oval := Vector2(u, v * 1.25).length()
+		if oval > 0.92:
+			return Pixels.CLEAR
+		if absf(u - v * 0.1) < 0.08:
+			return base.darkened(0.55) if (y % 2) == 0 else base.darkened(0.3)
+		var tone := Pixels.rounded(base, Vector2(u, v))
+		return tone.lightened(0.18) if Pixels.noise(x / 2, y / 2, shell) > 0.82 else tone)
 
 ## The ripple score: short blocks, long bars and blank rests in phrase order.
 func _draw_score_strip() -> void:
@@ -180,8 +268,8 @@ func _draw_score_strip() -> void:
 		if event.shell < 0:
 			_text(Vector2(x + width * 0.3, 248), "～", 40, 18, Paper.PAPER)
 		elif show_score:
-			draw_rect(rect, SHELL_COLORS[event.shell])
-			_text(rect.position + Vector2(6, 19), str(event.shell + 1), 30, 15, Paper.DEEP)
+			Props.shaded_box(self, rect, SHELL_COLORS[event.shell], 4.0)
+			_text(rect.position + Vector2(6, 17), str(event.shell + 1), 30, 15, Paper.DEEP)
 		else:
 			draw_rect(rect, Color(Paper.PAPER, 0.15))
 		x += unit * event.beats
@@ -192,4 +280,7 @@ func _draw_beat_dots() -> void:
 	var index := int(float(_snapshot.phase_time) / maxf(0.01, beat))
 	for i in 8:
 		var center := Vector2(560 + i * 24, 290)
-		draw_circle(center, 7.0 if i == index % 8 else 4.0, Paper.PAPER if i == index % 8 else Color(Paper.PAPER, 0.4))
+		if i == index % 8:
+			Props.token(self, center, 7.0, Paper.PAPER)
+		else:
+			draw_circle(center, 4.0, Color(Paper.PAPER, 0.4))

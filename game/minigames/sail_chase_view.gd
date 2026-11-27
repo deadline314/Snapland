@@ -7,7 +7,11 @@ signal command_requested(command: String, pressed: bool, source: String)
 const Paper = preload("res://game/ui/paper_ui.gd")
 const FontProfiles = preload("res://game/ui/font_profiles.gd")
 const Model = preload("res://game/minigames/sail_chase_model.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const StageProps = preload("res://game/minigames/stage_props.gd")
 const DESIGN_SIZE := Vector2(1280, 720)
+const STATUS_PLATE := Rect2(24, 140, 1232, 62)
+const BUTTON_ICONS := ["turn_left", "turn_right", "less", "more"]
 const STAGE := Rect2(24, 208, 1232, 364)
 const METER := Rect2(1066, 222, 178, 336)
 const COMMANDS := ["left", "right", "sheet_in", "sheet_out"]
@@ -108,18 +112,6 @@ func present(state: Dictionary, time_phase: String, reduced_motion: bool) -> voi
 		_apply_snapshot()
 	queue_redraw()
 
-func _material(color: Color, alpha: float = 1.0, glow: float = 0.0) -> StandardMaterial3D:
-	var material := StandardMaterial3D.new()
-	material.albedo_color = Color(color, alpha)
-	material.roughness = 0.8
-	if alpha < 1.0:
-		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	if glow > 0.0:
-		material.emission_enabled = true
-		material.emission = color
-		material.emission_energy_multiplier = glow
-	return material
-
 func _box(node_name: String, size: Vector3, at: Vector3, parent: Node3D, material: Material) -> MeshInstance3D:
 	var node := MeshInstance3D.new()
 	node.name = node_name
@@ -178,6 +170,7 @@ func _create_stage() -> void:
 	_sun.shadow_enabled = true
 	_sun.directional_shadow_max_distance = 50
 	_world.add_child(_sun)
+	StageProps.dress_lighting(_environment, _sun)
 	_camera = Camera3D.new()
 	_camera.name = "SailCamera"
 	_camera.projection = Camera3D.PROJECTION_ORTHOGONAL
@@ -188,13 +181,16 @@ func _create_stage() -> void:
 	_world.add_child(_camera)
 	_camera.look_at(focus)
 	_camera.current = true
-	for item in [["water", "#3b7d92"], ["inner", "#4a8c9c"], ["hull", "#f1e6c8"], ["mast", "#5b4632"], ["sail", "#fff8e6"], ["ship", "#2f4f63"],
+	for item in [["water", "#2f7f8f"], ["hull", "#f1e6c8"], ["mast", "#5b4632"], ["sail", "#fff8e6"], ["ship", "#2f4f63"],
 			["buoy", "#e07a5f"], ["flag", "#ffd36a"], ["wood", "#7a5a3d"], ["wind", "#d8efe8"], ["wake", "#e9f4f2"]]:
-		_materials[item[0]] = _material(Color(item[1]))
-	_materials.lamp = _material(Color("#fff0a0"), 1.0, 2.5)
-	_materials.wake = _material(Color("#e9f4f2"), 0.55)
+		_materials[item[0]] = StageProps.named(item[0], Color(item[1]))
+	_materials["sculpt"] = StageProps.sculpt_material()
+	_materials["foam"] = StageProps.foam_material()
+	_materials.inner = StageProps.water(Color("#4a98a0"))
+	_materials.lamp = StageProps.solid(Color("#fff0a0"), 1.0, 2.5)
+	_materials.wake = StageProps.foam_material()
 	var bounds: Rect2 = _snapshot.bounds
-	_box("Water", Vector3(bounds.size.x + 10, 0.1, bounds.size.y + 8), Vector3(bounds.get_center().x, -0.1, bounds.get_center().y), _world, _materials.water)
+	_box("Water", Vector3(bounds.size.x + 28, 0.1, bounds.size.y + 20), Vector3(bounds.get_center().x, -0.1, bounds.get_center().y), _world, _materials.water)
 	var inner: Rect2 = _snapshot.inner
 	_box("InnerLane", Vector3(inner.size.x, 0.02, inner.size.y), Vector3(inner.get_center().x, -0.03, inner.get_center().y), _world, _materials.inner)
 	_label3d("內線 · 風弱", Vector3(inner.get_center().x, 0.4, inner.get_center().y), _world, 30)
@@ -204,8 +200,9 @@ func _create_stage() -> void:
 		buoy.name = "Buoy%d" % index
 		buoy.position = Vector3(corner.x, 0, corner.y)
 		_world.add_child(buoy)
-		_box("Float", Vector3(0.5, 0.5, 0.5), Vector3(0, 0.15, 0), buoy, _materials.buoy)
-		_box("Pole", Vector3(0.06, 1.4, 0.06), Vector3(0, 0.9, 0), buoy, _materials.mast)
+		StageProps.add(buoy, "Float", StageProps.buoy_mesh(0.3, 0.95, Color("#e07a5f")), _materials.sculpt, Vector3(0, -0.05, 0))
+		StageProps.add(buoy, "FloatFoam", StageProps.foam_ring_mesh(0.4, 0.4), _materials.foam)
+		_box("Pole", Vector3(0.05, 0.75, 0.05), Vector3(0, 1.2, 0), buoy, _materials.mast)
 		var flag := Node3D.new()
 		flag.name = "Flag"
 		flag.position = Vector3(0, 1.45, 0)
@@ -223,8 +220,13 @@ func _create_stage() -> void:
 	_ship = Node3D.new()
 	_ship.name = "Lightship"
 	_world.add_child(_ship)
-	_box("ShipHull", Vector3(1.4, 0.4, 0.6), Vector3(0, 0.15, 0), _ship, _materials.ship)
-	_box("ShipMast", Vector3(0.1, 1.2, 0.1), Vector3(0, 0.9, 0), _ship, _materials.mast)
+	StageProps.add(_ship, "ShipHull", StageProps.boat_mesh(1.7, 0.7, Color("#b6463c"), Color("#ead9af"), 0.38, false), _materials.sculpt, Vector3(0, -0.05, 0))
+	StageProps.add(_ship, "ShipFoam", StageProps.foam_ring_mesh(0.92, 0.42), _materials.foam)
+	_box("ShipHouse", Vector3(0.5, 0.26, 0.34), Vector3(-0.2, 0.5, 0), _ship, _materials.ship)
+	_box("ShipHouseRoof", Vector3(0.58, 0.05, 0.42), Vector3(-0.2, 0.65, 0), _ship, _materials.hull)
+	for leg: float in [-0.12, 0.12]:
+		_box("ShipMast", Vector3(0.05, 1.15, 0.05), Vector3(0.12 + leg, 0.95, leg), _ship, _materials.mast).rotation.z = leg * 1.1
+	_box("LampGallery", Vector3(0.34, 0.05, 0.34), Vector3(0.12, 1.36, 0), _ship, _materials.hull)
 	var lamp := SphereMesh.new()
 	lamp.radius = 0.22
 	lamp.height = 0.44
@@ -235,20 +237,24 @@ func _create_stage() -> void:
 	lamp_node.position = Vector3(0, 1.55, 0)
 	_ship.add_child(lamp_node)
 	_label3d("燈船", Vector3(0, 2.2, 0), _ship, 30)
+	var wake_mesh := StageProps.foam_ring_mesh(0.1, 0.12)
 	for i in WAKE:
-		var wake := _box("Wake%d" % i, Vector3(0.35, 0.02, 0.35), Vector3.ZERO, _world, _materials.wake)
+		var wake := StageProps.add(_world, "Wake%d" % i, wake_mesh, _materials.wake)
 		wake.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		_wake.append(wake)
 	_boat = Node3D.new()
 	_boat.name = "Sailboat"
 	_world.add_child(_boat)
-	_box("Hull", Vector3(1.1, 0.3, 0.42), Vector3(0, 0.1, 0), _boat, _materials.hull)
-	_box("Mast", Vector3(0.07, 1.6, 0.07), Vector3(0.1, 1.0, 0), _boat, _materials.mast)
+	StageProps.add(_boat, "Hull", StageProps.boat_mesh(1.3, 0.52, Color("#f1e6c8"), Color("#3f7f8c"), 0.26), _materials.sculpt, Vector3(0, -0.03, 0))
+	StageProps.add(_boat, "HullFoam", StageProps.foam_ring_mesh(0.7, 0.32), _materials.foam)
+	_box("Mast", Vector3(0.06, 1.6, 0.06), Vector3(0.1, 1.0, 0), _boat, _materials.mast)
+	_box("Pennant", Vector3(0.22, 0.1, 0.02), Vector3(-0.02, 1.76, 0), _boat, StageProps.solid(Color("#e9694f")))
 	_sail = Node3D.new()
 	_sail.name = "SailPivot"
 	_sail.position = Vector3(0.1, 0.25, 0)
 	_boat.add_child(_sail)
-	_box("Sail", Vector3(0.9, 1.3, 0.03), Vector3(-0.45, 0.75, 0), _sail, _materials.sail)
+	StageProps.add(_sail, "Sail", StageProps.sail_mesh(0.9, 1.3, Color("#fff8e6"), Color("#f2d9a6")), _materials.sculpt, Vector3(0, 0.1, 0))
+	_box("Boom", Vector3(0.94, 0.04, 0.04), Vector3(-0.45, 0.1, 0), _sail, _materials.mast)
 
 func _build_wood() -> void:
 	_wood_variant = int(_snapshot.variant)
@@ -263,7 +269,8 @@ func _build_wood() -> void:
 		node.position = Vector3(wood.x, 0.05, wood.y)
 		node.rotation.y = index * 0.9
 		_world.add_child(node)
-		_box("Log", Vector3(1.1, 0.22, 0.3), Vector3.ZERO, node, _materials.wood)
+		StageProps.add(node, "Log", StageProps.log_mesh(1.1, 0.16), _materials.sculpt)
+		StageProps.add(node, "LogFoam", StageProps.foam_ring_mesh(0.62, 0.22), _materials.foam, Vector3(0, -0.04, 0))
 		_wood_nodes.append(node)
 
 func _apply_snapshot() -> void:
@@ -294,6 +301,8 @@ func _apply_snapshot() -> void:
 		_wake[i].scale = Vector3.ONE * (1.0 + i * 0.12)
 	var night := _time_phase == "night"
 	_environment.background_color = Color("#1b2c3a") if night else Color("#b8ccc9")
+	StageProps.set_motion(_materials.water, _reduced_motion)
+	StageProps.set_motion(_materials.inner, _reduced_motion)
 	_sun.light_color = {"dawn": Color("#f2caad"), "noon": Color("#f8efcf"), "dusk": Color("#e2b19c"), "night": Color("#a5c2d8")}.get(_time_phase, Color("#f8efcf"))
 	_sun.light_energy = 0.75 if night else 1.15
 	_sun.rotation_degrees = Vector3(-50, {"dawn": -70.0, "noon": -30.0, "dusk": 40.0, "night": 70.0}.get(_time_phase, -30.0), 0)
@@ -319,32 +328,30 @@ func flag_text() -> String:
 func _text(at: Vector2, text: String, width: float, font_size: int = 18, color: Color = Paper.PAPER) -> void:
 	draw_string(Paper.font(), at, text, HORIZONTAL_ALIGNMENT_LEFT, width, roundi(font_size * Paper.text_scale()), color)
 
+## The fine readings stay one hover away instead of filling the screen.
+func _get_tooltip(at_position: Vector2) -> String:
+	return flag_text() if STATUS_PLATE.has_point(at_position) and not _snapshot.is_empty() else ""
+
 func _draw() -> void:
-	draw_rect(Rect2(24, 140, 1232, 62), Paper.DEEP_TEAL)
+	Props.wood_panel(self, STATUS_PLATE, Props.SIGN_TEAL, true)
 	if not _snapshot.is_empty():
-		_text(Vector2(40, 164), status_text(), 1200)
-		_text(Vector2(40, 191), flag_text(), 1200, 17, Paper.GOLD if _snapshot.shift_visible else Paper.PAPER)
+		_text(Vector2(46, 166), status_text(), 1190, 17)
+		if _snapshot.shift_visible:
+			_text(Vector2(46, 193), flag_text(), 1190, 18, Paper.GOLD)
+		else:
+			_text(Vector2(46, 193), str(_snapshot.get("feedback", "")), 1190, 18, Paper.GOLD)
 		_draw_meter()
 	for i in COMMANDS.size():
-		var command: String = COMMANDS[i]
-		var rect := button_rect(command)
-		var held := _pointer_owners.values().has(command)
-		draw_rect(rect, Paper.FRAME if held else Paper.DEEP_TEAL)
-		draw_rect(rect, Paper.GOLD if held else Paper.TEAL, false, 2)
-		_text(rect.position + Vector2(12, 34), BUTTON_LABELS[i], rect.size.x - 20, 17)
-	_text(Vector2(30, 673), str(_snapshot.get("feedback", "")), 1210, 20, Paper.GOLD)
-	_text(Vector2(30, 704), "帆角約為船首與來風夾角的一半最快；正對來風會停帆，要之字搶風。浮標旗會先轉向預告風向。", 1210, 17)
+		Props.control_key(self, button_rect(COMMANDS[i]), _pointer_owners.values().has(COMMANDS[i]), BUTTON_ICONS[i], BUTTON_LABELS[i], Paper.font(), roundi(17 * Paper.text_scale()), true)
 
 ## Sail efficiency and speed bars with numbers.
 func _draw_meter() -> void:
-	draw_rect(METER, Color(Paper.DEEP, 0.86))
-	draw_rect(METER, Paper.TEAL, false, 2)
+	Props.wood_panel(self, METER, Props.SIGN_TEAL, true)
 	_text(METER.position + Vector2(10, 22), "吃風／船速", 160, 16, Paper.GOLD)
 	var top := METER.position.y + 40
 	var bottom := METER.end.y - 40
 	for column in 2:
 		var value := float(_snapshot.efficiency) if column == 0 else clampf(float(_snapshot.speed) / Model.MAX_BOAT_SPEED, 0.0, 1.0)
 		var bar := Rect2(METER.position.x + 26 + column * 70, top, 40, bottom - top)
-		draw_rect(bar, Color("#22404a"))
-		draw_rect(Rect2(bar.position.x, bottom - value * bar.size.y, bar.size.x, value * bar.size.y), Color("#9fe0c8") if column == 0 else Color("#ffe27a"))
+		Props.gauge(self, bar, value, Color("#9fe0c8") if column == 0 else Color("#ffe27a"))
 		_text(Vector2(bar.position.x - 2, bottom + 24), "%d%%" % roundi(value * 100) if column == 0 else "%.1f" % float(_snapshot.speed), 60, 14)

@@ -6,10 +6,16 @@ signal command_requested(command: String, pressed: bool, source: String)
 const Paper = preload("res://game/ui/paper_ui.gd")
 const FontProfiles = preload("res://game/ui/font_profiles.gd")
 const Model = preload("res://game/minigames/rowing_cargo_model.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const StageProps = preload("res://game/minigames/stage_props.gd")
 const DESIGN_SIZE := Vector2(1280, 720)
 const STAGE := Rect2(24, 208, 1232, 364)
 const COMMANDS := ["left", "right", "stroke", "reverse", "slip_left", "slip_right", "interact"]
 const BUTTON_LABELS := ["A / ← 左舵", "D / → 右舵", "W / ↑ 划槳", "S / ↓ 反槳", "Q 左側滑", "E 右側滑", "空白 拿／交箱"]
+const BUTTON_ICONS := ["turn_left", "turn_right", "oar", "down", "left", "right", "grab"]
+const STATUS_PLATE := Rect2(24, 140, 1232, 62)
+## Each dock flies a colour; a crate wears the band of the dock it is bound for.
+const DOCK_COLORS := [Color("#e9694f"), Color("#f2c14e"), Color("#5fb7a4")]
 var _snapshot: Dictionary = {}
 var _time_phase := "noon"
 var _reduced_motion := false
@@ -116,13 +122,7 @@ func present(state: Dictionary, time_phase: String, reduced_motion: bool) -> voi
 		_apply_snapshot()
 	queue_redraw()
 
-func _material(color: Color) -> StandardMaterial3D:
-	var material := StandardMaterial3D.new()
-	material.albedo_color = color
-	material.roughness = 0.86
-	return material
-
-func _box(node_name: String, dimensions: Vector3, at: Vector3, parent: Node3D, material: StandardMaterial3D) -> MeshInstance3D:
+func _box(node_name: String, dimensions: Vector3, at: Vector3, parent: Node3D, material: Material) -> MeshInstance3D:
 	var node := MeshInstance3D.new()
 	node.name = node_name
 	var mesh := BoxMesh.new()
@@ -133,7 +133,7 @@ func _box(node_name: String, dimensions: Vector3, at: Vector3, parent: Node3D, m
 	parent.add_child(node)
 	return node
 
-func _sphere(node_name: String, radius: float, at: Vector3, parent: Node3D, material: StandardMaterial3D) -> void:
+func _sphere(node_name: String, radius: float, at: Vector3, parent: Node3D, material: Material) -> void:
 	var node := MeshInstance3D.new()
 	node.name = node_name
 	var mesh := SphereMesh.new()
@@ -146,7 +146,7 @@ func _sphere(node_name: String, radius: float, at: Vector3, parent: Node3D, mate
 	node.position = at
 	parent.add_child(node)
 
-func _label3d(text: String, at: Vector3, parent: Node3D) -> void:
+func _label3d(text: String, at: Vector3, parent: Node3D) -> Label3D:
 	var label := Label3D.new()
 	label.text = text
 	label.font = FontProfiles.current_font()
@@ -159,6 +159,7 @@ func _label3d(text: String, at: Vector3, parent: Node3D) -> void:
 	label.outline_size = 8
 	label.position = at
 	parent.add_child(label)
+	return label
 
 func _create_stage() -> void:
 	var container := SubViewportContainer.new()
@@ -192,6 +193,7 @@ func _create_stage() -> void:
 	_sun.shadow_enabled = true
 	_sun.directional_shadow_max_distance = 35
 	_world.add_child(_sun)
+	StageProps.dress_lighting(_environment, _sun)
 	_camera = Camera3D.new()
 	_camera.name = "RowingCamera"
 	_camera.projection = Camera3D.PROJECTION_ORTHOGONAL
@@ -201,15 +203,25 @@ func _create_stage() -> void:
 	_world.add_child(_camera)
 	_camera.look_at(Vector3.ZERO)
 	_camera.current = true
-	for item in [["water", "#346c7b"], ["shelter", "#426f73"], ["wall", "#627b7b"], ["wood", "#9b7751"], ["dark", "#253e52"], ["ivory", "#ead9af"], ["crate", "#c58c59"], ["wave", "#a0c9c0"], ["coat", "#cdad66"], ["skin", "#e4ba91"]]:
-		_materials[item[0]] = _material(Color(item[1]))
+	for item in [["water", "#2f7f8f"], ["shelter", "#3d8d93"], ["wall", "#8a968c"], ["wood", "#a57a4e"], ["quay", "#a9a48f"], ["dark", "#253e52"], ["ivory", "#ead9af"], ["wave", "#cfe9e0"], ["coat", "#cdad66"], ["skin", "#e4ba91"]]:
+		_materials[item[0]] = StageProps.named(item[0], Color(item[1]))
+	_materials["sculpt"] = StageProps.sculpt_material()
+	_materials["foam"] = StageProps.foam_material()
 	_box("Water", Vector3(22, 0.12, 14), Vector3(0, -0.13, 0), _world, _materials.water)
 	var shelter: Rect2 = _snapshot.get("shelter", Rect2(-11, 3.8, 22, 3.2))
 	_box("ShelteredWater", Vector3(shelter.size.x, 0.02, shelter.size.y), Vector3(shelter.get_center().x, -0.05, shelter.get_center().y), _world, _materials.shelter)
-	for z in [-7.0, 7.0]:
-		_box("BasinEdge", Vector3(22.3, 0.2, 0.15), Vector3(0, 0, z), _world, _materials.dark)
-	for x in [-11.0, 11.0]:
-		_box("BasinEdge", Vector3(0.15, 0.2, 14), Vector3(x, 0, 0), _world, _materials.dark)
+	# A stone quay frames the basin, so the water never ends in bare backdrop.
+	for z in [-9.5, 9.5]:
+		_box("Quay", Vector3(34, 0.5, 5), Vector3(0, 0.02, z), _world, _materials.quay)
+		_box("BasinEdge", Vector3(22.5, 0.12, 0.3), Vector3(0, 0.3, signf(z) * 7.12), _world, _materials.dark)
+	for x in [-14.0, 14.0]:
+		_box("Quay", Vector3(6, 0.5, 14), Vector3(x, 0.02, 0), _world, _materials.quay)
+		_box("BasinEdge", Vector3(0.3, 0.12, 14.5), Vector3(signf(x) * 11.12, 0.3, 0), _world, _materials.dark)
+	var pile := StageProps.pile_mesh(0.14, 0.75)
+	for index in 9:
+		StageProps.add(_world, "QuayBollard", pile, _materials.sculpt, Vector3(-10.0 + index * 2.5 + (0.4 if index % 3 == 1 else 0.0), 0.27, -7.55))
+	for corner: Vector3 in [Vector3(-11.6, 0.27, -6.2), Vector3(-11.7, 0.27, 6.1), Vector3(11.6, 0.27, -6.4), Vector3(11.7, 0.27, 5.9)]:
+		StageProps.add(_world, "QuayCargo", StageProps.crate_mesh(Vector3(0.55, 0.5, 0.7), Color("#8f6f4c")), _materials.sculpt, corner)
 	for i in 2:
 		_walls.append(_box("Breakwater%d" % i, Vector3.ONE, Vector3.ZERO, _world, _materials.wall))
 	for dock in _snapshot.get("docks", []):
@@ -218,18 +230,19 @@ func _create_stage() -> void:
 		node.position = Vector3(dock.position.x, 0, dock.position.y)
 		_world.add_child(node)
 		_box("DockDeck", Vector3(dock.size.x, 0.18, dock.size.y), Vector3(0, 0.04, -0.65), node, _materials.wood)
-		for plank in 6:
-			_box("PlankSeam", Vector3(0.025, 0.025, dock.size.y), Vector3(-1.0 + plank * 0.4, 0.145, -0.65), node, _materials.dark)
 		for x in [-1.0, 1.0]:
-			_box("MooringPost", Vector3(0.12, 0.65, 0.12), Vector3(x, 0.2, -0.95), node, _materials.ivory)
-		_label3d("碼頭 %d" % dock.id, Vector3(0, 1.1, -0.9), node)
+			StageProps.add(node, "MooringPost", pile, _materials.sculpt, Vector3(x, 0, -0.95))
+		_box("FlagPole", Vector3(0.05, 1.0, 0.05), Vector3(0, 0.6, -1.0), node, _materials.ivory)
+		_box("DockFlag", Vector3(0.42, 0.26, 0.03), Vector3(0.23, 0.95, -1.0), node, StageProps.solid(DOCK_COLORS[(int(dock.id) - 1) % DOCK_COLORS.size()]))
+		_label3d("碼頭 %d" % dock.id, Vector3(0, 1.5, -0.9), node)
 	for crate in _snapshot.get("cargo", []):
 		var node := Node3D.new()
 		node.name = crate.id
 		_world.add_child(node)
-		_box("CargoBox", Vector3(0.5, 0.5, 0.5), Vector3(0, 0.25, 0), node, _materials.crate)
-		_box("CargoStrap", Vector3(0.54, 0.07, 0.54), Vector3(0, 0.3, 0), node, _materials.dark)
-		_label3d("%s → %d" % [str(crate.id).trim_prefix("crate-"), crate.destination], Vector3(0, 0.95, 0), node)
+		var band: Color = DOCK_COLORS[(int(crate.destination) - 1) % DOCK_COLORS.size()]
+		StageProps.add(node, "CargoBox", StageProps.crate_mesh(Vector3(0.52, 0.48, 0.52), Color("#b98a57"), band), _materials.sculpt)
+		StageProps.add(node, "CargoFoam", StageProps.foam_ring_mesh(0.34, 0.34), _materials.foam, Vector3(0, 0.01, 0))
+		_label3d("%s→%d" % [str(crate.id).trim_prefix("crate-"), crate.destination], Vector3(0, 0.95, 0), node).font_size = 30
 		_crates[crate.id] = node
 	for i in 9:
 		var wave := _box("Wave%d" % i, Vector3(0.035, 0.025, 0.6), Vector3(-10 + i * 2.5, 0, -4.8), _world, _materials.wave)
@@ -239,7 +252,7 @@ func _create_stage() -> void:
 		_waves.append(wave)
 	for x in [-6, -3, 0, 3, 6]:
 		_box("LongRouteDash", Vector3(0.7, 0.025, 0.07), Vector3(x, 0, 5.3), _world, _materials.ivory)
-	_label3d("堤後長路 · 弱浪", Vector3(0, 0.4, 6.3), _world)
+	_label3d("堤後長路", Vector3(0, 0.4, 6.3), _world)
 	_force = Node3D.new()
 	_force.name = "WaveForce"
 	_force.position = Vector3(-5, 0.1, -5.7)
@@ -255,22 +268,9 @@ func _create_boat() -> void:
 	_boat = Node3D.new()
 	_boat.name = "Boat"
 	_world.add_child(_boat)
-	var hull := _box("Hull", Vector3.ONE, Vector3.ZERO, _boat, _materials.dark)
-	var outline := [Vector2(-0.45, -0.18), Vector2(0.23, -0.26), Vector2(0.55, 0), Vector2(0.23, 0.26), Vector2(-0.45, 0.18), Vector2(-0.52, 0)]
-	var surface := SurfaceTool.new()
-	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	for i in outline.size():
-		var a: Vector2 = outline[i]
-		var b: Vector2 = outline[(i + 1) % outline.size()]
-		for vertex in [Vector3(0, 0.26, 0), Vector3(b.x, 0.26, b.y), Vector3(a.x, 0.26, a.y), Vector3(a.x, 0.26, a.y), Vector3(b.x, 0.26, b.y), Vector3(b.x * 0.7, 0.02, b.y * 0.7), Vector3(a.x, 0.26, a.y), Vector3(b.x * 0.7, 0.02, b.y * 0.7), Vector3(a.x * 0.7, 0.02, a.y * 0.7)]:
-			surface.add_vertex(vertex)
-	surface.generate_normals()
-	hull.mesh = surface.commit()
-	_box("Deck", Vector3(0.60, 0.06, 0.34), Vector3(-0.08, 0.28, 0), _boat, _materials.wood)
-	var bow := _box("Bow", Vector3(0.14, 0.06, 0.14), Vector3(0.36, 0.29, 0), _boat, _materials.ivory)
-	bow.rotation.y = PI / 4
+	StageProps.add(_boat, "Hull", StageProps.boat_mesh(1.25, 0.62, Color("#c4553f"), Color("#ead9af"), 0.26), _materials.sculpt, Vector3(0, -0.02, 0))
+	StageProps.add(_boat, "HullFoam", StageProps.foam_ring_mesh(0.66, 0.36), _materials.foam, Vector3(0, 0.01, 0))
 	for side in [-1, 1]:
-		_box("Gunwale", Vector3(0.85, 0.12, 0.055), Vector3(-0.03, 0.28, side * 0.24), _boat, _materials.ivory)
 		var oar := Node3D.new()
 		oar.name = "OarLeft" if side == -1 else "OarRight"
 		oar.position = Vector3(-0.08, 0.3, side * 0.22)
@@ -319,6 +319,8 @@ func _apply_snapshot() -> void:
 		_waves[i].scale.z = 1.4 if _snapshot.crest else 0.75
 	var night := _time_phase == "night"
 	_environment.background_color = Color("#1d3443") if night else Color("#b1c4c0")
+	StageProps.set_motion(_materials.water, _reduced_motion)
+	StageProps.set_motion(_materials.shelter, _reduced_motion)
 	_sun.light_color = {"dawn": Color("#f2caad"), "noon": Color("#f8efcf"), "dusk": Color("#e2b19c"), "night": Color("#a5c2d8")}.get(_time_phase, Color("#f8efcf"))
 	_sun.light_energy = 0.85 if night else 1.2
 	_sun.rotation_degrees = Vector3(-38, {"dawn": -75.0, "noon": -55.0, "dusk": 45.0, "night": 75.0}.get(_time_phase, -55.0), 0)
@@ -331,17 +333,21 @@ func status_text() -> String:
 func _text(at: Vector2, text: String, width: float, font_size: int = 18, color: Color = Paper.PAPER) -> void:
 	draw_string(Paper.font(), at, text, HORIZONTAL_ALIGNMENT_LEFT, width, roundi(font_size * Paper.text_scale()), color)
 
+func detail_text() -> String:
+	if _snapshot.is_empty():
+		return ""
+	return "靠岸速度 %.2f / %.2f　角度 %d° / %d°　最近碼頭 %d　%s　%s" % [_snapshot.speed, _snapshot.dock_speed_limit, roundi(rad_to_deg(_snapshot.dock_angle_error)), roundi(rad_to_deg(_snapshot.dock_angle_limit)), _snapshot.nearest_dock, "堤後遮蔽" if _snapshot.sheltered else "迎浪水域", _carrying_text()]
+
+## The fine readings stay one hover away instead of filling the screen.
+func _get_tooltip(at_position: Vector2) -> String:
+	return detail_text() if STATUS_PLATE.has_point(at_position) else ""
+
 func _draw() -> void:
-	draw_rect(Rect2(24, 140, 1232, 62), Paper.DEEP_TEAL)
+	Props.wood_panel(self, STATUS_PLATE, Props.SIGN_TEAL, true)
 	if not _snapshot.is_empty():
-		_text(Vector2(40, 164), status_text(), 1200)
-		_text(Vector2(40, 191), "靠岸速度 %.2f / %.2f　角度 %d° / %d°　最近碼頭 %d　%s　%s" % [_snapshot.speed, _snapshot.dock_speed_limit, roundi(rad_to_deg(_snapshot.dock_angle_error)), roundi(rad_to_deg(_snapshot.dock_angle_limit)), _snapshot.nearest_dock, "堤後遮蔽" if _snapshot.sheltered else "迎浪水域", _carrying_text()], 1200, 17)
+		_text(Vector2(46, 166), status_text(), 1190)
+		_text(Vector2(46, 193), feedback_text(_snapshot), 1190, 18, Paper.GOLD)
 	for i in COMMANDS.size():
-		var command: String = COMMANDS[i]
-		var rect := button_rect(command)
-		var held := _pointer_owners.values().has(command)
-		draw_rect(rect, Paper.FRAME if held else Paper.DEEP_TEAL)
-		draw_rect(rect, Paper.GOLD if held else Paper.TEAL, false, 2)
-		_text(rect.position + Vector2(10, 34), BUTTON_LABELS[i], rect.size.x - 16, 17)
-	_text(Vector2(30, 673), feedback_text(_snapshot), 1210, 20, Paper.GOLD)
-	_text(Vector2(30, 704), "舵需按住；槳與側滑每按一次出力。虛線為堤後長路；碼頭需慢速平行靠岸。", 1210, 17)
+		var rect := button_rect(COMMANDS[i])
+		var held := _pointer_owners.values().has(COMMANDS[i])
+		Props.control_key(self, rect, held, BUTTON_ICONS[i], BUTTON_LABELS[i], Paper.font(), roundi(16 * Paper.text_scale()))

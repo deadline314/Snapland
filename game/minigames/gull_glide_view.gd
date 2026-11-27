@@ -7,7 +7,10 @@ signal command_requested(command: String, pressed: bool, source: String)
 const Paper = preload("res://game/ui/paper_ui.gd")
 const FontProfiles = preload("res://game/ui/font_profiles.gd")
 const Model = preload("res://game/minigames/gull_glide_model.gd")
+const Props = preload("res://game/ui/pixel_props.gd")
+const StageProps = preload("res://game/minigames/stage_props.gd")
 const DESIGN_SIZE := Vector2(1280, 720)
+const STATUS_PLATE := Rect2(24, 140, 1232, 62)
 const STAGE := Rect2(24, 208, 1232, 364)
 const METER := Rect2(1150, 222, 94, 336)
 const TUCK_BUTTON := Rect2(28, 590, 420, 56)
@@ -18,6 +21,8 @@ var _snapshot: Dictionary = {}
 var _time_phase := "noon"
 var _reduced_motion := false
 var _pointer_owners: Dictionary = {}
+var _sky: MeshInstance3D
+var _gull_mesh: Mesh
 var _viewport: SubViewport
 var _world: Node3D
 var _camera: Camera3D
@@ -105,14 +110,6 @@ func present(state: Dictionary, time_phase: String, reduced_motion: bool) -> voi
 		_apply_snapshot()
 	queue_redraw()
 
-func _material(color: Color, alpha: float = 1.0) -> StandardMaterial3D:
-	var material := StandardMaterial3D.new()
-	material.albedo_color = Color(color, alpha)
-	material.roughness = 0.85
-	if alpha < 1.0:
-		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	return material
-
 func _box(node_name: String, size: Vector3, at: Vector3, parent: Node3D, material: Material) -> MeshInstance3D:
 	var node := MeshInstance3D.new()
 	node.name = node_name
@@ -144,16 +141,16 @@ func _make_gull(node_name: String, body: Material, wing: Material) -> Node3D:
 	var gull := Node3D.new()
 	gull.name = node_name
 	_world.add_child(gull)
-	_box("Body", Vector3(0.9, 0.3, 0.3), Vector3.ZERO, gull, body)
-	_box("Head", Vector3(0.3, 0.26, 0.26), Vector3(0.5, 0.1, 0), gull, body)
-	_box("Beak", Vector3(0.22, 0.08, 0.08), Vector3(0.72, 0.06, 0), gull, _materials.beak)
-	_box("Tail", Vector3(0.3, 0.06, 0.3), Vector3(-0.55, 0.02, 0), gull, wing)
+	StageProps.add(gull, "Body", _gull_mesh, body)
 	for side in [-1.0, 1.0]:
 		var pivot := Node3D.new()
 		pivot.name = "Wing%s" % ("L" if side < 0.0 else "R")
 		pivot.position = Vector3(0.05, 0.08, side * 0.12)
 		gull.add_child(pivot)
-		_box("Blade", Vector3(0.42, 0.05, 1.3), Vector3(0, 0, side * 0.65), pivot, wing)
+		var blade := _box("Blade", Vector3(0.42, 0.05, 1.3), Vector3(0, 0, side * 0.65), pivot, wing)
+		# Dark primaries at the wingtip and a pale trailing edge.
+		_box("Tip", Vector3(0.36, 0.06, 0.34), Vector3(-0.03, 0, side * 0.5), blade, _materials.wingtip if wing == _materials.wing else wing)
+		_box("Trail", Vector3(0.1, 0.055, 1.0), Vector3(-0.17, 0, -side * 0.1), blade, _materials.trail if wing == _materials.wing else wing)
 		pivot.set_meta("side", side)
 	return gull
 
@@ -186,7 +183,10 @@ func _create_stage() -> void:
 	_world.add_child(environment_node)
 	_sun = DirectionalLight3D.new()
 	_sun.name = "CliffSun"
+	_sun.shadow_enabled = true
+	_sun.directional_shadow_max_distance = 60
 	_world.add_child(_sun)
+	StageProps.dress_lighting(_environment, _sun)
 	_camera = Camera3D.new()
 	_camera.name = "SideCamera"
 	_camera.projection = Camera3D.PROJECTION_ORTHOGONAL
@@ -195,15 +195,30 @@ func _create_stage() -> void:
 	_camera.rotation_degrees = Vector3(-12, 0, 0)
 	_world.add_child(_camera)
 	_camera.current = true
-	for item in [["sea", "#3d7d8f"], ["foam", "#d8ece6"], ["rock", "#6f7a76"], ["cliff", "#8a7a62"], ["grass", "#7fa36a"], ["nest", "#b48a52"],
-			["gull", "#f4f1e8"], ["wing", "#9aa7ab"], ["beak", "#f0b443"], ["feather", "#fff6d8"], ["reach", "#e2674f"], ["wind", "#e9f4f2"]]:
-		_materials[item[0]] = _material(Color(item[1]))
-	_materials["thermal"] = _material(Color("#ffd98a"), 0.18)
-	_materials["ghost"] = _material(Color("#f4f1e8"), 0.45)
-	_materials["ghost_wing"] = _material(Color("#9aa7ab"), 0.45)
+	_materials.sea = StageProps.water(Color("#2f7f8f"))
+	_materials.rock = StageProps.stone(Color("#7d8580"), 1.0, 0.6)
+	_materials.cliff = StageProps.stone(Color("#9a8a6e"), 1.0, 0.6)
+	_materials.grass = StageProps.painted(Color("#7fa36a"))
+	_materials.sculpt = StageProps.sculpt_material()
+	_materials.wing = StageProps.solid(Color("#a9b5b8"))
+	_materials.wingtip = StageProps.solid(Color("#3a4248"))
+	_materials.trail = StageProps.solid(Color("#eef0ea"))
+	_materials.reach = StageProps.solid(Color("#e2674f"))
+	_materials.wind = StageProps.solid(Color("#e9f4f2"), 0.8)
+	_materials.thermal = StageProps.solid(Color("#ffd98a"), 0.1)
+	_materials.draft = StageProps.solid(Color("#fff2c4"), 0.22)
+	_materials.ghost = StageProps.sculpt_material()
+	_materials.ghost.albedo_color = Color(1, 1, 1, 0.45)
+	_materials.ghost.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	_materials.ghost_wing = StageProps.solid(Color("#a9b5b8"), 0.45)
+	_gull_mesh = StageProps.gull_body_mesh()
+	_sky = StageProps.sky_card(_world, Vector3(COURSE_END * 0.5, 10.0, -7.0), Vector2(COURSE_END + 80.0, 26.0), 0.0)
 	_box("Sea", Vector3(COURSE_END + 60.0, 8.0, 12.0), Vector3(COURSE_END * 0.5, -4.0, -2.0), _world, _materials.sea)
 	_box("StartRock", Vector3(3.0, 7.0, 3.0), Vector3(-2.5, 3.5, -1.0), _world, _materials.cliff)
-	_bird = _make_gull("Gull", _materials.gull, _materials.wing)
+	_box("StartTurf", Vector3(3.1, 0.25, 3.1), Vector3(-2.5, 7.0, -1.0), _world, _materials.grass)
+	for rock in [[4.0, 1.1], [21.0, 0.8], [37.0, 1.3], [52.0, 0.9]]:
+		StageProps.add(_world, "SeaRock", StageProps.rock_mesh(rock[1], rock[1] * 1.4, Color("#7d8580")), _materials.sculpt, Vector3(rock[0], -0.2, -2.6))
+	_bird = _make_gull("Gull", _materials.sculpt, _materials.wing)
 	_companion = _make_gull("Companion", _materials.ghost, _materials.ghost_wing)
 	_bird.scale = Vector3.ONE * 1.6
 	_companion.scale = Vector3.ONE * 1.2
@@ -223,17 +238,22 @@ func _build_layout() -> void:
 	var index := 0
 	for column: Vector2 in _snapshot.thermals:
 		var thermal := _box("Thermal%d" % index, Vector3(column.y - column.x, Model.CEILING, 1.6), Vector3((column.x + column.y) * 0.5, Model.CEILING * 0.5, -0.6), _world, _materials.thermal)
+		# Rising streaks of warm air, so the column reads as moving air, not a slab.
+		for streak in 4:
+			var across := (streak + 0.5) / 4.0 - 0.5
+			_box("Draft", Vector3(0.12, Model.CEILING * (0.5 + 0.12 * (streak % 3)), 0.12), Vector3(across * (column.y - column.x) * 0.8, -Model.CEILING * 0.12 * (streak % 2), 0.82), thermal, _materials.draft)
 		_label3d("上升氣流", Vector3(0, -Model.CEILING * 0.5 + 0.9, 0.9), thermal, 24)
 		_layout_nodes.append(thermal)
 		index += 1
 	index = 0
+	var feather_mesh := StageProps.feather_mesh(1.1)
 	for feather: Dictionary in _snapshot.feathers:
 		var at: Vector2 = feather.position
 		var node := Node3D.new()
 		node.name = "Feather%d" % index
 		node.position = Vector3(at.x, at.y, 0)
 		_world.add_child(node)
-		var quill := _box("Quill", Vector3(1.1, 0.2, 0.3), Vector3.ZERO, node, _materials.feather)
+		var quill := StageProps.add(node, "Quill", feather_mesh, _materials.sculpt)
 		quill.rotation_degrees = Vector3(0, 0, 35)
 		_feather_nodes.append(node)
 		_layout_nodes.append(node)
@@ -242,14 +262,15 @@ func _build_layout() -> void:
 	var center: float = gap.x + gap.width * 0.5
 	var lower := _box("GapLower", Vector3(gap.width, gap.low + 1.0, 2.0), Vector3(center, (gap.low - 1.0) * 0.5, 0), _world, _materials.rock)
 	var upper := _box("GapUpper", Vector3(gap.width, gap.top - gap.high, 2.0), Vector3(center, (gap.top + gap.high) * 0.5, 0), _world, _materials.rock)
+	_box("GapCap", Vector3(gap.width + 0.2, 0.2, 2.1), Vector3(0, (gap.top - gap.high) * 0.5, 0), upper, _materials.grass)
 	var gap_label := _label3d("岩縫", Vector3(center, gap.top + 0.7, 0.9), _world, 26)
 	_layout_nodes.append_array([lower, upper, gap_label])
 	var nest: Vector2 = _snapshot.nest
 	var cliff_top: float = nest.y - Model.NEST_BELOW
 	var cliff := _box("NestCliff", Vector3(8.0, cliff_top + 1.0, 4.0), Vector3(nest.x + 4.0, (cliff_top - 1.0) * 0.5, -1.0), _world, _materials.cliff)
 	_box("CliffTurf", Vector3(8.0, 0.2, 4.0), Vector3(0, (cliff_top + 1.0) * 0.5, 0), cliff, _materials.grass)
-	var bowl := _box("Nest", Vector3(1.4, 0.4, 1.4), Vector3(nest.x + 0.9, cliff_top + 0.2, 0), _world, _materials.nest)
-	_label3d("巢", Vector3(0, 0.9, 0.9), bowl, 28)
+	var bowl := StageProps.add(_world, "Nest", StageProps.nest_mesh(0.7), _materials.sculpt, Vector3(nest.x + 0.9, cliff_top, 0))
+	_label3d("巢", Vector3(0, 1.1, 0.9), bowl, 28)
 	_layout_nodes.append_array([cliff, bowl])
 
 func _set_wings(gull: Node3D, tucked: bool, flap: float) -> void:
@@ -292,6 +313,8 @@ func _apply_snapshot() -> void:
 	_sun.light_color = {"dawn": Color("#f2caad"), "noon": Color("#f8efcf"), "dusk": Color("#e2b19c"), "night": Color("#a5c2d8")}.get(_time_phase, Color("#f8efcf"))
 	_sun.light_energy = 0.75 if night else 1.15
 	_sun.rotation_degrees = Vector3(-50, {"dawn": -60.0, "noon": -20.0, "dusk": 30.0, "night": 60.0}.get(_time_phase, -20.0), 0)
+	StageProps.set_motion(_materials.sea, _reduced_motion)
+	StageProps.set_sky_phase(_sky, _time_phase, _reduced_motion)
 
 func status_text() -> String:
 	if _snapshot.is_empty():
@@ -319,29 +342,30 @@ func guide_text() -> String:
 func _text(at: Vector2, text: String, width: float, font_size: int = 18, color: Color = Paper.PAPER) -> void:
 	draw_string(Paper.font(), at, text, HORIZONTAL_ALIGNMENT_LEFT, width, roundi(font_size * Paper.text_scale()), color)
 
+## The fine print stays one hover away instead of filling the screen.
+func _get_tooltip(at_position: Vector2) -> String:
+	if _snapshot.is_empty() or not STATUS_PLATE.has_point(at_position):
+		return ""
+	return "放開＝展翼：慢沉、借氣流拉高；收翼越久衝越快，放開時把速度換回高度。\n高處風大滑得慢、看得遠；貼海面風小但容易落水。紅柱是現在展翼能滑到的落點。"
+
 func _draw() -> void:
-	draw_rect(Rect2(24, 140, 1232, 62), Paper.DEEP_TEAL)
+	Props.wood_panel(self, STATUS_PLATE, Props.SIGN_TEAL, true)
 	if not _snapshot.is_empty():
-		_text(Vector2(40, 164), status_text(), 1200, 17)
-		_text(Vector2(40, 191), guide_text(), 1200, 17, Paper.GOLD if _snapshot.tucked else Paper.PAPER)
+		_text(Vector2(46, 166), status_text(), 1190, 17)
+		_text(Vector2(46, 193), guide_text(), 1190, 17, Paper.GOLD)
 		_draw_meter()
 	var held := not _pointer_owners.is_empty() or bool(_snapshot.get("tucked", false))
-	draw_rect(TUCK_BUTTON, Paper.FRAME if held else Paper.DEEP_TEAL)
-	draw_rect(TUCK_BUTTON, Paper.GOLD if held else Paper.TEAL, false, 2)
-	_text(TUCK_BUTTON.position + Vector2(14, 35), "按住收翼（空白／S／↓，或按住畫面）", TUCK_BUTTON.size.x - 20, 17)
-	_text(Vector2(470, 625), "放開＝展翼：慢沉、借氣流拉高；收翼越久衝越快，放開時把速度換回高度。", 780, 16)
-	_text(Vector2(30, 673), str(_snapshot.get("feedback", "")), 1210, 20, Paper.GOLD)
-	_text(Vector2(30, 704), "高處風大滑得慢、看得遠；貼海面風小但容易落水。紅柱是現在展翼能滑到的落點。", 1210, 17)
+	Props.control_key(self, TUCK_BUTTON, held, "wing", "按住收翼（空白／S／↓，或按住畫面）", Paper.font(), roundi(17 * Paper.text_scale()), true)
+	_text(Vector2(470, 625), str(_snapshot.get("feedback", "")), 780, 18, Paper.GOLD)
 
 ## Usable height: the gull's altitude against the next feather and the nest.
 func _draw_meter() -> void:
-	draw_rect(METER, Color(Paper.DEEP, 0.86))
-	draw_rect(METER, Paper.TEAL, false, 2)
-	_text(METER.position + Vector2(10, 22), "高度", 80, 16, Paper.GOLD)
+	Props.wood_panel(self, METER, Props.SIGN_TEAL, true)
+	_text(METER.position + Vector2(12, 24), "高度", 80, 16, Paper.GOLD)
 	var top := METER.position.y + 40
 	var bottom := METER.end.y - 18
 	var bar := Rect2(METER.position.x + 30, top, 34, bottom - top)
-	draw_rect(bar, Color("#22404a"))
+	Props.gauge(self, bar, 0.0, Color("#9fd7c8"))
 	var to_y := func(height: float) -> float: return bottom - clampf(height / Model.CEILING, 0.0, 1.0) * bar.size.y
 	# Wind shading: stronger toward the top.
 	for band in 7:

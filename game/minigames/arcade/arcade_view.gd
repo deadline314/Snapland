@@ -10,7 +10,11 @@ extends Control
 const Medal = preload("res://game/ui/arcade_medal.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
 const Pixels = preload("res://game/minigames/arcade/arcade_pixels.gd")
+## The shared minigame drawing kit; the helpers below are thin wrappers over it.
+const Props = preload("res://game/ui/pixel_props.gd")
 const DESIGN := Vector2(1280, 720)
+## Dusky plum the circus sprites' shadows lean toward.
+const SPRITE_SHADE := Color(0.05, 0.02, 0.09)
 const INK := Color("#1b1626")
 const CREAM := Color("#fff5dc")
 const GOLD := Color("#ffd166")
@@ -118,80 +122,46 @@ func stage_floor(top: float, wood: Color, seam: Color) -> void:
 
 ## A baked material (see Pixels.surface) stretched over `rect`, outline included.
 func panel(rect: Rect2, kind: String, base: Color, trim := Color(0, 0, 0, 0), texel := TEXEL, tint := Color.WHITE) -> void:
-	var size := Vector2i(maxi(2, roundi(rect.size.x / texel) - 2), maxi(2, roundi(rect.size.y / texel) - 2))
-	draw_texture_rect(Pixels.surface(kind, size, base, trim), rect, false, tint)
+	Props.surface(self, rect, kind, base, trim, texel, tint)
 
 
 ## A chipped gilt frame `border` design pixels wide around `rect`'s edge.
 func gilt_frame(rect: Rect2, border: float, base := GILT, texel := TEXEL, tint := Color.WHITE) -> void:
-	var size := Vector2i(maxi(4, roundi(rect.size.x / texel) - 2), maxi(4, roundi(rect.size.y / texel) - 2))
-	draw_texture_rect(Pixels.frame(size, maxi(3, roundi(border / texel) - 1), base), rect, false, tint)
+	Props.gilt_frame(self, rect, border, base, texel, tint)
 
 
 ## A highlight sweeping across something round and shiny every `period` seconds.
 func glint(center: Vector2, radius: float, period := 3.0, offset := 0.0) -> void:
-	if reduced_motion:
-		return
-	var phase := fposmod(now + offset, period) / 0.45
-	if phase >= 1.0:
-		return
-	var across := lerpf(-radius * 1.4, radius * 1.4, phase)
-	var step := maxf(2.0, roundf(radius / 6.0))
-	var y := -radius
-	while y < radius:
-		var point := Vector2(across + y * 0.5, y)
-		if point.length() < radius * 0.82:
-			draw_rect(Rect2(center + point - Vector2(step, step * 0.5), Vector2(step * 2.0, step)), Color(1, 0.97, 0.86, 0.7))
-		y += step
+	if not reduced_motion:
+		Props.glint(self, center, radius, fposmod(now + offset, period) / 0.45)
 
 
 ## A slanted band of light crossing `rect` as `phase` runs from 0 to 1, drawn
 ## in texel rows so it stays pixel art.
 func sheen(rect: Rect2, phase: float, width: float, alpha := 0.18, slant := 0.6) -> void:
-	if reduced_motion or phase < 0.0 or phase >= 1.0:
-		return
-	var travel := rect.size.x + rect.size.y * slant + width
-	var y := rect.position.y
-	while y < rect.end.y:
-		var left := rect.position.x - width - rect.size.y * slant + phase * travel + (rect.end.y - y) * slant
-		var from := maxf(left, rect.position.x)
-		var to := minf(left + width, rect.end.x)
-		if to > from:
-			draw_rect(Rect2(from, y, to - from, minf(TEXEL, rect.end.y - y)), Color(1, 0.98, 0.9, alpha))
-		y += TEXEL
+	if not reduced_motion:
+		Props.sheen(self, rect, phase, width, alpha, slant, TEXEL)
 
 
 ## Dust kicked up where something lands; `elapsed` counts from the impact.
 func dust_puffs(at: Vector2, elapsed: float, spread := 60.0) -> void:
-	if reduced_motion or elapsed < 0.0 or elapsed > 0.5:
-		return
-	var t := elapsed / 0.5
-	for side: float in [-1.0, 1.0]:
-		for puff in 3:
-			var reach := spread * (0.4 + puff * 0.3) * (1.0 - (1.0 - t) * (1.0 - t))
-			var size := roundf((10.0 - puff * 2.0) * (1.0 - t * 0.5))
-			var centre := (at + Vector2(side * reach, -puff * 4.0 - 10.0 * t)).round()
-			draw_rect(Rect2(centre - Vector2(size, size * 0.6), Vector2(size * 2.0, size * 1.2)), Color(0.9, 0.82, 0.74, 0.55 * (1.0 - t)))
-			draw_rect(Rect2(centre - Vector2(size * 0.6, size), Vector2(size * 1.2, size * 0.5)), Color(1.0, 0.94, 0.86, 0.45 * (1.0 - t)))
+	if not reduced_motion:
+		Props.dust_puffs(self, at, elapsed, spread)
 
 
 ## Draw a baked sprite (arcade_pixels.gd) so texel (0, 0) of its shape lands on `at`.
 func stamp(texture: Texture2D, at: Vector2, scale_factor := TEXEL, tint := Color.WHITE) -> void:
-	draw_texture_rect(texture, Rect2(at - Vector2.ONE * scale_factor, Vector2(texture.get_size()) * scale_factor), false, tint)
+	Props.stamp(self, texture, at, scale_factor, tint)
 
 
 ## The shadow a hung or standing sprite throws on whatever is behind it.
 func cast_shadow(texture: Texture2D, at: Vector2, offset := Vector2(10, 14), scale_factor := TEXEL, strength := 0.3) -> void:
-	stamp(texture, at + offset, scale_factor, Color(0.05, 0.02, 0.09, strength))
+	Props.sprite_shadow(self, texture, at, offset, scale_factor, strength, SPRITE_SHADE)
 
 
 ## Darkened side edges keep the eye on the middle and sink sprites into the painting.
 func vignette(strength := 0.5) -> void:
-	for band in 5:
-		var reach := 160.0 - band * 30.0
-		var shade := Color(0.04, 0.02, 0.07, strength * 0.2)
-		draw_rect(Rect2(0, PLAY_TOP, reach, DESIGN.y - PLAY_TOP), shade)
-		draw_rect(Rect2(DESIGN.x - reach, PLAY_TOP, reach, DESIGN.y - PLAY_TOP), shade)
+	Props.vignette(self, Rect2(0, PLAY_TOP, DESIGN.x, DESIGN.y - PLAY_TOP), strength, Color(0.04, 0.02, 0.07))
 
 
 ## A wooden bench or shelf from `top` to the bottom edge: grained boards, a lit
@@ -239,11 +209,7 @@ func pulse(rate := 1.0, offset := 0.0) -> float:
 
 ## Soft contact shadow so objects sit on the floor instead of floating.
 func ground_shadow(center: Vector2, radii: Vector2, strength := 0.34) -> void:
-	for ring in 3:
-		var grow := 1.0 - ring * 0.22
-		draw_set_transform(center, 0.0, Vector2(1.0, radii.y / radii.x))
-		draw_circle(Vector2.ZERO, radii.x * grow, Color(0.05, 0.02, 0.09, strength * 0.42))
-	draw_set_transform(Vector2.ZERO)
+	Props.oval_shadow(self, center, radii, strength, SPRITE_SHADE)
 
 
 ## Centred text with a dark pixel outline; `scale_factor` pops it around its
