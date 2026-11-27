@@ -9,6 +9,7 @@ extends "res://game/minigames/arcade/arcade_view.gd"
 ## about below, whose hair goes flat. Every object is baked pixel art.
 
 const Hero = preload("res://game/minigames/arcade/arcade_hero.gd")
+const Greenhouse = preload("res://game/minigames/arcade/greenhouse_backdrop.gd")
 const LEAF_LEFT := 150.0
 const LEAF_RIGHT := 1110.0
 const PIVOT := Vector2(630, 404)
@@ -41,7 +42,6 @@ const BUG := Color("#9ccf52")
 const DARK := Color("#24302c")
 const MORNING := Color(1.0, 0.98, 0.94)
 
-var _scene: ImageTexture
 var _leaf: ImageTexture
 var _pot: ImageTexture
 var _hanging: ImageTexture
@@ -49,6 +49,7 @@ var _droplet: ImageTexture
 var _bug: ImageTexture
 var _bud: ImageTexture
 var _bloom: ImageTexture
+var _bud_pot: ImageTexture
 
 
 func _init() -> void:
@@ -57,7 +58,6 @@ func _init() -> void:
 
 
 func _ready() -> void:
-	_scene = Pixels.bake("dew-scene", Vector2i(320, 180), _paint_scene)
 	_leaf = Pixels.bake("dew-leaf", LEAF_TEXELS, _paint_leaf)
 	_pot = Pixels.bake("dew-pot", POT, _paint_pot)
 	_hanging = Pixels.bake("dew-hanging", Vector2i(16, 22), _paint_hanging)
@@ -65,16 +65,12 @@ func _ready() -> void:
 	_bug = Pixels.bake("dew-bug", Vector2i(18, 7), _paint_bug)
 	_bud = Pixels.bake("dew-bud", BUD_TEXELS, _paint_bud)
 	_bloom = Pixels.bake("dew-bloom", BLOOM_TEXELS, _paint_bloom)
+	_bud_pot = Pixels.bake("dew-bud-pot", Vector2i(17, 10), _paint_bud_pot)
 
 
 
 func _draw_backdrop() -> void:
-	stamp(_scene, Vector2.ZERO)
-	# Sun shafts slant through the roof glass.
-	for shaft in 3:
-		var x := 260.0 + shaft * 330.0
-		var sway := 0.0 if reduced_motion else 14.0 * sin(now * 0.4 + shaft)
-		draw_colored_polygon(PackedVector2Array([Vector2(x + sway, 150), Vector2(x + 70 + sway, 150), Vector2(x - 60, 650), Vector2(x - 170, 650)]), Color(1, 0.97, 0.8, 0.07))
+	Greenhouse.draw(self, now, reduced_motion)
 	bench(FLOOR_TOP, WOOD)
 	vignette(0.4)
 
@@ -247,6 +243,9 @@ func _draw_pot() -> void:
 # --- The bud and the pour -------------------------------------------------------
 
 func _draw_bud() -> void:
+	# The bud grows from its own little clay pot on the bench.
+	var pot := Vector2(BUD_ROOT.x - 34.0, BUD_ROOT.y - 34.0)
+	ground_shadow(BUD_ROOT + Vector2(8, 4), Vector2(54, 9), 0.42)
 	draw_line(BUD_ROOT, BUD_HEAD + Vector2(0, 30), LEAF_DARK.darkened(0.25), 9.0)
 	draw_line(BUD_ROOT, BUD_HEAD + Vector2(0, 30), LEAF_DARK, 5.0)
 	draw_line(BUD_ROOT + Vector2(-2, 0), BUD_HEAD + Vector2(-2, 30), LEAF.lightened(0.1), 1.0)
@@ -254,7 +253,7 @@ func _draw_bud() -> void:
 		var leaf := BUD_ROOT + Vector2(side * 4.0 - 6.0, -40.0)
 		draw_line(leaf, leaf + Vector2(side * 26.0, -16.0), LEAF_DARK, 7.0)
 		draw_line(leaf, leaf + Vector2(side * 24.0, -15.0), LEAF, 3.0)
-	ground_shadow(BUD_ROOT + Vector2(4, 0), Vector2(30, 6), 0.35)
+	stamp(_bud_pot, pot, TEXEL, MORNING)
 	var pour: Dictionary = state.get("pour", {})
 	var since := age(float(pour.get("at", -99.0))) if not pour.is_empty() else 99.0
 	var total := float(state.get("pour_seconds", 1.1))
@@ -363,47 +362,6 @@ func _draw_gust() -> void:
 
 
 # --- Texel painters ---------------------------------------------------------------
-
-func _paint_scene(x: int, y: int) -> Color:
-	if y < 40:
-		# Roof glass in iron glazing bars, brighter toward the morning sun.
-		if x % 40 < 2 or y >= 38:
-			return IRON.lightened(0.2) if x % 40 == 0 or y == 38 else IRON
-		var pane := Color("#86a89f").lerp(Color("#c4d9c6"), clampf(1.0 - absf(x - 120.0) / 200.0, 0.0, 1.0) * 0.6)
-		if Pixels.noise(x / 4, y / 3, 3) > 0.82:
-			pane = pane.lightened(0.07)
-		return Pixels.grainy(pane, x, y, 0.05)
-	if y < 150:
-		# Tall panes with the garden outside softly out of focus: a pale sky,
-		# rounded shrubs along the bottom, and a shelf of potted ferns inside.
-		if x % 64 < 2:
-			return IRON.lightened(0.12) if x % 64 == 0 else IRON.darkened(0.1)
-		var outside := Color("#a9c3b2").lerp(Color("#7f9f8a"), float(y - 40) / 110.0)
-		var bush := 118.0 - 14.0 * absf(sin(x * 0.07)) - 9.0 * absf(sin(x * 0.023 + 1.0))
-		if y > bush:
-			outside = Color("#5f8466").lerp(Color("#476a52"), clampf((y - bush) / 20.0, 0.0, 1.0))
-		if y >= 104 and y <= 106:
-			return Pixels.wood(WOOD.darkened(0.15), x, y, 12, false)
-		if y > 86 and y < 104 and (x / 26) % 3 != 1:
-			var cell := x % 26
-			var frond := Vector2((cell - 13.0) / 12.0, (y - 99.0) / 12.0)
-			if y > 97 and cell > 8 and cell < 18:
-				return Pixels.rounded(CLAY.darkened(0.2), Vector2((cell - 13.0) / 5.0, (y - 101.0) / 3.0))
-			if frond.length() < 1.0 and posmod(cell + y, 3) != 0:
-				return Pixels.rounded(Color("#4f8a4a"), frond)
-		return Pixels.grainy(GLASS.darkened(0.25).lerp(outside, 0.7), x, y, 0.04)
-	if y < 152:
-		return Color("#c9b9a0") if y == 150 else Color("#9a8a72")
-	# Mossy brick plinth down to the floor.
-	var course := (y - 152) / 4
-	var shifted := x + (4 if course % 2 == 1 else 0)
-	if (y - 152) % 4 == 3 or shifted % 9 == 0:
-		return Color("#5a4a3a")
-	var brick := Color("#9a5a44").darkened(0.12 * Pixels.noise(shifted / 9, course, 5))
-	if Pixels.noise(shifted / 3, course, 7) > 0.78:
-		brick = brick.lerp(Color("#5f8a4a"), 0.5)
-	return Pixels.grainy(brick, x, y, 0.1)
-
 
 ## The broad leaf seen from just above its edge: pointed tip on the right, a
 ## rounded base on the left, a pale midrib, paired veins and a glossy top.
@@ -521,3 +479,16 @@ func _paint_bloom(x: int, y: int) -> Color:
 	if at.y > 2.0 and absf(at.x) < 6.0 - (at.y - 2.0) * 0.8:
 		return Pixels.lit(BUD, -at.x / 6.0, x, y)
 	return Pixels.CLEAR
+
+
+func _paint_bud_pot(x: int, y: int) -> Color:
+	# A small clay pot with a rolled rim and dark soil around the stalk.
+	var middle := 8.5
+	if y < 2:
+		if y == 0 and absf(x + 0.5 - middle) < 6.0:
+			return Pixels.grainy(SOIL, x, y, 0.2)
+		return CLAY.lightened(0.15) if y == 0 else CLAY.darkened(0.1)
+	var half := 8.0 - (y - 2) * 0.45
+	if absf(x + 0.5 - middle) > half:
+		return Pixels.CLEAR
+	return Pixels.grainy(Pixels.lit(CLAY, -(x + 0.5 - middle) / half * 0.8, x, y), x, y, 0.07)

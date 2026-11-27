@@ -32,7 +32,7 @@ const STANDS := {
 		{"id": "game-073", "title": "螢火蟲長曝光", "prompt": "螢火蟲長曝光 · 忍住別按",
 			"stand": Vector3(-9.6, 0.2, 5.6), "point": Vector3(-8.5, 0.2, 6.9), "prop": "camera", "paint": Color("#38534e")},
 		{"id": "game-074", "title": "露珠牽橋", "prompt": "露珠牽橋 · 傾斜葉子滾露珠",
-			"stand": Vector3(9.0, 0.2, 6.0), "point": Vector3(10.0, 0.2, 7.4), "prop": "dew", "paint": Color("#4f7f5a")},
+			"stand": Vector3(-6.6, 0.2, 6.2), "point": Vector3(-5.5, 0.2, 7.5), "prop": "dew", "paint": Color("#4f7f5a")},
 		{"id": "game-077", "title": "睡蓮踏浪", "prompt": "睡蓮踏浪 · 踩葉過池",
 			"stand": Vector3(-2.6, 0.2, -7.7), "point": Vector3(-1.55, 0.2, -6.35), "prop": "lily", "paint": Color("#3f6f5a")},
 		{"id": "game-079", "title": "蘑菇撐傘", "prompt": "蘑菇撐傘 · 替幼苗接雨",
