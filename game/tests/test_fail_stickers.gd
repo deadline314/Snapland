@@ -71,7 +71,7 @@ func _every_arcade_game_reaches_its_fail() -> void:
 		if not bool(definition.get("arcade", false)):
 			continue
 		var failed := false
-		for pattern in ["idle", "mash", "hold", "arrows"]:
+		for pattern in ["idle", "mash", "hold", "arrows", "keep"]:
 			var game: RefCounted = (load("res://game/minigames/arcade/%s_driver.gd" % definition.mode) as Script).new()
 			game.round_seed = 4
 			game.reset(false, "noon")
@@ -82,6 +82,8 @@ func _every_arcade_game_reaches_its_fail() -> void:
 					_key(game, KEY_SPACE, false)
 				elif pattern == "hold" and tick % 20 == 0:
 					_key(game, KEY_SPACE, tick % 40 == 0)
+				elif pattern == "keep" and tick == 0:
+					_key(game, KEY_SPACE, true)
 				elif pattern == "arrows" and tick % 3 == 0:
 					var arrow: Key = [KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE][(tick / 3) % 5]
 					_key(game, arrow, true)

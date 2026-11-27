@@ -2,7 +2,7 @@ extends RefCounted
 
 const DATA_PATHS := {"welcome": "res://game/data/welcome_games.json", "harbor": "res://game/data/harbor_games.json", "candy": "res://game/data/candy_games.json", "nightmarket": "res://game/data/nightmarket_games.json", "circus": "res://game/data/circus_games.json", "toy": "res://game/data/toy_games.json", "garden": "res://game/data/garden_games.json"}
 const ZONE_STARTS := {"welcome": 1, "harbor": 13, "candy": 25, "nightmarket": 37, "circus": 49, "toy": 61, "garden": 73}
-const ZONE_COUNTS := {"welcome": 12, "harbor": 12, "candy": 12, "nightmarket": 12, "circus": 6, "toy": 8, "garden": 4}
+const ZONE_COUNTS := {"welcome": 12, "harbor": 12, "candy": 12, "nightmarket": 12, "circus": 7, "toy": 8, "garden": 4}
 ## A zone holds twelve numbered slots; a delivered game keeps its slot's number,
 ## so later zones may leave gaps (game-077 is the garden's fifth slot).
 const ZONE_SLOTS := 12

@@ -26,8 +26,9 @@ const BUCKLE := Color("#e8b44a")
 static var _ramps: Array = []
 
 
-## `pose` is idle, left, right or up (arms only); `front` faces the viewer.
-## Moods change the face: plain, shocked, sorry, tongue.
+## `pose` is idle, left, right, up (arms only) or nose (pinching it, front
+## only); `front` faces the viewer. Moods change the face: plain, shocked,
+## sorry, tongue, stinky (eyes squeezed shut and watering).
 static func texture(pose: StringName, front: bool, mood := "plain") -> Texture2D:
 	var key := "arcade-hero|%s|%s|%s" % [pose, front, mood]
 	var painted: Image = null
@@ -64,7 +65,8 @@ static func _paint(pose: StringName, front: bool, mood: String) -> Image:
 			hands[1] = Vector2(37.5, 22)
 		&"up":
 			hands = [Vector2(6, 4.5), Vector2(34, 4.5)]
-	_arm(ids, Vector2(11.5, 24), hands[0])
+	if pose != &"nose" or not front:
+		_arm(ids, Vector2(11.5, 24), hands[0])
 	_arm(ids, Vector2(28.5, 24), hands[1])
 	var hx := 20 + lean
 	_fill(ids, hx - 2, 19, hx + 2, 22, SKIN)
@@ -86,7 +88,35 @@ static func _paint(pose: StringName, front: bool, mood: String) -> Image:
 			_put(ids, hx + at.x, at.y, STREAK)
 	var image := _shade(ids)
 	_details(image, ids, front, mood, hx)
+	if pose == &"nose" and front:
+		_pinch(image, hx)
 	return image
+
+
+## The sleeve rises across the chest, the cuff sits under the chin and an
+## outlined hand pinches the nose; painted after the face so it stays on top.
+static func _pinch(image: Image, hx: int) -> void:
+	var coat: Array = _ramps[COAT]
+	for step in 6:
+		var x := hx - 9 + step
+		var y := 23 - step
+		image.set_pixel(x, y, coat[3] if step % 2 == 0 else coat[2])
+		image.set_pixel(x, y + 1, coat[2])
+		image.set_pixel(x, y + 2, coat[1])
+	for at: Vector2i in [Vector2i(hx - 3, 17), Vector2i(hx - 3, 18), Vector2i(hx - 2, 18), Vector2i(hx - 4, 18)]:
+		image.set_pixel(at.x, at.y, _ramps[CUFF][2])
+	var outline := (_ramps[SKIN][1] as Color).darkened(0.55)
+	for x in range(hx - 2, hx + 2):
+		image.set_pixel(x, 13, outline)
+		image.set_pixel(x, 14, _ramps[SKIN][3])
+		image.set_pixel(x, 15, _ramps[SKIN][2])
+		image.set_pixel(x, 16, _ramps[SKIN][2])
+		image.set_pixel(x, 17, outline)
+	image.set_pixel(hx + 2, 14, outline)
+	image.set_pixel(hx + 2, 15, outline)
+	image.set_pixel(hx + 2, 16, outline)
+	image.set_pixel(hx - 1, 15, _ramps[SKIN][1])
+	image.set_pixel(hx, 15, outline)
 
 
 static func _arm(ids: PackedByteArray, shoulder: Vector2, hand: Vector2) -> void:
@@ -173,6 +203,12 @@ static func _details(image: Image, ids: PackedByteArray, front: bool, mood: Stri
 			image.set_pixel(hx + 1, 18, INK)
 			_rect(image, hx + 7, 9, 1, 2, SWEAT)
 			_rect(image, hx + 8, 10, 1, 2, SWEAT)
+		"stinky":
+			for eye: int in [left, right]:
+				_rect(image, eye - 1, 14, 3, 1, INK)
+				image.set_pixel(eye - 1 if eye == left else eye + 1, 13, INK)
+				_rect(image, eye if eye == left else eye + 1, 15, 1, 3, SWEAT)
+			_rect(image, hx + 7, 9, 1, 2, SWEAT)
 		"tongue":
 			_rect(image, left, 15, 2, 1, INK)
 			_eye(image, right)

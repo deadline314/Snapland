@@ -13,7 +13,7 @@ CANDY_DELIVERED = 12  # game-025 onward, in local order
 NIGHTMARKET_DELIVERED = 12  # game-037 onward, in local order
 # Later zones deliver any of their twelve numbered slots, in any order between zones:
 # zone -> (first game number, delivered game numbers); rows live in game/data/<zone>_games.json.
-LATER_ZONES = {'circus': (49, (49, 50, 51, 52, 55, 57)), 'toy': (61, (61, 62, 63, 64, 65, 66, 68, 70)), 'garden': (73, (73, 77, 79, 80))}
+LATER_ZONES = {'circus': (49, (49, 50, 51, 52, 53, 55, 57)), 'toy': (61, (61, 62, 63, 64, 65, 66, 68, 70)), 'garden': (73, (73, 77, 79, 80))}
 ZONES = ('welcome', 'harbor', 'candy', 'nightmarket', 'circus', 'toy', 'garden', 'hotel', 'sky', 'cinema')
 CORES = {'掌握', '取捨', '預測', '創意', '協調', '節奏'}
 GAME_FIELDS = ('id', 'name', 'zone', 'core', 'action', 'goal', 'choice', 'feedback', 'variation', 'solo', 'multi', 'ai', 'demon', 'demon_assist_policy', 'variant', 'assist', 'test', 'reference', 'revision', 'revision_reason', 'presentation', 'implementation')

@@ -582,6 +582,17 @@ func _topper(sculpt: Kit.Sculpt, top: Vector3, kind: String) -> void:
 			sculpt.box(top + Vector3(0.1, 1.04, 0), Vector3(0.1, 0.18, 0.08), Props.TEAL)
 			sculpt.box(top + Vector3(0.1, 1.18, 0), Vector3(0.08, 0.08, 0.08), Props.CREAM)
 			sculpt.box(top + Vector3(0.1, 1.06, 0.04), Vector3(0.7, 0.02, 0.02), Props.GOLD, Basis(Vector3.BACK, 0.12))
+		"hat":
+			# An upside-down top hat with a rabbit popping out and a scarf trailing over the brim.
+			sculpt.tube(top + Vector3(0, 0.22, 0), 0.24, 0.24, 0.44, Props.NIGHT.darkened(0.3), 10)
+			sculpt.tube(top + Vector3(0, 0.08, 0), 0.245, 0.245, 0.08, Props.RED, 10)
+			sculpt.tube(top + Vector3(0, 0.46, 0), 0.38, 0.38, 0.04, Props.NIGHT.darkened(0.3), 12)
+			sculpt.box(top + Vector3(-0.02, 0.6, 0), Vector3(0.2, 0.2, 0.16), Props.CREAM)
+			for ear: float in [-0.06, 0.06]:
+				sculpt.box(top + Vector3(-0.02 + ear, 0.8, 0), Vector3(0.05, 0.2, 0.04), Props.CREAM)
+				sculpt.box(top + Vector3(-0.02 + ear, 0.8, 0.025), Vector3(0.02, 0.14, 0.01), Props.ROSE)
+			for link in 4:
+				sculpt.box(top + Vector3(0.3 + link * 0.06, 0.44 - link * 0.11, 0.05), Vector3(0.1, 0.1, 0.03), [Props.RED, Props.GOLD, Props.TEAL, Props.PLUM][link], Basis(Vector3.BACK, 0.6))
 		"scenery":
 			# A toy theatre: gilt posts and a valance, a painted castle cloth halfway
 			# down on its batten and the flown forest cloth above, with a pull rope.

@@ -80,6 +80,26 @@
     ]
   },
   {
+    "id": "game-053",
+    "mode": "hat_trick",
+    "zone": "circus",
+    "local_index": 5,
+    "arcade": true,
+    "name": "帽中套物",
+    "goal": "按住從魔術帽裡拉出彩巾、花束、鴿子和兔子，拉越多一帽越值錢；在臭鼬出來前放手收下。",
+    "instructions": "按住空白鍵、E 或手把 A 鍵一直從帽子拉東西，放手就收下這一帽；帽子又抖又冒煙代表下一個是臭鼬，只抖或只冒煙是假的。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助拉帽子拿到金牌",
+    "ordinary": "在臭鼬出來前放手收下，拿到銅牌",
+    "attraction_tag": "魔術帽小舞台",
+    "island_invitation": "帽子裡什麼都有，越拉越多越值錢。只是……最後面住著一隻臭鼬。",
+    "retake_props": [
+      "hat",
+      "mascot",
+      "balloon"
+    ]
+  },
+  {
     "id": "game-055",
     "mode": "human_cannon",
     "zone": "circus",
