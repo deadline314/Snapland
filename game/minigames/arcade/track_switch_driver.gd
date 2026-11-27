@@ -1,7 +1,10 @@
 extends "res://game/minigames/arcade/arcade_driver.gd"
 ## 軌道換軌: toy trains in three colours puff in from the left along a wooden
 ## track to a three-way set of points. Throw the points up, straight on or down
-## (↑ → ↓) so each train runs into the station of its own colour. A train sent
+## (↑ → ↓) so each train runs into the station of its own colour. The points
+## spring back to "stop" once a train has run over them, and a train that finds
+## them at stop waits at the signal, tooting, until they are thrown: every train
+## needs its own throw, so a round left alone earns nothing. A train sent
 ## to the wrong station shoots off the end of the line and tips into the big
 ## toy box, tooting a trail of little stars. Trains come quicker, longer and
 ## closer together; some stop short, toot and back up before charging on.
@@ -38,11 +41,12 @@ const STREAK_POINTS := 5
 const ASSIST_SPEED := 1.25
 const STREAK_CAP := 5
 const CRASH_SECONDS := 1.2
-## Points: 0 up, 1 straight on, 2 down.
+## Points: 0 up, 1 straight on, 2 down, or STOP.
 const BRANCHES := 3
+const STOP := -1
 
-## Where the points send the next train.
-var points := 1
+## Where the points send the next train; STOP holds it at the signal.
+var points := STOP
 var points_at := -99.0
 ## Which colour each station takes, top to bottom.
 var stations: Array[int] = [0, 1, 2]
@@ -83,7 +87,7 @@ func _init() -> void:
 
 
 func _begin_round(_chosen: Dictionary) -> void:
-	points = 1
+	points = STOP
 	points_at = -99.0
 	stations = [0, 1, 2]
 	shuffle_at = -99.0
@@ -113,7 +117,7 @@ func _warm_up(delta: float) -> void:
 func _go() -> void:
 	_demo = false
 	trains.clear()
-	points = 1
+	points = STOP
 	streak = 0
 	_next_train = clock + 0.3
 	_next_shuffle = clock + SHUFFLE_SECONDS
@@ -137,7 +141,7 @@ func _press(button: StringName) -> void:
 		&"down":
 			_throw(2)
 		&"action", &"second":
-			_throw((points + 1) % BRANCHES)
+			_throw((points + 1) % BRANCHES if points != STOP else 0)
 
 
 func _snapshot(into: Dictionary) -> void:
@@ -223,8 +227,15 @@ func _move(delta: float) -> void:
 			continue
 		var step := base * delta * _pace(train)
 		var s := float(train.s) + step
-		if int(train.branch) < 0 and s < JUNCTION + 0.001:
-			s = minf(s, ahead_tail - GAP)
+		if int(train.branch) < 0:
+			if s < JUNCTION + 0.001:
+				s = minf(s, ahead_tail - GAP)
+			# Points at stop hold the train at the signal, however fast it comes.
+			if points == STOP and s >= JUNCTION:
+				s = JUNCTION - 0.0005
+				if not bool(train.get("waiting", false)):
+					train.waiting = true
+					sound(74)
 		train.s = s
 		if int(train.branch) < 0:
 			ahead_tail = float(train.s) - train_length(train)
@@ -271,6 +282,10 @@ func _reach_points(train: Dictionary) -> void:
 	train.branch = points
 	train.right = stations[points] == int(train.colour)
 	train.speed = 1.0
+	train.waiting = false
+	# The points spring back to stop behind it.
+	points = STOP
+	points_at = clock
 
 
 func _arrive(train: Dictionary) -> void:

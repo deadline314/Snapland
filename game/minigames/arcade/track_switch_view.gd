@@ -132,11 +132,12 @@ func _draw_track() -> void:
 	var main := PackedVector2Array()
 	for step in 13:
 		main.append(Vector2(lerpf(MAIN_LEFT - 40.0, POINTS_X, step / 12.0), MAIN_Y))
-	var thrown := int(state.get("points", 1))
+	var thrown := int(state.get("points", -1))
 	for branch in BRANCH_Y.size():
 		if branch != thrown:
 			_rails(_branch_points(branch))
-	_rails(_branch_points(thrown), true)
+	if thrown >= 0:
+		_rails(_branch_points(thrown), true)
 	_rails(main, true)
 	# Joints every so often, like real toy-track pieces.
 	for step in 6:
@@ -145,9 +146,13 @@ func _draw_track() -> void:
 
 
 func _draw_points() -> void:
-	var thrown := int(state.get("points", 1))
+	var thrown := int(state.get("points", -1))
 	var since := age(float(state.get("points_at", -99.0)))
 	var post := Vector2(POINTS_X - 10.0, MAIN_Y - 40.0)
+	if thrown < 0:
+		_draw_stop(post, since)
+		_draw_branch_keys(thrown, since)
+		return
 	# A signal post with an arrow arm that swings to the thrown branch.
 	draw_rect(Rect2(post + Vector2(-4, -70), Vector2(10, 74)), DARK)
 	draw_rect(Rect2(post + Vector2(-2, -70), Vector2(6, 74)), WOOD.lightened(0.15))
@@ -163,6 +168,23 @@ func _draw_points() -> void:
 	draw_colored_polygon(PackedVector2Array([head[0] - Vector2.from_angle(swing) * 3.0, head[1].lerp(head[0], 0.15), head[2].lerp(head[0], 0.15)]), COLOURS[0])
 	draw_circle(pivot, 8.0, DARK)
 	draw_circle(pivot, 6.0, STEEL)
+	_draw_branch_keys(thrown, since)
+
+
+## Points at stop: the post shows a red disc until they are thrown.
+func _draw_stop(post: Vector2, since: float) -> void:
+	draw_rect(Rect2(post + Vector2(-4, -70), Vector2(10, 74)), DARK)
+	draw_rect(Rect2(post + Vector2(-2, -70), Vector2(6, 74)), WOOD.lightened(0.15))
+	ground_shadow(post + Vector2(8, 6), Vector2(20, 5), 0.4)
+	var disc := post + Vector2(1, -82)
+	var grow := pop_in(since, 0.2)
+	draw_circle(disc, 20.0 * grow, DARK)
+	draw_circle(disc, 17.0 * grow, COLOURS[0])
+	draw_circle(disc + Vector2(-4, -4), 8.0 * grow, COLOURS[0].lightened(0.25))
+	label(disc, "停", 18, LABEL, grow)
+
+
+func _draw_branch_keys(thrown: int, since: float) -> void:
 	# The key for each branch sits beside it.
 	for branch in BRANCH_Y.size():
 		var at: Vector2 = _along(float(state.get("junction", 0.55)) + float(state.get("branch", 0.45)) * 0.42, branch)[0]
@@ -223,6 +245,8 @@ func _draw_train(train: Dictionary) -> void:
 				draw_circle(at + Vector2(size.x * 0.25 - rise * 30.0, -size.y + 6.0 - rise * 36.0), 6.0 + rise * 8.0, Color(LABEL, 0.45 * (1.0 - rise)))
 		if index == 0 and bool(train.backer) and str(train.get("phase", "")) in ["stop", "back"]:
 			label(at + Vector2(0, -size.y - 10.0), "倒車～" if str(train.phase) == "back" else "？", 20, LABEL)
+		if index == 0 and bool(train.get("waiting", false)) and str(train.state) == "run":
+			label(at + Vector2(0, -size.y - 14.0 - 4.0 * pulse(2.5)), "嘟嘟！", 20, LABEL)
 
 
 ## A wrong train leaps off the end of the line into the toy box, tooting stars.
