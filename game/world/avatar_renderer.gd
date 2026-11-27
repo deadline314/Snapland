@@ -117,8 +117,17 @@ var _diagonal_hair_valid := false
 var _diagonal_hat_valid := false
 var animation_library: RefCounted
 
+## Atlas-derived state captured after the first successful load, keyed by
+## property name. Decoding and scanning the source atlases takes about a second,
+## and every world, wardrobe and minigame view creates its own renderer.
+static var _shared_sources: Dictionary = {}
+
+## Forget the shared sources so the next renderer reloads them from disk.
+static func clear_shared_sources() -> void:
+	_shared_sources.clear()
+
 func _init() -> void:
-	_load_atlas()
+	_load_sources_once()
 	animation_library = CharacterAnimationLibraryScript.new()
 	if FileAccess.file_exists(HEAD_MATERIAL_OWNERS_PATH):
 		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(HEAD_MATERIAL_OWNERS_PATH))
@@ -134,6 +143,33 @@ func _init() -> void:
 			# JSON numbers are floats; Array equality would reject [280.0,360.0].
 			if canvas is Array and canvas.size()==2 and (canvas[0] is int or canvas[0] is float) and (canvas[1] is int or canvas[1] is float) and float(canvas[0])==280.0 and float(canvas[1])==360.0:
 				_side_coat_owners = materials.owners
+
+func _load_sources_once() -> void:
+	if not _shared_sources.is_empty():
+		for property: String in _shared_sources:
+			var shared: Variant = _shared_sources[property]
+			# Containers are copied so one renderer can never grow another's tables;
+			# the images inside stay shared and are only ever read.
+			set(property, shared.duplicate() if shared is Array or shared is Dictionary else shared)
+		return
+	var before := _source_property_values()
+	_load_atlas()
+	if not _atlas_valid:
+		return
+	var after := _source_property_values()
+	for property: String in after:
+		if after[property] != before[property]:
+			var loaded: Variant = after[property]
+			_shared_sources[property] = loaded.duplicate() if loaded is Array or loaded is Dictionary else loaded
+
+func _source_property_values() -> Dictionary:
+	var values := {}
+	for property: Dictionary in (get_script() as Script).get_script_property_list():
+		if int(property.usage) & PROPERTY_USAGE_SCRIPT_VARIABLE == 0:
+			continue
+		var value: Variant = get(str(property.name))
+		values[str(property.name)] = value.duplicate() if value is Array or value is Dictionary else value
+	return values
 
 func head_source_signature(source: Image) -> String:
 	var context := HashingContext.new()
