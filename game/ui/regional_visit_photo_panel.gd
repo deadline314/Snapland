@@ -16,7 +16,7 @@ func _ready() -> void:
 	mouse_filter = MOUSE_FILTER_IGNORE
 	_bottom = PanelContainer.new()
 	_bottom.name = "StoryPhotoControls"
-	_bottom.add_theme_stylebox_override("panel", Paper.plaque(Color("#233048")))
+	_bottom.add_theme_stylebox_override("panel", Paper.signboard(Color("#233048")))
 	add_child(_bottom)
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 14)

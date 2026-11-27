@@ -89,10 +89,10 @@ func _run() -> void:
 func _check_paper_depth() -> void:
 	var button := Button.new()
 	Paper.set_button_role(button, "primary")
-	var normal := button.get_theme_stylebox("normal") as StyleBoxFlat
-	var hover := button.get_theme_stylebox("hover") as StyleBoxFlat
-	var pressed := button.get_theme_stylebox("pressed") as StyleBoxFlat
-	_check(normal != null and normal.corner_radius_top_left == 0 and normal.shadow_size > 0, "paper buttons use square hard pixel edges and a cast shadow")
+	var normal := button.get_theme_stylebox("normal") as Paper.Board
+	var hover := button.get_theme_stylebox("hover") as Paper.Board
+	var pressed := button.get_theme_stylebox("pressed") as Paper.Board
+	_check(normal != null and normal.corner >= 1 and normal.get_border_width(SIDE_BOTTOM) - normal.get_border_width(SIDE_TOP) >= 3 and normal.shadow_size > 0, "paper buttons use stepped pixel corners, an underside lip and a cast shadow")
 	_check(hover != null and hover.shadow_size >= normal.shadow_size and pressed != null and pressed.shadow_size == 0, "hover raises paper controls and press collapses their depth")
 	button.queue_free()
 	var selector := OptionButton.new()
@@ -298,13 +298,13 @@ func _check_map() -> void:
 		var detail := _overlay.find_child("DestinationDetails", true, false)
 		_check(_contains_text(detail, "6 張") and _contains_text(detail, "準備中"), "gate details preserve the original unlock eligibility")
 		_check(gate.text!="01" and gate.tooltip_text.contains("第 01 區"),"gate labels name their destination and tooltip retains full zone name and threshold")
-		_check((gate.get_theme_stylebox("normal") as StyleBoxFlat).border_color==Color("#f2bd68"),"selected gate is visually distinct on the map")
+		_check((gate.get_theme_stylebox("normal") as Paper.Board).border_color==Color("#f2bd68"),"selected gate is visually distinct on the map")
 	var station := _overlay.find_child("MapStop_game-010", true, false) as Button
 	if station != null:
 		station.emit_signal("pressed")
 		await _frames(1)
 		_check(_contains_text(_overlay.find_child("DestinationDetails", true, false), "泡泡遊戲 10"), "selecting a station updates its actual destination details")
-		_check((station.get_theme_stylebox("normal") as StyleBoxFlat).border_color==Color("#f2bd68"),"selected station is visually distinct on the map")
+		_check((station.get_theme_stylebox("normal") as Paper.Board).border_color==Color("#f2bd68"),"selected station is visually distinct on the map")
 	_check(_overlay.find_child("MapStop_game-010", true, false) != null, "destination selection stays inside the map and does not invoke a teleport")
 	for physical_size in [Vector2i(800, 450), Vector2i(1280, 720), Vector2i(1920, 1080)]:
 		get_window().size = physical_size

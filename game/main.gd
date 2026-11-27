@@ -383,15 +383,7 @@ func _build_ui() -> void:
 	banner.position=Vector2(24,20)
 	banner.custom_minimum_size=Vector2(320,48)
 	banner.size=Vector2(320,48)
-	var banner_style := StyleBoxFlat.new()
-	banner_style.bg_color=Color(0.025,0.09,0.13,0.9)
-	banner_style.border_width_left=3
-	banner_style.border_color=Paper.TEAL
-	banner_style.content_margin_left=12
-	banner_style.content_margin_right=12
-	banner_style.content_margin_top=8
-	banner_style.content_margin_bottom=8
-	banner.add_theme_stylebox_override("panel",banner_style)
+	banner.add_theme_stylebox_override("panel",Paper.nameplate())
 	hud.add_child(banner)
 	var banner_box := VBoxContainer.new()
 	banner_box.size_flags_horizontal=Control.SIZE_EXPAND_FILL
@@ -477,14 +469,22 @@ func _build_ui() -> void:
 	context_action.name="ContextAction"
 	context_action.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	context_action.visible=false
+	Paper.set_button_role(context_action,"primary")
 	context_bar.visible=false
-	toast=Paper.label("",21,Paper.GOLD)
+	# Notices arrive as a cream voyage ticket so they read over any scene.
+	toast=Paper.label("",21,Paper.TICKET_INK)
 	toast.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
 	toast.position=Vector2(-310,130)
 	toast.size=Vector2(620,90)
 	toast.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
-	toast.add_theme_color_override("font_shadow_color",Paper.INK)
-	toast.add_theme_constant_override("shadow_offset_y",2)
+	toast.add_theme_color_override("font_color",Paper.TICKET_INK)
+	var toast_paper := Paper.ticket(30.0)
+	toast_paper.content_margin_left=44
+	toast_paper.content_margin_right=20
+	toast_paper.content_margin_top=10
+	toast_paper.content_margin_bottom=13
+	toast.add_theme_stylebox_override("normal",toast_paper)
+	toast.visible=false
 	hud.add_child(toast)
 	field_chip=FieldGameChip.new()
 	hud.add_child(field_chip)
@@ -538,11 +538,11 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	var panel := PanelContainer.new()
 	panel.name="AdaptiveMenuPanel"
 	panel.custom_minimum_size=Vector2.ZERO
-	var menu_face := Paper.plaque()
+	var menu_face := Paper.signboard()
 	if market_menu:
 		menu_face.bg_color=Color("#201b36")
 		menu_face.border_color=Color("#725a88")
-		menu_face.shadow_color=Color("#100e20d9")
+		menu_face.shadow_color=Color("#100e2099")
 	panel.add_theme_stylebox_override("panel",menu_face)
 	center.add_child(panel)
 	_layout_open_panel(panel)
@@ -2436,11 +2436,14 @@ func _show_wardrobe() -> void:
 
 func _notice(message: String) -> void:
 	toast.text=message
+	toast.visible=not message.is_empty()
+	# Shrink the ticket to the wrapped message instead of a fixed slab.
+	toast.size.y=0.0
 	if not message.is_empty():
 		PaperMotion.pop(toast,1.08)
 		PaperMotion.flash(toast,PaperMotion.GAIN_TINT,0.5)
 	var timer := get_tree().create_timer(3.5)
-	timer.timeout.connect(func(): if is_instance_valid(toast) and toast.text==message: toast.text="")
+	timer.timeout.connect(func(): if is_instance_valid(toast) and toast.text==message: toast.text=""; toast.visible=false)
 
 func _achievement_toast(id: String) -> void:
 	var label := ""
@@ -2676,10 +2679,10 @@ func _adapt_hud() -> void:
 	context_bar.offset_left=-context_extent.x*0.5
 	context_bar.offset_right=context_extent.x*0.5
 	context_bar.offset_top=context_bar.offset_bottom-context_extent.y
-	toast.offset_left=-310.0/scale_factor
-	toast.offset_right=310.0/scale_factor
+	toast.offset_left=-250.0/scale_factor
+	toast.offset_right=250.0/scale_factor
 	toast.offset_top=190.0/scale_factor
-	toast.offset_bottom=280.0/scale_factor
+	toast.offset_bottom=toast.offset_top
 
 func _menu_preferred_size(kind: String) -> Vector2:
 	if kind=="pause": return Vector2(1040,620)

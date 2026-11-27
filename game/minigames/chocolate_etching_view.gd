@@ -37,8 +37,8 @@ var _state: Dictionary = {}
 var _labels: Dictionary = {}
 var _buttons: Dictionary = {}
 var _part_labels: Array[Label] = []
-var _normal_style: StyleBoxFlat
-var _held_style: StyleBoxFlat
+var _normal_style: StyleBox
+var _held_style: StyleBox
 var _font: Font
 var _text_scale := 0.0
 var _canvas: Node2D

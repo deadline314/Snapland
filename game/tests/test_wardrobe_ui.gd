@@ -32,13 +32,13 @@ func _run() -> void:
 	var closet_tab := main.overlay.find_child("Tab_closet",true,false) as Button
 	_check(appearance_tab!=null and appearance_tab.button_pressed and closet_tab!=null and not closet_tab.button_pressed,"the current wardrobe category is visibly selected")
 	if appearance_tab!=null and closet_tab!=null:
-		var active_tab_style := appearance_tab.get_theme_stylebox("pressed") as StyleBoxFlat
-		var inactive_tab_style := closet_tab.get_theme_stylebox("normal") as StyleBoxFlat
+		var active_tab_style := appearance_tab.get_theme_stylebox("pressed") as Paper.Board
+		var inactive_tab_style := closet_tab.get_theme_stylebox("normal") as Paper.Board
 		_check(active_tab_style!=null and inactive_tab_style!=null and active_tab_style.bg_color==Paper.DEEP_TEAL and active_tab_style.bg_color!=inactive_tab_style.bg_color,"selected tab face reads as the active fitting-room page, not another idle control")
 		var active_ink := appearance_tab.get_theme_color("font_pressed_color")
 		_check(_contrast(active_ink,active_tab_style.bg_color)>=4.5,"selected tab pressed text keeps readable contrast against its actual dark face")
 		_check(appearance_tab.get_theme_color("font_color")==Paper.PAPER and appearance_tab.get_theme_color("font_hover_color")==active_ink and appearance_tab.get_theme_color("font_focus_color")==active_ink,"selected tab text stays light and readable in normal, hovered, pressed and focused states")
-		var tab_focus_style := closet_tab.get_theme_stylebox("focus") as StyleBoxFlat
+		var tab_focus_style := closet_tab.get_theme_stylebox("focus") as Paper.Board
 		_check(tab_focus_style!=null and tab_focus_style.border_color==Color("#dfa458") and tab_focus_style.get_border_width(SIDE_LEFT)>=3,"keyboard focus remains a separate gold outline on page tabs")
 	var fitting_frame := main.wardrobe_panel.preview.get_parent() as PanelContainer
 	var expected_preview_height := 220.0 if Paper.physical_scale(main.wardrobe_panel.body)<0.9 else 265.0
@@ -47,7 +47,7 @@ func _run() -> void:
 	_check(main.wardrobe_panel.preview.custom_minimum_size.y==220 and main.wardrobe_panel.controls.get_theme_constant("separation")==4,"compact profile reduces the live fitting mirror and column gaps")
 	main.wardrobe_panel._apply_responsive_profile(1.0)
 	_check(main.wardrobe_panel.preview.custom_minimum_size.y==265 and main.wardrobe_panel.controls.get_theme_constant("separation")==6,"resizing back restores the standard fitting-room profile")
-	var fitting_frame_style := fitting_frame.get_theme_stylebox("panel") as StyleBoxFlat
+	var fitting_frame_style := fitting_frame.get_theme_stylebox("panel") as Paper.Board
 	_check(fitting_frame_style!=null and fitting_frame_style.get_border_width(SIDE_BOTTOM)>=7 and fitting_frame_style.shadow_size>=6,"preview frame has a visible thick lower paper edge and bounded cast shadow")
 	var frame_rect_before_motion_toggle := fitting_frame.get_global_rect()
 	Paper.set_reduced_motion(true)
@@ -56,8 +56,8 @@ func _run() -> void:
 	var apply_action := main.overlay.find_child("ApplyAppearance",true,false) as Button
 	var cancel_action := main.overlay.find_child("CancelFitting",true,false) as Button
 	if apply_action!=null and cancel_action!=null:
-		var primary_style := apply_action.get_theme_stylebox("normal") as StyleBoxFlat
-		var secondary_style := cancel_action.get_theme_stylebox("normal") as StyleBoxFlat
+		var primary_style := apply_action.get_theme_stylebox("normal") as Paper.Board
+		var secondary_style := cancel_action.get_theme_stylebox("normal") as Paper.Board
 		_check(primary_style!=null and secondary_style!=null and primary_style.bg_color!=secondary_style.bg_color,"the commit action has more visual weight than cancel")
 	for direction in ["front","left","right","back"]:
 		var direction_button := main.overlay.find_child("Preview_"+direction,true,false) as Button
@@ -141,7 +141,7 @@ func _run() -> void:
 	_check(main.wardrobe_panel.status_label.text.contains("不足") and main.wardrobe_panel.status_label.text.contains("需要 %d 枚"%int(flower.get("price",-1))),"disabled purchase explains the actual catalog price")
 	_check(_contrast(main.wardrobe_panel.status_label.get_theme_color("font_color"),Color("#f7efd9"))>=4.5,"insufficient-funds readout contrasts with the actual paper surface")
 	if purchase_action!=null:
-		var disabled_style := purchase_action.get_theme_stylebox("disabled") as StyleBoxFlat
+		var disabled_style := purchase_action.get_theme_stylebox("disabled") as Paper.Board
 		var disabled_ink := purchase_action.get_theme_color("font_disabled_color")
 		_check(disabled_style!=null and _contrast(disabled_ink,disabled_style.bg_color)>=4.5,"disabled purchase label remains readable against its actual disabled surface")
 	main.wardrobe_panel._cancel()

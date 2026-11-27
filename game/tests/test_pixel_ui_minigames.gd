@@ -36,8 +36,12 @@ func _run() -> void:
 	hud.set_state({"title":"沿著海港木棧道追接旅人的六頂帽子","objective":"依照風向和帽子落點移動，並在帽簷經過手線時接住；連續中心接取可獲得更高成果。","progress_text":"已接住 3/6　漏接 0","score":816,"time_text":"00:42","assisted":true})
 	_check((hud.get("_title") as Label).text.begins_with("沿著海港"),"long minigame title remains available in the HUD")
 	_check(hud.get("_score").text=="0816" and hud.get("_time").text=="00:42" and hud.get("_progress").text.contains("3/6"),"score, time, and round progress remain visible")
-	var header_style := (hud.get("_header") as Control).get_theme_stylebox("panel") as StyleBoxFlat
-	_check(header_style!=null and header_style.bg_color==Color("#0c2938") and header_style.corner_radius_top_left==0,"HUD uses a crisp navy pixel frame")
+	var header_style := (hud.get("_header") as Control).get_theme_stylebox("panel") as Paper.Board
+	_check(header_style!=null and header_style.kind==Paper.Board.Kind.FRAMED and header_style.bg_color==Paper.FRAME and header_style.corner>=1 and header_style.get_border_width(SIDE_BOTTOM)-header_style.get_border_width(SIDE_TOP)>=3 and header_style.shadow_size>0,"HUD title hangs on a timber-framed signboard with stepped corners, a lip and a shadow")
+	var ticket_style := (hud.find_child("ScoreAndTime",true,false) as Control).get_theme_stylebox("panel") as Paper.Board
+	var score_plate := ticket_style.plate if ticket_style!=null else null
+	_check(ticket_style!=null and ticket_style.kind==Paper.Board.Kind.PAPER and ticket_style.perforation!=0.0 and score_plate!=null and ticket_style.plate_rect.size.x>=(hud.get("_score") as Label).custom_minimum_size.x,"score and time ride on a perforated ticket with the score on its own brass plate")
+	_check(_contrast((hud.get("_time") as Label).get_theme_color("font_color"),ticket_style.bg_color)>=7.0 and _contrast((hud.get("_score") as Label).get_theme_color("font_color"),score_plate.bg_color)>=7.0 and _contrast((hud.get("_score_label") as Label).get_theme_color("font_color"),ticket_style.bg_color)>=4.5 and _contrast((hud.get("_badge") as Label).get_theme_color("font_color"),ticket_style.bg_color)>=4.5,"ticket readouts and their labels keep readable ink contrast")
 	(hud.find_child("PauseButton",true,false) as Button).pressed.emit()
 	_check(events==["pause"],"pause action preserves its signal")
 	hud.set_paused(true)
@@ -217,3 +221,14 @@ func _check(condition: bool, message: String) -> void:
 
 func _frames(count: int) -> void:
 	for _index in range(count): await get_tree().process_frame
+
+func _contrast(foreground: Color, background: Color) -> float:
+	var a := _luminance(foreground)
+	var b := _luminance(background)
+	return (maxf(a,b)+0.05)/(minf(a,b)+0.05)
+
+func _luminance(color: Color) -> float:
+	var linear: Array[float]=[]
+	for channel in [color.r,color.g,color.b]:
+		linear.append(channel/12.92 if channel<=0.04045 else pow((channel+0.055)/1.055,2.4))
+	return 0.2126*linear[0]+0.7152*linear[1]+0.0722*linear[2]

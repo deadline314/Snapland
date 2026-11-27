@@ -207,10 +207,10 @@ var _selected: Button
 var _stations: Array[Button] = []
 var _gates: Array[Button] = []
 var _hub: Button
-var _normal_style: StyleBoxFlat
-var _selected_style: StyleBoxFlat
-var _station_style: StyleBoxFlat
-var _selected_station_style: StyleBoxFlat
+var _normal_style: StyleBox
+var _selected_style: StyleBox
+var _station_style: StyleBox
+var _selected_station_style: StyleBox
 
 func setup(zones: Array, games: Array, normal_count: int, park_points: Array = [], player_position := Vector3.INF) -> void:
 	_zones = zones.duplicate(true)
@@ -346,15 +346,15 @@ func _make_button(text: String, node_name: String, station := false) -> Button:
 	_style_button(button, false)
 	return button
 
-func _map_button_style(selected: bool, station: bool) -> StyleBoxFlat:
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color("#276c70") if selected else Color("#f0dfb7")
-	style.border_color = Color("#f2bd68") if selected else Color("#8e7954")
-	style.set_border_width_all(3 if selected else 1)
+func _map_button_style(selected: bool, station: bool) -> StyleBox:
+	# Map pins are small enamel tiles: cream until chosen, then teal with a gold rim.
+	var style := Paper.button_box(Color("#276c70") if selected else Color("#f0dfb7"), Color("#f2bd68") if selected else Color("#8e7954"), 0)
+	style.set_border_width(SIDE_BOTTOM, 4)
+	style.corner = 1
 	style.content_margin_left = 2
 	style.content_margin_right = 2
 	style.content_margin_top = 14 if station else 2
-	style.content_margin_bottom = 2
+	style.content_margin_bottom = 4
 	return style
 
 func _style_button(button: Button, selected: bool) -> void:

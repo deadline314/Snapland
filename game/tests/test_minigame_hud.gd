@@ -148,7 +148,7 @@ func _test_responsive_targets(hud: Control, viewport_size: Vector2, check_panel_
 	var right := hud.find_child("MinigameStatusRail", true, false) as Control
 	var left_rect := _physical_rect(left)
 	var right_rect := _physical_rect(right)
-	_check(left_rect.position.x >= 0.0 and left_rect.end.x < right_rect.position.x and right_rect.end.x <= viewport_size.x, "split corner plates leave the center open in physical pixels")
+	_check(left_rect.position.x >= 0.0 and left_rect.end.x < right_rect.position.x and right_rect.end.x <= viewport_size.x, "split corner plates leave the center open in physical pixels (left=%s right=%s at %s)" % [left_rect, right_rect, viewport_size])
 	_check(left_rect.position.y >= 0.0 and right_rect.end.y <= viewport_size.y, "HUD corner plates stay within the physical viewport height")
 	if check_panel_density and viewport_size.x >= 1000.0:
 		_check(left_rect.size.y < 104.0 and right_rect.size.y < 104.0, "standard HUD plates stay below the previous 104px banner height")

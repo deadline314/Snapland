@@ -8,6 +8,7 @@ signal covered
 signal revealed
 
 const PaperMotion = preload("res://game/ui/paper_motion.gd")
+const Paper = preload("res://game/ui/paper_ui.gd")
 const IRIS_SHADER := preload("res://game/ui/region_transition.gdshader")
 const CLOSE_SECONDS := 0.34
 const OPEN_SECONDS := 0.46
@@ -52,10 +53,14 @@ func _init() -> void:
 	_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_title.add_theme_font_size_override("font_size", 34)
 	stack.add_child(_title)
-	# The title lingers over the revealed scene for a moment, so it carries its own contrast.
-	for label: Label in [_eyebrow, _title]:
-		label.add_theme_color_override("font_outline_color", Color("#06141c"))
-		label.add_theme_constant_override("outline_size", 8)
+	# The title lingers over the revealed scene for a moment, so it hangs on its
+	# own signboard; the small line above it keeps an ink outline instead.
+	var board := Paper.signboard()
+	board.content_margin_left = 34
+	board.content_margin_right = 34
+	_title.add_theme_stylebox_override("normal", board)
+	_eyebrow.add_theme_color_override("font_outline_color", Color("#06141c"))
+	_eyebrow.add_theme_constant_override("outline_size", 8)
 
 
 ## True from the start of the cover until the reveal has finished.

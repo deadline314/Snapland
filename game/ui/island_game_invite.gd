@@ -26,7 +26,7 @@ func _ready() -> void:
 	panel.name = "InviteCard"
 	panel.custom_minimum_size = Vector2(590,0)
 	panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	panel.add_theme_stylebox_override("panel",Paper.plaque(Color("#fff4dc")))
+	panel.add_theme_stylebox_override("panel",Paper.signboard())
 	row.add_child(panel)
 	var margin := MarginContainer.new()
 	for side in ["left","right","top","bottom"]: margin.add_theme_constant_override("margin_"+side,18)

@@ -33,7 +33,7 @@ func _ready() -> void:
 	plaque.name = "DialoguePlaque"
 	plaque.custom_minimum_size = Vector2(0, 194)
 	plaque.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	plaque.add_theme_stylebox_override("panel", Paper.plaque(Color("#f7efd9")))
+	plaque.add_theme_stylebox_override("panel", Paper.signboard())
 	plaque.mouse_filter = Control.MOUSE_FILTER_STOP
 	center.add_child(plaque)
 	var margin := MarginContainer.new()

@@ -98,9 +98,9 @@ func _run() -> void:
 		_check(get_viewport().get_visible_rect().encloses(popup_rect),"opened embedded popup actualposition/size stays inside owner viewport at %s: %s"%[str(dimensions),str(popup_rect)])
 		_check(popup.max_size.y<=720,"long dropdown lists use bounded built-in scrolling")
 		popup.hide()
-		var popup_panel := popup.get_theme_stylebox("panel") as StyleBoxFlat
-		var popup_hover := popup.get_theme_stylebox("hover") as StyleBoxFlat
-		_check(popup_panel!=null and popup_hover!=null and popup_panel.get_corner_radius(CORNER_TOP_LEFT)==0 and popup_hover.border_color==Paper.GOLD,"dropdown uses square navy panel and gold highlight")
+		var popup_panel := popup.get_theme_stylebox("panel") as Paper.Board
+		var popup_hover := popup.get_theme_stylebox("hover") as Paper.Board
+		_check(popup_panel!=null and popup_hover!=null and popup_panel.corner>=1 and popup_panel.get_border_width(SIDE_BOTTOM)>popup_panel.get_border_width(SIDE_TOP) and popup_hover.border_color==Paper.GOLD,"dropdown uses a stepped raised panel and gold highlight")
 		_check(_contrast(popup.get_theme_color("font_color"),popup_panel.bg_color)>=4.5 and _contrast(popup.get_theme_color("font_hover_color"),popup_hover.bg_color)>=4.5 and _contrast(popup.get_theme_color("font_disabled_color"),popup_panel.bg_color)>=4.5,"dropdown normal hover disabled ink contrasts actual faces")
 		_main._close()
 		_main._show_pause()
@@ -249,7 +249,7 @@ func _run() -> void:
 		_check(_main.modal_kind=="" and not _main.world.blocked,"dialogue cancellation restores world input")
 	await _check_rules_catalog()
 	var theme := Paper.theme()
-	var disabled := theme.get_stylebox("disabled","Button") as StyleBoxFlat
+	var disabled := theme.get_stylebox("disabled","Button") as Paper.Board
 	_check(_contrast(theme.get_color("font_disabled_color","Button"),disabled.bg_color)>=4.5,"default disabled button meets 4.5 contrast")
 	_check(Paper.PRICE_INK==Color("#8d3c33"),"price ink keeps its light-plate contract")
 	_check(Paper.text_scale()>=1.0 and Paper.text_scale()<=1.25,"text scale remains within its persisted accessible range")
@@ -353,7 +353,7 @@ func _check_paper_contrast() -> void:
 		button.theme=Paper.theme()
 		Paper.set_button_role(button,role)
 		for state in ["normal","hover","pressed","disabled"]:
-			var face := button.get_theme_stylebox(state) as StyleBoxFlat
+			var face := button.get_theme_stylebox(state) as Paper.Board
 			var ink_key := "font_color" if state=="normal" else "font_%s_color"%state
 			_check(face!=null and _contrast(button.get_theme_color(ink_key),face.bg_color)>=4.5,"%s %s actual foreground/background contrast meets4.5"%[role,state])
 		button.free()

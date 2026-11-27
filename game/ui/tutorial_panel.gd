@@ -419,7 +419,7 @@ func _build_ui() -> void:
 	card.offset_right = 560
 	card.offset_bottom = 330
 	card.custom_minimum_size = Vector2(900, 560)
-	card.add_theme_stylebox_override("panel", Paper.plaque())
+	card.add_theme_stylebox_override("panel", Paper.signboard())
 	add_child(card)
 	_margin = MarginContainer.new()
 	var margin := _margin

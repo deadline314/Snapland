@@ -29,11 +29,7 @@ func _init() -> void:
 	anchor_right = 0.5
 	grow_horizontal = Control.GROW_DIRECTION_BOTH
 	offset_top = 18.0
-	var style := Paper.box(Color(0.025, 0.09, 0.13, 0.92), 0)
-	style.border_color = Paper.GOLD
-	style.content_margin_top = 6
-	style.content_margin_bottom = 6
-	add_theme_stylebox_override("panel", style)
+	add_theme_stylebox_override("panel", Paper.nameplate())
 	var column := VBoxContainer.new()
 	column.add_theme_constant_override("separation", 2)
 	column.mouse_filter = Control.MOUSE_FILTER_IGNORE

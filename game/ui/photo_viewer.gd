@@ -32,7 +32,7 @@ func _ready() -> void:
 	panel.name="PhotoViewerPanel"
 	panel.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	panel.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	panel.add_theme_stylebox_override("panel",Paper.plaque())
+	panel.add_theme_stylebox_override("panel",Paper.signboard())
 	center.add_child(panel)
 	var margin := MarginContainer.new()
 	for side in ["left","right"]: margin.add_theme_constant_override("margin_"+side,12)
