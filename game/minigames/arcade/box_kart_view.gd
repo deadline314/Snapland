@@ -12,9 +12,14 @@ const BENCH_TOP := 470.0
 ## Where the box sits on screen and the ground line it rolls on.
 const CAR_X := 430.0
 const GROUND_Y := 590.0
-const BOX := Vector2i(26, 15)
+const BOX := Vector2i(28, 17)
 const FOLDED := Vector2i(30, 7)
 const BLOCK := Vector2i(10, 10)
+## The chunky blocks the ramps and jump lips are stacked from.
+const RAMP := Vector2i(13, 11)
+const CRAYON_RED := Color("#d8423a")
+const CRAYON_BLUE := Color("#3f63b0")
+const CRAYON_BLACK := Color("#2a2228")
 const HERO_SCALE := 2.0
 ## The car and its driver are drawn a size up so the tilt and the fold read at a glance.
 const CAR_SCALE := 1.6
@@ -34,6 +39,8 @@ var _has_art := false
 var _box: ImageTexture
 var _folded: ImageTexture
 var _blocks: Array[ImageTexture] = []
+var _ramp_blocks: Array[ImageTexture] = []
+var _lip: ImageTexture
 
 
 func _init() -> void:
@@ -46,7 +53,9 @@ func _ready() -> void:
 	_box = Pixels.bake("kart-box", BOX, _paint_box.bind(false))
 	_folded = Pixels.bake("kart-folded", FOLDED, _paint_box.bind(true))
 	for paint in PAINTS.size():
-		_blocks.append(Pixels.bake("kart-block|%d" % paint, BLOCK, _paint_block.bind(PAINTS[paint])))
+		_blocks.append(Pixels.bake("kart-block|%d" % paint, BLOCK, _paint_block.bind(PAINTS[paint], BLOCK)))
+		_ramp_blocks.append(Pixels.bake("kart-ramp|%d" % paint, RAMP, _paint_block.bind(PAINTS[paint], RAMP)))
+	_lip = Pixels.bake("kart-lip", RAMP, _paint_lip)
 
 
 func _draw_backdrop() -> void:
@@ -90,55 +99,76 @@ func _draw_ground() -> void:
 		stamp(_blocks[paint], Vector2(x, GROUND_Y + 4.0), TEXEL, DUSK)
 
 
-## A kicker of stacked blocks whose top edge slopes up to the lip at `x`.
+## A kicker of chunky stacked blocks stepping up to a wedge-block lip at `x`.
 func _draw_kicker(x: float, launch: float) -> void:
-	var rise := clampf(-launch, 0.1, 0.8)
-	_wedge(x, -1.0, rise, 5)
+	_ramp(x, -1.0, clampf(-launch, 0.1, 0.8), 5)
 
 
-## The landing: a downhill ramp of blocks, or a seesaw plank on a fulcrum.
+## The landing: a downhill stair of blocks, or a seesaw plank on a block fulcrum.
 func _draw_landing(jump: Dictionary, x: float) -> void:
 	if str(jump.kind) == "seesaw":
 		var angle := float(state.get("target", float(jump.land)))
 		if str(state.get("phase", "")) != "air":
 			angle = float(jump.flip)
-		var pivot := Vector2(x + 140.0, GROUND_Y - 60.0)
-		ground_shadow(pivot + Vector2(0, 62), Vector2(60, 10), 0.4)
+		var pivot := Vector2(x + 140.0, GROUND_Y - RAMP.y * TEXEL * 2.0 + 2.0)
+		ground_shadow(Vector2(pivot.x + 10.0, GROUND_Y + 4.0), Vector2(70, 12), 0.45)
 		for row in 2:
-			stamp(_blocks[2], pivot + Vector2(-BLOCK.x * 2.0, 6.0 + row * BLOCK.y * TEXEL * 0.6), TEXEL, DUSK)
+			_stack_block(Vector2(pivot.x - RAMP.x * 2.0, GROUND_Y - row * RAMP.y * TEXEL + 4.0), 2 + row, row == 1)
 		draw_set_transform(pivot, angle, Vector2.ONE)
-		panel(Rect2(-180, -16, 360, 22), "planks", PINE, Color(0, 0, 0, 0), TEXEL, DUSK)
+		draw_rect(Rect2(-184, -14, 368, 34), Color(SPRITE_SHADE, 0.4))
+		panel(Rect2(-180, -20, 360, 28), "planks", PINE, Color(0, 0, 0, 0), TEXEL, DUSK)
+		draw_rect(Rect2(-180, -20, 360, 4), Color(1, 1, 1, 0.18))
 		draw_set_transform(Vector2.ZERO)
 		return
-	_wedge(x, 1.0, clampf(float(jump.land), 0.05, 0.8), 7)
+	_ramp(x, 1.0, clampf(float(jump.land), 0.05, 0.8), 7)
 
 
-## A ramp of blocks starting at `x` going `side` (−1 back to a lip, 1 ahead
-## downhill) and rising by `slope` per pixel, `count` blocks long.
-func _wedge(x: float, side: float, slope: float, count: int) -> void:
-	var step := BLOCK.x * TEXEL
+## A stair of chunky blocks from `x`: `side` −1 rises back toward a lip at `x`,
+## 1 steps down ahead of `x`; `slope` is the rise per pixel, `count` columns long.
+func _ramp(x: float, side: float, slope: float, count: int) -> void:
+	var step := RAMP.x * TEXEL
+	var tall := RAMP.y * TEXEL
+	var tops: Array[Vector2] = []
+	var left := x - count * step if side < 0.0 else x
+	ground_shadow(Vector2(left + count * step * 0.5 + 16.0, GROUND_Y + 6.0), Vector2(count * step * 0.55, 14), 0.42)
 	for index in count:
 		var along := (index + 0.5) * step
 		var height := along * slope if side < 0.0 else (count * step - along) * slope
-		var column := x + (side * along if side > 0.0 else -along)
-		var rows := int(height / (BLOCK.y * TEXEL)) + 1
+		var rows := maxi(1, roundi(height / tall))
+		var column := left + index * step
 		for row in rows:
-			stamp(_blocks[(index + row) % PAINTS.size()], Vector2(column - step * 0.5, GROUND_Y - row * BLOCK.y * TEXEL - 34.0 + 4.0), TEXEL, DUSK)
-	# The ramp's surface: a lit plank laid along the top.
-	var low := Vector2(x + side * count * step, GROUND_Y - 30.0) if side > 0.0 else Vector2(x - count * step, GROUND_Y - 30.0)
-	var high := Vector2(x, GROUND_Y - 30.0 - count * step * slope)
-	draw_line(low + Vector2(0, 5), high + Vector2(0, 5), Color(SPRITE_SHADE, 0.45), 16.0)
-	draw_line(low, high, PINE.darkened(0.3), 14.0)
-	draw_line(low + Vector2(0, -2), high + Vector2(0, -2), PINE.lightened(0.1), 8.0)
-	draw_line(low + Vector2(0, -5), high + Vector2(0, -5), PINE.lightened(0.45), 2.0)
-	if side > 0.0:
-		# Chevrons down the landing plank show which way it slopes.
-		for chevron in 3:
-			var spot := high.lerp(low, 0.25 + chevron * 0.22) + Vector2(0, -1)
-			var along := (low - high).normalized()
-			var across := along.orthogonal() * 7.0
-			draw_line(spot - along * 6.0 + across, spot + along * 4.0, GOLD, 3.0)
-			draw_line(spot - along * 6.0 - across, spot + along * 4.0, GOLD, 3.0)
+			var lit := row == rows - 1
+			_stack_block(Vector2(column, GROUND_Y - row * tall + 4.0), index + row, lit)
+		tops.append(Vector2(column + step * 0.5, GROUND_Y - rows * tall + 4.0))
+	if side < 0.0:
+		# The lip: a wedge block on the top of the tallest column, sloping up to the edge.
+		var top := tops.back() as Vector2
+		stamp(_lip, Vector2(top.x - step * 0.5, top.y - tall), TEXEL, DUSK)
+		return
+	# Chevrons down the landing stair show which way it slopes.
+	var high := tops[0] + Vector2(0, -12)
+	var low := tops.back() as Vector2 + Vector2(0, -12)
+	var down := (low - high).normalized()
+	for chevron in 3:
+		var spot := high.lerp(low, 0.2 + chevron * 0.3)
+		var across := down.orthogonal() * 8.0
+		draw_line(spot - down * 7.0 + across, spot + down * 5.0, DARK, 6.0)
+		draw_line(spot - down * 7.0 - across, spot + down * 5.0, DARK, 6.0)
+		draw_line(spot - down * 7.0 + across, spot + down * 5.0, GOLD, 3.0)
+		draw_line(spot - down * 7.0 - across, spot + down * 5.0, GOLD, 3.0)
+
+
+## One chunky block with its bottom-left at `at`; the top one of a column shows
+## a lit top face, and every block throws a little shadow to its lower right.
+func _stack_block(at: Vector2, paint: int, lit_top: bool) -> void:
+	var size := Vector2(RAMP) * TEXEL
+	draw_rect(Rect2(at + Vector2(8, -size.y + 8), size), Color(SPRITE_SHADE, 0.22))
+	stamp(_ramp_blocks[posmod(paint, PAINTS.size())], at - Vector2(0, size.y), TEXEL, DUSK)
+	if lit_top:
+		var tone := PAINTS[posmod(paint, PAINTS.size())].lerp(PINE, 0.2).lightened(0.3)
+		var face := PackedVector2Array([at + Vector2(2, -size.y), at + Vector2(size.x - 2, -size.y), at + Vector2(size.x + 8, -size.y - 8), at + Vector2(12, -size.y - 8)])
+		draw_colored_polygon(face, tone)
+		draw_polyline(PackedVector2Array([face[3], face[2], face[1]]), tone.darkened(0.45), 2.0)
 
 
 # --- Car ----------------------------------------------------------------------
@@ -155,16 +185,25 @@ func _draw_car(phase: String, at: Vector2, pitch: float) -> void:
 	# The traveller sits in the box, head and arms above the rim.
 	var pose := &"up" if phase == "air" else &"idle"
 	var mood := "tongue" if str(landed.get("grade", "")) == "perfect" and since < 0.8 else ("shocked" if phase == "air" and absf(pitch - float(state.get("target", 0.0))) > float(state.get("good", 0.32)) else "plain")
-	stamp(Hero.texture(pose, true, mood), Vector2(-20, -46) * HERO_SCALE + Vector2(-6, -26), HERO_SCALE, DUSK)
+	stamp(Hero.texture(pose, true, mood), Vector2(-20, -46) * HERO_SCALE + Vector2(-6, -30), HERO_SCALE, DUSK)
 	stamp(_box, Vector2(-BOX.x * 0.5, -BOX.y) * TEXEL, TEXEL, DUSK)
-	for wheel: float in [-34.0, 34.0]:
-		var spin := float(state.get("travelled", 0.0)) * 12.0
-		draw_circle(Vector2(wheel, 2), 13.0, DARK)
-		draw_circle(Vector2(wheel, 2), 11.0, CAP)
-		draw_circle(Vector2(wheel - 2, 0), 6.0, CAP.lightened(0.3))
-		for rib in 4:
-			var ridge := Vector2.from_angle(spin + rib * TAU / 4.0) * 10.0
-			draw_line(Vector2(wheel, 2) + ridge * 0.6, Vector2(wheel, 2) + ridge, CAP.darkened(0.4), 2.0)
+	if pose == &"idle":
+		# Both hands grip the front rim.
+		for hand: float in [-20.0, 14.0]:
+			draw_circle(Vector2(hand, -BOX.y * TEXEL + 14.0), 6.0, DARK)
+			draw_circle(Vector2(hand, -BOX.y * TEXEL + 14.0), 4.5, Color("#ebb894"))
+	var spin := float(state.get("travelled", 0.0)) * 12.0
+	for wheel: float in [-36.0, 36.0]:
+		# Cardboard discs with crayon rims and spokes.
+		var hub := Vector2(wheel, 4)
+		draw_circle(hub + Vector2(2, 3), 15.0, Color(SPRITE_SHADE, 0.35))
+		draw_circle(hub, 15.0, CARD.darkened(0.45))
+		draw_circle(hub, 13.0, CARD.lightened(0.12))
+		draw_arc(hub, 10.5, spin, spin + TAU * 0.85, 14, CRAYON_BLACK, 3.0)
+		for spoke in 3:
+			var reach := Vector2.from_angle(spin + spoke * TAU / 3.0) * 9.0
+			draw_line(hub - reach * 0.2, hub + reach, CRAYON_RED, 2.5)
+		draw_circle(hub, 3.0, CRAYON_BLACK)
 	draw_set_transform(Vector2.ZERO)
 	if str(landed.get("grade", "")) == "perfect" and since < 0.4:
 		dust_puffs(Vector2(at.x, GROUND_Y), since, 80.0)
@@ -205,30 +244,64 @@ func _draw_speed() -> void:
 # --- Texel painters -------------------------------------------------------------
 
 func _paint_box(x: int, y: int, folded: bool) -> Color:
-	var size := FOLDED if folded else BOX
 	var at := Vector2(x + 0.5, y + 0.5)
 	if folded:
-		# A flattened box: two layers of card with a dark crease between.
+		# A flattened box: two layers of card with a dark crease and a strip of tape.
+		var flat := FOLDED
 		if y == 3:
 			return CARD.darkened(0.5)
 		if x < 1 and y < 3:
 			return Pixels.CLEAR
+		if x >= flat.x / 2 - 2 and x < flat.x / 2 + 1:
+			return Pixels.grainy(TAPE.lightened(0.1), x, y, 0.06)
 		return Pixels.grainy(CARD.darkened(0.08 if y > 3 else 0.0), x, y, 0.12)
-	# Flaps folded out at the top, corrugated sides, a tape strip and a printed arrow.
-	if y < 2:
-		return Pixels.grainy(CARD.lightened(0.1), x, y, 0.1) if x < 5 or x >= size.x - 5 else Pixels.CLEAR
-	if y == 2:
-		return CARD.darkened(0.35)
-	if x >= size.x / 2 - 2 and x < size.x / 2 + 2:
-		return Pixels.grainy(TAPE, x, y, 0.08)
-	if x >= 3 and x < 7 and y >= 6 and y < 10 and absf(at.x - 5.0) <= (at.y - 6.0) * 0.6 + 0.4:
-		return Color("#5a3a2a")
-	var tone := Pixels.rounded(CARD, Vector2((at.x - size.x * 0.5) / (size.x * 0.5) * 0.6, (at.y - 8.0) / 8.0))
-	return tone.darkened(0.08) if x % 3 == 0 else tone
+	var size := BOX
+	# The four top flaps, folded out and up at a slant.
+	if y < 5:
+		var left_flap := x < 8 and x >= 4 - y
+		var right_flap := x >= size.x - 8 and x < size.x - 4 + y
+		if left_flap or right_flap:
+			return Pixels.grainy(CARD.lightened(0.18 - y * 0.03), x, y, 0.1) if y > 0 else CARD.darkened(0.2)
+		if y == 4 and x >= 8 and x < size.x - 8:
+			return Color("#3a2630")
+		return Pixels.CLEAR
+	if y == 5:
+		return CARD.lightened(0.25)
+	# Packing tape over the rim and down the front.
+	if x >= 6 and x < 9:
+		return Pixels.grainy(TAPE.lightened(0.12 if x == 6 else 0.0), x, y, 0.05)
+	if y == 6 and x >= 3 and x < size.x - 3:
+		return Pixels.grainy(TAPE, x, y, 0.05)
+	# A crayon racing number in a scribbled ring.
+	var ring := (at - Vector2(18.5, 11.0)).length()
+	if absf(ring - 4.3) < 0.7 and Pixels.noise(x, y, 9) > 0.18:
+		return CRAYON_RED
+	var seven := (y == 9 and x >= 17 and x <= 20) or (y > 9 and y <= 13 and absf(at.x - (20.4 - (at.y - 9.5) * 0.55)) < 0.75)
+	if seven and Pixels.noise(x, y, 4) > 0.12:
+		return CRAYON_BLUE
+	# Crayon speed lines at the back.
+	if (y == 10 or y == 13) and x >= 1 and x < 5 and Pixels.noise(x, y, 7) > 0.25:
+		return CRAYON_BLUE.lightened(0.15)
+	var tone := Pixels.rounded(CARD, Vector2((at.x - size.x * 0.5) / (size.x * 0.5) * 0.6, (at.y - 11.0) / 8.0))
+	return tone.darkened(0.08) if x % 3 == 0 else Pixels.grainy(tone, x, y, 0.05)
 
 
-func _paint_block(x: int, y: int, paint: Color) -> Color:
-	# A painted wooden block with a natural-wood rim.
-	if x == 0 or y == 0 or x == BLOCK.x - 1 or y == BLOCK.y - 1:
+func _paint_block(x: int, y: int, paint: Color, size: Vector2i) -> Color:
+	# A painted wooden block with a natural-wood rim and a little carved star.
+	if x == 0 or y == 0 or x == size.x - 1 or y == size.y - 1:
 		return PINE.darkened(0.15) if x > 0 and y > 0 else PINE.lightened(0.1)
+	if size.x >= 12:
+		var star := Vector2(x + 0.5 - size.x * 0.5, y + 0.5 - size.y * 0.5)
+		if absf(star.x) + absf(star.y) < 2.0 or (absf(star.x) < 0.6 and absf(star.y) < 3.0) or (absf(star.y) < 0.6 and absf(star.x) < 3.0):
+			return LABEL.darkened(0.1)
 	return Pixels.wood(paint.lerp(PINE, 0.2), x, y, 5, false, 3)
+
+
+func _paint_lip(x: int, y: int) -> Color:
+	# A wedge block, low on the left and high on the right, for the jump lip.
+	var rise := float(x + 1) / RAMP.x * RAMP.y
+	if float(RAMP.y - y) > rise:
+		return Pixels.CLEAR
+	if float(RAMP.y - y) > rise - 1.2:
+		return PINE.lightened(0.3)
+	return Pixels.wood(PAINTS[2].lerp(PINE, 0.2), x, y, 5, false, 6)
