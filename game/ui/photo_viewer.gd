@@ -1,17 +1,24 @@
 extends Control
 
 const Paper = preload("res://game/ui/paper_ui.gd")
+const Collage = preload("res://game/ui/collage_kit.gd")
 
 var _texture: Texture2D
 var _photo_title := ""
 var _focus_origin: Control
 var _replay_action := Callable()
+## The sticker's back: {"page": int, "text": String}; empty when it has none.
+var _back: Dictionary = {}
+var _image_rect: TextureRect
+var _back_card: Control
+var _flip: Button
 
-func setup(texture: Texture2D, photo_title: String, focus_origin: Control, replay_action := Callable()) -> void:
+func setup(texture: Texture2D, photo_title: String, focus_origin: Control, replay_action := Callable(), back := {}) -> void:
 	_texture=texture
 	_photo_title=photo_title
 	_focus_origin=focus_origin
 	_replay_action=replay_action
+	_back=back
 
 func _ready() -> void:
 	name="PhotoViewer"
@@ -65,9 +72,18 @@ func _ready() -> void:
 	image_rect.custom_minimum_size=Vector2(0,0)
 	image_rect.mouse_filter=Control.MOUSE_FILTER_IGNORE
 	picture_frame.add_child(image_rect)
+	_image_rect=image_rect
 	var controls := HBoxContainer.new()
 	controls.alignment=BoxContainer.ALIGNMENT_END
 	body.add_child(controls)
+	if not _back.is_empty():
+		_back_card=_make_back()
+		picture_frame.add_child(_back_card)
+		_flip=Paper.button("翻到背面",_toggle_back,controls)
+		_flip.name="PhotoViewerFlip"
+		_flip.tooltip_text="看看拍貼背面寫了什麼"
+		# A sticker with no picture left to show opens on its back.
+		_show_back(_texture==null)
 	if _replay_action.is_valid():
 		var replay := Paper.button("重看故事", _replay, controls)
 		replay.name = "PhotoViewerReplayStory"
@@ -79,6 +95,43 @@ func _ready() -> void:
 	get_viewport().size_changed.connect(_fit)
 	resized.connect(_fit)
 	_fit()
+
+## The back of the sticker: a torn page of the premiere script in pencil.
+func _make_back() -> Control:
+	var card := PanelContainer.new()
+	card.name="PhotoViewerBack"
+	card.size_flags_horizontal=Control.SIZE_SHRINK_CENTER
+	card.size_flags_vertical=Control.SIZE_SHRINK_CENTER
+	card.custom_minimum_size=Vector2(520,0)
+	card.add_theme_stylebox_override("panel",StyleBoxEmpty.new())
+	Collage.backing(card,"note",3,Collage.CREAM)
+	# Margins live on a container so a menu-wide restyle cannot squeeze the pencil text to the edge.
+	var margin := MarginContainer.new()
+	for side in ["left","right"]: margin.add_theme_constant_override("margin_"+side,34)
+	margin.add_theme_constant_override("margin_top",26)
+	margin.add_theme_constant_override("margin_bottom",28)
+	card.add_child(margin)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation",10)
+	margin.add_child(column)
+	var stamp := Paper.label("首演劇本　第 %d 頁" % int(_back.get("page",0)),16,Collage.INK_CORAL)
+	stamp.name="PhotoViewerBackStamp"
+	column.add_child(stamp)
+	var text := Paper.label(str(_back.get("text","")),22,Collage.INK)
+	text.name="PhotoViewerBackText"
+	text.add_theme_color_override("font_color",Color("#3a3f4a"))
+	text.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+	text.custom_minimum_size=Vector2(440,0)
+	column.add_child(text)
+	return card
+
+func _toggle_back() -> void:
+	_show_back(_image_rect.visible)
+
+func _show_back(on: bool) -> void:
+	_image_rect.visible=not on
+	_back_card.visible=on
+	_flip.text="翻回正面" if on else "翻到背面"
 
 func _fit() -> void:
 	var scale_factor := Paper.physical_scale(self)

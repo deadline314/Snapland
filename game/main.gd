@@ -32,6 +32,7 @@ const RegionalVisitPhotoPanel = preload("res://game/ui/regional_visit_photo_pane
 const DialoguePanelScript = preload("res://game/ui/dialogue_panel.gd")
 const BoatPrologueStage = preload("res://game/story/boat_prologue_stage.gd")
 const StageCues = preload("res://game/story/stage_cues.gd")
+const ScriptPages = preload("res://game/story/script_pages.gd")
 const STAGE_ACTOR_BY_SPEAKER := {"票票": "ticket", "小角": "imp", "阿浪": "announcer", "主角": "player"}
 var world: Node3D
 var world_region := "welcome"
@@ -111,6 +112,8 @@ var boat_first_run := false
 ## Per-line dialogue staging (camera, emotes, holds); lives only while a cued dialogue plays.
 var stage_cues: Node3D
 var cue_hold_left := 0.0
+## The thing at the edge of a greeting photo's frame, while that photo is open.
+var frame_clue: Sprite3D
 var cue_pantomime := false
 var dialogue_done := Callable()
 var dialogue_cancelled := Callable()
@@ -1955,6 +1958,31 @@ func _open_region_story_photo(region: String, from_album: bool, errand := false)
 	visit_photo_panel.shutter_requested.connect(_take_region_story_photo)
 	visit_photo_panel.cancel_requested.connect(_exit_region_story_photo)
 	ui.add_child(visit_photo_panel)
+	if not errand: _plant_frame_clue(region)
+
+## Something that does not belong to the greeting shot peeks in at the right edge
+## of the viewfinder (a cape corner, a glove, a hat brim) and is in the photo.
+func _plant_frame_clue(region: String) -> void:
+	var kind := ScriptPages.clue_for(RegionalVisit.photo_id(region))
+	var camera := get_viewport().get_camera_3d()
+	var host: Node3D = region_world().story_actor(str(STAGE_ACTOR_BY_SPEAKER.get(RegionalVisit.host_name(region),""))) if region_world().has_method("story_actor") else null
+	if kind.is_empty() or camera==null or host==null: return
+	var finder := RegionalVisitPhotoPanel.viewfinder_rect(get_viewport().get_visible_rect().size)
+	var depth := -camera.to_local(host.global_position).z
+	var at := Vector2(finder.end.x-finder.size.x*0.035,finder.position.y+finder.size.y*0.6)
+	var clue := Sprite3D.new()
+	clue.name="FrameEdgeClue"
+	clue.texture=ScriptPages.clue_texture(kind)
+	clue.billboard=BaseMaterial3D.BILLBOARD_ENABLED
+	clue.texture_filter=BaseMaterial3D.TEXTURE_FILTER_NEAREST
+	clue.no_depth_test=true
+	clue.render_priority=8
+	clue.shaded=false
+	# About a hand's height on screen, whatever the photo camera's zoom.
+	clue.pixel_size=(camera.size if camera.projection==Camera3D.PROJECTION_ORTHOGONAL else 2.0*depth*tan(deg_to_rad(camera.fov*0.5)))*0.2/56.0
+	world.add_child(clue)
+	clue.global_position=camera.project_position(at,maxf(depth,0.5))
+	frame_clue=clue
 
 func _exit_region_story_photo() -> void:
 	var return_to_album := visit_photo_from_album
@@ -1969,6 +1997,8 @@ func _dispose_region_story_photo() -> void:
 	visit_photo_panel.hide()
 	visit_photo_panel.queue_free()
 	visit_photo_panel = null
+	if is_instance_valid(frame_clue): frame_clue.queue_free()
+	frame_clue = null
 	visit_photo_from_album = false
 	visit_photo_errand = false
 	if is_instance_valid(world) and region_world().has_method("end_story_photo"):

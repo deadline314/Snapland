@@ -8,6 +8,7 @@ signal errand_replay_requested(region: String)
 const Paper = preload("res://game/ui/paper_ui.gd")
 const TimeOfDay = preload("res://game/core/time_of_day.gd")
 const PhotoViewer = preload("res://game/ui/photo_viewer.gd")
+const ScriptPages = preload("res://game/story/script_pages.gd")
 const GameCatalog = preload("res://game/core/game_catalog.gd")
 const RegionalVisit = preload("res://game/story/regional_visit.gd")
 const ResidentErrands = preload("res://game/story/resident_errands.gd")
@@ -673,7 +674,8 @@ func _open_collected_photo(entry: Dictionary, tile: Button) -> void:
 			_photo_details.text = str(entry.title) + "｜完整尺寸照片沒有留下來，先看看相簿畫格。"
 		elif texture != null:
 			_photo_details.text = str(entry.title) + "｜原尺寸照片暫時無法打開，先看看相簿畫格。"
-	if texture == null:
+	var back := ScriptPages.page(photo_id)
+	if texture == null and back.is_empty():
 		if entry.has("story_region"):
 			story_replay_requested.emit(str(entry.story_region))
 		elif entry.has("story_errand"):
@@ -691,7 +693,7 @@ func _open_collected_photo(entry: Dictionary, tile: Button) -> void:
 		replay = func(): story_replay_requested.emit(str(entry.story_region))
 	elif entry.has("story_errand"):
 		replay = func(): errand_replay_requested.emit(str(entry.story_errand))
-	viewer.setup(texture,str(entry.title),tile,replay)
+	viewer.setup(texture,str(entry.title),tile,replay,back)
 	modal_overlay.add_child(viewer)
 
 func _open_fail_replay(entry: Dictionary, tile: Button) -> void:

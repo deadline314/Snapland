@@ -86,6 +86,11 @@ func _run() -> void:
 		_check(signs.all(func(sign: Node3D) -> bool: return not sign.visible),
 			"the portrait hides the actual plaques without altering tent geometry")
 		_check(actor.sprite.texture == main.region_world()._story_photo_pose, "photo stage uses the registered front greeting pose")
+		var clue: Sprite3D = main.frame_clue
+		var finder_now := Viewfinder.viewfinder_rect(root.get_visible_rect().size)
+		var clue_at: Vector2 = main.region_world()._story_photo_camera.unproject_position(clue.global_position) if is_instance_valid(clue) else Vector2.INF
+		_check(is_instance_valid(clue) and clue.name == "FrameEdgeClue" and finder_now.grow(4.0).has_point(clue_at) and clue_at.x > finder_now.position.x + finder_now.size.x * 0.85,
+			"a cape corner peeks in at the right edge of the greeting viewfinder")
 		for viewport_size: Vector2i in [Vector2i(800, 600), Vector2i(1280, 720), Vector2i(1920, 1080)]:
 			root.content_scale_size = viewport_size
 			root.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_IGNORE
@@ -109,6 +114,8 @@ func _run() -> void:
 		and main.world.player.position.distance_to(walk_position) < 0.15 and not main.world.blocked,
 		"cancelling restores normal zoom, character position and movement")
 	_check(actor.sprite.texture == main.region_world()._story_rest_pose, "close restores the host’s standing pose")
+	await _frames(1)
+	_check(main.frame_clue == null and main.world.find_child("FrameEdgeClue", true, false) == null, "closing the photo takes the edge clue away")
 	_check(marker_states == [false, true], "cancelling restores the nearby story glyph once")
 	for index in signs.size():
 		_check(signs[index].visible == sign_visibility[index],
@@ -174,6 +181,17 @@ func _save_then_replay() -> bool:
 		_check(false, "regional album exposes the story tile")
 		return false
 	tile.pressed.emit()
+	var flip := main.overlay.find_child("PhotoViewerFlip", true, false) as Button
+	_check(flip != null, "the greeting sticker can be turned over")
+	if flip != null:
+		flip.pressed.emit()
+		var back_text := main.overlay.find_child("PhotoViewerBackText", true, false) as Label
+		var back_card := main.overlay.find_child("PhotoViewerBack", true, false) as Control
+		_check(back_card != null and back_card.visible and back_text != null and back_text.text.contains("鏡子會先鞠躬")
+			and not (main.overlay.find_child("PhotoViewerImage", true, false) as Control).visible,
+			"its back is a pencilled page of the premiere script")
+		flip.pressed.emit()
+		_check((main.overlay.find_child("PhotoViewerImage", true, false) as Control).visible and not back_card.visible, "turning it again shows the photo")
 	var replay := main.overlay.find_child("PhotoViewerReplayStory", true, false) as Button
 	if replay == null:
 		_check(false, "viewing the original offers replay")

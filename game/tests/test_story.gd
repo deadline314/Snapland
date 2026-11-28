@@ -33,6 +33,19 @@ func _run() -> void:
 	_check(camera_goal.contains("自己的角色") and not camera_goal.contains("小角"), "game-010 lesson describes the player avatar, not Xiao Jiao appearing in the photo")
 	_check(not str(imp_mission.get("motivation", "")).contains("修好"), "Xiao Jiao's story does not claim the backdrop was repaired")
 
+	var pages_script := load("res://game/story/script_pages.gd")
+	var visits := load("res://game/story/regional_visit.gd")
+	var numbers: Array = []
+	for photo_id in ["photo-welcome-story-1"] + visits.VISITS.values().map(func(visit: Dictionary) -> String: return str(visit.id)):
+		var page: Dictionary = pages_script.page(photo_id)
+		_check(int(page.get("page", 0)) > 0 and not str(page.get("text", "")).strip_edges().is_empty(), "%s has a script page on its back" % photo_id)
+		_check(pages_script.CLUES.has(pages_script.clue_for(photo_id)), "%s has a known frame-edge clue" % photo_id)
+		numbers.append(int(page.get("page", 0)))
+	numbers.sort()
+	_check(numbers == range(1, numbers.size() + 1), "script pages run 1..n without gaps or repeats")
+	for kind in pages_script.CLUES:
+		_check(pages_script.clue_texture(kind) != null, "frame-edge clue %s is drawn" % kind)
+
 	var first := story.quest_data("quest-001")
 	var second := story.quest_data("quest-002")
 	for quest in [first, second]:
