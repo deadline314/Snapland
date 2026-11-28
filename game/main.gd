@@ -491,13 +491,25 @@ func _build_ui() -> void:
 	hud.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	hud.mouse_filter=Control.MOUSE_FILTER_IGNORE
 	ui.add_child(hud)
+	# One idle clock for the park overlays' keepsakes (ART-77): the same sway the
+	# collage menus use; it rests while the HUD is hidden or motion is reduced.
+	var hud_idle := Collage.Idle.new()
+	hud_idle.name="CollageIdle"
+	hud.set_meta(&"collage_idle",hud_idle)
+	hud.add_child(hud_idle)
 	var banner := PanelContainer.new()
 	banner.name="ParkKeepsakeBanner"
 	banner.position=Vector2(24,20)
 	banner.custom_minimum_size=Vector2(320,48)
 	banner.size=Vector2(320,48)
-	banner.add_theme_stylebox_override("panel",Paper.nameplate())
+	# A torn note taped to the corner of the screen instead of a dark plate;
+	# the margins match the old plate so the layout does not move.
+	var banner_face := StyleBoxEmpty.new()
+	var plate := Paper.nameplate()
+	for side in [SIDE_LEFT,SIDE_TOP,SIDE_RIGHT,SIDE_BOTTOM]: banner_face.set_content_margin(side,plate.get_content_margin(side))
+	banner.add_theme_stylebox_override("panel",banner_face)
 	hud.add_child(banner)
+	Collage.backing(banner,"note",3,Collage.CREAM,2.0)
 	var banner_box := VBoxContainer.new()
 	banner_box.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	banner_box.add_theme_constant_override("separation",4)
@@ -507,9 +519,11 @@ func _build_ui() -> void:
 	banner_box.add_child(island_row)
 	island_row.add_child(Paper.icon("pin",20,Paper.CORAL))
 	area_label=Paper.label("海風碼頭",20)
+	area_label.add_theme_color_override("font_color",Collage.INK)
 	area_label.autowrap_mode=TextServer.AUTOWRAP_OFF
 	island_row.add_child(area_label)
 	phase_label=Paper.label("",16,Paper.TEAL)
+	phase_label.add_theme_color_override("font_color",Collage.INK_TEAL)
 	phase_label.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT
 	phase_label.custom_minimum_size.x=98
 	island_row.add_child(phase_label)
@@ -522,6 +536,7 @@ func _build_ui() -> void:
 	album_mark.tooltip_text="普通拍貼收藏"
 	keepsakes.add_child(album_mark)
 	normal_count_label=Paper.label("",18)
+	normal_count_label.add_theme_color_override("font_color",Collage.INK)
 	normal_count_label.autowrap_mode=TextServer.AUTOWRAP_OFF
 	normal_count_label.custom_minimum_size.x=88
 	normal_count_label.size_flags_horizontal=Control.SIZE_SHRINK_BEGIN
@@ -530,11 +545,13 @@ func _build_ui() -> void:
 	devil_mark.tooltip_text="小惡魔拍貼收藏"
 	keepsakes.add_child(devil_mark)
 	devil_count_label=Paper.label("",18,Paper.CORAL)
+	devil_count_label.add_theme_color_override("font_color",Collage.INK_CORAL)
 	devil_count_label.autowrap_mode=TextServer.AUTOWRAP_OFF
 	devil_count_label.custom_minimum_size.x=102
 	devil_count_label.size_flags_horizontal=Control.SIZE_SHRINK_BEGIN
 	keepsakes.add_child(devil_count_label)
 	coin_count_label=Paper.label("",18,Paper.GOLD)
+	coin_count_label.add_theme_color_override("font_color",Collage.INK_BRASS)
 	coin_count_label.autowrap_mode=TextServer.AUTOWRAP_OFF
 	coin_count_label.custom_minimum_size.x=62
 	coin_count_label.size_flags_horizontal=Control.SIZE_SHRINK_BEGIN
@@ -550,6 +567,8 @@ func _build_ui() -> void:
 	ticket_button.offset_top=24.0
 	ticket_button.offset_bottom=72.0
 	ticket_button.custom_minimum_size=Vector2(198,48)
+	# A hanging voyage ticket stub; the button keeps its text and hit area.
+	Collage.dress(ticket_button,"stub",4,"ticket",Color("#4f9fc4"),2.0)
 	quest_label=Paper.label("",18,Color("#fffaf0"))
 	quest_label.position=Vector2(28,80)
 	quest_label.size=Vector2(376,48)
