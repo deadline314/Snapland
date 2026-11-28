@@ -1614,7 +1614,10 @@ func _arch(pos: Vector3, title: String, color: Color, wide := 5.0) -> void:
 	for i in range(7):
 		var flag := _box(pos+Vector3(-wide*0.45+i*wide*0.15,2.85,0),Vector3(0.4,0.35,0.04),CORAL if i%2==0 else GOLD)
 		component_motion.register_component(flag,"flag",float(i)*0.6)
-	var arch_title := _label(title,pos+Vector3(0,3.5,0.43),30)
+	# Painted on the beam's front face, below the cornice's overhang, so the
+	# deeper cornice can never cover the name (ART-68).
+	var arch_title := _label(title,pos+Vector3(0,3.32,0.51),30)
+	arch_title.billboard = BaseMaterial3D.BILLBOARD_DISABLED
 	occlusion_controller.register_visibility_label(arch_title)
 	occlusion_controller.finish_building(blocker)
 	for side in [-1,1]:
