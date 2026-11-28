@@ -582,6 +582,16 @@ func _topper(sculpt: Kit.Sculpt, top: Vector3, kind: String) -> void:
 			sculpt.box(top + Vector3(0.1, 1.04, 0), Vector3(0.1, 0.18, 0.08), Props.TEAL)
 			sculpt.box(top + Vector3(0.1, 1.18, 0), Vector3(0.08, 0.08, 0.08), Props.CREAM)
 			sculpt.box(top + Vector3(0.1, 1.06, 0.04), Vector3(0.7, 0.02, 0.02), Props.GOLD, Basis(Vector3.BACK, 0.12))
+		"ribbon":
+			# A little dancer on a drum with a pink ribbon looping round her.
+			sculpt.tube(top + Vector3(0, 0.1, 0), 0.2, 0.2, 0.2, Props.RED, 10)
+			sculpt.tube(top + Vector3(0, 0.21, 0), 0.21, 0.21, 0.03, Props.GOLD, 10)
+			sculpt.box(top + Vector3(0, 0.38, 0), Vector3(0.1, 0.3, 0.07), Props.TEAL)
+			sculpt.box(top + Vector3(0, 0.58, 0), Vector3(0.1, 0.1, 0.08), Props.CREAM)
+			sculpt.box(top + Vector3(0.1, 0.62, 0), Vector3(0.02, 0.36, 0.02), Props.WOOD, Basis(Vector3.BACK, -0.5))
+			for loop in 10:
+				var a := loop * TAU / 10.0
+				sculpt.box(top + Vector3(cos(a) * 0.36, 0.5 + sin(a * 2.0) * 0.06, sin(a) * 0.12), Vector3(0.09, 0.03, 0.02), Props.ROSE if loop % 2 == 0 else Props.RED, Basis(Vector3.UP, -a))
 		"shadow":
 			# A little backlit paper screen in a wooden frame with a rabbit shadow on it
 			# and a candle glowing underneath.

@@ -218,5 +218,25 @@
       "camera",
       "sign"
     ]
+  },
+  {
+    "id": "game-060",
+    "mode": "ribbon_spin",
+    "zone": "circus",
+    "local_index": 12,
+    "arcade": true,
+    "name": "謝幕回旋",
+    "goal": "跟著鼓聲左右交替轉圈，讓絲帶在空中畫出大圓，最後在鼓聲收尾時停下鞠躬。",
+    "instructions": "← → 或手把十字鍵跟著鼓聲左右交替按，主角就會轉圈、絲帶越畫越大；最後鼓聲「鏘！」的那一下按空白鍵、E 或手把 A 鍵鞠躬。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助轉絲帶拿到金牌",
+    "ordinary": "跟著鼓聲轉圈並鞠躬，拿到銅牌",
+    "attraction_tag": "謝幕絲帶舞",
+    "island_invitation": "咚、咚、咚，左右左右轉起來！節奏亂掉的話……絲帶會把你包成木乃伊。",
+    "retake_props": [
+      "hat",
+      "balloon",
+      "mascot"
+    ]
   }
 ]
