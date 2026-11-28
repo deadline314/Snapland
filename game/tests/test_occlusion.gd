@@ -341,7 +341,7 @@ func _run() -> void:
 	for label: Label3D in park_world.find_children("*", "Label3D", true, false):
 		if label.text == "迎賓大道": arch_title = label
 		elif label.text == "倒影大道": rear_arch_title = label
-		elif label.text == "中央廣場": unrelated_label = label
+		elif label.text == "日夜鐘": unrelated_label = label
 	assert(is_instance_valid(arch_title) and is_instance_valid(rear_arch_title) and is_instance_valid(unrelated_label), "arch title labels and an unrelated world label exist")
 	var arch_title_modulate := arch_title.modulate
 	park_world.player.position = Vector3(0, 0.4, -15)

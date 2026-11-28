@@ -774,9 +774,16 @@ func _check_wayfinding(world: Node) -> void:
 	_check_wayfinding_focus(world, landmarks)
 	var outcomes: Dictionary = landmarks.outcome_state()
 	_check(not outcomes.ribbon_visible and not outcomes.entry_sign_corrected, "unfinished requests leave the arch and entry sign unchanged")
+	var shown_requests: Dictionary = landmarks.request_icons()
+	_check(shown_requests.keys().size() == 3, "the three welcome characters each carry a request icon")
+	_check(landmarks._requests.values().all(func(record: Dictionary) -> bool: return record.wanted), "unmet guide and unstarted requests want the walker")
+	var plaza_text := landmarks.get_node_or_null("Signpost_plaza/SignText") as Label3D
+	_check(plaza_text != null and plaza_text.billboard == BaseMaterial3D.BILLBOARD_DISABLED and is_instance_valid(landmarks._board),
+		"the plaza directions are painted on a board fixed to the post, not floating words")
 	world.set_story_progress({"story_photo": true, "steps": {"quest-001": 3, "quest-002": 3}, "next_steps": {}, "photos": {}})
 	outcomes = landmarks.outcome_state()
 	_check(outcomes.ribbon_visible and outcomes.entry_sign_corrected, "finished requests show the ribbon garland and corrected entry sign")
+	_check(landmarks.request_icons().values().all(func(shown: bool) -> bool: return not shown), "finished requests take the request icons away")
 	for quest_id in ["quest-001", "quest-002"]:
 		var quest_position: Vector3 = world._point_by_id(quest_id).get("position", Vector3.INF)
 		var quest_transform := Transform3D(world.player.global_basis, quest_position + Vector3(0.0,0.3,0.0))

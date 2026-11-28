@@ -1745,7 +1745,6 @@ func _build_plaza() -> void:
 		_shrub_cluster(Vector3(side*14.0,0,2.0),side)
 		_shrub_cluster(Vector3(side*14.0,0,-5.8),-side)
 	_arch(Vector3(0,0,-11),"迎賓大道",CORAL,8)
-	_local_label("中央廣場",Vector3(0,4.7,1),30)
 
 func _bench(pos: Vector3) -> void:
 	var wood := Color("#956d48")
