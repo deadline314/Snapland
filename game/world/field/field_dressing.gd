@@ -52,8 +52,10 @@ const THEMES := {
 		"board": {"wood": Color("#7a3e32")},
 		"roof": {"tile": [Color("#c9423a"), Color("#f2c75a"), Color("#7a2c26")], "pattern": 1, "size": 0.25},
 		"ink": Color("#ffe39a"), "cap": Color("#e8674f"), "bulb": Color("#ff9a5a"),
-		"floor": {"tile": [Color("#9a5a44"), Color("#c49a6a"), Color("#4a3430")], "pattern": 0, "size": 0.6},
-		"rim": {"stone": Color("#5b4a44")},
+		# A boarded stall floor framed by a raised timber edge, not a rug on the street (ART-82).
+		"floor": {"coastal": 1, "size": 0.8, "tint": Color("#e0b07a")},
+		"rim": {"wood": Color("#5e3a26")},
+		"kerb": 0.16,
 		"props": ["lanterns", "stools", "fruit"],
 	},
 	"circus": {
@@ -374,7 +376,7 @@ static func build_grounds(world: Node3D, parent: Node3D, records: Array[Dictiona
 		var radii := _outline(centre, radius, seed_value, walkable)
 		var pad := MeshInstance3D.new()
 		pad.name = "Floor"
-		pad.mesh = _floor_mesh(world, centre, radii, surface(world, look.floor), surface(world, look.rim))
+		pad.mesh = _floor_mesh(world, centre, radii, surface(world, look.floor), surface(world, look.rim), float(look.get("kerb", 0.05)))
 		pad.position = Vector3(centre.x, world.ground_surface_y(centre), centre.z)
 		pad.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		parent.add_child(pad)
@@ -409,7 +411,9 @@ static func _outline(centre: Vector3, radius: float, seed_value: int, walkable: 
 
 
 ## Top (surface 0) and kerb (surface 1) of a floor following the ground.
-static func _floor_mesh(world: Node3D, centre: Vector3, radii: PackedFloat32Array, top: Material, kerb: Material) -> ArrayMesh:
+## `kerb_height` is how far the edging stands above the floor; walkers stay on
+## the floor itself, so a tall edge frames it without burying anyone's feet.
+static func _floor_mesh(world: Node3D, centre: Vector3, radii: PackedFloat32Array, top: Material, kerb: Material, kerb_height := 0.05) -> ArrayMesh:
 	var base: float = world.ground_surface_y(centre)
 	var height := func(at: Vector3) -> float: return world.ground_surface_y(centre + at) - base
 	var shape := ArrayMesh.new()
@@ -419,7 +423,7 @@ static func _floor_mesh(world: Node3D, centre: Vector3, radii: PackedFloat32Arra
 	rims.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var middle := Vector3(0, PAD_LIFT, 0)
 	# Kerb profile: inner lip, flat top, outer face sinking into the ground.
-	var profile := [Vector2(0.0, 0.0), Vector2(0.0, 0.05), Vector2(RIM_WIDTH, 0.05), Vector2(RIM_WIDTH + 0.04, -0.08)]
+	var profile := [Vector2(0.0, 0.0), Vector2(0.0, kerb_height), Vector2(RIM_WIDTH, kerb_height), Vector2(RIM_WIDTH + 0.04, -0.08)]
 	for index in range(PAD_SIDES):
 		var next := (index + 1) % PAD_SIDES
 		_triangle(tops, middle, _ring(index, radii[index], 0.0, 0.0, height), _ring(next, radii[next], 0.0, 0.0, height), Vector3.UP)
