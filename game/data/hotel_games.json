@@ -118,5 +118,25 @@
       "sign",
       "lantern"
     ]
+  },
+  {
+    "id": "game-091",
+    "mode": "quiet_steps",
+    "zone": "hotel",
+    "local_index": 7,
+    "arcade": true,
+    "name": "枕頭靜步",
+    "goal": "躡手躡腳穿過一整排睡著的客人：客人打呼時可以往前走，打呼一停就要立刻站住。被發現的話，客人會坐起來拿枕頭砸你。",
+    "instructions": "→、D 或手把十字鍵、左搖桿：按住往前走，放開立刻站住。看客人的鼻涕泡泡：在縮就快醒了。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助靜步穿過客房拿到金牌",
+    "ordinary": "趁客人打呼時溜過整排床，拿到銅牌",
+    "attraction_tag": "枕頭靜步",
+    "island_invitation": "幽幽旅館的客人都睡了，你要躡手躡腳溜過去！客人打呼時才能走，打呼一停就要站好。有的客人還會假裝睡著偷看。被發現的話，一顆枕頭會飛到你臉上。",
+    "retake_props": [
+      "mascot",
+      "lantern",
+      "bench"
+    ]
   }
 ]

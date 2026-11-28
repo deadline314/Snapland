@@ -72,6 +72,8 @@ const STANDS := {
 			"stand": Vector3(3.6, 0.2, 3.4), "point": Vector3(4.55, 0.2, 4.75), "prop": "window", "paint": Color("#4f8f86")},
 		{"id": "game-090", "title": "電梯借重", "prompt": "電梯借重 · 剎車停在樓層",
 			"stand": Vector3(-11.0, 0.2, 5.6), "point": Vector3(-10.05, 0.2, 6.95), "prop": "lift", "paint": Color("#8a6030")},
+		{"id": "game-091", "title": "枕頭靜步", "prompt": "枕頭靜步 · 打呼時才能走",
+			"stand": Vector3(12.8, 0.2, 7.0), "point": Vector3(13.75, 0.2, 8.35), "prop": "sleeper", "paint": Color("#c0485e")},
 	],
 	# Sky stands use the kept sites in sky_world.STAND_SITES (stand and point copied).
 	"sky": [
@@ -128,6 +130,7 @@ static func build(world: Node3D, region: String) -> void:
 			"roots": _roots_prop(sculpt)
 			"leafboat": _leafboat_prop(sculpt)
 			"book": _book_prop(sculpt)
+			"sleeper": _sleeper_prop(sculpt)
 			"lift": _lift_prop(sculpt)
 			"window": _window_prop(sculpt)
 			"bubble": _bubble_prop(sculpt)
@@ -816,3 +819,20 @@ static func _wind_kite_prop(sculpt: Kit.Sculpt) -> void:
 	sculpt.tube(Vector3(-0.2, 1.02, 0.12), 0.08, 0.08, 0.08, Color("#f4ecd8"), 10, Basis(Vector3.RIGHT, PI * 0.5))
 	sculpt.box(Vector3(0.2, 1.08, 0.12), Vector3(0.02, 0.16, 0.02), dark)
 	sculpt.box(Vector3(0.24, 1.16, 0.12), Vector3(0.12, 0.03, 0.03), sun)
+
+
+## A little bed on the roof with a ghost asleep under a red quilt in a striped
+## nightcap and a big Z over it, and a pillow on the counter.
+static func _sleeper_prop(sculpt: Kit.Sculpt) -> void:
+	var wood := Color("#6a4058")
+	sculpt.box(Vector3(0, 2.52, -0.3), Vector3(0.9, 0.12, 0.44), wood)
+	sculpt.box(Vector3(-0.42, 2.72, -0.3), Vector3(0.06, 0.4, 0.44), wood.lightened(0.1))
+	sculpt.box(Vector3(0.08, 2.62, -0.3), Vector3(0.66, 0.08, 0.4), Color("#c0485e"))
+	sculpt.box(Vector3(-0.28, 2.64, -0.3), Vector3(0.18, 0.08, 0.34), Color("#f3ecfa"))
+	sculpt.ball(Vector3(-0.26, 2.78, -0.26), 0.11, Color("#eef0ff"), Color.TRANSPARENT, 8, 4)
+	sculpt.tube(Vector3(-0.3, 2.9, -0.26), 0.08, 0.02, 0.14, Color("#c0485e"), 8, Basis(Vector3.BACK, 0.6))
+	sculpt.box(Vector3(0.2, 3.1, -0.22), Vector3(0.18, 0.03, 0.02), Color("#d8d2ff"))
+	sculpt.box(Vector3(0.2, 2.96, -0.22), Vector3(0.18, 0.03, 0.02), Color("#d8d2ff"))
+	sculpt.box(Vector3(0.2, 3.03, -0.22), Vector3(0.03, 0.18, 0.02), Color("#d8d2ff"), Basis(Vector3.BACK, -0.7))
+	sculpt.box(Vector3(0.24, 1.02, 0.1), Vector3(0.36, 0.1, 0.24), Color("#f3ecfa"))
+	sculpt.box(Vector3(-0.28, 1.0, 0.1), Vector3(0.3, 0.06, 0.22), Color("#5b3f74"))
