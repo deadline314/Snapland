@@ -63,6 +63,7 @@ func _build_region_geometry() -> void:
 func _build_entries() -> void:
 	_point("region:welcome", "返回迎賓大道", Vector3(-12, GROUND_Y, 5))
 	_point("harbor:tide", "潮汐鐘 · 預覽漲退潮", Vector3(-12, GROUND_Y, -1))
+	_point("harbor:rift", "查看逆潮港", Vector3(-12, GROUND_Y, 2))
 	_point("harbor:ferry:shore", "免費渡船 · 前往燈塔", SHORE_DOCK)
 	_point("harbor:ferry:lighthouse", "免費渡船 · 返回岸邊", LIGHTHOUSE_DOCK)
 	_point("harbor:info:lighthouse", "燈塔與環形水路", Vector3(0, GROUND_Y, -2))

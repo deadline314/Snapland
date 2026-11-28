@@ -15,6 +15,11 @@ const RegionRoutes = preload("res://game/core/region_routes.gd")
 const FailReplayViewer = preload("res://game/ui/fail_replay_viewer.gd")
 const Collage = preload("res://game/ui/collage_kit.gd")
 const IslandEventCatalog = preload("res://game/core/island_event_catalog.gd")
+## Other-space finale keepsakes per district: [win title, how, loss title, how].
+const RIFT_KEEPSAKES := {
+	"welcome": ["倒影大道 · 後台劇照", "倒影首映照謝幕時留下的劇照。", "倒影大道 · 倒倒的自拍", "倒影首映照時間用完時，倒倒拿你的相機拍的。"],
+	"harbor": ["逆潮港 · 燈塔重亮", "燈塔追潮拿回燈塔燈時留下的照片。", "逆潮港 · 錨錨的明信片", "燈塔追潮時間用完時，錨錨寄來的明信片。"],
+}
 ## Each album category is a postage stamp of its own colour.
 const TAB_TONES := {"normal": Color("#6fc7b7"), "devil": Color("#f08f73"), "time": Color("#dfa458"), "fail": Color("#c9a6d8")}
 const PAGE_SIZE := 4
@@ -418,11 +423,12 @@ func _entries() -> Array[Dictionary]:
 				entries.append(_game_entry(game,identity,true))
 			# 倒影大道's finale tucks its keepsakes in after the twelve cards once
 			# they exist; they are photos, not cards, so the page never lists them as missing.
-			if _region=="welcome" and _progress!=null:
-				if _progress.photos.has("photo-welcome-backstage"):
-					entries.append(_entry("photo-welcome-backstage","倒影大道 · 後台劇照","倒影首映照謝幕時留下的劇照。不計入拍貼數。"))
-				if _progress.photos.has("photo-welcome-backstage-selfie"):
-					entries.append(_entry("photo-welcome-backstage-selfie","倒影大道 · 倒倒的自拍","倒影首映照時間用完時，倒倒拿你的相機拍的。不計入拍貼數。"))
+			if _progress!=null and RIFT_KEEPSAKES.has(_region):
+				var keepsakes: Array = RIFT_KEEPSAKES[_region]
+				for index in 2:
+					var id := "photo-%s-backstage%s" % [_region, "" if index == 0 else "-selfie"]
+					if _progress.photos.has(id):
+						entries.append(_entry(id,str(keepsakes[index * 2]),str(keepsakes[index * 2 + 1])+"不計入拍貼數。"))
 		"time":
 			if _region!="welcome": return entries
 			for phase in _time_phases:

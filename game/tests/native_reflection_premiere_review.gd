@@ -82,7 +82,7 @@ func _run() -> void:
 	main._close()
 	await _settle()
 	# An untouched show, sped up: the curtain falls early on 倒倒's selfie.
-	main._launch_rift()
+	main._launch_rift("welcome")
 	await _settle()
 	Engine.time_scale = 6.0
 	if not await _play(false):
