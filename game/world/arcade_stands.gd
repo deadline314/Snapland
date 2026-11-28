@@ -57,6 +57,8 @@ const STANDS := {
 			"stand": Vector3(8.45, 0.86, -3.1), "point": Vector3(7.75, 0.86, -1.95), "prop": "roots", "paint": Color("#4f7f6a")},
 		{"id": "game-082", "title": "葉舟搬家", "prompt": "葉舟搬家 · 左右划槳載螞蟻",
 			"stand": Vector3(8.45, 1.12, -7.0), "point": Vector3(8.1, 1.12, -5.6), "prop": "leafboat", "paint": Color("#3f7f8a")},
+		{"id": "game-083", "title": "花粉拓印", "prompt": "花粉拓印 · 看準時機蓋印章",
+			"stand": Vector3(-9.6, 0.2, -10.0), "point": Vector3(-8.3, 0.2, -8.9), "prop": "stamp", "paint": Color("#a8486a")},
 	],
 	# Hotel stands use the kept sites in hotel_world.STAND_SITES (stand and point copied).
 	"hotel": [
@@ -135,6 +137,7 @@ static func build(world: Node3D, region: String) -> void:
 			"bee": _bee_prop(sculpt)
 			"roots": _roots_prop(sculpt)
 			"leafboat": _leafboat_prop(sculpt)
+			"stamp": _stamp_prop(sculpt)
 			"book": _book_prop(sculpt)
 			"sheep": _sheep_prop(sculpt)
 			"sleeper": _sleeper_prop(sculpt)
@@ -596,6 +599,30 @@ static func _leafboat_prop(sculpt: Kit.Sculpt) -> void:
 	for ant in 2:
 		sculpt.ball(Vector3(0.22 + ant * 0.12, 1.06, 0.12), 0.03, Color("#2a2020"), Color.TRANSPARENT, 5, 2)
 	sculpt.box(Vector3(-0.3, 1.0, 0.1), Vector3(0.34, 0.06, 0.26), CREAM)
+
+
+## A big wooden flower stamp hanging from a little gallows arm on the roof,
+## a pink flower printed on a sheet below it, and ink jars on the counter.
+static func _stamp_prop(sculpt: Kit.Sculpt) -> void:
+	var wood := Color("#9a7048")
+	var dye := Color("#e0587a")
+	sculpt.box(Vector3(-0.5, 2.85, -0.3), Vector3(0.06, 0.9, 0.06), wood.darkened(0.15))
+	sculpt.box(Vector3(-0.2, 3.28, -0.3), Vector3(0.66, 0.06, 0.06), wood.darkened(0.15))
+	sculpt.box(Vector3(0.1, 3.12, -0.3), Vector3(0.015, 0.3, 0.015), Color("#5a4632"))
+	sculpt.ball(Vector3(0.1, 2.94, -0.3), 0.07, wood.lightened(0.15), Color.TRANSPARENT, 8, 3)
+	sculpt.tube(Vector3(0.1, 2.86, -0.3), 0.03, 0.03, 0.1, wood, 6)
+	sculpt.box(Vector3(0.1, 2.76, -0.3), Vector3(0.26, 0.12, 0.26), wood)
+	sculpt.box(Vector3(0.1, 2.68, -0.3), Vector3(0.22, 0.04, 0.22), dye)
+	sculpt.box(Vector3(0.1, 2.44, -0.25), Vector3(0.5, 0.02, 0.36), Color("#f6eedb"))
+	for petal in 5:
+		var at := Vector3(0.1, 2.46, -0.25) + Basis(Vector3.UP, petal * TAU / 5.0) * Vector3(0.07, 0, 0)
+		sculpt.ball(at, 0.05, dye, Color.TRANSPARENT, 6, 2, 0.3)
+	sculpt.ball(Vector3(0.1, 2.47, -0.25), 0.035, Color("#f2b93a"), Color.TRANSPARENT, 6, 2, 0.3)
+	for jar in 3:
+		var tone: Color = [dye, Color("#f2b93a"), Color("#6f9ad8")][jar]
+		sculpt.tube(Vector3(-0.4 + jar * 0.16, 1.03, 0.1), 0.06, 0.06, 0.14, tone, 8)
+		sculpt.box(Vector3(-0.4 + jar * 0.16, 1.12, 0.1), Vector3(0.07, 0.04, 0.07), Color("#b5884e"))
+	sculpt.box(Vector3(0.3, 1.0, 0.1), Vector3(0.36, 0.02, 0.26), Color("#f6eedb"))
 
 
 ## A big open book on the roof with its two pages swinging up to clap, a

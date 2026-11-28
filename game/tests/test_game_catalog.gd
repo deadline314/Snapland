@@ -22,7 +22,7 @@ func _run() -> void:
 	var sky: Array = catalog.definitions("sky")
 	var all_games: Array = catalog.all_definitions()
 	_check(welcome == JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json")), "default definitions preserve the original welcome row shape and order")
-	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 12 and toy.size() == 12 and garden.size() == 10 and hotel.size() == 8 and sky.size() == 7 and all_games.size() == 97, "only the 97 delivered games are exposed")
+	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 12 and toy.size() == 12 and garden.size() == 11 and hotel.size() == 8 and sky.size() == 7 and all_games.size() == 98, "only the 98 delivered games are exposed")
 	for index in range(welcome.size()):
 		_check(welcome[index].id == "game-%03d" % (index + 1), "welcome numbering stays ordered")
 	_check(all_games == welcome + harbor + candy + nightmarket + circus + toy + garden + hotel + sky and catalog.definitions("cinema").is_empty(), "games retain global order and future regions remain unavailable")
@@ -112,6 +112,9 @@ func _run() -> void:
 	var leafboat := {"id":"game-082", "mode":"leaf_boat", "zone":"garden", "local_index":10, "photo_id":"photo-garden-game-10", "devil_photo_id":"photo-garden-devil-10", "achievement_id":"ACH_GAME_082"}
 	_check(catalog.identity("game-082") == leafboat and catalog.identity("leaf_boat") == leafboat and garden[9].name == "葉舟搬家" and garden[9].arcade == true,
 		"greenhouse slot 10 keeps its own number")
+	var pollen := {"id":"game-083", "mode":"pollen_print", "zone":"garden", "local_index":11, "photo_id":"photo-garden-game-11", "devil_photo_id":"photo-garden-devil-11", "achievement_id":"ACH_GAME_083"}
+	_check(catalog.identity("game-083") == pollen and catalog.identity("pollen_print") == pollen and garden[10].name == "花粉拓印" and garden[10].arcade == true,
+		"greenhouse slot 11 keeps its own number")
 	var lily := {"id":"game-077", "mode":"lily_hop", "zone":"garden", "local_index":5, "photo_id":"photo-garden-game-5", "devil_photo_id":"photo-garden-devil-5", "achievement_id":"ACH_GAME_077"}
 	_check(catalog.identity("game-077") == lily and catalog.identity("lily_hop") == lily and garden[4].name == "睡蓮踏浪" and garden[4].arcade == true,
 		"a greenhouse game keeps the number of the slot it fills, leaving slots still in design empty")

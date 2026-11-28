@@ -198,5 +198,25 @@
       "hat",
       "bench"
     ]
+  },
+  {
+    "id": "game-083",
+    "mode": "pollen_print",
+    "zone": "garden",
+    "local_index": 11,
+    "arcade": true,
+    "name": "花粉拓印",
+    "goal": "花朵印章在紙上方左右擺動，看準時機按下把花印在虛線框裡，越正越高分；印歪了印章會彈起來蓋在主角額頭上。",
+    "instructions": "空白鍵、Enter 或手把 A 鈕、點畫面：蓋下印章。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助印花拿到金牌",
+    "ordinary": "把花印進框裡，拿到銅牌",
+    "attraction_tag": "花藝工作桌",
+    "island_invitation": "大印章在紙上晃來晃去，看準了再蓋！印歪的話，那朵花會蓋在你額頭上。",
+    "retake_props": [
+      "flower_horn",
+      "hat",
+      "bench"
+    ]
   }
 ]
