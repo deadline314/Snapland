@@ -54,6 +54,8 @@ const STANDS := {
 			"stand": Vector3(-3.6, 0.2, 4.6), "point": Vector3(-2.65, 0.2, 5.95), "prop": "book", "paint": Color("#5b3f74")},
 		{"id": "game-086", "title": "被單滑梯", "prompt": "被單滑梯 · 左右傾身撿枕頭",
 			"stand": Vector3(10.8, 0.2, 3.6), "point": Vector3(11.75, 0.2, 4.95), "prop": "slide", "paint": Color("#7a5aa8")},
+		{"id": "game-087", "title": "回聲鑰匙", "prompt": "回聲鑰匙 · 缺口對準時轉鑰匙",
+			"stand": Vector3(-14.6, 0.2, 4.4), "point": Vector3(-13.65, 0.2, 5.75), "prop": "lock", "paint": Color("#6a4058")},
 	],
 }
 const FOOTPRINT := Vector3(1.5, 2.0, 1.0)
@@ -92,6 +94,7 @@ static func build(world: Node3D, region: String) -> void:
 			"vine": _vine_prop(sculpt)
 			"post": _post_prop(sculpt)
 			"book": _book_prop(sculpt)
+			"lock": _lock_prop(sculpt)
 			"slide": _slide_prop(sculpt)
 		var stand: MeshInstance3D = world._mesh(sculpt.mesh(), Vector3.ZERO, world._vertex_color_material("arcade-stand"))
 		stand.name = "ArcadeStand_" + str(row.id)
@@ -517,3 +520,21 @@ static func _slide_prop(sculpt: Kit.Sculpt) -> void:
 	sculpt.box(Vector3(-0.25, 1.04, 0.1), Vector3(0.36, 0.1, 0.24), Color("#f3ecfa"))
 	sculpt.box(Vector3(0.28, 1.0, 0.1), Vector3(0.36, 0.06, 0.26), Color("#e79bb6"))
 	sculpt.box(Vector3(0.28, 1.06, 0.1), Vector3(0.34, 0.05, 0.24), Color("#4f8f86"))
+
+
+## A big round brass door lock on the roof with its rings and a key in the
+## keyhole at the top, and a ring of keys and a little broom on the counter.
+static func _lock_prop(sculpt: Kit.Sculpt) -> void:
+	var facing := Basis(Vector3.RIGHT, PI * 0.5)
+	sculpt.tube(Vector3(0, 2.8, -0.3), 0.4, 0.4, 0.06, BRASS, 16, facing)
+	for ring in 3:
+		var radius := 0.33 - ring * 0.09
+		sculpt.tube(Vector3(0, 2.8, -0.26), radius, radius, 0.03, Color("#b07a3a").darkened(ring * 0.12), 16, facing)
+	sculpt.box(Vector3(0, 3.12, -0.24), Vector3(0.06, 0.08, 0.04), Color("#c9b6ff"))
+	sculpt.box(Vector3(0, 3.3, -0.24), Vector3(0.05, 0.3, 0.04), BRASS)
+	sculpt.tube(Vector3(0, 3.5, -0.24), 0.1, 0.1, 0.04, BRASS, 10, facing)
+	sculpt.tube(Vector3(-0.28, 1.0, 0.1), 0.1, 0.1, 0.02, BRASS.darkened(0.2), 10)
+	for key in 3:
+		sculpt.box(Vector3(-0.36 + key * 0.08, 1.02, 0.18), Vector3(0.03, 0.02, 0.12), BRASS)
+	sculpt.box(Vector3(0.32, 1.08, 0.08), Vector3(0.03, 0.3, 0.03), Color("#9a6a40"), Basis(Vector3.BACK, 0.5))
+	sculpt.box(Vector3(0.42, 0.98, 0.08), Vector3(0.14, 0.1, 0.06), Color("#d9b85a"), Basis(Vector3.BACK, 0.5))

@@ -38,5 +38,25 @@
       "lantern",
       "bench"
     ]
+  },
+  {
+    "id": "game-087",
+    "mode": "echo_key",
+    "zone": "hotel",
+    "local_index": 3,
+    "arcade": true,
+    "name": "回聲鑰匙",
+    "goal": "房門上的圓鎖有好幾圈在轉，每圈有一個缺口；缺口轉到鑰匙下面的瞬間按鍵，一圈一圈打開房門。按錯會打開掃把櫃。",
+    "instructions": "空白鍵、E、↑ 或手把 A 鈕：轉鑰匙。缺口轉到上面鑰匙底下時按，鑰匙孔冒出回聲時就快到了。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助轉鑰匙開門拿到金牌",
+    "ordinary": "在缺口對準鑰匙時轉鑰匙開門，拿到銅牌",
+    "attraction_tag": "回聲鑰匙",
+    "island_invitation": "旅館的房門鎖會轉圈圈！缺口對準鑰匙時喀啦一聲，一圈一圈打開。按錯的話，打開的是掃把櫃，你會被掃把埋起來。",
+    "retake_props": [
+      "lantern",
+      "mascot",
+      "sign"
+    ]
   }
 ]
