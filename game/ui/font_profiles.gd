@@ -1,6 +1,18 @@
 extends RefCounted
 ## Locale-aware, bounded font resources shared by Paper UI and custom drawing.
+##
+## Type roles (design/runtime/type-system.md):
+## * body    - Snapland Rounded (jf open huninn 2.1 with the 4:3 line box baked in by
+##             tools/fonts/bake_line_box.py), the face every Control inherits (current_font()).
+## * display - the same face emboldened, for titles, captions and big feedback words.
+## * numeral - Snapland Digits (Fredoka Bold, same line box); CJK units use the body face.
+## * pixel   - Fusion Pixel 12px (whose Traditional Chinese comes from Cubic 11), for
+##             pixel-art signage drawn at whole-texel sizes.
+## The "readable" style swaps body and display to Noto Sans CJK for players who
+## find the rounded face harder to read; numerals and pixel stay the same.
 
+const ROUNDED_PATH := "res://assets/fonts/rounded/SnaplandRounded-Regular.ttf"
+const NUMERAL_PATH := "res://assets/fonts/rounded/SnaplandDigits-Bold.ttf"
 const CJK_PATH := "res://assets/fonts/NotoSansCJKtc-Regular.otf"
 const PIXEL_PATHS := {
 	"zh_TW": "res://assets/fonts/pixel/fusion-pixel-12px-proportional-zh_tw.otf",
@@ -10,11 +22,18 @@ const PIXEL_PATHS := {
 }
 const ARABIC_PATH := "res://assets/fonts/NotoSansArabic.ttf"
 const SYMBOLS_PATH := "res://assets/fonts/NotoSansSymbols2.ttf"
-const CACHE_LIMIT := 8
+const STYLES := ["rounded", "pixel", "readable"]
+const ROLES := ["body", "display", "numeral", "pixel"]
+const CACHE_LIMIT := 12
 # Covers Paper UI sizes including its maximum accessibility text scale.
 const METRIC_CACHE_MAX_SIZE := 128
+## Every primary face has the 4:3 line box the interface was laid out for
+## (Fusion Pixel's native 1.333 em); the rounded faces carry it in their own metrics.
+const LINE_EM := 4.0 / 3.0
+## Extra weight of the display role, in em fractions (FontVariation.variation_embolden).
+const DISPLAY_EMBOLDEN := 0.55
 
-static var _style := "pixel"
+static var _style := "rounded"
 static var _cache: Dictionary = {}
 static var _cache_order: Array[String] = []
 static var _loaded: Dictionary = {}
@@ -44,35 +63,84 @@ static func font_for_locale(locale_id: String, style: String = "") -> Font:
 	var normalized_style := _style if style.is_empty() else _normalized_style(style)
 	return _font_for_key(normalized_locale, normalized_style)
 
+## The font of one type role for the active locale and style (see the header).
+static func role_font(role: String) -> Font:
+	match role:
+		"display":
+			return _display_for(_active_locale, _style)
+		"numeral":
+			return _numeral_for(_active_locale)
+		"pixel":
+			return _font_for_key(_active_locale, "pixel")
+	return _active_font
+
+static func _display_for(locale_key: String, style: String) -> Font:
+	var key := "%s:%s:display" % [locale_key, style]
+	if _cache.has(key):
+		_touch(key)
+		return _cache[key]
+	var base := _font_for_key(locale_key, style)
+	var display := FontVariation.new()
+	display.base_font = base
+	# Arabic keeps its own weight; emboldening joins its letters badly.
+	display.variation_embolden = 0.0 if locale_key == "qa_rtl" else DISPLAY_EMBOLDEN
+	display.fallbacks = base.fallbacks
+	return _remember(key, display)
+
+static func _numeral_for(locale_key: String) -> Font:
+	var key := "%s:numeral" % locale_key
+	if _cache.has(key):
+		_touch(key)
+		return _cache[key]
+	var digits := _duplicate_profile_font(NUMERAL_PATH, false)
+	if not digits is FontFile:
+		return _font_for_key(locale_key, "rounded")
+	# Units and labels beside the digits fall back to the rounded body; every
+	# fallback is bounded to the digits' line box so RTL keeps the same height.
+	var chain: Array[Font] = []
+	for path in [ROUNDED_PATH, CJK_PATH, ARABIC_PATH, SYMBOLS_PATH]:
+		var fallback := _fallback_font(path, NUMERAL_PATH, digits)
+		if fallback != null:
+			chain.append(fallback)
+	digits.fallbacks = chain
+	return _remember(key, digits)
+
 static func _font_for_key(normalized_locale: String, style: String) -> Font:
 	var key := "%s:%s" % [normalized_locale, style]
 	if _cache.has(key):
 		_touch(key)
 		return _cache[key]
-	var regional_path := ARABIC_PATH if normalized_locale == "qa_rtl" else str(PIXEL_PATHS.get(normalized_locale, PIXEL_PATHS["en"]))
-	var primary_path := regional_path if style == "pixel" else (ARABIC_PATH if normalized_locale == "qa_rtl" else CJK_PATH)
+	var regional_path := str(PIXEL_PATHS.get(normalized_locale, PIXEL_PATHS["en"]))
+	var primary_path := ARABIC_PATH if normalized_locale == "qa_rtl" else (regional_path if style == "pixel" else (CJK_PATH if style == "readable" else ROUNDED_PATH))
 	var primary := _duplicate_profile_font(primary_path, style == "pixel")
 	var fallback_paths: Array[String] = []
 	if style == "pixel":
-		fallback_paths = [CJK_PATH, ARABIC_PATH, SYMBOLS_PATH]
+		fallback_paths.assign([CJK_PATH, ARABIC_PATH, SYMBOLS_PATH])
 		if normalized_locale == "qa_rtl":
 			fallback_paths.append(str(PIXEL_PATHS["en"]))
+	elif style == "readable":
+		fallback_paths.assign([str(PIXEL_PATHS["en"]) if normalized_locale == "qa_rtl" else regional_path, CJK_PATH if normalized_locale == "qa_rtl" else ARABIC_PATH, SYMBOLS_PATH])
 	else:
-		fallback_paths = [str(PIXEL_PATHS["en"]) if normalized_locale == "qa_rtl" else regional_path, CJK_PATH if normalized_locale == "qa_rtl" else ARABIC_PATH, SYMBOLS_PATH]
+		# Rounded: huninn has no Hangul and only common kanji; Noto CJK fills those in.
+		# Fusion last: it alone carries a few pictographs the park signs use (⚓ ⚙).
+		fallback_paths.assign([ROUNDED_PATH, CJK_PATH, SYMBOLS_PATH, regional_path] if normalized_locale == "qa_rtl" else [CJK_PATH, ARABIC_PATH, SYMBOLS_PATH, regional_path])
 	var profile_fallbacks: Array[Font] = []
 	for fallback_path in fallback_paths:
 		var fallback := _fallback_font(fallback_path, primary_path, primary)
 		if primary is FontFile and fallback != null and fallback != primary and not profile_fallbacks.has(fallback):
 			profile_fallbacks.append(fallback)
 	primary.fallbacks = profile_fallbacks
-	_cache[key] = primary
+	return _remember(key, primary)
+
+static func _remember(key: String, font: Font) -> Font:
+	_cache[key] = font
 	_cache_order.append(key)
 	while _cache_order.size() > CACHE_LIMIT:
 		_cache.erase(_cache_order.pop_front())
-	return primary
+	return font
 
 static func _normalized_style(style: String) -> String:
-	return "readable" if style == "readable" else "pixel"
+	return style if STYLES.has(style) else "rounded"
 
 static func current_locale_key() -> String:
 	return _active_locale

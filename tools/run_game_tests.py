@@ -210,7 +210,7 @@ PASS_MARKERS = {
     "boat prologue integration tests": "PASS: boat prologue first-run, replay, interruption, and unchanged rewards",
     "avatar prop foreground tests": "PASS: prop foreground 128 complete-pose blends, independent hand/camera witnesses, rigid guards, exact-source rejection, bounded cache and 10 malformed inputs",
     "NPC departure lifecycle tests": "PASS: planted NPC departure, pause, dialogue, interruption, stride restart, reduced motion and damaged-source fallback",
-    "pixel typography tests": "PASS: 40 pixel font checks, 0 failures",
+    "pixel typography tests": "PASS: 52 pixel font checks, 0 failures",
     "localization framework tests": "PASS: locale packs, fallback, preferences and live UI state",
     "pixel UI shell tests": "PASS: pixel shell pause, ticket, controls, three explorations, synthetic result and Main dialogue; geometry, Tab and pointer return at 800/1280/1920",
     "pixel UI popup tests": "PASS: actual popup window bounds and44physical rows at800/1280/1920, 1.25 text",

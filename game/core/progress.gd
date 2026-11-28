@@ -49,7 +49,7 @@ const DEFAULT_SETTINGS := {
 	"ui_scale": 1.0,
 	"time_phase": TimeOfDay.DEFAULT_PHASE,
 	"locale": "zh_TW",
-	"font_style": "pixel",
+	"font_style": "rounded",
 	"graphics_quality": RenderQuality.DEFAULT_LEVEL,
 	"roaming_thief": true,
 	"island_events": true,
@@ -886,7 +886,7 @@ func save_progress() -> bool:
 		if key == "locale":
 			valid = typeof(value) == TYPE_STRING and _released_locales().has(str(value))
 		elif key == "font_style":
-			valid = typeof(value) == TYPE_STRING and ["pixel", "readable"].has(value)
+			valid = typeof(value) == TYPE_STRING and ["rounded", "readable"].has(value)
 		elif key == "graphics_quality":
 			valid = typeof(value) == TYPE_STRING and RenderQuality.LEVELS.has(value)
 		elif key == "time_phase":
@@ -1008,9 +1008,11 @@ func set_setting(key: String, value: Variant) -> void:
 		changed.emit()
 		return
 	if key == "font_style":
-		if typeof(value) != TYPE_STRING or not ["pixel", "readable"].has(value):
-			push_warning("Invalid setting 'font_style'; using pixel.")
-			value = "pixel"
+		if typeof(value) == TYPE_STRING and value == "pixel":
+			value = "rounded"
+		if typeof(value) != TYPE_STRING or not ["rounded", "readable"].has(value):
+			push_warning("Invalid setting 'font_style'; using rounded.")
+			value = "rounded"
 		settings[key] = value
 		_apply_setting(key)
 		changed.emit()
@@ -1157,7 +1159,11 @@ func _validated_payload(payload: Dictionary, path: String) -> Dictionary:
 			if str(key) == "locale":
 				valid = typeof(value) == TYPE_STRING and _released_locales().has(str(value))
 			if str(key) == "font_style":
-				valid = typeof(value) == TYPE_STRING and ["pixel", "readable"].has(value)
+				# Saves from before ART-64 stored the old pixel default; it reads as rounded.
+				if typeof(value) == TYPE_STRING and value == "pixel":
+					value = "rounded"
+					safe_settings[key] = value
+				valid = typeof(value) == TYPE_STRING and ["rounded", "readable"].has(value)
 			if str(key) == "graphics_quality":
 				valid = typeof(value) == TYPE_STRING and RenderQuality.LEVELS.has(value)
 			if typeof(default_value) in [TYPE_INT, TYPE_FLOAT]:
@@ -1433,7 +1439,7 @@ func _apply_loaded_setting(key: String, value: Variant) -> void:
 	elif key == "locale":
 		settings[key] = value if typeof(value) == TYPE_STRING and _released_locales().has(str(value)) else "zh_TW"
 	elif key == "font_style":
-		settings[key] = value if typeof(value) == TYPE_STRING and ["pixel", "readable"].has(value) else "pixel"
+		settings[key] = value if typeof(value) == TYPE_STRING and ["rounded", "readable"].has(value) else "rounded"
 	elif key == "graphics_quality":
 		settings[key] = RenderQuality.normalize(value)
 	elif typeof(default_value) == TYPE_BOOL:

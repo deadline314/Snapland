@@ -57,7 +57,7 @@ const EMBEDDED_BASE_SOURCES := {
 	"controls.ticket.keys": "M",
 	"controls.pause.keys": "Esc",
 	"button.back": "返回遊園  ·  Esc",
-	"font.pixel": "像素字型",
+	"font.rounded": "圓體字型",
 	"font.readable": "易讀字型",
 	"locale.zh_TW": "繁體中文",
 	"locale.en": "English（QA）",

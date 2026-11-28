@@ -49,7 +49,7 @@
     "controls.ticket.keys": {"source": "M", "text": "M"},
     "controls.pause.keys": {"source": "Esc", "text": "Esc"},
     "button.back": {"source": "返回遊園  ·  Esc", "text": "返回遊園  ·  Esc"},
-    "font.pixel": {"source": "像素字型", "text": "像素字型"},
+    "font.rounded": {"source": "圓體字型", "text": "圓體字型"},
     "font.readable": {"source": "易讀字型", "text": "易讀字型"},
     "locale.zh_TW": {"source": "繁體中文", "text": "繁體中文"},
     "locale.en": {"source": "English（QA）", "text": "English（QA）"},

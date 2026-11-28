@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "checked_on": "2026-10-14",
+  "checked_on": "2026-11-28",
   "pixel_release": {
     "tag": "2026.09.25",
     "asset": "fusion-pixel-font-12px-proportional-otf-v2026.09.25.zip",
@@ -8,7 +8,7 @@
     "sha256": "b0138dfdb5b9fae0159b1e996710782aaf7f47d2b2db26ddc13cd066f6dbb14b"
   },
   "upstream": "https://github.com/TakWolf/fusion-pixel-font",
-  "license_note": "Fonts use SIL OFL 1.1; the user CC0 requirement applies to music and sound effects. Fonts are bundled unmodified, with original font names and upstream license texts. License line endings/trailing whitespace normalized only.",
+  "license_note": "Fonts use SIL OFL 1.1; the user CC0 requirement applies to music and sound effects. Upstream license texts are bundled. License line endings/trailing whitespace normalized only for the Fusion set; the ART-64 rounded set is a metrics-only Modified Version, renamed per OFL (see rounded_release and each file's derived_from).",
   "files": [
     {
       "path": "assets/fonts/pixel/fusion-pixel-12px-proportional-zh_tw.otf",
@@ -72,19 +72,74 @@
       "license": "OFL-1.1",
       "license_path": "assets/fonts/NotoSansSymbols2-OFL.txt",
       "source_url": "https://raw.githubusercontent.com/google/fonts/main/ofl/notosanssymbols2/NotoSansSymbols2-Regular.ttf"
+    },
+    {
+      "path": "assets/fonts/rounded/SnaplandRounded-Regular.ttf",
+      "sha256": "dcb998b52438356fb2b4e541e94d90e231bb0498e0300ec14ad068fa258afdaf",
+      "bytes": 4911440,
+      "language_variant": "rounded/body+display (zh_TW, Latin, kana)",
+      "glyph_count": 11988,
+      "license": "OFL-1.1",
+      "license_path": "assets/fonts/rounded/jf-openhuninn-OFL.txt",
+      "source_url": "https://github.com/justfont/open-huninn-font/releases/download/v2.1/jf-openhuninn-2.1.ttf",
+      "derived_from": {
+        "file": "jf-openhuninn-2.1.ttf",
+        "sha256": "9d5bf4932d31fe94c18cd8cfddc98bc1b14ce10f4e354c682179db290a99c825",
+        "bytes": 4911464
+      },
+      "modification": "tools/fonts/bake_line_box.py: vertical metrics set to a centred 4/3 em line box and renamed (OFL reserved names); outlines, advances and copyright/licence strings unchanged"
+    },
+    {
+      "path": "assets/fonts/rounded/SnaplandDigits-Bold.ttf",
+      "sha256": "4ef2064077b104093b9166cd5aa1053045f8246732757b2431ee6ac695d9fcb3",
+      "bytes": 47200,
+      "language_variant": "numeral (Latin digits)",
+      "license": "OFL-1.1",
+      "license_path": "assets/fonts/rounded/Fredoka-OFL.txt",
+      "source_url": "https://raw.githubusercontent.com/hafontia-zz/Fredoka-One/35c584ff23450c9bcdf8819706e12fcdeefe1712/fonts/ttf/Fredoka-Bold.ttf",
+      "derived_from": {
+        "file": "Fredoka-Bold.ttf",
+        "sha256": "457525f9e9296784b79e3bb12b808f739ee802404f51043ae5094ce783a6e52c",
+        "bytes": 47128
+      },
+      "modification": "tools/fonts/bake_line_box.py: vertical metrics set to a centred 4/3 em line box and renamed; outlines, advances and copyright/licence strings unchanged"
     }
   ],
-  "fallback": "Bundled Noto Sans CJK TC, Noto Sans Arabic and Noto Sans Symbols 2; no dependence on operating system font availability.",
+  "fallback": "Rounded body: Snapland Rounded (jf open huninn), then Noto Sans CJK TC, Noto Sans Arabic, Noto Sans Symbols 2 and the regional Fusion Pixel face; numerals: Snapland Digits (Fredoka Bold), then the rounded body. No dependence on operating system font availability.",
   "source_character_coverage": {
     "scope": [
       "game/ui/**/*.gd",
       "game/data/**/*.json",
       "game/main.gd"
     ],
-    "unique_characters": 975,
-    "primary_missing": "ابةجحرصطغلمنهوً٤٥٦‹›−✦",
-    "primary_plus_cjk_missing": "ابةجحرصطغلمنهوً٤٥٦✦",
+    "unique_characters": 1505,
+    "primary_missing": "ابةجحرصطغلمنهوً٤٥٦⚓⚙✦",
+    "primary_plus_cjk_missing": "ابةجحرصطغلمنهوً٤٥٦⚓⚙✦",
     "bundled_union_missing": "",
-    "note": "Static cmap snapshot, not a shaping or visual test. Runtime and native checks are separate."
+    "note": "Static cmap snapshot (2026-11-28, rounded primary), not a shaping or visual test. Runtime and native checks are separate.",
+    "primary": "assets/fonts/rounded/SnaplandRounded-Regular.ttf"
+  },
+  "rounded_release": {
+    "jf_openhuninn": {
+      "upstream": "https://github.com/justfont/open-huninn-font",
+      "tag": "v2.1",
+      "commit": "98d53b3dac1730889edf548359c326c53624fa80",
+      "download": "https://github.com/justfont/open-huninn-font/releases/download/v2.1/jf-openhuninn-2.1.ttf",
+      "license_source": "https://raw.githubusercontent.com/justfont/open-huninn-font/98d53b3dac1730889edf548359c326c53624fa80/LICENSE",
+      "reserved_font_names": [
+        "open huninn",
+        "huninn",
+        "Varela",
+        "Varela Round"
+      ],
+      "note": "OFL 1.1; Hanzi derived from Kosugi Maru (Apache-2.0) as stated upstream. Bundled as the Modified Version \"Snapland Rounded\": only vertical metrics changed, renamed because of the reserved names; not subset."
+    },
+    "fredoka": {
+      "upstream": "https://github.com/hafontia-zz/Fredoka-One",
+      "commit": "35c584ff23450c9bcdf8819706e12fcdeefe1712",
+      "download": "https://raw.githubusercontent.com/hafontia-zz/Fredoka-One/35c584ff23450c9bcdf8819706e12fcdeefe1712/fonts/ttf/Fredoka-Bold.ttf",
+      "note": "OFL 1.1, no reserved font name; the repository has no tagged releases, so the file is pinned to the default-branch commit. Only the Bold weight is bundled, as \"Snapland Digits\" with the same metric change."
+    },
+    "cubic_11": "Not bundled separately: Fusion Pixel 12px already carries Cubic 11's Traditional Chinese glyphs and licence (pixel/LICENSES/cubic-11)."
   }
 }

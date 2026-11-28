@@ -78,19 +78,22 @@ func _run() -> void:
 	Progress.set_setting("locale", "zh_TW")
 	Progress.set_setting("font_style", "readable")
 	Progress.set_setting("font_style", "bogus")
-	_check(Progress.settings.font_style == "pixel", "invalid font style safely falls back to pixel")
+	_check(Progress.settings.font_style == "rounded", "invalid font style safely falls back to rounded")
 	Progress.set_setting("font_style", "readable")
 	var future_setting := {"enabled": true, "values": [1.0, "future"]}
 	Progress.settings["future_setting"] = future_setting.duplicate(true)
 	_check(Progress.save_progress(), "locale and font preference save to isolated profile")
 	Progress.settings.locale = "zh_TW"
-	Progress.settings.font_style = "pixel"
+	Progress.settings.font_style = "rounded"
 	Progress.load_progress()
 	_check(Progress.settings.locale == "zh_TW" and Progress.settings.font_style == "readable", "locale and font preference reload with string validation")
 	_check(Progress.settings.get("future_setting") == future_setting, "unknown future settings survive the validated locale/font save roundtrip")
 	var legacy_save := Progress._validated_payload({"settings": {"master_volume": 0.25}}, "user://legacy-progress.json")
 	Progress._apply_save(legacy_save)
-	_check(Progress.settings.locale == "zh_TW" and Progress.settings.font_style == "pixel" and Progress.settings.master_volume == 0.25, "old progress without locale or font keys loads default preferences")
+	_check(Progress.settings.locale == "zh_TW" and Progress.settings.font_style == "rounded" and Progress.settings.master_volume == 0.25, "old progress without locale or font keys loads default preferences")
+	var pixel_era_save := Progress._validated_payload({"settings": {"font_style": "pixel"}}, "user://pixel-era-progress.json")
+	Progress._apply_save(pixel_era_save)
+	_check(Progress.settings.font_style == "rounded", "saves from the pixel-font era load the rounded type system")
 
 	Progress.intro_seen = true
 	Progress.save_progress()
@@ -171,7 +174,7 @@ func _check(condition: bool, message: String) -> void:
 func _check_tall_rtl_pause() -> void:
 	main._close()
 	Progress.settings["ui_scale"]=1.25
-	Progress.settings["font_style"]="pixel"
+	Progress.settings["font_style"]="rounded"
 	Localization.set_locale("qa_rtl",true)
 	main._refresh()
 	for dimensions in [Vector2i(1280,720),Vector2i(800,450)]:

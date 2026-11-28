@@ -188,9 +188,9 @@
       "text": "Return to the park  ·  Esc",
       "source": "返回遊園  ·  Esc"
     },
-    "font.pixel": {
-      "text": "Pixel",
-      "source": "像素字型"
+    "font.rounded": {
+      "text": "Rounded",
+      "source": "圓體字型"
     },
     "font.readable": {
       "text": "Readable",

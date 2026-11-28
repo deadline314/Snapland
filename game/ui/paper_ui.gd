@@ -33,10 +33,12 @@ const PIXEL_GRABBER_HIGHLIGHT = preload("res://assets/ui/pixel-controls/grabber-
 const PIXEL_GRABBER_DISABLED = preload("res://assets/ui/pixel-controls/grabber-disabled.svg")
 static var _reduced_motion := false
 static var _text_scale := 1.0
-static var _font_style := "pixel"
+static var _font_style := "rounded"
 
+## "rounded" (default) or "readable"; the old "pixel" setting maps to rounded,
+## since pixel type is now a role for pixel signage, not a whole-UI style.
 static func set_font_style(style: String) -> void:
-	_font_style = "readable" if style == "readable" else "pixel"
+	_font_style = "readable" if style == "readable" else "rounded"
 	FontProfiles.set_style(_font_style)
 	FONT = FontProfiles.current_font()
 
@@ -47,6 +49,14 @@ static func font() -> Font:
 	FontProfiles.refresh_context()
 	FONT = FontProfiles.current_font()
 	return FONT
+
+## Emboldened face for titles, captions and big feedback words.
+static func display_font() -> Font:
+	return FontProfiles.role_font("display")
+
+## Chunky rounded digits for score, time and counts.
+static func numeral_font() -> Font:
+	return FontProfiles.role_font("numeral")
 
 class PrintMark extends Control:
 	var motif := "ticket"
@@ -540,6 +550,11 @@ static func theme() -> Theme:
 	result.set_constant("v_separation","PopupMenu",16)
 	result.set_stylebox("panel","TooltipPanel",plaque(FRAME))
 	result.set_color("font_color","TooltipLabel",PAPER)
+	# Type roles every screen can opt into through theme_type_variation.
+	result.set_type_variation(&"TitleLabel", &"Label")
+	result.set_font("font", &"TitleLabel", display_font())
+	result.set_type_variation(&"NumeralLabel", &"Label")
+	result.set_font("font", &"NumeralLabel", numeral_font())
 	return result
 
 ## Recessed well: a routed-in area of a board that holds a group of content.
@@ -770,6 +785,7 @@ static func label(text: String, size := 20, color := INK) -> Label:
 
 static func section_title(text: String, color := TEAL) -> Label:
 	var result := label(text, 20, color)
+	result.theme_type_variation = &"TitleLabel"
 	result.add_theme_font_size_override("font_size", 20)
 	result.add_theme_constant_override("outline_size", 0)
 	result.custom_minimum_size.y=30

@@ -55,7 +55,7 @@ func _show_category(category: String) -> void:
 func _fill_text() -> void:
 	content.add_child(Paper.section_title(_t("settings.text"),Paper.TEAL))
 	_add_choice("locale", _t("settings.locale"), Localization.available_locales(), _locale_labels())
-	_add_choice("font_style", _t("settings.font_style"), ["pixel", "readable"], {"pixel": _t("font.pixel"), "readable": _t("font.readable")})
+	_add_choice("font_style", _t("settings.font_style"), ["rounded", "readable"], {"rounded": _t("font.rounded"), "readable": _t("font.readable")})
 
 func _locale_labels() -> Dictionary:
 	var result := {"zh_TW": _t("locale.zh_TW"), "en": _t("locale.en")}
