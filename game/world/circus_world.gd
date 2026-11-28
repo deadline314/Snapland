@@ -331,6 +331,10 @@ func apply_settings(settings: Dictionary) -> void:
 		_projection.finish_transition()
 
 
+## After dark the lamps carry the light, so they burn brighter than on the open island (ART-70).
+func lamp_level(_lamp: Light3D) -> float:
+	return lamp_energy_for_phase * (1.45 if night else 1.0)
+
 func set_time_of_day(phase_id: Variant) -> void:
 	super.set_time_of_day(phase_id)
 	var evening := active_time_phase in ["dusk", "night"]
@@ -347,7 +351,10 @@ func _air(phase: String, island: Dictionary) -> Dictionary:
 	var evening := phase in ["dusk", "night"]
 	return {
 		"fog": (island.fog as Color).lerp(Color("#3a2a44") if evening else Color("#ead2b6"), 0.3),
-		"ambient": (island.ambient as Color).lerp(Color("#ffd6b4"), 0.24), "saturation": 1.13,
+		# At night only a trace of canvas warmth: the marquee bulbs and the pools light the ground (ART-70).
+		"ambient": (island.ambient as Color).lerp(Color("#ffd6b4"), 0.08 if phase == "night" else 0.24), "saturation": 1.13,
+		"ambient_energy": float(island.ambient_energy) * (0.82 if phase == "night" else 1.0),
+		"sun_energy": float(island.sun_energy) * (0.8 if phase == "night" else 1.0),
 		"glow": float(island.glow) + (0.05 if evening else 0.015),
 	}
 

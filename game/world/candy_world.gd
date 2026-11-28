@@ -78,13 +78,25 @@ func _build_entries() -> void:
 	_point("game-035", "汽泡升降梯 · 踩泵運桶跨熱槽", Vector3(2.6, GROUND_Y, -7.0))
 	_point("game-036", "熔糖抽絲 · 控溫拉出三段糖絲", Vector3(2.6, GROUND_Y, 2.8))
 
+## After dark the lamps carry the light, so they burn brighter than on the open island (ART-70).
+func lamp_level(_lamp: Light3D) -> float:
+	return lamp_energy_for_phase * (1.45 if night else 1.0)
+
 func set_time_of_day(phase_id: Variant) -> void:
 	super.set_time_of_day(phase_id)
 	if _scenery != null:
 		_scenery.apply_time_of_day(lamp_energy_for_phase)
 
 ## Sugar air: rosy light, a warmer sun and colours a little sweeter than outside.
-func _air(_phase: String, island: Dictionary) -> Dictionary:
+## After dark only a hint of the rose stays, so the night is dark and the cane
+## lamps make the pools of light (ART-70).
+func _air(phase: String, island: Dictionary) -> Dictionary:
+	if phase == "night":
+		return {
+			"ambient": (island.ambient as Color).lerp(Color("#c98fb0"), 0.12), "fog": (island.fog as Color).lerp(Color("#3e2c48"), 0.35),
+			"sky": (island.sky as Color).lerp(Color("#4a3a5e"), 0.3), "ambient_energy": float(island.ambient_energy) * 0.8,
+			"sun_energy": float(island.sun_energy) * 0.75, "saturation": 1.12, "glow": float(island.glow) + 0.03,
+		}
 	return {
 		"ambient": (island.ambient as Color).lerp(Color("#ffc9dd"), 0.34), "fog": (island.fog as Color).lerp(Color("#f3bfd2"), 0.4),
 		"sky": (island.sky as Color).lerp(Color("#f0c4d6"), 0.3), "sun": (island.sun as Color).lerp(Color("#ffe0ec"), 0.25),

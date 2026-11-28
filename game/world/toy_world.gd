@@ -340,6 +340,10 @@ func apply_settings(settings: Dictionary) -> void:
 		_sync_station_controls()
 
 
+## After dark the lamps carry the light, so they burn brighter than on the open island (ART-70).
+func lamp_level(_lamp: Light3D) -> float:
+	return lamp_energy_for_phase * (1.45 if night else 1.0)
+
 func set_time_of_day(phase_id: Variant) -> void:
 	super.set_time_of_day(phase_id)
 	if _scenery == null:
@@ -352,10 +356,25 @@ func set_time_of_day(phase_id: Variant) -> void:
 
 
 ## Toy-box air: crisper colour, a clearer sky by day and a warm nursery fill.
+## At dusk the fill and sun turn back toward white so the painted toys keep
+## their own colours and the warmth stays in the sky; at night the fill steps
+## back and the street lamps light the squares (ART-70).
 func _air(phase: String, island: Dictionary) -> Dictionary:
-	var day := phase in ["dawn", "noon"]
+	match phase:
+		"dusk":
+			return {
+				"fog": (island.fog as Color).lerp(Color("#f4e6c6"), 0.05),
+				"ambient": (island.ambient as Color).lerp(Color("#f1ecff"), 0.45), "sun": (island.sun as Color).lerp(Color("#fff0dc"), 0.4),
+				"ambient_energy": float(island.ambient_energy) * 1.1, "saturation": 1.26,
+			}
+		"night":
+			return {
+				"fog": (island.fog as Color).lerp(Color("#24304a"), 0.2),
+				"ambient": (island.ambient as Color).lerp(Color("#fff0d2"), 0.06), "ambient_energy": float(island.ambient_energy) * 0.82,
+				"sun_energy": float(island.sun_energy) * 0.8, "saturation": 1.16,
+			}
 	return {
-		"sky": (island.sky as Color).lerp(Color("#a8d8f4"), 0.22 if day else 0.0), "fog": (island.fog as Color).lerp(Color("#f4e6c6"), 0.2 if day else 0.05),
+		"sky": (island.sky as Color).lerp(Color("#a8d8f4"), 0.22), "fog": (island.fog as Color).lerp(Color("#f4e6c6"), 0.2),
 		"ambient": (island.ambient as Color).lerp(Color("#fff0d2"), 0.22), "saturation": 1.18,
 	}
 
