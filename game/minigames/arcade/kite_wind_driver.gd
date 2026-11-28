@@ -34,6 +34,8 @@ const FAKE_SECONDS := 0.55
 const RING_GAP_FIRST := 1.2
 const RING_GAP_LAST := 0.7
 const DRAG_SECONDS := 2.2
+## Rings only pay while someone is flying the kite: a pull within this many seconds.
+const STEER_GRACE := 3.0
 
 var kite_x := 0.5
 var kite_h := 0.6
@@ -54,6 +56,7 @@ var best_combo := 0
 var caught := 0
 var missed := 0
 var pulling := 0
+var steered_at := -99.0
 
 var _serial := 0
 var _shift_due := 0.0
@@ -98,6 +101,7 @@ func _begin_round(_chosen: Dictionary) -> void:
 	caught = 0
 	missed = 0
 	pulling = 0
+	steered_at = -99.0
 	_serial = 0
 	_demo = true
 	# The countdown shifts the wind once and swings the kite over after it.
@@ -195,6 +199,8 @@ func _shift_to(target: float, fake: bool) -> void:
 
 func _fly(delta: float, push: float) -> void:
 	pulling = int(push)
+	if push != 0.0:
+		steered_at = clock
 	if clock >= fake_until:
 		arrow_x = wind_target
 	# The wind itself follows the arrow a little behind, so the arrow is the warning.
@@ -258,8 +264,8 @@ func _catch(ring: Dictionary) -> void:
 	ring.state = "caught"
 	ring.at = clock
 	sound(76 + mini(combo, 8))
-	# A kite nobody has steered can drift through a ring, but that pays nothing.
-	if not touched:
+	# A kite nobody is steering can drift through a ring, but that pays nothing.
+	if not touched or clock - steered_at > STEER_GRACE:
 		return
 	caught += 1
 	combo += 1
