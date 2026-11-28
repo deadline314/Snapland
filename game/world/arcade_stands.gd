@@ -79,6 +79,8 @@ const STANDS := {
 			"stand": Vector3(-12.6, 0.75, -6.0), "point": Vector3(-11.65, 0.75, -4.65), "prop": "cloudhop", "paint": Color("#5a8ac0")},
 		{"id": "game-103", "title": "羽球上升流", "prompt": "羽球上升流 · 左右跑接羽球",
 			"stand": Vector3(-12.4, 1.85, 14.4), "point": Vector3(-11.45, 1.85, 15.75), "prop": "shuttle", "paint": Color("#3d6fb0")},
+		{"id": "game-098", "title": "紙翼穿峽", "prompt": "紙翼穿峽 · 左右傾斜穿峽口",
+			"stand": Vector3(-16.4, 1.85, 11.4), "point": Vector3(-15.45, 1.85, 12.75), "prop": "paperwing", "paint": Color("#c05a52")},
 		{"id": "game-104", "title": "繩橋共振", "prompt": "繩橋共振 · 跟著拍子左右踩",
 			"stand": Vector3(0.6, 1.80, 5.8), "point": Vector3(1.55, 1.80, 7.15), "prop": "ropebridge", "paint": Color("#6e4c32")},
 		{"id": "game-105", "title": "風箏追風", "prompt": "風箏追風 · 跟著箭頭拉風箏",
@@ -135,6 +137,7 @@ static func build(world: Node3D, region: String) -> void:
 			"lock": _lock_prop(sculpt)
 			"slide": _slide_prop(sculpt)
 			"cloudhop": _cloudhop_prop(sculpt)
+			"paperwing": _paper_wing_prop(sculpt)
 		var stand: MeshInstance3D = world._mesh(sculpt.mesh(), Vector3.ZERO, world._vertex_color_material("arcade-stand"))
 		stand.name = "ArcadeStand_" + str(row.id)
 		var body := StaticBody3D.new()
@@ -690,6 +693,24 @@ static func _musicbox_prop(sculpt: Kit.Sculpt) -> void:
 	sculpt.tube(Vector3(0.0, 1.05, 0.1), 0.07, 0.07, 0.34, brass, 10, Basis(Vector3.BACK, PI * 0.5))
 	for tooth in 5:
 		sculpt.box(Vector3(-0.12 + tooth * 0.06, 1.0, 0.22), Vector3(0.03, 0.02, 0.14), Color("#c3c8cf"))
+
+
+## A big folded paper plane gliding nose-up over the sign on a pole, and a
+## little one on the counter.
+static func _paper_wing_prop(sculpt: Kit.Sculpt) -> void:
+	var paper := Color("#fbf8ee")
+	var crease := Color("#cfc6d8")
+	var stripe := Color("#e8807a")
+	sculpt.box(Vector3(0.0, 2.45, -0.2), Vector3(0.04, 0.5, 0.04), DARK)
+	for side: float in [-1.0, 1.0]:
+		var wing := Basis(Vector3.FORWARD, side * 0.22) * Basis(Vector3.RIGHT, -0.25)
+		sculpt.box(Vector3(side * 0.3, 2.78, -0.2), Vector3(0.6, 0.03, 0.42), paper, wing)
+		sculpt.box(Vector3(side * 0.38, 2.8, -0.12), Vector3(0.3, 0.035, 0.06), stripe, wing)
+	sculpt.box(Vector3(0.0, 2.7, -0.2), Vector3(0.05, 0.16, 0.5), crease, Basis(Vector3.RIGHT, -0.25))
+	for side: float in [-1.0, 1.0]:
+		sculpt.box(Vector3(-0.25 + side * 0.09, 1.03, 0.12), Vector3(0.18, 0.02, 0.14), paper, Basis(Vector3.FORWARD, side * 0.2))
+	sculpt.box(Vector3(-0.25, 1.01, 0.12), Vector3(0.03, 0.05, 0.16), crease)
+	sculpt.box(Vector3(0.3, 1.0, 0.1), Vector3(0.4, 0.06, 0.3), CREAM)
 
 
 ## Three little cloud pads stepping up over the sign, each on a thin pole, the

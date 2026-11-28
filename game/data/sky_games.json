@@ -20,6 +20,26 @@
     ]
   },
   {
+    "id": "game-098",
+    "mode": "paper_wing",
+    "zone": "sky",
+    "local_index": 2,
+    "arcade": true,
+    "name": "紙翼穿峽",
+    "goal": "乘著紙飛機在雲峽間滑翔，左右傾斜機翼穿過一道道峽口，從峽口中間的風環穿過去分數最多。",
+    "instructions": "← →、A D 或手把十字鍵、左搖桿：按住傾斜機翼往那邊滑。撞上岩壁紙飛機會揉成一團。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助穿過峽口拿到金牌",
+    "ordinary": "左右傾斜穿過峽口，拿到銅牌",
+    "attraction_tag": "風箏露台紙飛機",
+    "island_invitation": "跳上大紙飛機穿過雲裡的岩石峽谷！左右傾斜機翼對準風環，撞到岩壁的話……會連人一起被揉成紙團。",
+    "retake_props": [
+      "balloon",
+      "sign",
+      "camera"
+    ]
+  },
+  {
     "id": "game-103",
     "mode": "shuttle_updraft",
     "zone": "sky",
