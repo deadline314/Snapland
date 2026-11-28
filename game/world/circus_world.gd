@@ -49,6 +49,7 @@ const PITCH_GAMES: Array[Dictionary] = [
 	{"pitch": 9, "id": "game-052", "title": "接飛碟", "prompt": "接飛碟 · 飛碟到圈裡就按", "body": Color("#b8553f"), "shape": "oval", "topper": "plates"},
 	{"pitch": 1, "id": "game-055", "title": "人肉砲彈", "prompt": "人肉砲彈 · 按住蓄力放開發射", "body": Color("#3f6f8a"), "shape": "arch", "topper": "cannon"},
 	{"pitch": 5, "id": "game-057", "title": "走鋼索", "prompt": "走鋼索 · 左右撐住平衡", "body": Color("#6f8a3f"), "shape": "oval", "topper": "wire"},
+	{"pitch": 0, "id": "game-059", "title": "影偶搭梯", "prompt": "影偶搭梯 · 擺出一樣的手影", "body": Color("#5a4a3a"), "shape": "oval", "topper": "shadow"},
 	{"pitch": 3, "id": "game-058", "title": "觀眾席波浪", "prompt": "觀眾席波浪 · 人浪到了就起立", "body": Color("#7a5a3a"), "shape": "arch", "topper": "wave"},
 	{"pitch": 4, "id": "game-056", "title": "折鏡迷箱", "prompt": "折鏡迷箱 · 轉鏡子打氣球", "body": Color("#3f6a7a"), "shape": "oval", "topper": "mirror"},
 	{"pitch": 6, "id": "game-054", "title": "追光躲步", "prompt": "追光躲步 · 跟著光跳舞", "body": Color("#5a3a6a"), "shape": "arch", "topper": "spot"},

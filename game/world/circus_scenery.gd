@@ -582,6 +582,19 @@ func _topper(sculpt: Kit.Sculpt, top: Vector3, kind: String) -> void:
 			sculpt.box(top + Vector3(0.1, 1.04, 0), Vector3(0.1, 0.18, 0.08), Props.TEAL)
 			sculpt.box(top + Vector3(0.1, 1.18, 0), Vector3(0.08, 0.08, 0.08), Props.CREAM)
 			sculpt.box(top + Vector3(0.1, 1.06, 0.04), Vector3(0.7, 0.02, 0.02), Props.GOLD, Basis(Vector3.BACK, 0.12))
+		"shadow":
+			# A little backlit paper screen in a wooden frame with a rabbit shadow on it
+			# and a candle glowing underneath.
+			for side: float in [-1.0, 1.0]:
+				sculpt.box(top + Vector3(side * 0.42, 0.42, 0), Vector3(0.06, 0.84, 0.06), Props.WOOD)
+			sculpt.box(top + Vector3(0, 0.84, 0), Vector3(0.9, 0.06, 0.06), Props.WOOD)
+			sculpt.box(top + Vector3(0, 0.5, -0.01), Vector3(0.78, 0.62, 0.02), Color("#f2dcae"))
+			sculpt.box(top + Vector3(0.0, 0.48, 0.01), Vector3(0.22, 0.16, 0.01), Color("#2a1d33"))
+			for ear: float in [-0.05, 0.05]:
+				sculpt.box(top + Vector3(ear, 0.64, 0.01), Vector3(0.04, 0.16, 0.01), Color("#2a1d33"))
+			sculpt.box(top + Vector3(-0.08, 0.36, 0.01), Vector3(0.12, 0.12, 0.01), Color("#2a1d33"))
+			sculpt.tube(top + Vector3(0, 0.08, 0.08), 0.05, 0.05, 0.14, Props.CREAM, 8)
+			sculpt.box(top + Vector3(0, 0.18, 0.08), Vector3(0.03, 0.05, 0.03), Color("#ffd27a"))
 		"wave":
 			# A little three-step bleacher; the middle spectators throw their arms up.
 			for step in 3:

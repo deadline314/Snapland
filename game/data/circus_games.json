@@ -198,5 +198,25 @@
       "balloon",
       "sign"
     ]
+  },
+  {
+    "id": "game-059",
+    "mode": "shadow_puppet",
+    "zone": "circus",
+    "local_index": 11,
+    "arcade": true,
+    "name": "影偶搭梯",
+    "goal": "幕布上的剪影一隻隻飄過來，在它碰到你之前擺出一樣的手影，讓它穿過去。",
+    "instructions": "↑ 鳥、← 兔子、→ 狗、↓ 鵝，或手把十字鍵：按方向鍵擺出手影，再按一次同一個方向手影會轉向；剪影飄到你的手影時形狀和方向都要對上。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助擺手影拿到金牌",
+    "ordinary": "擺對手影讓剪影穿過去，拿到銅牌",
+    "attraction_tag": "手影小劇場",
+    "island_invitation": "兔子、鳥、狗、鵝……剪影飄過來時擺出一樣的手影。擺錯的話，你的手會變成一隻對你汪汪叫的狗。",
+    "retake_props": [
+      "lantern",
+      "camera",
+      "sign"
+    ]
   }
 ]

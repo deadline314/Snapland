@@ -21,7 +21,7 @@ func _run() -> void:
 	var hotel: Array = catalog.definitions("hotel")
 	var all_games: Array = catalog.all_definitions()
 	_check(welcome == JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json")), "default definitions preserve the original welcome row shape and order")
-	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 10 and toy.size() == 10 and garden.size() == 7 and hotel.size() == 2 and all_games.size() == 77, "only the 77 delivered games are exposed")
+	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 11 and toy.size() == 10 and garden.size() == 7 and hotel.size() == 2 and all_games.size() == 78, "only the 78 delivered games are exposed")
 	for index in range(welcome.size()):
 		_check(welcome[index].id == "game-%03d" % (index + 1), "welcome numbering stays ordered")
 	_check(all_games == welcome + harbor + candy + nightmarket + circus + toy + garden + hotel and catalog.definitions("sky").is_empty(), "games retain global order and future regions remain unavailable")
@@ -79,6 +79,9 @@ func _run() -> void:
 	var wave := {"id":"game-058", "mode":"crowd_wave", "zone":"circus", "local_index":10, "photo_id":"photo-circus-game-10", "devil_photo_id":"photo-circus-devil-10", "achievement_id":"ACH_GAME_058"}
 	_check(catalog.identity("game-058") == wave and catalog.identity("crowd_wave") == wave and circus[9].name == "觀眾席波浪" and circus[9].arcade == true,
 		"the crowd wave takes circus slot ten")
+	var shadow := {"id":"game-059", "mode":"shadow_puppet", "zone":"circus", "local_index":11, "photo_id":"photo-circus-game-11", "devil_photo_id":"photo-circus-devil-11", "achievement_id":"ACH_GAME_059"}
+	_check(catalog.identity("game-059") == shadow and catalog.identity("shadow_puppet") == shadow and circus[10].name == "影偶搭梯" and circus[10].arcade == true,
+		"the shadow puppets take circus slot eleven")
 	var still := {"id":"game-073", "mode":"hold_still", "zone":"garden", "local_index":1, "photo_id":"photo-garden-game-1", "devil_photo_id":"photo-garden-devil-1", "achievement_id":"ACH_GAME_073"}
 	_check(catalog.identity("game-073") == still and catalog.identity("hold_still") == still and garden[0].name == "螢火蟲長曝光" and garden[0].arcade == true, "first greenhouse game keeps its own global number and the arcade flow flag")
 	var dew := {"id":"game-074", "mode":"dew_bridge", "zone":"garden", "local_index":2, "photo_id":"photo-garden-game-2", "devil_photo_id":"photo-garden-devil-2", "achievement_id":"ACH_GAME_074"}
