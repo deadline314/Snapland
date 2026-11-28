@@ -7,6 +7,9 @@ const Paper = preload("res://game/ui/paper_ui.gd")
 const RegionTransition = preload("res://game/ui/region_transition.gd")
 const ArrivalStamp = preload("res://game/ui/arrival_stamp.gd")
 const Collage = preload("res://game/ui/collage_kit.gd")
+const CollageLife = preload("res://game/ui/collage_life.gd")
+const ArcadeMedal = preload("res://game/ui/arcade_medal.gd")
+const Pixels = preload("res://game/minigames/arcade/arcade_pixels.gd")
 
 var failures := 0
 var checks := 0
@@ -194,8 +197,169 @@ func _run() -> void:
 	stamp.dismiss()
 	_check(not stamp.showing(), "arrival stamp can be dismissed at once")
 
+	await _check_life(host)
+
 	host.queue_free()
 	await process_frame
 	if failures == 0:
 		print("PASS: interface motion rests, button feedback and region cover release (%d checks)" % checks)
 	quit(1 if failures > 0 else 0)
+
+
+func _wait(seconds: float) -> void:
+	var until := Time.get_ticks_msec() + int(seconds * 1000.0)
+	while Time.get_ticks_msec() < until:
+		await process_frame
+
+
+## A collage page as the menus build it: sheet, headline, tags and object cards.
+func _collage_page(host: Control) -> PanelContainer:
+	var page := PanelContainer.new()
+	page.size = Vector2(700, 460)
+	host.add_child(page)
+	Collage.sheet(page)
+	var column := VBoxContainer.new()
+	page.add_child(column)
+	var eyebrow := Paper.label("SNAPLAND", 14)
+	column.add_child(eyebrow)
+	var title := Paper.label("遊園選單", 25)
+	column.add_child(title)
+	Collage.headline(title, eyebrow)
+	for index in 4:
+		Collage.dress(Paper.button("吊牌%d" % index, func() -> void: pass, column), "tag", index)
+	var board := Collage.Board.new()
+	board.custom_minimum_size = Vector2(400, 200)
+	column.add_child(board)
+	for index in 2:
+		var card := Paper.button("卡片%d" % index, func() -> void: pass, board)
+		Collage.pin(board, card, Rect2(index * 0.5, 0.0, 0.48, 1.0))
+		Collage.dress(card, ["map", "album"][index], index)
+	return page
+
+
+## Idle life, sticker flights and result shows, with motion forced on so the
+## real tweens run headless; then the same calls with reduced motion.
+func _check_life(host: Control) -> void:
+	PaperMotion.force_motion(true)
+	var page := _collage_page(host)
+	var idle := page.get_node("CollageIdle")
+	var swaying: Array = page.find_children("CollageArt", "", true, false)
+	await _wait(0.6)
+	_check(idle.is_processing() and swaying.size() == 6 and swaying.any(func(art: Control) -> bool: return absf(art.rotation) > 0.0001), "one page clock sways the keepsakes and cards")
+	_check(swaying.all(func(art: Control) -> bool: return absf(rad_to_deg(art.rotation)) <= 1.61 and absf(art.scale.x - 1.0) <= 0.013), "idle sway stays under about 1.5 degrees and breath under 1.3 percent")
+	_check(swaying.all(func(art: Control) -> bool: return art.get_parent().rotation == 0.0 and art.get_parent().scale == Vector2.ONE), "only the art moves; the buttons (hit areas) stay put")
+	page.hide()
+	await process_frame
+	_check(not idle.is_processing() and swaying.all(func(art: Control) -> bool: return art.rotation == 0.0 and art.scale == Vector2.ONE), "the clock stops and the art rests level while the page is hidden")
+	page.show()
+	await process_frame
+	_check(idle.is_processing(), "the clock wakes when the page shows again")
+	Collage.sweep_off(page)
+	_check(page.mouse_filter == Control.MOUSE_FILTER_IGNORE and (swaying[0] as Control).get_parent().focus_mode == Control.FOCUS_NONE, "a swept page never takes clicks or focus")
+	var page_id := page.get_instance_id()
+	var swept_after: float = await _settle(func() -> bool: return not is_instance_id_valid(page_id))
+	_check(not is_instance_valid(page) and swept_after <= 0.5, "a swept page frees itself within half a second (%.2f s)" % swept_after)
+
+	# Stickers queue a beat apart, land in order and leave nothing behind.
+	var album := Control.new()
+	album.position = Vector2(1000, 30)
+	album.size = Vector2(120, 60)
+	host.add_child(album)
+	var landed := [0]
+	var bump := func() -> void: landed[0] += 1
+	for index in 3:
+		CollageLife.stick(host, null, Rect2(500, 300, 180, 100), album, bump)
+	CollageLife.stick(host, null, Rect2(500, 300, 180, 100), album, bump)
+	_check(landed[0] == 1 and _stickers(host).size() == 3, "three stickers fly at once; a fourth lands at once as a bump")
+	_check(CollageLife.STICK_SECONDS + CollageLife.STICK_GAP * (CollageLife.STICK_QUEUE - 1) <= 1.2 and CollageLife.STICK_SECONDS <= 1.0, "each sticker flight is under a second")
+	await _wait(CollageLife.STICK_SECONDS + CollageLife.STICK_GAP * 2.0 + 0.1)
+	for frame in 600:
+		if _stickers(host).is_empty():
+			break
+		await process_frame
+	await _settle(func() -> bool: return album.scale.is_equal_approx(Vector2.ONE))
+	_check(landed[0] == 4 and _stickers(host).is_empty() and int(host.get_meta(&"collage_stickers")) == 0, "the queue ends with every sticker stuck and freed")
+	_check(album.scale.is_equal_approx(Vector2.ONE), "the album bump settles back to size")
+	for index in 2:
+		CollageLife.stick(host, null, Rect2(500, 300, 180, 100), album, bump)
+	_check(PaperMotion.showing() and PaperMotion.skip() and landed[0] == 6, "any key finishes queued stickers in their final state")
+	await process_frame
+	_check(_stickers(host).is_empty(), "skipped stickers are freed")
+
+	# Celebrations grow with the medal; a missed medal sags instead.
+	_check(CollageLife.PIECES[1] < CollageLife.PIECES[2] and CollageLife.PIECES[2] < CollageLife.PIECES[3] and CollageLife.STREAMERS[3] > CollageLife.STREAMERS[2] and CollageLife.PIECES[0] == 0, "confetti grows from bronze to gold")
+	_check(CollageLife.SLAM_SECONDS + CollageLife.CONFETTI_SECONDS <= 1.0 and CollageLife.DROOP_SECONDS + 0.2 <= 1.0, "result shows last under a second")
+	for tier in 4:
+		var medal := ArcadeMedal.new()
+		medal.medal = tier
+		medal.size = Vector2(112, 160)
+		host.add_child(medal)
+		CollageLife.celebrate(medal, tier, medal)
+		var burst := medal.get_node_or_null("CollageConfetti")
+		_check((burst != null) == (tier > 0) and (burst == null or burst.tier == tier), "tier %d throws %s" % [tier, "its confetti" if tier > 0 else "nothing"])
+		await _settle(func() -> bool: return medal.get_node_or_null("CollageConfetti") == null and medal.ink < 0.01 and is_equal_approx(medal.thud, 0.0))
+		_check(medal.get_node_or_null("CollageConfetti") == null and is_equal_approx(medal.slam, 0.0) and is_equal_approx(medal.thud, 0.0) and medal.ink < 0.01, "tier %d lands stamped flat and its confetti is gone (slam %.2f, thud %.2f, ink %.2f)" % [tier, medal.slam, medal.thud, medal.ink])
+		medal.queue_free()
+	var again := Paper.button("再玩一次", func() -> void: pass, host)
+	var again_art := Collage.dress(again, "stamp", 0, "play")
+	var empty := ArcadeMedal.new()
+	host.add_child(empty)
+	CollageLife.flop(null, again_art, empty)
+	await _settle(func() -> bool: return not PaperMotion.showing() and is_equal_approx(again_art.wiggle, 0.0))
+	_check(empty.droop > 10.0 and is_equal_approx(again_art.wiggle, 0.0), "no medal: the slot sags on its ribbon and the stamp swings back to rest")
+
+	# Reduced motion: final state at once and nothing added to the tree.
+	Paper.set_reduced_motion(true)
+	var calm := _collage_page(host)
+	await process_frame
+	_check(not calm.get_node("CollageIdle").is_processing() and calm.find_children("CollageArt", "", true, false).all(func(art: Control) -> bool: return art.rotation == 0.0), "reduced motion keeps every page still")
+	var children := host.get_child_count()
+	CollageLife.stick(host, null, Rect2(500, 300, 180, 100), album, bump)
+	CollageLife.celebrate(empty, 3, empty)
+	CollageLife.flop(null, again_art, empty)
+	_check(landed[0] == 7 and host.get_child_count() == children and empty.get_child_count() == 0 and album.scale == Vector2.ONE, "reduced motion lands stickers and results at once without new nodes")
+	Collage.sweep_off(calm)
+	await process_frame
+	_check(not is_instance_valid(calm), "reduced motion removes a replaced page at once")
+	Paper.set_reduced_motion(false)
+
+	# Opening and closing the same page again and again leaves no nodes or
+	# textures behind.
+	await _wait(0.3)
+	var counts: Array[int] = [int(Performance.get_monitor(Performance.OBJECT_NODE_COUNT))]
+	var textures := 0
+	for cycle in 5:
+		var round_page := _collage_page(host)
+		await _wait(0.12)
+		Collage.sweep_off(round_page)
+		for frame in 600:
+			if not is_instance_valid(round_page):
+				break
+			await process_frame
+		await process_frame
+		counts.append(int(Performance.get_monitor(Performance.OBJECT_NODE_COUNT)))
+		if cycle == 0:
+			textures = Pixels._cache.size()
+	_check(counts.min() == counts.max(), "node count is stable over five open/close cycles %s" % str(counts))
+	_check(Pixels._cache.size() == textures, "no textures are made after the first open")
+	again.queue_free()
+	empty.queue_free()
+	album.queue_free()
+	PaperMotion.force_motion(false)
+
+
+func _stickers(layer: Node) -> Array:
+	return layer.get_children().filter(func(child: Node) -> bool: return child is CollageLife.Sticker)
+
+
+## Run frames until `done` holds (a few seconds at most): tweens follow the
+## frame clock, which can trail the wall clock on a busy machine.
+## Returns the frame-clock seconds it took.
+func _settle(done: Callable) -> float:
+	var until := Time.get_ticks_msec() + 15000
+	var elapsed := 0.0
+	while not done.call() and Time.get_ticks_msec() < until:
+		await process_frame
+		elapsed += root.get_process_delta_time()
+	await process_frame
+	return elapsed

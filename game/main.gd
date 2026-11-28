@@ -5,6 +5,7 @@ const DistrictSites = preload("res://game/world/district_sites.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
 const PaperMotion = preload("res://game/ui/paper_motion.gd")
 const Collage = preload("res://game/ui/collage_kit.gd")
+const CollageLife = preload("res://game/ui/collage_life.gd")
 const FieldGameChip = preload("res://game/ui/field_game_chip.gd")
 const RoamingThief = preload("res://game/world/roaming_thief.gd")
 const IslandEvents = preload("res://game/world/island_events.gd")
@@ -43,6 +44,8 @@ var region_transition: Control
 var arrival_stamp: Control
 ## Collection totals last shown on the HUD; gains since then are announced when it returns.
 var _hud_seen: Dictionary = {}
+## The photo a new sticker peels off when the HUD next announces gains.
+var _sticker_source: Dictionary = {}
 var modal_body: VBoxContainer
 var modal_footer: HBoxContainer
 var area_label: Label
@@ -601,12 +604,19 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	# Re-rendering the panel that is already showing (paging, tabs) must not replay its entrance.
 	var same_panel := was_open and modal_kind==kind
 	_dispose_retake()
+	# Between collage pages the old table is swept off above the new one.
+	var swept: Control = null
+	if was_open and not same_panel and Collage.KINDS.has(modal_kind) and Collage.KINDS.has(kind) and PaperMotion.enabled():
+		swept=overlay.get_node_or_null("AdaptiveMenuCenter") as Control
 	for child in overlay.get_children():
 		overlay.remove_child(child)
-		child.queue_free()
+		if child!=swept: child.queue_free()
 	# Sessions are added later to the same canvas; raise the whole modal,
 	# including its ink and panel face, above that active session.
 	overlay.move_to_front()
+	if swept!=null:
+		ui.add_child(swept)
+		Collage.sweep_off(swept)
 	if is_instance_valid(session):
 		session.set_paused(true)
 		session.set_process_unhandled_input(false)
@@ -697,8 +707,9 @@ func _open(title: String, subtitle: String, kind: String) -> VBoxContainer:
 	if not get_tree().root.size_changed.is_connected(_adapt_open_menu):
 		get_tree().root.size_changed.connect(_adapt_open_menu)
 	if not same_panel:
-		# Moving from one collage page to another turns the journal page.
-		if collage and was_open: PaperMotion.page_turn(center)
+		# The next collage page is dealt onto the table: the sheet slides in and
+		# its keepsakes fly in one after another.
+		if collage and was_open: PaperMotion.enter(center,Vector2(70.0,12.0),0.22)
 		else: PaperMotion.enter(center)
 		if not was_open: PaperMotion.fade_in(dim)
 	return content
@@ -815,6 +826,7 @@ func _close() -> void:
 	if modal_kind=="marathon" and session==null: marathon.clear()
 	var celebrate := celebrate_on_close and modal_kind=="result"
 	celebrate_on_close=false
+	if modal_kind=="result": _sticker_source=_result_photo_source()
 	overlay.hide()
 	modal_kind=""
 	world.blocked=session!=null
@@ -840,25 +852,55 @@ func _close() -> void:
 func _collection_totals() -> Dictionary:
 	return {"normal":Progress.normal_count(),"devil":Progress.devil_count(world_region),"coins":Progress.coins}
 
-## Show what was collected while the HUD was hidden as short rising notes.
+## Show what was collected while the HUD was hidden: each new sticker peels off
+## its photo and sticks onto the park banner, then the gains rise as short notes.
 func _announce_gains() -> void:
 	var totals := _collection_totals()
-	var banner := hud.get_node_or_null("ParkKeepsakeBanner") as Control
-	if PaperMotion.has_display() and banner!=null:
-		var row := 0
-		for entry in [["normal","+%d 拍貼",Paper.TEAL],["devil","+%d 小惡魔",Paper.CORAL],["coins","+%d 遊園幣",Paper.GOLD]]:
-			var gained := int(totals[entry[0]])-int(_hud_seen.get(entry[0],totals[entry[0]]))
-			if gained<=0: continue
-			var note := Paper.label(str(entry[1])%gained,20,entry[2])
-			note.name="CollectionGainNote"
-			note.add_theme_color_override("font_shadow_color",Paper.DEEP)
-			note.add_theme_constant_override("shadow_offset_y",2)
-			note.position=banner.position+Vector2(banner.size.x+14.0,10.0+row*28.0)
-			note.size=Vector2(260,28)
-			hud.add_child(note)
-			PaperMotion.rise_and_free(note,22.0)
-			row+=1
+	var gains := {}
+	for key in totals: gains[key]=int(totals[key])-int(_hud_seen.get(key,totals[key]))
 	_hud_seen=totals
+	var source := _sticker_source
+	_sticker_source={}
+	var banner := hud.get_node_or_null("ParkKeepsakeBanner") as Control
+	if not PaperMotion.has_display() or banner==null: return
+	var stickers := mini(int(gains.normal),CollageLife.STICK_QUEUE)
+	if stickers<=0:
+		_gain_notes(gains)
+		return
+	for index in stickers:
+		CollageLife.stick(hud,source.get("photo"),source.get("rect",_sticker_origin()),banner,_gain_notes.bind(gains) if index==stickers-1 else Callable())
+
+func _gain_notes(gains: Dictionary) -> void:
+	var banner := hud.get_node_or_null("ParkKeepsakeBanner") as Control
+	if banner==null: return
+	var row := 0
+	for entry in [["normal","+%d 拍貼  ·  共 %d 張",Paper.TEAL],["devil","+%d 小惡魔",Paper.CORAL],["coins","+%d 遊園幣",Paper.GOLD]]:
+		var gained := int(gains.get(entry[0],0))
+		if gained<=0: continue
+		var text := str(entry[1])%[gained,Progress.normal_count()] if entry[0]=="normal" else str(entry[1])%gained
+		var note := Paper.label(text,20,entry[2])
+		note.name="CollectionGainNote"
+		note.add_theme_color_override("font_shadow_color",Paper.DEEP)
+		note.add_theme_constant_override("shadow_offset_y",2)
+		note.position=banner.position+Vector2(banner.size.x+14.0,10.0+row*28.0)
+		note.size=Vector2(320,28)
+		hud.add_child(note)
+		PaperMotion.pop(note,1.3)
+		PaperMotion.rise_and_free(note,22.0)
+		row+=1
+
+## Where a sticker without a photo on screen starts: the middle of the view.
+func _sticker_origin() -> Rect2:
+	return Rect2(get_viewport().get_visible_rect().get_center()-Vector2(90,52),Vector2(180,104))
+
+## The first result photo, as shown (its fitted picture rect), for the sticker.
+func _result_photo_source() -> Dictionary:
+	var photo := overlay.find_child("ResultPhoto0",true,false) as TextureRect
+	if photo==null or photo.texture==null or not photo.is_visible_in_tree(): return {}
+	var area := photo.get_global_rect()
+	var picture := photo.texture.get_size()
+	var fit := minf(area.size.x/maxf(picture.x,1.0),area.size.y/maxf(picture.y,1.0))
+	return {"photo":photo.texture,"rect":Rect2(area.get_center()-picture*fit*0.5,picture*fit)}
 
 func _back(parent: Node) -> void:
 	var button := Paper.button(Localization.text("button.back"),_close,modal_footer)
@@ -980,6 +1022,8 @@ func _context_prompt() -> String:
 	return "E   "+str(actor_prompts.get(id,world.nearest.get("label","附近設施")))
 
 func _input(event: InputEvent) -> void:
+	# Any key or click finishes a running celebration; the press still counts.
+	if event.is_pressed() and not event.is_echo() and not event is InputEventMouseMotion: PaperMotion.skip()
 	if quitting or changing_region or _transition_busy(): return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_T:
 		if modal_kind == "time":
@@ -2291,8 +2335,14 @@ func _game_finished(result: Dictionary, saved_frames: Array[String] = [], saved_
 			content.add_child(thumbnail)
 			content.add_child(Paper.label("第 %d 格%s"%[i+1," · 未拍攝" if saved_frames.is_empty() else ""],16,Paper.TEAL))
 	var again := Paper.button("再練一次" if practice else "再玩一次",func(): _launch_game(id,bool(result.get("assisted",false)),practice),modal_footer)
-	Collage.dress(again,"stamp",0,"play",Paper.CORAL)
+	var again_art := Collage.dress(again,"stamp",0,"play",Paper.CORAL)
 	again.grab_focus()
+	if not practice:
+		# Stamp and confetti by medal; without one, a shrug and a swinging stamp.
+		var medal_node := overlay.find_child("ArcadeResultMedal",true,false) as Control
+		var tier := ParkVariety.medal_of(result) if success else 0
+		if tier>0: CollageLife.celebrate(medal_node if medal_node!=null else overlay.find_child("AdaptiveMenuTitle",true,false) as Control,tier,medal_node)
+		else: CollageLife.flop(overlay.find_child("CollageHeadline",true,false) as Control,again_art,medal_node)
 	if practice and retake_practice_target.get("id","") == id:
 		Paper.button("返回所選補拍",_request_retake.bind(id,bool(retake_practice_target.devil)),modal_footer).name="PracticeReturnRetake"
 	if not practice:
@@ -2608,7 +2658,6 @@ func _render_arcade_result(parent: VBoxContainer, summary: Dictionary) -> void:
 	medal.medal=earned
 	medal.custom_minimum_size=Vector2(112,160)
 	card.add_child(medal)
-	PaperMotion.pop(medal,1.2)
 	var words := VBoxContainer.new()
 	words.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	words.alignment=BoxContainer.ALIGNMENT_CENTER
@@ -2922,6 +2971,11 @@ func _keep_event_sticker(sticker: String) -> void:
 		paths = await _snap_island_moment(sticker)
 	if not Progress.record_event_sticker(sticker, str(paths.get("thumbnail", "")), str(paths.get("original", ""))):
 		_remove_photo_paths(paths.values())
+	elif modal_kind=="" and session==null and hud.visible and PaperMotion.enabled():
+		# Souvenirs do not count toward totals; the sticker still flies to the banner.
+		var banner := hud.get_node_or_null("ParkKeepsakeBanner") as Control
+		var photo := _photo_texture(str(paths.thumbnail)) if paths.has("thumbnail") else null
+		if banner!=null: CollageLife.stick(hud,photo,_sticker_origin(),banner)
 
 func _snap_island_moment(sticker: String) -> Dictionary:
 	var hud_was_visible := hud.visible

@@ -16,6 +16,25 @@ var medal := 0:
 	set(value):
 		medal = clampi(value, 0, 3)
 		queue_redraw()
+## Result-card show values (collage_life): `slam` > 0 is the stamp still in
+## the air (bigger), `thud` squashes it on landing, `ink` fades the stamp ring
+## pressed round it and `droop` (degrees) lets an empty slot sag on its ribbon.
+var slam := 0.0:
+	set(value):
+		slam = value
+		queue_redraw()
+var thud := 0.0:
+	set(value):
+		thud = value
+		queue_redraw()
+var ink := 0.0:
+	set(value):
+		ink = value
+		queue_redraw()
+var droop := 0.0:
+	set(value):
+		droop = value
+		queue_redraw()
 
 
 func _init() -> void:
@@ -25,7 +44,16 @@ func _init() -> void:
 
 func _draw() -> void:
 	var unit := maxf(1.0, floorf(minf(size.x / 14.0, size.y / 20.0)))
-	paint(self, Vector2(size.x * 0.5, floorf((size.y - 20.0 * unit) * 0.5) + 14.0 * unit), unit, medal)
+	var disc := Vector2(size.x * 0.5, floorf((size.y - 20.0 * unit) * 0.5) + 14.0 * unit)
+	if ink > 0.01:
+		draw_arc(disc, 10.0 * unit, 0.0, TAU, 28, Color(RIBBON_DARK, 0.7 * ink), 2.0 * unit)
+		draw_arc(disc, 8.5 * unit, 0.4, TAU - 0.4, 24, Color(RIBBON_DARK, 0.5 * ink), unit)
+	# Hang from the top of the ribbon, so a droop swings the disc.
+	var hook := disc - Vector2(0.0, 8.0 * unit)
+	var grow := 1.0 + slam
+	draw_set_transform(hook, deg_to_rad(droop), Vector2(grow * (1.0 + 0.14 * thud), grow * (1.0 - 0.14 * thud)))
+	paint(self, disc - hook, unit, medal)
+	draw_set_transform(Vector2.ZERO)
 
 
 ## Paint a medal whose disc centre is `center`; one art pixel is `unit` screen pixels.

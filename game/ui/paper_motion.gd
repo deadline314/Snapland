@@ -30,10 +30,18 @@ const STAGGER_SECONDS := 0.026
 const STAGGER_CAP := 8
 
 static var _reduced := false
+static var _forced := false
+## Running celebrations, sticker flights and page sweeps: any key finishes them.
+static var _shows: Array[Tween] = []
 
 
 static func set_reduced(value: bool) -> void:
 	_reduced = value
+
+
+## Headless checks may switch motion on to watch real tweens run to their end.
+static func force_motion(value: bool) -> void:
+	_forced = value
 
 
 static func has_display() -> bool:
@@ -42,7 +50,36 @@ static func has_display() -> bool:
 
 ## True when animated transitions should play.
 static func enabled() -> bool:
-	return not _reduced and has_display()
+	return not _reduced and (has_display() or _forced)
+
+
+## A tween for one short show (a celebration, a flying sticker, a page sweep)
+## that `skip` can finish at once.
+static func show_tween(node: Node, key: StringName) -> Tween:
+	var tween := _start(node, key)
+	_shows = _shows.filter(func(running: Tween) -> bool: return running.is_valid() and running.is_running())
+	_shows.append(tween)
+	return tween
+
+
+## Finish every running show in its final state (callbacks included). True if
+## anything was still playing.
+static func skip() -> bool:
+	var shows := _shows
+	_shows = []
+	var skipped := false
+	for tween in shows:
+		if tween.is_valid() and tween.is_running():
+			tween.custom_step(60.0)
+			skipped = true
+	return skipped
+
+
+static func showing() -> bool:
+	for tween in _shows:
+		if tween.is_valid() and tween.is_running():
+			return true
+	return false
 
 
 static func _stop(node: Node, key: StringName) -> void:

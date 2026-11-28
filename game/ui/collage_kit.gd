@@ -49,6 +49,14 @@ const INK_BRASS := Color("#6e4614")
 const FLY_SECONDS := 0.3
 const LEAF_SECONDS := 0.26
 const LIFT_SECONDS := 0.14
+const SWEEP_SECONDS := 0.28
+## Idle life per kind: [degrees of sway, pivot as a fraction of the item,
+## breath (scale amplitude)]. Tags hang from their eyelet, cards from their tape.
+const SWAY := {
+	"tag": [1.5, Vector2(0.0, 0.5), 0.0], "stub": [1.0, Vector2(0.5, 0.5), 0.0], "stamp": [1.2, Vector2(0.5, 0.0), 0.0],
+	"map": [1.1, Vector2(0.5, 0.0), 0.012], "album": [1.4, Vector2(0.5, 0.0), 0.012], "hanger": [1.6, Vector2(0.5, 0.0), 0.0],
+	"ticket": [0.9, Vector2(0.5, 0.0), 0.012], "headline": [1.2, Vector2(0.0, 1.0), 0.0],
+}
 
 
 static func swatch(index: int) -> Color:
@@ -164,7 +172,77 @@ static func sheet(panel: Control, market := false) -> Item:
 	panel.add_child(item)
 	panel.move_child(item, 0)
 	item.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var idle := Idle.new()
+	idle.name = "CollageIdle"
+	panel.set_meta(&"collage_idle", idle)
+	panel.add_child(idle)
 	return item
+
+
+## Send a page that is being replaced off the table: its keepsakes fly back the
+## way they came and the sheet slides away under a sweeping hand. The page must
+## already be out of the menu (so lookups by name find the new one); it ignores
+## the pointer and focus at once and frees itself within SWEEP_SECONDS.
+static func sweep_off(page: Control) -> void:
+	if not PaperMotion.enabled() or not page.is_inside_tree():
+		page.queue_free()
+		return
+	page.name = "CollageSweptPage"
+	for control: Control in page.find_children("*", "Control", true, false):
+		control.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		control.focus_mode = Control.FOCUS_NONE
+	page.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var index := 0
+	for art: Node in page.find_children("CollageArt", "", true, false):
+		PaperMotion.ease_property(art, &"enter", 0.0, SWEEP_SECONDS * 0.7, PaperMotion.stagger(index) * 0.5, Tween.TRANS_CUBIC)
+		index += 1
+	page.pivot_offset = page.size * Vector2(0.5, 1.0)
+	var tween := PaperMotion.show_tween(page, &"collage_sweep").set_parallel(true)
+	tween.tween_property(page, "position", page.position + Vector2(-page.size.x * 0.32, 36.0), SWEEP_SECONDS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	tween.tween_property(page, "rotation", deg_to_rad(-5.0), SWEEP_SECONDS).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tween.tween_property(page, "modulate:a", 0.0, SWEEP_SECONDS).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.chain().tween_callback(page.queue_free)
+
+
+## One clock for a whole collage page: every keepsake, card and the headline on
+## it sways or breathes a little on its own beat, by turning the art (never the
+## button), so hit areas stay put. Art joins when it enters the page; the clock
+## sleeps, and the art rests level, while the page is hidden or motion is off.
+class Idle extends Node:
+	var items: Array[Item] = []
+	var page: Control
+
+	func _ready() -> void:
+		page = get_parent() as Control
+		page.visibility_changed.connect(wake)
+		wake()
+
+	func join(item: Item) -> void:
+		items.append(item)
+		if not is_processing():
+			wake()
+
+	func leave(item: Item) -> void:
+		items.erase(item)
+
+	func wake() -> void:
+		var live := PaperMotion.enabled() and is_instance_valid(page) and page.is_visible_in_tree()
+		set_process(live)
+		if not live:
+			rest()
+
+	func rest() -> void:
+		for item in items:
+			item.sway(NAN)
+
+	func _process(_delta: float) -> void:
+		if not PaperMotion.enabled() or not page.is_visible_in_tree():
+			rest()
+			set_process(false)
+			return
+		var now := Time.get_ticks_msec() * 0.001
+		for item in items:
+			item.sway(now)
 
 
 ## Pin board for the big cards: each child sits on its own fractional slot
@@ -372,6 +450,9 @@ class Item extends Control:
 	var label: Label
 	var eyebrow: Label
 	var face: StyleBoxEmpty
+	## The page clock this art sways with, and its own period and phase.
+	var idle: Idle
+	var beat := Vector2(3.0, 0.0)
 	var focused := false
 	var hovered := false
 	## A chosen tab sits level and carries a cancellation mark.
@@ -409,6 +490,42 @@ class Item extends Control:
 		mouse_filter = Control.MOUSE_FILTER_IGNORE
 		texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 		texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+
+	func _enter_tree() -> void:
+		if not Kit.SWAY.has(kind):
+			return
+		var page := get_parent()
+		while page != null and not page.has_meta(&"collage_idle"):
+			page = page.get_parent()
+		if page == null:
+			return
+		beat = Vector2(2.0 + Kit.Pixels.noise(salt, 5, 61) * 2.0, Kit.Pixels.noise(salt, 7, 67) * TAU)
+		idle = page.get_meta(&"collage_idle")
+		idle.join(self)
+
+	func _exit_tree() -> void:
+		if idle == null:
+			return
+		if is_instance_valid(idle):
+			idle.leave(self)
+		idle = null
+		sway(NAN)
+
+	## Idle pose at clock `now` (seconds); NAN rests level. Long pieces sway
+	## less, and a lifted (hovered or focused) piece holds still to be read.
+	func sway(now: float) -> void:
+		if is_nan(now):
+			rotation = 0.0
+			scale = Vector2.ONE
+			return
+		var style: Array = Kit.SWAY[kind]
+		var wave := sin(now * TAU / beat.x + beat.y)
+		var calm := (1.0 - lift) * clampf(220.0 / maxf(size.x, 1.0), 0.35, 1.0)
+		pivot_offset = size * (style[1] as Vector2)
+		rotation = deg_to_rad(float(style[0]) * wave * calm)
+		var breath: float = style[2]
+		if breath > 0.0:
+			scale = Vector2.ONE * (1.0 + breath * sin(now * TAU * 2.0 / beat.x + beat.y) * (1.0 - lift))
 
 	## Band, icon and margins follow the adapted text size, so compact windows
 	## and large text keep the same proportions.
@@ -790,7 +907,7 @@ class Item extends Control:
 		var font := label.get_theme_font("font")
 		var base := label.get_theme_font_size("font_size")
 		var small := maxi(12, roundi(base * 0.62))
-		var angle := deg_to_rad(tilt)
+		var angle := deg_to_rad(tilt + wiggle)
 		# Pivot on the lower-left corner, hanging `bleed` title heights below the
 		# header and a little past the sheet's left edge; the title rises right.
 		# The frame and strip reach ~40 px left of the pivot; keep them on screen.

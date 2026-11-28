@@ -13,6 +13,7 @@ const Pixels = preload("res://game/minigames/arcade/arcade_pixels.gd")
 ## The shared minigame drawing kit; the helpers below are thin wrappers over it.
 const Props = preload("res://game/ui/pixel_props.gd")
 const Collage = preload("res://game/ui/collage_kit.gd")
+const CollageLife = preload("res://game/ui/collage_life.gd")
 const HudArt = preload("res://game/ui/hud_collage.gd")
 ## Shared feedback-word lettering (two-tone outline, pop and squash).
 const Caption = preload("res://game/ui/caption_style.gd")
@@ -426,6 +427,15 @@ func _draw_closing_card() -> void:
 	var settle := pop_in(elapsed, 0.3)
 	var angle := deg_to_rad(-2.5 + 9.0 * (1.0 - settle))
 	var centre := Vector2(640, 375) + Vector2(0, 70.0 * (1.0 - settle))
+	var earned := int(state.get("medal", 0))
+	# No medal: the right-hand tape lets go and the card sags from the left one.
+	var sag := 0.0
+	if earned == 0 and not reduced_motion and elapsed > 0.75:
+		var hang := elapsed - 0.75
+		sag = 1.0 - exp(-hang * 6.0) * cos(hang * 11.0)
+		var hook := centre + Vector2(-196.0, -128.0).rotated(angle)
+		centre = hook + (centre - hook).rotated(deg_to_rad(7.0 * sag))
+		angle += deg_to_rad(7.0 * sag)
 	var face := Rect2(Vector2(-240, -130), Vector2(480, 260))
 	var edge: PackedVector2Array = Collage.torn(face, 13, 3.0, 10.0)
 	draw_set_transform(centre + Vector2(10, 14), angle)
@@ -435,14 +445,14 @@ func _draw_closing_card() -> void:
 	Collage.outline(self, edge, Props.deepen(Collage.CREAM, 0.55), 3.0)
 	var strip: PackedVector2Array = Collage.torn(Rect2(-70, -114, 270, 58), 7, 3.0, 8.0)
 	draw_colored_polygon(strip, Paper.CORAL)
-	var earned := int(state.get("medal", 0))
 	var seal: PackedVector2Array = Collage.stamp_shape(Rect2(26, -40, 190, 64))
 	draw_colored_polygon(seal, Medal.FACES[earned].lightened(0.45))
 	Collage.outline(self, seal, Props.deepen(Medal.FACES[earned], 0.5), 2.0)
 	draw_line(Vector2(36, 92), Vector2(206, 88), Color(Paper.CORAL, 0.8), 3.0)
 	draw_set_transform(Vector2.ZERO)
 	for side: float in [-1.0, 1.0]:
-		Collage.tape(self, centre + Vector2(side * 196.0, -128.0).rotated(angle), 92.0, angle + side * 0.55)
+		if side < 0.0 or sag < 0.3:
+			Collage.tape(self, centre + Vector2(side * 196.0, -128.0).rotated(angle), 92.0, angle + side * 0.55)
 	_card_text(centre, angle, Vector2(64, -84), "時間到！", 40, CREAM, pop_in(elapsed, 0.24), true, _display)
 	_card_text(centre, angle, Vector2(121, -7), Medal.NAMES[earned], 30, INK, 1.0, false, _display)
 	# The score counts up once the card has landed.
@@ -464,6 +474,9 @@ func _draw_closing_card() -> void:
 		dust_puffs(centre + Vector2(-130, 84).rotated(angle), drop_age - 0.26, 70.0)
 		if earned > 0 and drop_age > 0.7:
 			glint(at, 38.0, 2.4, -0.96)
+		# Paper confetti bursts from the landed medal; more for a better one.
+		if not reduced_motion:
+			CollageLife.draw_confetti(self, at, (drop_age - 0.26) / CollageLife.CONFETTI_SECONDS, earned, 5)
 
 
 ## Text on the tilted closing card, centred on `offset` in card space.
