@@ -22,27 +22,44 @@ const TONGUE := Color("#ff7fa0")
 const SWEAT := Color("#9fdcff")
 const BUCKLE := Color("#e8b44a")
 
-## Per part: shade, base and light tones.
+## Other park folk drawn on the same build: per outfit, the part colours that
+## replace COLORS. "drummer" is the circus bandsman: navy shako (BAG) with a gold
+## badge (STREAK), red jacket with gold braid (CAMERA) and cuffs, navy trousers.
+const OUTFITS := {
+	"drummer": {HAIR: Color("#5a3a2a"), STREAK: Color("#e9b85c"), SKIN: Color("#e8b48c"), COAT: Color("#b8463f"), CUFF: Color("#e9b85c"),
+		SHIRT: Color("#f3ead9"), SHORTS: Color("#33355a"), BOOTS: Color("#2b2440"), BAG: Color("#2f3660"), CAMERA: Color("#e9b85c")},
+}
+
+## Per part: shade, base and light tones, for the outfit being painted.
 static var _ramps: Array = []
+static var _ramp_sets: Dictionary = {}
 
 
 ## `pose` is idle, left, right, up (arms only) or nose (pinching it, front
 ## only); `front` faces the viewer. Moods change the face: plain, shocked,
 ## sorry, tongue, stinky (eyes squeezed shut and watering); soaked is sorry
-## with the hair plastered flat and wet over the brow.
-static func texture(pose: StringName, front: bool, mood := "plain") -> Texture2D:
-	var key := "arcade-hero|%s|%s|%s" % [pose, front, mood]
+## with the hair plastered flat and wet over the brow. `outfit` names another
+## park figure on the same build (see OUTFITS); empty is the traveller.
+static func texture(pose: StringName, front: bool, mood := "plain", outfit := "") -> Texture2D:
+	var key := "arcade-hero|%s|%s|%s|%s" % [pose, front, mood, outfit]
 	var painted: Image = null
 	return Pixels.bake(key, SIZE, func(x: int, y: int) -> Color:
 		if painted == null:
-			painted = _paint(pose, front, mood)
+			painted = _paint(pose, front, mood, outfit)
 		return painted.get_pixel(x, y))
 
 
-static func _paint(pose: StringName, front: bool, mood: String) -> Image:
-	if _ramps.is_empty():
-		for color in COLORS:
-			_ramps.append([color, Pixels.lit(color, -1.0, 0, 0), color, Pixels.lit(color, 1.0, 0, 0)])
+static func _paint(pose: StringName, front: bool, mood: String, outfit := "") -> Image:
+	if not _ramp_sets.has(outfit):
+		var ramps: Array = []
+		var swaps: Dictionary = OUTFITS.get(outfit, {})
+		for part in COLORS.size():
+			var color: Color = swaps.get(part, COLORS[part])
+			ramps.append([color, Pixels.lit(color, -1.0, 0, 0), color, Pixels.lit(color, 1.0, 0, 0)])
+		_ramp_sets[outfit] = ramps
+	_ramps = _ramp_sets[outfit]
+	if outfit == "drummer":
+		return _paint_drummer(pose, front, mood)
 	var ids := PackedByteArray()
 	ids.resize(SIZE.x * SIZE.y)
 	var lean := -1 if pose == &"left" else (1 if pose == &"right" else 0)
@@ -100,6 +117,60 @@ static func _paint(pose: StringName, front: bool, mood: String) -> Image:
 	_details(image, ids, front, mood, hx)
 	if pose == &"nose" and front:
 		_pinch(image, hx)
+	return image
+
+
+## The circus drummer on the traveller's build: short hair under a tall shako
+## with a gold badge and plume, a red jacket with gold braid across the chest and
+## epaulettes, and long navy trousers.
+static func _paint_drummer(pose: StringName, front: bool, mood: String) -> Image:
+	var ids := PackedByteArray()
+	ids.resize(SIZE.x * SIZE.y)
+	_fill(ids, 13, 41, 18, 45, BOOTS)
+	_fill(ids, 22, 41, 27, 45, BOOTS)
+	_fill(ids, 14, 33, 18, 40, SHORTS)
+	_fill(ids, 22, 33, 26, 40, SHORTS)
+	_fill(ids, 12, 22, 28, 31, COAT)
+	_fill(ids, 11, 32, 29, 34, COAT)
+	if front:
+		_fill(ids, 19, 22, 21, 31, SHIRT)
+		for y: int in [24, 27, 30]:
+			_fill(ids, 15, y, 25, y, CAMERA)
+	var hands := [Vector2(10, 33), Vector2(30, 33)]
+	match pose:
+		&"left":
+			hands[0] = Vector2(2.5, 22)
+		&"right":
+			hands[1] = Vector2(37.5, 22)
+		&"up":
+			hands = [Vector2(6, 4.5), Vector2(34, 4.5)]
+	_arm(ids, Vector2(11.5, 24), hands[0])
+	_arm(ids, Vector2(28.5, 24), hands[1])
+	for side: int in [11, 26]:
+		_fill(ids, side, 21, side + 3, 22, CUFF)
+	var hx := 20
+	_fill(ids, hx - 2, 19, hx + 2, 22, SKIN)
+	_ellipse(ids, Vector2(hx, 12), Vector2(8.6, 6.0), HAIR)
+	if front:
+		_fill(ids, hx - 7, 10, hx + 7, 19, SKIN)
+		_fill(ids, hx - 5, 20, hx + 5, 20, SKIN)
+		_fill(ids, hx - 8, 10, hx - 8, 15, HAIR)
+		_fill(ids, hx + 8, 10, hx + 8, 15, HAIR)
+	# The shako: a tall navy drum of a hat with a peak, gold badge and plume.
+	_fill(ids, hx - 6, 1, hx + 6, 8, BAG)
+	_fill(ids, hx - 8, 9, hx + 8, 9, BAG)
+	if front:
+		_ellipse(ids, Vector2(hx, 5), Vector2(2.2, 2.2), STREAK)
+	_fill(ids, hx + 3, 0, hx + 5, 2, CUFF)
+	var image := _shade(ids)
+	for y in range(2, 8):
+		image.set_pixel(hx - 6, y, (_ramps[BAG][3] as Color))
+	_details(image, ids, front, mood, hx, "drummer")
+	if front and mood != "shocked":
+		# A proud moustache.
+		_rect(image, hx - 3, 17, 7, 1, (_ramps[HAIR][1] as Color))
+		image.set_pixel(hx - 4, 16, _ramps[HAIR][1])
+		image.set_pixel(hx + 4, 16, _ramps[HAIR][1])
 	return image
 
 
@@ -170,10 +241,10 @@ static func _hair_tone(x: int, y: int) -> int:
 	return 2
 
 
-static func _details(image: Image, ids: PackedByteArray, front: bool, mood: String, hx: int) -> void:
+static func _details(image: Image, ids: PackedByteArray, front: bool, mood: String, hx: int, outfit := "") -> void:
 	for y in range(22, 32, 2):
 		for x in range(18, 23):
-			if _id(ids, x, y) == SHIRT:
+			if outfit == "" and _id(ids, x, y) == SHIRT:
 				image.set_pixel(x, y, STRIPE)
 	if not front:
 		var bag: Array = _ramps[BAG]
@@ -186,13 +257,14 @@ static func _details(image: Image, ids: PackedByteArray, front: bool, mood: Stri
 		for x: int in [17, 23]:
 			image.set_pixel(x, 27, BUCKLE)
 		return
-	for x in range(17, 24):
-		if _id(ids, x, 27) == CAMERA:
-			image.set_pixel(x, 27, _ramps[CAMERA][3])
-	for at: Vector2i in [Vector2i(19, 28), Vector2i(20, 28), Vector2i(21, 28), Vector2i(19, 29), Vector2i(21, 29), Vector2i(19, 30), Vector2i(20, 30), Vector2i(21, 30)]:
-		if _id(ids, at.x, at.y) == CAMERA:
-			image.set_pixel(at.x, at.y, INK)
-	image.set_pixel(20, 29, Color("#5a7cb0"))
+	if outfit == "":
+		for x in range(17, 24):
+			if _id(ids, x, 27) == CAMERA:
+				image.set_pixel(x, 27, _ramps[CAMERA][3])
+		for at: Vector2i in [Vector2i(19, 28), Vector2i(20, 28), Vector2i(21, 28), Vector2i(19, 29), Vector2i(21, 29), Vector2i(19, 30), Vector2i(20, 30), Vector2i(21, 30)]:
+			if _id(ids, at.x, at.y) == CAMERA:
+				image.set_pixel(at.x, at.y, INK)
+		image.set_pixel(20, 29, Color("#5a7cb0"))
 	for x in range(hx - 6, hx + 7):
 		if _id(ids, x, 20) == SKIN:
 			image.set_pixel(x, 20, _ramps[SKIN][1])

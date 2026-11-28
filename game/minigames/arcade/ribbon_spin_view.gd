@@ -22,7 +22,6 @@ const BRASS := Color("#c9953e")
 
 var _has_tent := false
 var _drum: ImageTexture
-var _drummer: Dictionary = {}
 var _cymbal: ImageTexture
 
 
@@ -37,8 +36,6 @@ func _ready() -> void:
 	_cymbal = Pixels.bake("ribbon-cymbal", Vector2i(20, 6), func(x: int, y: int) -> Color:
 		var offset := Vector2((x + 0.5 - 10.0) / 10.0, (y + 0.5 - 3.0) / 3.0)
 		return Pixels.metal(Color("#d9b04a"), x, y) if offset.length() <= 1.0 else Pixels.CLEAR)
-	for look: String in ["down", "up", "high"]:
-		_drummer[look] = Pixels.bake_blocks("ribbon-drummer|" + look, Vector2i(26, 34), Vector2i(13, 34), _drummer_blocks(look))
 
 
 func _draw_backdrop() -> void:
@@ -206,25 +203,40 @@ func _draw_mummy(since: float) -> void:
 # --- Drummer ----------------------------------------------------------------------
 
 func _draw_drummer(phase: String) -> void:
-	var look := "down"
+	# The bandsman stands behind the bass drum and swings a stick on every beat:
+	# left and right in turn, both held high to warn of a tempo change, a blur
+	# of both during the roll.
+	var pose := &"idle"
 	var beat := float(state.get("beat", 0.6))
 	var until := float(state.get("next_beat", 0.0)) - now
 	var tempo: Dictionary = state.get("tempo_change", {})
-	if phase == "dance":
-		look = "up" if fmod(until, beat) > beat * 0.6 else "down"
-		if not tempo.is_empty() and float(tempo.at) - now > 0.0 and float(tempo.at) - now < beat * 1.6:
-			look = "high"
-	elif phase == "roll" and not reduced_motion:
-		look = "up" if fmod(now, 0.1) < 0.05 else "down"
+	var mood := "plain"
+	match phase:
+		"dance":
+			# The stick comes up between beats and lands on the drum with the beat.
+			pose = &"left" if fmod(until, beat) < beat * 0.55 else &"idle"
+			if not tempo.is_empty() and float(tempo.at) - now > 0.0 and float(tempo.at) - now < beat * 1.6:
+				pose = &"up"
+				mood = "tongue"
+		"roll":
+			pose = &"left" if reduced_motion or fmod(now, 0.12) < 0.06 else &"idle"
+			mood = "shocked"
+		"bow":
+			pose = &"up"
+			mood = "tongue"
+		"tangle":
+			mood = "shocked"
+	var feet := DRUMMER + Vector2(-74, -6)
 	ground_shadow(DRUMMER + Vector2(10, 6), Vector2(120, 14), 0.5)
-	draw_set_transform(DRUMMER + Vector2(-46, 0), 0.0, Vector2.ONE * TEXEL * 1.25)
-	stamp(_drummer[look], -Vector2(13, 34), 1.0, LAMP)
+	draw_set_transform(feet, 0.0, Vector2(-1, 1) * TEXEL)
+	stamp(Hero.texture(pose, true, mood, "drummer"), -Hero.FEET, 1.0, LAMP)
 	draw_set_transform(Vector2.ZERO)
 	var hit := 0.0 if reduced_motion or phase != "dance" else maxf(0.0, 1.0 - (beat - fmod(until + beat * 4.0, beat)) / 0.12)
-	var drum_at := DRUMMER + Vector2(50, 0)
-	draw_set_transform(drum_at, 0.0, Vector2(1.0 + hit * 0.04, 1.0 - hit * 0.04) * TEXEL * 1.25)
+	var drum_at := DRUMMER + Vector2(52, 0)
+	draw_set_transform(drum_at, 0.0, Vector2(1.0 + hit * 0.04, 1.0 - hit * 0.04) * TEXEL * 1.05)
 	stamp(_drum, Vector2(-15, -28), 1.0, LAMP)
 	draw_set_transform(Vector2.ZERO)
+	_draw_sticks(feet, pose)
 	# The crash cymbal on its stand.
 	var stand := DRUMMER + Vector2(140, 0)
 	draw_line(stand, stand + Vector2(0, -170), INK, 6.0)
@@ -239,6 +251,28 @@ func _draw_drummer(phase: String) -> void:
 	draw_set_transform(stand + Vector2(0, -176), sin(now * 40.0) * shake, Vector2.ONE * TEXEL)
 	stamp(_cymbal, Vector2(-10, -3), 1.0, LAMP)
 	draw_set_transform(Vector2.ZERO)
+
+
+## Drumsticks from the drummer's hands (the sprite is mirrored to face the
+## hero): pointing down at the drum head, or up when the hands are raised.
+func _draw_sticks(feet: Vector2, pose: StringName) -> void:
+	var hands: Array[Vector2] = [Vector2(10, 33), Vector2(30, 33)]
+	match pose:
+		&"left":
+			hands[0] = Vector2(2.5, 22)
+		&"right":
+			hands[1] = Vector2(37.5, 22)
+		&"up":
+			hands = [Vector2(6, 4.5), Vector2(34, 4.5)]
+	for hand in hands:
+		var at := feet + Vector2(-(hand.x + 1.0 - Hero.FEET.x), hand.y + 1.0 - Hero.FEET.y) * TEXEL
+		var raised := hand.y < 30.0
+		var tip := at + (Vector2(18, -54) if pose == &"up" else (Vector2(40, 46) if raised else Vector2(30, 30)))
+		draw_line(at, tip, INK, 7.0)
+		draw_line(at, tip, Color("#d9b07a"), 4.0)
+		draw_line(at + Vector2(0, -1), tip + Vector2(0, -1), Color("#f0d6a0"), 1.5)
+		draw_circle(tip, 5.0, INK)
+		draw_circle(tip, 3.5, Color("#f3ead9"))
 
 
 func _draw_cues(phase: String, since: float) -> void:
@@ -262,44 +296,26 @@ func _draw_cues(phase: String, since: float) -> void:
 		label(FEET + Vector2(0, 60), "鏘！的那一下按空白鍵", 20, CREAM)
 
 
-## The bass drum: red shell with brass hoops, a lit head and tension rods.
+## The bass drum seen head-on: brass hoops round a red shell laced with a zigzag
+## tension rope, a lit calfskin head with a painted gold star.
 func _paint_drum(x: int, y: int) -> Color:
 	var offset := Vector2((x + 0.5 - 15.0) / 15.0, (y + 0.5 - 14.0) / 14.0)
-	if offset.length() > 1.0:
+	var reach := offset.length()
+	if reach > 1.0:
 		return Pixels.CLEAR
-	if offset.length() > 0.86:
+	if reach > 0.93 or (reach > 0.66 and reach <= 0.71):
 		return Pixels.metal(BRASS, x, y)
-	if offset.length() > 0.78:
-		return Pixels.lit(Color("#a83a3a"), 0.4 - offset.y, x, y)
-	if posmod(int(atan2(offset.y, offset.x) / TAU * 12.0 * 10.0), 10) == 0 and offset.length() > 0.7:
-		return Pixels.metal(BRASS, x, y)
-	# A painted gold star on the head, scuffed where the beater lands.
+	if reach > 0.71:
+		# The rope runs in a V between the hoops, round the whole shell.
+		var around := fposmod(atan2(offset.y, offset.x) / TAU * 14.0, 1.0)
+		var across := (reach - 0.71) / 0.22
+		var rope := absf(around - across * 0.5) < 0.09 or absf(around - (1.0 - across * 0.5)) < 0.09
+		if rope:
+			return Pixels.lit(Color("#efe2c4"), 0.6 - offset.y * 0.5, x, y)
+		return Pixels.lit(Color("#a83a3a"), 0.4 - offset.y * 0.8, x, y)
 	var angle := fposmod(atan2(offset.y, offset.x) + PI * 0.5, TAU / 5.0) - TAU / 10.0
-	var spike := 0.32 + 0.3 * (1.0 - absf(angle) / (TAU / 10.0))
-	if offset.length() < spike * 0.95 and offset.length() > 0.05:
+	var spike := 0.25 + 0.22 * (1.0 - absf(angle) / (TAU / 10.0))
+	if reach < spike and reach > 0.04:
 		return Pixels.lit(Color("#e9b85c"), 0.5 - offset.y * 0.6, x, y)
-	var scuff := 0.25 * (Pixels.noise(x, y, 31) - 0.5) - (0.2 if Vector2(offset.x - 0.1, offset.y - 0.2).length() < 0.2 else 0.0)
-	return Pixels.lit(Color("#efe2c4"), 0.6 - offset.length() * 0.6 - offset.y * 0.3 + scuff, x, y)
-
-
-## The drummer: bandleader's red jacket and shako, sticks low, up or held high.
-static func _drummer_blocks(look: String) -> Array:
-	var coat := Color("#b8463f")
-	var gold := Color("#e9b85c")
-	var skin := Color("#f0c8a0")
-	var ink := Color("#2b2440")
-	var blocks: Array = [
-		[Rect2(-5, -3, 4, 3), ink], [Rect2(1, -3, 4, 3), ink],
-		[Rect2(-4, -14, 3, 11), Color("#3b3550")], [Rect2(1, -14, 3, 11), Color("#3b3550")],
-		[Rect2(-7, -27, 14, 14), coat], [Rect2(-1, -27, 2, 14), gold], [Rect2(-7, -15, 14, 2), gold],
-		[Rect2(-5, -35, 10, 8), skin], [Rect2(-3, -32, 2, 2), ink], [Rect2(2, -32, 2, 2), ink], [Rect2(-2, -29, 4, 1), Color("#c9344a")],
-		[Rect2(-5, -41, 10, 6), Color("#2b2440")], [Rect2(-5, -37, 10, 1), gold], [Rect2(-1, -43, 2, 2), Color("#e85a7a")],
-	]
-	match look:
-		"up":
-			blocks.append_array([[Rect2(-10, -30, 3, 6), coat], [Rect2(7, -30, 3, 6), coat], [Rect2(-12, -36, 2, 8), Color("#c9a46a")], [Rect2(10, -36, 2, 8), Color("#c9a46a")]])
-		"high":
-			blocks.append_array([[Rect2(-10, -38, 3, 12), coat], [Rect2(7, -38, 3, 12), coat], [Rect2(-10, -46, 2, 8), Color("#c9a46a")], [Rect2(8, -46, 2, 8), Color("#c9a46a")]])
-		_:
-			blocks.append_array([[Rect2(-10, -26, 3, 9), coat], [Rect2(7, -26, 3, 9), coat], [Rect2(-13, -18, 6, 2), Color("#c9a46a")], [Rect2(7, -18, 6, 2), Color("#c9a46a")]])
-	return blocks
+	var scuff := 0.25 * (Pixels.noise(x, y, 31) - 0.5) - (0.2 if Vector2(offset.x - 0.1, offset.y - 0.2).length() < 0.15 else 0.0)
+	return Pixels.lit(Color("#efe2c4"), 0.6 - reach * 0.7 - offset.y * 0.3 + scuff, x, y)
