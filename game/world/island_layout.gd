@@ -39,6 +39,7 @@ const PATHS := [
 	{"id": "hotel", "width": 3.6, "surface": "paving", "points": [Vector2(-30,28.2), Vector2(-28.4,34), Vector2(-27.2,41), Vector2(-26.2,48), Vector2(-25.4,53.5), Vector2(-25,57.4)]},
 	{"id": "cinema", "width": 2.6, "surface": "boardwalk", "points": [Vector2(47,-134.5), Vector2(56,-134.2), Vector2(65,-136.5), Vector2(73,-137.6), Vector2(79,-139.8), Vector2(83.6,-140.6)]},
 	{"id": "sky", "width": 3.6, "surface": "paving", "points": [Vector2(48.6,25.4), Vector2(47.6,31), Vector2(48.4,37), Vector2(47.8,41), Vector2(48,44)]},
+	{"id": "theatre", "width": 2.6, "surface": "boardwalk", "points": [Vector2(-64.2,-31.2), Vector2(-66.0,-31.8), Vector2(-67.8,-32)]},
 ]
 ## The coastal loop: a trail a few metres inland from the waterline. It leaves
 ## the dock stem westward and comes back to the stem from the east.

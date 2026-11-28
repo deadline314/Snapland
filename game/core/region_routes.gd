@@ -1,6 +1,6 @@
 extends RefCounted
 
-const ORDER := ["welcome", "harbor", "candy", "nightmarket", "circus", "toy", "garden", "hotel", "sky", "cinema"]
+const ORDER := ["welcome", "harbor", "candy", "nightmarket", "circus", "toy", "garden", "hotel", "sky", "cinema", "theatre"]
 const ROUTES := {
 	"welcome": {"title": "迎賓大道", "map": "今天想去哪一邊？", "threshold": 0, "travel_button": ""},
 	"harbor": {"title": "潮汐碼頭", "map": "潮汐碼頭 · 燈塔與環岸步道", "threshold": 6, "travel_button": "TravelHarborButton"},
@@ -12,6 +12,8 @@ const ROUTES := {
 	"hotel": {"title": "幽幽旅館", "map": "幽幽旅館 · 櫃檯、走廊與夢境客房", "threshold": 60, "travel_button": "TravelHotelButton"},
 	"sky": {"title": "雲端遊樂場", "map": "雲端遊樂場 · 摩天輪、浮島步道、風箏台與攝影點", "threshold": 60, "travel_button": "TravelSkyButton"},
 	"cinema": {"title": "星光影城", "map": "星光影城 · 紅毯、放映館、布景街與攝影台", "threshold": 60, "travel_button": "TravelCinemaButton"},
+	# The optional final zone: its gate counts down the cards still missing.
+	"theatre": {"title": "地底惡魔劇場", "map": "地底惡魔劇場 · 後台、觀眾席、樂池、舞台與謝幕台", "threshold": 180, "travel_button": "TravelTheatreButton", "countdown": true},
 }
 
 static func supports(region: String) -> bool:
@@ -25,6 +27,10 @@ static func map_title(region: String) -> String:
 
 static func threshold(region: String) -> int:
 	return ROUTES.get(region, ROUTES.welcome).threshold
+
+## True for a gate that shows how many cards are still missing instead of only its threshold.
+static func counts_down(region: String) -> bool:
+	return bool(ROUTES.get(region, ROUTES.welcome).get("countdown", false))
 
 static func travel_button(region: String) -> String:
 	return ROUTES.get(region, ROUTES.welcome).travel_button

@@ -68,7 +68,7 @@ func _test_map() -> void:
 	var gates := _find_named_buttons(_main.overlay,"MapGate_")
 	_check(hub!=null,"map labels the sea-wind harbor hub")
 	_check(stations.size()==12,"map exposes all twelve real welcome-game stations")
-	_check(gates.size()==9,"map exposes the other nine park entrances")
+	_check(gates.size()==10,"map exposes the other ten park entrances, the final theatre among them")
 	var legend: Node=_main.overlay.find_child("IslandMapLegend",true,false)
 	_check(legend!=null and _has_label(legend,"珊瑚線：迎賓大道") and _has_label(legend,"青綠線：海岸環線") and _has_label(legend,"藍點：你的位置") and _has_label(legend,"金菱：目的地") and not _has_label(legend,"九島準備中"),"map legend preserves route colors and truthfully labels regional gates without claiming all nine are unavailable")
 	var map_detail: Node=_main.overlay.find_child("DestinationDetails",true,false)
@@ -129,7 +129,7 @@ func _test_map() -> void:
 		var canvas := _main.overlay.find_child("IslandChartCanvas",true,false) as Control
 		var all_stops := _find_named_buttons(_main.overlay,"MapStop_game-")
 		var all_gates := _find_named_buttons(_main.overlay,"MapGate_")
-		var contained := canvas!=null and all_stops.size()==12 and all_gates.size()==9
+		var contained := canvas!=null and all_stops.size()==12 and all_gates.size()==10
 		if canvas!=null:
 			for button in all_stops+all_gates:
 				if not button.is_visible_in_tree() or button.size.x<44.0 or button.size.y<44.0 or button.focus_mode!=Control.FOCUS_ALL or not canvas.get_global_rect().encloses(button.get_global_rect()):
@@ -143,7 +143,7 @@ func _test_map() -> void:
 		for stop in all_stops:
 			for gate in all_gates:
 				if stop.get_global_rect().intersects(gate.get_global_rect()): stops_clear_of_gates=false
-		_check(stops_clear_of_gates,"all twelve stations stay clear of all nine gates at actual %dx%d" % [viewport_size.x,viewport_size.y])
+		_check(stops_clear_of_gates,"all twelve stations stay clear of all ten gates at actual %dx%d" % [viewport_size.x,viewport_size.y])
 		var map_hub := _main.overlay.find_child("MapHub",true,false) as Button
 		var harbor_clear := map_hub!=null
 		for stop in all_stops:
@@ -157,7 +157,7 @@ func _test_map() -> void:
 		for first in range(all_gates.size()):
 			for second in range(first+1,all_gates.size()):
 				if all_gates[first].get_global_rect().intersects(all_gates[second].get_global_rect()): gates_separated=false
-		_check(gates_separated,"all nine future gate targets remain distinct at %dx%d, text scale %.2f" % [viewport_size.x,viewport_size.y,float(review_case[1])])
+		_check(gates_separated,"all ten gate targets remain distinct at %dx%d, text scale %.2f" % [viewport_size.x,viewport_size.y,float(review_case[1])])
 		var gate_copy_fits := true
 		var selection_fits := true
 		for gate in all_gates:

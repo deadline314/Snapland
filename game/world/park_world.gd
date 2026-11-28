@@ -75,7 +75,9 @@ const IDENTITY_REGIONS := {
 	"ticket": Rect2i(374,667,188,343),
 	"announcer": Rect2i(675,642,207,369),
 }
-const ZONE_ICONS := ["⚓","✿","☼","✦","⚙","❀","⬡","◉","◇"]
+const ZONE_ICONS := ["⚓","✿","☼","✦","⚙","❀","⬡","◉","◇","☆"]
+## The final zone's line on its gate and map entry (park.json gives it no theme).
+const FINAL_THEME := "幕幕劇團的地底首演：整本相冊就是今晚的節目。"
 const CREAM = Color("#edddb8")
 const TEAL = Color("#246c6c")
 const CORAL = Color("#da705c")
@@ -2326,6 +2328,10 @@ func park_data() -> Dictionary:
 		if zone is Dictionary and zone.get("id") is String and zone.get("name") is String and zone.get("theme") is String and zone.get("threshold") is float:
 			zones.append(zone)
 		else: push_warning("Invalid park zone at "+path+"; entry ignored")
+	# The optional final zone has its own gate after the ten regions.
+	var final: Variant = value.get("final")
+	if final is Dictionary and final.get("id") is String and final.get("name") is String and final.get("normal_required") is float:
+		zones.append({"id": final.id, "name": final.name, "theme": FINAL_THEME, "threshold": final.normal_required})
 	return {"zones":zones}
 
 func _build_wayfinding() -> void:
@@ -2389,7 +2395,7 @@ func _build_gates() -> void:
 		var see_through: StaticBody3D = _district_occlusion_blocker(gate, "GateOcclusionBlocker") if faces_away else null
 		if faces_away: occlusion_controller.begin_building()
 		var first_part := get_child_count()
-		var zone_color: Color = [Color("#28737a"),Color("#e2795e"),Color("#e2ae4f"),Color("#725985"),Color("#47718a"),Color("#678858"),Color("#5295a0"),Color("#42638a"),Color("#865d71")][i-1]
+		var zone_color: Color = [Color("#28737a"),Color("#e2795e"),Color("#e2ae4f"),Color("#725985"),Color("#47718a"),Color("#678858"),Color("#5295a0"),Color("#42638a"),Color("#865d71"),Color("#7a2238")][i-1]
 		var pos := Vector3.ZERO
 		var gate_floor := _box(pos+Vector3(0,0.18,0),Vector3(3.9,0.22,1.5),Color("#958064"))
 		gate_floor.material_override = _coastal_surface(0,1.6,Color("#d8c39f"))
@@ -2463,7 +2469,10 @@ func show_gate(region: String, open: bool, celebrate: bool) -> void:
 	var status := find_child("GateStatus_" + region, false, false) as Label3D
 	if status != null:
 		if is_instance_valid(district_host) and district_host.failed.has(region): status.text = "整修中 · 暫停開放"
-		else: status.text = "已開放 · 請進" if open else "%d 張 · 不消耗" % RegionRoutes.threshold(region)
+		elif open: status.text = "已開放 · 請進"
+		elif RegionRoutes.counts_down(region) and is_instance_valid(district_host) and district_host.sticker_count() >= 0:
+			status.text = "%d 張 · 還差 %d 張" % [RegionRoutes.threshold(region), RegionRoutes.threshold(region) - district_host.sticker_count()]
+		else: status.text = "%d 張 · 不消耗" % RegionRoutes.threshold(region)
 	for leaf: MeshInstance3D in _gate_leaves.get(region, []):
 		var side: float = leaf.get_meta("hinge")
 		var closed := 0.0 if side < 0.0 else PI
@@ -2530,6 +2539,14 @@ func _zone_crown(index: int, pos: Vector3, color: Color) -> void:
 			orbit.scale=Vector3(0.82,0.36,0.3)
 			orbit.rotation.z=0.32
 			for side in [-1,1]: _box(pos+Vector3(side*0.72,4.0,0),Vector3(0.11,0.11,0.11),GOLD)
+		10: # The final gate wears the theatre's devil mask over a velvet swag, as one piece.
+			var mask := SceneryKit.Sculpt.new()
+			mask.ball(Vector3.ZERO,0.42,color,color.lightened(0.1),10,4,0.85)
+			for side in [-1.0,1.0]:
+				mask.tube(Vector3(side*0.3,0.42,0),0.1,0.0,0.34,CREAM,6,Basis(Vector3.BACK,-side*0.4))
+				mask.ball(Vector3(side*0.16,0.06,0.3),0.07,GOLD,Color.TRANSPARENT,6,3)
+				mask.box(Vector3(side*0.85,-0.37,0.1),Vector3(0.5,0.5,0.06),color.darkened(0.2),Basis(Vector3.BACK,side*0.5))
+			_mesh(mask.mesh(),pos+Vector3(0,3.62,0),_vertex_color_material("gate-mask"))
 		9: # The last gate is a freestanding mirror oval with a key-like crest.
 			var portal := _mesh(TorusMesh.new(),pos+Vector3(0,3.83,0),_mat(Color("#b9d9d8")))
 			portal.scale=Vector3(0.72,1.05,0.22)
@@ -3726,8 +3743,17 @@ func _update_lamp_selection(force := false) -> void:
 		var level := _lamp_level(lamp)
 		var enabled := level > 0.0 and slot < active_lamp_budget - reserved
 		lamp.light_energy = level if enabled else 0.0
-		lamp.shadow_enabled = enabled and active_time_phase in ["dusk", "night"] and shadow_count < shadow_lamp_budget
-		if lamp.shadow_enabled:
+		lamp.shadow_enabled = false
+	# A lamp that casts whatever the hour (a district's stage spot) takes a shadow
+	# place first, by day too; the rest share what is left after dark, nearest first.
+	for always in [true, false]:
+		for slot in range(ACTIVE_LAMP_LIMIT):
+			var lamp_index := active_lamp_indices[slot]
+			if lamp_index < 0 or shadow_count >= shadow_lamp_budget: continue
+			var lamp := lamps[lamp_index]
+			if lamp.light_energy <= 0.0 or lamp.has_meta(&"always_shadow") != always: continue
+			if not always and active_time_phase not in ["dusk", "night"]: continue
+			lamp.shadow_enabled = true
 			# Two shadow passes per lamp instead of six; these short-range lamps look the same.
 			var omni := lamp as OmniLight3D
 			if omni != null and omni.omni_shadow_mode != OmniLight3D.SHADOW_DUAL_PARABOLOID:
@@ -3743,7 +3769,9 @@ func _update_lamp_selection(force := false) -> void:
 ## How bright a lamp burns when chosen: its district decides for its own lamps.
 func _lamp_level(lamp: Light3D) -> float:
 	var keeper: Object = lamp.get_meta(&"district") if lamp.has_meta(&"district") else null
-	return keeper.lamp_level(lamp) if is_instance_valid(keeper) else lamp_energy_for_phase
+	if is_instance_valid(keeper): return keeper.lamp_level(lamp)
+	# A lamp with a level of its own (one that burns whatever the hour) keeps it standing alone too.
+	return lamp_level(lamp) if lamp.has_meta(&"level") else lamp_energy_for_phase
 
 ## Lights an embedded district keeps burning outside the shared lamp list
 ## (light pools, a glow over beds); the host counts them once it is built.

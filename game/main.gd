@@ -1736,7 +1736,7 @@ func _interact(id: String, title: String) -> void:
 	if not id.is_empty() and id == RegionalVisit.point_id(here):
 		if not _talk_errand(here): _start_region_story_visit(here)
 		return
-	if id.begins_with("game-") and here in ["circus","toy","garden","hotel","sky","cinema"] and Catalog.identity(id).get("zone","")==here:
+	if id.begins_with("game-") and here in ["circus","toy","garden","hotel","sky","cinema","theatre"] and Catalog.identity(id).get("zone","")==here:
 		_show_game_info(id)
 		return
 	if here=="hotel":
@@ -1752,6 +1752,14 @@ func _interact(id: String, title: String) -> void:
 			"sky:balloon": _notice(place.tug_balloon())
 			"sky:kites": _notice(place.fly_kites())
 			"sky:photo": _notice(place.take_photo())
+		return
+	if here=="theatre":
+		match id:
+			"theatre:ticket": _notice(place.read_programme())
+			"theatre:costumes": _notice(place.rummage_costumes())
+			"theatre:pit": _notice(place.strike_up())
+			"theatre:spotlight": _notice(place.take_spotlight())
+			"theatre:bow": _notice(place.practise_bow())
 		return
 	if here=="cinema":
 		match id:
@@ -3118,7 +3126,7 @@ func _show_map() -> void:
 		if not Catalog.definitions(world_region).is_empty():
 			var games_button := Paper.button("遊戲入口",_show_region_games,modal_footer)
 			games_button.name="RegionGamesButton"
-		if world_region in ["candy", "nightmarket", "circus", "toy", "garden", "hotel", "sky", "cinema"]:
+		if world_region in ["candy", "nightmarket", "circus", "toy", "garden", "hotel", "sky", "cinema", "theatre"]:
 			var return_button := Paper.button("免費返回迎賓大道",_travel_to_region.bind("welcome"),modal_footer)
 			if world_region=="nightmarket":
 				return_button.name="NightmarketReturnButton"
@@ -3134,6 +3142,8 @@ func _show_map() -> void:
 				return_button.name="SkyReturnButton"
 			elif world_region=="cinema":
 				return_button.name="CinemaReturnButton"
+			elif world_region=="theatre":
+				return_button.name="TheatreReturnButton"
 			return_button.tooltip_text="永久免費返回；不需要拍貼或遊園幣。"
 		_back(harbor_body)
 		return

@@ -217,7 +217,12 @@ func set_sticker_count(count: int) -> void:
 	_stickers = count
 	for region: String in DistrictSites.regions():
 		var open := count >= RegionRoutes.threshold(region) and not failed.has(region)
-		if open != gate_is_open(region): _set_gate(region, open, open and not quiet)
+		# A gate that counts down rewords its sign with every card while it is shut.
+		if open != gate_is_open(region) or (not open and RegionRoutes.counts_down(region)): _set_gate(region, open, open and not quiet)
+
+## The sticker count the gates last saw, or -1 before the first.
+func sticker_count() -> int:
+	return _stickers
 
 func _set_gate(region: String, open: bool, celebrate: bool) -> void:
 	_open[region] = open

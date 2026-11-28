@@ -87,7 +87,18 @@ func _check_gates(world: Node3D, host: Node) -> void:
 	# The leaves swing open with a little celebration.
 	await create_timer(1.2).timeout
 	for region: String in DistrictSites.regions():
-		_check(host.gate_is_open(region) and world.gate_leaf_angle(region) > 1.0, "%s gate stands open at 60 stickers" % region)
+		var due := 60 >= RegionRoutes.threshold(region)
+		_check(host.gate_is_open(region) == due and (world.gate_leaf_angle(region) > 1.0) == due, "%s gate stands open at 60 stickers exactly when due" % region)
+	# The final theatre counts down every card still missing and opens at 180.
+	var countdown := world.find_child("GateStatus_theatre", false, false) as Label3D
+	_check(countdown != null and countdown.text == "180 張 · 還差 120 張", "the theatre gate counts down the cards still missing at 60")
+	world.set_sticker_count(179)
+	_check(not host.gate_is_open("theatre") and countdown.text == "180 張 · 還差 1 張" and not world.is_walkable(_approach_middle("theatre")),
+		"one card short the theatre gate stays shut, says so and keeps its bridge closed")
+	world.set_sticker_count(180)
+	await create_timer(1.2).timeout
+	_check(host.gate_is_open("theatre") and world.gate_leaf_angle("theatre") > 1.0 and countdown.text == "已開放 · 請進" and opened.has("theatre"),
+		"at 180 stickers the theatre gate swings open with a celebration")
 
 func _gate_is_bars(leaves: Array) -> bool:
 	var leaf: MeshInstance3D = leaves[0]
@@ -197,11 +208,11 @@ func _check_closed_built(world: Node3D) -> void:
 	world.set_sticker_count(0)
 	for region: String in DistrictSites.regions():
 		_check(not world.is_walkable(_approach_middle(region)), "%s approach stays shut behind a closed gate after it is built" % region)
-	world.set_sticker_count(60)
+	world.set_sticker_count(180)
 
 ## Every interaction point of every district can be reached on foot from the
 ## plaza, over ground the walking rules allow.
-func _check_reach(world: Node3D, _host: Node) -> void:
+func _check_reach(world: Node3D, host: Node) -> void:
 	var bounds := IslandShape.bounds()
 	var columns := int(bounds.size.x / GRID) + 1
 	var rows := int(bounds.size.y / GRID) + 1
@@ -234,6 +245,15 @@ func _check_reach(world: Node3D, _host: Node) -> void:
 	print("[district] flood fill: %d walkable cells in %d ms" % [queue.size(), Time.get_ticks_msec() - started])
 	for point: Dictionary in world.points:
 		if not point.has("region"): continue
+		if (point.position as Vector3).y < -10.0:
+			# A point on a level below the island is reached through its district's
+			# passage down; that district's own test walks the level itself.
+			var below: Node3D = host.built(point.region)
+			var down := below != null and below.has_method("passage_entrance")
+			var entrance: Vector3 = below.to_global(below.passage_entrance()) if down else Vector3.INF
+			_check(down and _reached(seen, bounds, columns, rows, Vector2(entrance.x, entrance.z)),
+				"%s point %s is reached by the walk down from the plaza" % [point.region, point.id])
+			continue
 		var spot := Vector2(point.position.x, point.position.z)
 		_check(_reached(seen, bounds, columns, rows, spot), "%s point %s can be reached on foot from the plaza" % [point.region, point.id])
 	for region: String in DistrictSites.regions():
@@ -285,6 +305,8 @@ func _check_mechanics(world: Node3D, host: Node) -> void:
 	_check(sky.push_wheel().contains("摩天輪") and sky._life._push > 0.0, "the sky park's wheel answers a push embedded")
 	var cinema: Node3D = host.built("cinema")
 	_check(cinema.walk_carpet().contains("紅毯") and cinema._life._carpet > 0.0, "the cinema's red carpet answers a walk embedded")
+	var theatre: Node3D = host.built("theatre")
+	_check(theatre.strike_up().contains("樂池") and theatre._life._strike > 0.0, "the theatre's pit strikes up embedded")
 	world.place_player(DistrictSites.arrival("candy"))
 	candy.reset_to_entry()
 	_check(world.player.global_position.distance_to(candy.to_global(candy.ENTRY)) < 0.05, "candy reset returns the island walker to the factory entry")

@@ -9,7 +9,8 @@ const IslandMapPanel = preload("res://game/ui/island_map_panel.gd")
 const DistrictSites = preload("res://game/world/district_sites.gd")
 
 ## Scene budget for the island itself, districts excluded (design/runtime/scene-building-standards.md).
-const NODE_BUDGET := 2700
+## Raised from 2700 by MAIN-71: the tenth gate (the final theatre's) costs 41 nodes.
+const NODE_BUDGET := 2750
 ## Nodes that exist only with a GPU (air particles, cloud shade, hair viewport
 ## parts); this headless count must leave room for them.
 const GPU_ONLY_NODES := 60
@@ -510,7 +511,7 @@ func _check_reachability(world: Node) -> void:
 	for zone_index in range(1, zones.size()): destinations.append("gate:" + str(zones[zone_index].get("id", "")))
 	for stop_id: String in IslandLayout.COAST_STOPS: destinations.append("coast:" + stop_id)
 	for index in IslandLayout.WINDMILL_PADS.size(): destinations.append("play:wind-%d" % index)
-	_check(destinations.size() == 44, "the walk covers every fixed interaction point (%d)" % destinations.size())
+	_check(destinations.size() == 45, "the walk covers every fixed interaction point (%d)" % destinations.size())
 	for point_id in destinations:
 		var point: Dictionary = world._point_by_id(point_id)
 		_check(not point.is_empty(), "%s is registered" % point_id)
@@ -853,6 +854,8 @@ func _check_illuminated_guides(world: Node) -> void:
 	_check(hotel_gate != null and hotel_gate.text == "60 張 · 不消耗", "the hotel gate shows its real 60-card threshold")
 	_check(sky_gate != null and sky_gate.text == "60 張 · 不消耗", "the sky park gate shows its real 60-card threshold")
 	_check(cinema_gate != null and cinema_gate.text == "60 張 · 不消耗", "the cinema gate shows its real 60-card threshold")
+	var theatre_gate := world.get_node_or_null("GateStatus_theatre") as Label3D
+	_check(theatre_gate != null and theatre_gate.text.begins_with("180 張"), "the final theatre gate shows its 180-card threshold")
 	if material == null: return
 	var previous_phase: String = world.active_time_phase
 	var previous_reduction: bool = world.reduced_motion

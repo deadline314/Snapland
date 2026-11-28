@@ -133,6 +133,18 @@ const SITES := {
 		"cutouts": [],
 		"ground": Color("#d6b98a"), "ground_strength": 0.45,
 	},
+	# The optional final zone: an islet in the west bay, reached by a bridge
+	# from the bay's inner point. The theatre itself lies far below the claim.
+	"theatre": {
+		"script": "res://game/world/theatre_world.gd",
+		"at": Vector3(-94, 0, -32),
+		"claim": Rect2(-28, -11, 34, 30),
+		"approach": Rect2(5.0, -1.6, 20.6, 3.2), "approach_y": 0.20,
+		"arrival": Vector3(4.0, 0.2, 0.6),
+		"gate": Vector3(24.5, 0.0, 90),
+		"cutouts": [],
+		"ground": Color("#8e6a86"), "ground_strength": 0.4,
+	},
 }
 
 static var _tint: ImageTexture

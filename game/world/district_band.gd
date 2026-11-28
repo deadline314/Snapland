@@ -97,6 +97,15 @@ const BANDS := {
 		"tiles": [Color("#d8c39f"), Color("#cdb48a"), Color("#e2cfa8"), Color("#a8243a")],
 		"beach": true,
 	},
+	"theatre": {
+		# Touring trunks and playbills wait on the lawn above the bay; little
+		# floor spotlights point the way to the bridge.
+		# The bay leaves little lawn in the band, so the props stand closer together.
+		"density": 2.4, "cell": 1.6, "props": [["luggage", 3.0, 0.0], ["ticket_sign", 1.6, 0.2], ["spot_lamp", 2.0, 0.0], ["pennant_stake", 1.6, 0.0]],
+		"colors": [Color("#9e1f35"), Color("#e3b450"), Color("#3a2245"), Color("#fff0d6"), Color("#c79a45")],
+		"tiles": [Color("#cdb8a0"), Color("#bfa88e"), Color("#d8c6ae"), Color("#9e1f35")],
+		"beach": true,
+	},
 	"harbor": {
 		# The bay keeps the harbour off the island: only the headland by its pier is band.
 		"density": 8.0, "props": [["crates", 3.0, 0.0], ["rope_coil", 3.0, 0.0], ["net_poles", 1.5, 0.15], ["dinghy", 1.2, 0.25]],

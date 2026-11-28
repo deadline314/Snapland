@@ -23,7 +23,7 @@ const QUIET_SECONDS := 0.16
 const INKS := {
 	"harbor": Color("#1d5a5e"), "candy": Color("#a3405f"), "nightmarket": Color("#5e3482"),
 	"circus": Color("#9a3128"), "toy": Color("#2c5799"), "garden": Color("#356b33"),
-	"hotel": Color("#563c80"), "sky": Color("#25688c"), "cinema": Color("#8d3c33"),
+	"hotel": Color("#563c80"), "sky": Color("#25688c"), "cinema": Color("#8d3c33"), "theatre": Color("#7a2238"),
 }
 const TAG := Color("#f6ecd0")
 const TAG_EDGE := Color("#c8b78f")

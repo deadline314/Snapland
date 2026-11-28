@@ -491,7 +491,7 @@ func _connect_selection(button: Button, select: Callable) -> void:
 	button.focus_entered.connect(select)
 
 func _gate_short_name(zone_id: String, ordinal: int) -> String:
-	var names := {"harbor":"潮汐","forest":"森林","desert":"沙丘","mountain":"山脈","snow":"雪原","volcano":"火山","sky":"天空","ruins":"遺跡","moon":"月灣","candy":"糖廠","nightmarket":"夜市","circus":"馬戲","toy":"玩具","garden":"花園","hotel":"旅店","cinema":"影城"}
+	var names := {"harbor":"潮汐","forest":"森林","desert":"沙丘","mountain":"山脈","snow":"雪原","volcano":"火山","sky":"天空","ruins":"遺跡","moon":"月灣","candy":"糖廠","nightmarket":"夜市","circus":"馬戲","toy":"玩具","garden":"花園","hotel":"旅店","cinema":"影城","theatre":"劇場"}
 	return str(names.get(zone_id, "島%02d" % ordinal))
 
 func _make_button(text: String, node_name: String, station := false) -> Button:
@@ -544,7 +544,7 @@ func _layout_map_buttons() -> void:
 	var overview_header := 34.0 * unit
 	var station_width := maxf(218.0 * unit, maxf(hub_size.x + 107.0 * unit, 4.0 * station_hit.x + 30.0 * unit))
 	var overview_width := maxf(164.0 * unit, 3.0 * overview_hit.x + 26.0 * unit)
-	var content_height := maxf(station_header + 3.0 * station_hit.y, overview_header + 3.0 * overview_hit.y)
+	var content_height := maxf(station_header + 3.0 * station_hit.y, overview_header + ceilf(float(_gates.size()) / 3.0) * overview_hit.y)
 	_canvas.custom_minimum_size = Vector2(maxf(600.0 * unit, station_width + overview_width + 165.0 * unit),
 		maxf(220.0 * unit if compact else 0.0, content_height + 24.0 * unit))
 	_canvas.arrange(menu_scale, station_width, overview_width)

@@ -39,6 +39,10 @@ class TerrainChart extends Control:
 		"carpet": Color("#9a4a52"), "cinema": Color("#7a6a5a"),
 		"backlot": Color("#8d7650"), "stage": Color("#5a5068"),
 	}
+	const THEATRE_FLOORS := {
+		"entrance": Color("#9a8a74"), "backstage": Color("#7a5e4a"), "house": Color("#8a2e3c"),
+		"pit": Color("#4e3a46"), "stage": Color("#5a4650"), "bow": Color("#a8864a"),
+	}
 	var data: Dictionary
 	## Cream guide sheet showing round each printed plan (the compass sits on it).
 	const SHEET_MARGIN := 16.0
@@ -80,7 +84,7 @@ class TerrainChart extends Control:
 		if region=="nightmarket":
 			_draw_market(bounds)
 			return
-		if region in ["circus", "toy", "garden", "hotel", "sky", "cinema"]:
+		if region in ["circus", "toy", "garden", "hotel", "sky", "cinema", "theatre"]:
 			_draw_room_plan(bounds, region)
 			return
 		var scale_factor := minf((size.x-SHEET_MARGIN*2.0)/bounds.size.x,(size.y-SHEET_MARGIN*2.0)/bounds.size.y)
@@ -119,21 +123,21 @@ class TerrainChart extends Control:
 		var plan := Rect2((size - plan_size) * 0.5, plan_size)
 		var origin := plan.position - bounds.position * unit
 		var panel := plan.grow(7.0)
-		var backing: Color = {"garden": Color("#253d37"), "toy": Color("#302b31"), "hotel": Color("#2a2340"), "sky": Color("#2b4566"), "cinema": Color("#2c3f52")}.get(region, Color("#291f36"))
+		var backing: Color = {"garden": Color("#253d37"), "toy": Color("#302b31"), "hotel": Color("#2a2340"), "sky": Color("#2b4566"), "cinema": Color("#2c3f52"), "theatre": Color("#1e1626")}.get(region, Color("#291f36"))
 		_paper_under(panel)
 		draw_rect(panel, backing)
-		var border: Color = {"garden": Color("#77958c"), "toy": Color("#7e6a5c"), "hotel": Color("#9d8cc8"), "sky": Color("#a9cbe6"), "cinema": Color("#e8c27a")}.get(region, Color("#72556b"))
+		var border: Color = {"garden": Color("#77958c"), "toy": Color("#7e6a5c"), "hotel": Color("#9d8cc8"), "sky": Color("#a9cbe6"), "cinema": Color("#e8c27a"), "theatre": Color("#e3b450")}.get(region, Color("#72556b"))
 		draw_rect(panel, border, false, 1.0)
-		var swatches: Dictionary = {"garden": GARDEN_FLOORS, "toy": TOY_FLOORS, "hotel": HOTEL_FLOORS, "sky": SKY_DECKS, "cinema": CINEMA_FLOORS}.get(region, CIRCUS_FLOORS)
+		var swatches: Dictionary = {"garden": GARDEN_FLOORS, "toy": TOY_FLOORS, "hotel": HOTEL_FLOORS, "sky": SKY_DECKS, "cinema": CINEMA_FLOORS, "theatre": THEATRE_FLOORS}.get(region, CIRCUS_FLOORS)
 		if region == "sky":
 			_draw_sky_plan(origin, unit)
-		elif region == "cinema":
+		elif region in ["cinema", "theatre"]:
 			_draw_cinema_links(origin, unit)
 		for room: Dictionary in data.areas if region != "sky" else []:
 			var rect: Rect2 = room.rect
 			var floor := Rect2(origin + rect.position * unit, rect.size * unit)
 			# Raised floors (the cinema's tiers and stage) print lighter.
-			var lift := clampf(float(room.get("y", 0.2)) - 0.2, 0.0, 1.0) * 0.35 if region == "cinema" else 0.0
+			var lift := clampf(float(room.get("y", 0.2)) - 0.2, 0.0, 1.0) * 0.35 if region in ["cinema", "theatre"] else 0.0
 			draw_rect(floor, (swatches.get(room.id, MARKET_PAVING) as Color).lightened(lift))
 			draw_rect(floor, Color("#bc9c95"), false, 1.0)
 			if region == "toy":
@@ -146,7 +150,7 @@ class TerrainChart extends Control:
 			_draw_garden_terrain(origin, unit)
 		elif region == "hotel":
 			_draw_hotel_signs(origin, unit)
-		elif region == "cinema":
+		elif region in ["cinema", "theatre"]:
 			var ink := Color(ROOM_PLAN_INK, 0.45)
 			for site: Vector3 in data.get("sites", []):
 				var at := origin + Vector2(site.x, site.z) * unit
@@ -486,14 +490,14 @@ func setup(value: Dictionary) -> void:
 
 func _ready() -> void:
 	var region: String = snapshot.get("region","harbor")
-	var prefix: String = {"candy":"CandyMap","nightmarket":"NightmarketMap","circus":"CircusMap","toy":"ToyMap","garden":"GardenMap","hotel":"HotelMap","sky":"SkyMap","cinema":"CinemaMap"}.get(region,"HarborMap")
+	var prefix: String = {"candy":"CandyMap","nightmarket":"NightmarketMap","circus":"CircusMap","toy":"ToyMap","garden":"GardenMap","hotel":"HotelMap","sky":"SkyMap","cinema":"CinemaMap","theatre":"TheatreMap"}.get(region,"HarborMap")
 	name=prefix+"Panel"
 	size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	size_flags_vertical=Control.SIZE_EXPAND_FILL
 	add_theme_constant_override("separation",6)
 	var status := _status_text(region)
 	var tide := Paper.label(status,18,Paper.DEEP_TEAL)
-	tide.name=prefix+str({"candy":"Temperature","nightmarket":"Status","circus":"Status","toy":"Status","garden":"Status","hotel":"Status","sky":"Status","cinema":"Status"}.get(region,"Tide"))
+	tide.name=prefix+str({"candy":"Temperature","nightmarket":"Status","circus":"Status","toy":"Status","garden":"Status","hotel":"Status","sky":"Status","cinema":"Status","theatre":"Status"}.get(region,"Tide"))
 	add_child(tide)
 	if snapshot.has("errand"):
 		var errand := Paper.label("小旗：委託目標｜" + str(snapshot.errand.goal), 17, Paper.CORAL)
@@ -539,6 +543,7 @@ func _status_text(region: String) -> String:
 		"nightmarket":
 			return "%s · %s" % ["營業中" if snapshot.operating else "已收攤","你在雨棚下" if snapshot.covered else "你在露天區"]
 		"circus", "hotel", "sky", "cinema": return "你在" + String(snapshot.area)
+		"theatre": return "你在%s · %s" % [snapshot.area, "地底" if snapshot.get("below", false) else "地面"]
 		"garden": return "你在%s · %s" % [snapshot.area, snapshot.light_label]
 		"toy":
 			var train: Dictionary = snapshot.train
@@ -560,6 +565,11 @@ func _legend_text(region: String) -> String:
 		"garden": return "金環是你，植床上的光圈是日照位置。\n西側走木棧道，東側可上葉臺或沿寬路繞行。"
 		"cinema": return "金環是你，越亮的地板越高；紅線是紅毯坡道。
 座位階梯、樓梯和燈架步道連起各區，返回迎賓大道免費。"
+		"theatre":
+			if snapshot.get("below", false): return "金環是你，越亮的地板越高。
+後台坡道上舞台，舞台兩側的樓梯下到觀眾席；南端出口回到地面。"
+			return "金環是你。棧橋連到島上的柵門，
+大階梯往下走就進地底劇場；返回迎賓大道免費。"
 		"sky": return "金環是你，越亮的平台越高。
 斜坡與長雲梯連起各區，不必跳躍；返回迎賓大道免費。"
 		"hotel": return "金環是你，金色圓牌是房號路標。
