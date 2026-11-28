@@ -21,7 +21,7 @@ func _run() -> void:
 	var hotel: Array = catalog.definitions("hotel")
 	var all_games: Array = catalog.all_definitions()
 	_check(welcome == JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json")), "default definitions preserve the original welcome row shape and order")
-	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 11 and toy.size() == 10 and garden.size() == 7 and hotel.size() == 3 and all_games.size() == 79, "only the 79 delivered games are exposed")
+	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 11 and toy.size() == 11 and garden.size() == 7 and hotel.size() == 3 and all_games.size() == 80, "only the 80 delivered games are exposed")
 	for index in range(welcome.size()):
 		_check(welcome[index].id == "game-%03d" % (index + 1), "welcome numbering stays ordered")
 	_check(all_games == welcome + harbor + candy + nightmarket + circus + toy + garden + hotel and catalog.definitions("sky").is_empty(), "games retain global order and future regions remain unavailable")
@@ -55,6 +55,9 @@ func _run() -> void:
 		"the ninth toy town slot keeps its own number")
 	var bonk := {"id":"game-070", "mode":"soldier_bonk", "zone":"toy", "local_index":10, "photo_id":"photo-toy-game-10", "devil_photo_id":"photo-toy-devil-10", "achievement_id":"ACH_GAME_070"}
 	_check(catalog.identity("game-070") == bonk and catalog.identity("soldier_bonk") == bonk and toy[9].name == "敲敲玩具兵" and toy[9].arcade == true, "tenth toy town game has stable identities and the arcade flow flag")
+	var kart := {"id":"game-071", "mode":"box_kart", "zone":"toy", "local_index":11, "photo_id":"photo-toy-game-11", "devil_photo_id":"photo-toy-devil-11", "achievement_id":"ACH_GAME_071"}
+	_check(catalog.identity("game-071") == kart and catalog.identity("box_kart") == kart and toy[10].name == "紙盒變車" and toy[10].arcade == true,
+		"the eleventh toy town slot keeps its own number")
 	var scenery := {"id":"game-051", "mode":"scenery_drop", "zone":"circus", "local_index":3, "photo_id":"photo-circus-game-3", "devil_photo_id":"photo-circus-devil-3", "achievement_id":"ACH_GAME_051"}
 	_check(catalog.identity("game-051") == scenery and catalog.identity("scenery_drop") == scenery and circus[2].name == "舞台換景" and circus[2].arcade == true,
 		"the scenery drop fills circus slot three between the delivered neighbours")

@@ -198,5 +198,25 @@
       "sign",
       "bench"
     ]
+  },
+  {
+    "id": "game-071",
+    "mode": "box_kart",
+    "zone": "toy",
+    "local_index": 11,
+    "arcade": true,
+    "name": "紙盒變車",
+    "goal": "坐在紙箱車裡從積木坡道衝下去，飛在空中時調整車身，平平地落在下一段坡道上才能保住速度。",
+    "instructions": "← →、A D 或手把十字鍵：在空中按住 ← 抬起車頭、→ 壓低車頭。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助開紙箱車拿到金牌",
+    "ordinary": "在空中調整紙箱車平穩落地，拿到銅牌",
+    "attraction_tag": "紙箱賽道",
+    "island_invitation": "紙箱車飛起來時要扶正！落地太歪，紙箱會整個摺起來，只剩一隻手在外面揮白旗。",
+    "retake_props": [
+      "mascot",
+      "bench",
+      "sign"
+    ]
   }
 ]

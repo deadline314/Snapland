@@ -31,6 +31,8 @@ const STANDS := {
 			"stand": Vector3(-5.6, 0.2, -5.6), "point": Vector3(-4.4, 0.2, -4.3), "prop": "dice", "paint": Color("#3f6f5a")},
 		{"id": "game-070", "title": "敲敲玩具兵", "prompt": "敲敲玩具兵 · 方向鍵敲回去",
 			"stand": Vector3(-6.0, 0.2, 1.6), "point": Vector3(-4.95, 0.2, 3.0), "prop": "soldier", "paint": Color("#5b6f9a")},
+		{"id": "game-071", "title": "紙盒變車", "prompt": "紙盒變車 · 空中扶正紙箱車",
+			"stand": Vector3(-2.6, 0.2, 7.9), "point": Vector3(-1.5, 0.2, 6.6), "prop": "kart", "paint": Color("#c99a62")},
 	],
 	"garden": [
 		{"id": "game-073", "title": "螢火蟲長曝光", "prompt": "螢火蟲長曝光 · 忍住別按",
@@ -86,6 +88,7 @@ static func build(world: Node3D, region: String) -> void:
 			"rails": _rails_prop(sculpt)
 			"puppet": _puppet_prop(sculpt)
 			"dice": _dice_prop(sculpt)
+			"kart": _kart_prop(sculpt)
 			"camera": _camera_prop(sculpt)
 			"lily": _lily_prop(sculpt)
 			"mushroom": _mushroom_prop(sculpt)
@@ -538,3 +541,20 @@ static func _lock_prop(sculpt: Kit.Sculpt) -> void:
 		sculpt.box(Vector3(-0.36 + key * 0.08, 1.02, 0.18), Vector3(0.03, 0.02, 0.12), BRASS)
 	sculpt.box(Vector3(0.32, 1.08, 0.08), Vector3(0.03, 0.3, 0.03), Color("#9a6a40"), Basis(Vector3.BACK, 0.5))
 	sculpt.box(Vector3(0.42, 0.98, 0.08), Vector3(0.14, 0.1, 0.06), Color("#d9b85a"), Basis(Vector3.BACK, 0.5))
+
+
+## A ramp of painted blocks on the roof with a cardboard-box car about to leave
+## its lip, and a little taped box car on bottle-cap wheels on the counter.
+static func _kart_prop(sculpt: Kit.Sculpt) -> void:
+	var paints: Array[Color] = [Color("#c0503f"), Color("#4f79a8"), Color("#e0b04a")]
+	var card := Color("#c99a62")
+	for step in 3:
+		sculpt.box(Vector3(-0.45 + step * 0.2, 2.5 + step * 0.06, -0.3), Vector3(0.2, 0.14 + step * 0.12, 0.24), paints[step])
+	sculpt.box(Vector3(0.3, 2.86, -0.3), Vector3(0.3, 0.2, 0.24), card, Basis(Vector3.BACK, 0.35))
+	sculpt.box(Vector3(0.3, 2.97, -0.3), Vector3(0.06, 0.2, 0.25), Color("#d9c08a"), Basis(Vector3.BACK, 0.35))
+	sculpt.box(Vector3(0.0, 1.08, 0.1), Vector3(0.4, 0.2, 0.26), card)
+	sculpt.box(Vector3(0.0, 1.08, 0.235), Vector3(0.08, 0.2, 0.01), Color("#d9c08a"))
+	for wheel: float in [-0.13, 0.13]:
+		sculpt.tube(Vector3(wheel, 0.99, 0.24), 0.05, 0.05, 0.03, Color("#c0503f"), 8, Basis(Vector3.RIGHT, PI * 0.5))
+	sculpt.box(Vector3(-0.08, 1.26, 0.06), Vector3(0.02, 0.2, 0.02), CREAM)
+	sculpt.box(Vector3(-0.02, 1.32, 0.06), Vector3(0.1, 0.07, 0.01), Color("#f7f1e3"))
