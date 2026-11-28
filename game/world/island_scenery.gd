@@ -160,8 +160,8 @@ static func _build_ponds(world: Node3D) -> void:
 				var height := 0.7 + _hash(index * 13 + blade) * 0.45
 				reeds.append(Transform3D(Basis().rotated(Vector3.FORWARD, lean).scaled(Vector3(0.07, height, 0.05)), foot + Vector3(0, POND_WATER_Y + height * 0.5, 0)))
 				reed_colors.append(Color("#557961") if blade % 2 == 0 else Color("#6f8f5f"))
-	world._multi_mesh(stone_mesh, Vector3.ZERO, stones, stone_colors, world._vertex_color_material("pond-bank-stones")).name = "IslandPondStones"
-	world._multi_mesh(reed_mesh, Vector3.ZERO, reeds, reed_colors, world._vertex_color_material("pond-reeds")).name = "IslandPondReeds"
+	world._multi_mesh(stone_mesh, Vector3.ZERO, stones, stone_colors, world._vertex_color_material("pond-bank-stones", 0.9, true)).name = "IslandPondStones"
+	world._multi_mesh(reed_mesh, Vector3.ZERO, reeds, reed_colors, world._vertex_color_material("pond-reeds", 0.9, true)).name = "IslandPondReeds"
 
 ## Tide-pool rocks in loose groups on the sand all round the coast, except
 ## beside the dock and where a district dresses its own shore, with tufts of
@@ -206,8 +206,8 @@ static func build_shore_rocks(world: Node3D) -> void:
 	var bud_mesh := SphereMesh.new()
 	bud_mesh.radial_segments = 8
 	bud_mesh.rings = 4
-	world._multi_mesh(blade_mesh, Vector3.ZERO, blades, blade_colors, world._vertex_color_material("sea-grass")).name = "IslandSeaGrass"
-	world._multi_mesh(bud_mesh, Vector3.ZERO, buds, bud_colors, world._vertex_color_material("sea-grass")).name = "IslandSeaGrassBuds"
+	world._multi_mesh(blade_mesh, Vector3.ZERO, blades, blade_colors, world._vertex_color_material("sea-grass", 0.9, true)).name = "IslandSeaGrass"
+	world._multi_mesh(bud_mesh, Vector3.ZERO, buds, bud_colors, world._vertex_color_material("sea-grass", 0.9, true)).name = "IslandSeaGrassBuds"
 
 const LAWN_SHRUBS := [Vector2(51, -13), Vector2(55, -10), Vector2(67, -12), Vector2(64, -8), Vector2(47, -3)]
 
@@ -221,8 +221,7 @@ static func _on_open_sand(spot: Vector2) -> bool:
 ## Beachcombing on the spit: shells, bleached driftwood and sea-grass tufts,
 ## added to the shore's two batched draws instead of new nodes.
 static func _dress_sand_spit(blades: Array[Transform3D], blade_colors: Array[Color], buds: Array[Transform3D], bud_colors: Array[Color]) -> void:
-	# Instance colours are linear; convert so the shells keep their painted tones.
-	var shells: Array[Color] = [Color("#f4e6d2").srgb_to_linear(), Color("#e89a86").srgb_to_linear(), Color("#e2c48f").srgb_to_linear(), Color("#c9705f").srgb_to_linear()]
+	var shells: Array[Color] = [Color("#f4e6d2"), Color("#e89a86"), Color("#e2c48f"), Color("#c9705f")]
 	var attempts := 90
 	for index in attempts:
 		var angle := float(index) * 2.39996
@@ -238,11 +237,11 @@ static func _dress_sand_spit(blades: Array[Transform3D], blade_colors: Array[Col
 			1:
 				var length := 1.3 + _hash(index * 13) * 1.0
 				blades.append(Transform3D(turn.rotated(Vector3.FORWARD, 0.05).scaled(Vector3(length, 0.16, 0.2)), foot + Vector3(0, 0.08, 0)))
-				blade_colors.append(Color("#8b7355").srgb_to_linear())
+				blade_colors.append(Color("#8b7355"))
 			3:
 				for blade in 3:
 					blades.append(Transform3D(Basis(Vector3.BACK, float(blade - 1) * 0.25).scaled(Vector3(0.08, 0.6, 0.06)), foot + Vector3(float(blade - 1) * 0.11, 0.3, 0)))
-					blade_colors.append(Color("#5f7f52").srgb_to_linear())
+					blade_colors.append(Color("#5f7f52"))
 
 ## A half-finished sand castle someone left by the water: one small draw that
 ## gives the spit something to walk over and look at.
@@ -353,10 +352,10 @@ static func _build_meadows(world: Node3D) -> void:
 			var bloom := 0.55 + _hash(index * 17 + meadow_index) * 0.5
 			flowers.append(Transform3D(Basis().scaled(Vector3(bloom, bloom * 0.55, bloom)), base + Vector3(0, height + 0.03, 0)))
 			flower_colors.append(palette[(index + meadow_index * 2 + int(_hash(index * 29) * 2.0)) % palette.size()])
-	var stems: MultiMeshInstance3D = world._multi_mesh(blade_mesh, Vector3.ZERO, blades, blade_colors, world._vertex_color_material("coastal-pocket-leaves"))
+	var stems: MultiMeshInstance3D = world._multi_mesh(blade_mesh, Vector3.ZERO, blades, blade_colors, world._vertex_color_material("coastal-pocket-leaves", 0.9, true))
 	stems.name = "IslandMeadowStems"
 	stems.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	var blooms: MultiMeshInstance3D = world._multi_mesh(flower_mesh, Vector3.ZERO, flowers, flower_colors, world._vertex_color_material("coastal-pocket-flowers"))
+	var blooms: MultiMeshInstance3D = world._multi_mesh(flower_mesh, Vector3.ZERO, flowers, flower_colors, world._vertex_color_material("coastal-pocket-flowers", 0.9, true))
 	blooms.name = "IslandMeadowFlowers"
 	blooms.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 

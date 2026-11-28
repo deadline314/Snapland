@@ -992,12 +992,18 @@ func _multi_mesh(mesh: Mesh, pos: Vector3, transforms: Array[Transform3D], color
 	mesh_count += 1
 	return instance
 
-func _vertex_color_material(cache_key: String, roughness := 0.9) -> StandardMaterial3D:
-	if material_cache.has(cache_key): return material_cache[cache_key]
+## Colours from SceneryKit.Sculpt and the district batches arrive already linear.
+## `srgb` is for batches fed swatch colours as written (the welcome island's
+## leaves, flowers, stones and trims): the material converts them, so they keep
+## their painted tone instead of washing out pale (ART-81).
+func _vertex_color_material(cache_key: String, roughness := 0.9, srgb := false) -> StandardMaterial3D:
+	var key := cache_key + (":srgb" if srgb else "")
+	if material_cache.has(key): return material_cache[key]
 	var material := StandardMaterial3D.new()
 	material.vertex_color_use_as_albedo=true
+	material.vertex_color_is_srgb=srgb
 	material.roughness=roughness
-	material_cache[cache_key]=material
+	material_cache[key]=material
 	return material
 
 ## Colour for a primitive of this size: faces large enough to read as a blank
@@ -1272,7 +1278,7 @@ func _build_land() -> void:
 		var pebble_basis := Basis().rotated(Vector3.UP, angle).scaled(Vector3(scale_value * 1.35, 0.12, scale_value))
 		pebble_transforms.append(Transform3D(pebble_basis, Vector3(cos(angle) * radius, 0.13, sin(angle) * radius)))
 		pebble_colors.append([Color("#897f6a"), Color("#9b927c"), Color("#70877a")][index % 3])
-	_multi_mesh(pebble_mesh, Vector3.ZERO, pebble_transforms, pebble_colors, _vertex_color_material("fountain-pebble-rim"))
+	_multi_mesh(pebble_mesh, Vector3.ZERO, pebble_transforms, pebble_colors, _vertex_color_material("fountain-pebble-rim", 0.9, true))
 	_build_coastal_planting_pockets()
 	for side in [-1, 1]:
 		var x: float = float(side) * 11.8
@@ -1305,8 +1311,8 @@ func _build_coastal_planting_pockets() -> void:
 				var flower_scale := 0.82 + fposmod(float(pocket_index + blade_index) * 0.17, 0.3)
 				flower_transforms.append(Transform3D(Basis().scaled(Vector3.ONE * flower_scale), center + offset + Vector3(0,0.54,0)))
 				flower_colors.append(Color("#d98768") if (pocket_index + blade_index) % 2 == 0 else Color("#e6ce8f"))
-	_multi_mesh(blade_mesh, Vector3.ZERO, blade_transforms, blade_colors, _vertex_color_material("coastal-pocket-leaves"))
-	_multi_mesh(flower_mesh, Vector3.ZERO, flower_transforms, flower_colors, _vertex_color_material("coastal-pocket-flowers"))
+	_multi_mesh(blade_mesh, Vector3.ZERO, blade_transforms, blade_colors, _vertex_color_material("coastal-pocket-leaves", 0.9, true))
+	_multi_mesh(flower_mesh, Vector3.ZERO, flower_transforms, flower_colors, _vertex_color_material("coastal-pocket-flowers", 0.9, true))
 
 const BEACH_TOP_Y := IslandLayout.BEACH_TOP_Y
 
@@ -1391,10 +1397,10 @@ func _tree(pos: Vector3, seed_value: int, site_checked := false) -> void:
 			glint_colors.append(Color("#a1ad72"))
 	var leaf_mesh := BoxMesh.new()
 	leaf_mesh.size=Vector3.ONE
-	_multi_mesh(leaf_mesh,pos,leaves,leaf_colors,_vertex_color_material("tree-leaves"))
+	_multi_mesh(leaf_mesh,pos,leaves,leaf_colors,_vertex_color_material("tree-leaves", 0.9, true))
 	var glint_mesh := BoxMesh.new()
 	glint_mesh.size=Vector3.ONE
-	_multi_mesh(glint_mesh,pos,glints,glint_colors,_vertex_color_material("tree-glints"))
+	_multi_mesh(glint_mesh,pos,glints,glint_colors,_vertex_color_material("tree-glints", 0.9, true))
 	if seed_value % 3 == 0:
 		_lantern(pos+Vector3(0.4,2,0.7))
 
@@ -1426,9 +1432,9 @@ func _flowerbed(pos: Vector3, seed_value: int) -> void:
 	petal.size=Vector3.ONE
 	var center := BoxMesh.new()
 	center.size=Vector3.ONE
-	_multi_mesh(blade,pos,leaves,leaf_colors,_vertex_color_material("flower-leaves"))
-	_multi_mesh(petal,pos,petals,petal_colors,_vertex_color_material("flower-petals"))
-	_multi_mesh(center,pos,centers,center_colors,_vertex_color_material("flower-centers"))
+	_multi_mesh(blade,pos,leaves,leaf_colors,_vertex_color_material("flower-leaves", 0.9, true))
+	_multi_mesh(petal,pos,petals,petal_colors,_vertex_color_material("flower-petals", 0.9, true))
+	_multi_mesh(center,pos,centers,center_colors,_vertex_color_material("flower-centers", 0.9, true))
 
 func _foliage_sprite(kind: String, ground: Vector3, world_height: float) -> Sprite3D:
 	var sprite := Sprite3D.new()
@@ -1648,7 +1654,7 @@ func _build_dock() -> void:
 	var nail_mesh := CylinderMesh.new()
 	nail_mesh.radial_segments = 8
 	nail_mesh.height = 1.0
-	var dock_nails := _multi_mesh(nail_mesh,Vector3.ZERO,nails,nail_colors,_vertex_color_material("dock-nails"))
+	var dock_nails := _multi_mesh(nail_mesh,Vector3.ZERO,nails,nail_colors,_vertex_color_material("dock-nails", 0.9, true))
 	dock_nails.name = "DockNails"
 	dock_nails.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	for side in [-1,1]:
@@ -1684,7 +1690,7 @@ func _build_plaza() -> void:
 		var a := i*TAU/24.0
 		rim_tiles.append(Transform3D(Basis().rotated(Vector3.UP,-a).scaled(Vector3(0.47,0.07,0.2)),Vector3(cos(a)*2.57,0.79,sin(a)*2.57)))
 		rim_colors.append([Color("#dfc99e"),Color("#e7d7b8")][i%2])
-	_multi_mesh(BoxMesh.new(),Vector3.ZERO,rim_tiles,rim_colors,_vertex_color_material("fountain-rim-tiles")).name = "FountainRimTiles"
+	_multi_mesh(BoxMesh.new(),Vector3.ZERO,rim_tiles,rim_colors,_vertex_color_material("fountain-rim-tiles", 0.9, true)).name = "FountainRimTiles"
 	var fountain_rim := _cylinder(Vector3(0,0.78,0),2.5,0.13,Color("#7ac3c8"))
 	fountain_rim.material_override = _coastal_surface(5,0.8,Color("#d9eee5"))
 	fountain_water = ShaderMaterial.new()
@@ -1780,7 +1786,7 @@ func _shrub_cluster(pos: Vector3, seed_value: float) -> void:
 		var origin := Vector3(cos(a)*0.34,0.78+sin(i*2.1)*0.08,sin(a)*0.34)
 		leaves.append(Transform3D(Basis().rotated(Vector3.UP,a).rotated(Vector3.FORWARD,sin(a)*0.32).scaled(Vector3(0.42,0.18,0.24)),origin))
 		colors.append([Color("#385e49"),Color("#527952"),Color("#789563")][i%3])
-	_multi_mesh(BoxMesh.new(),pos,leaves,colors,_vertex_color_material("shrub-leaves"))
+	_multi_mesh(BoxMesh.new(),pos,leaves,colors,_vertex_color_material("shrub-leaves", 0.9, true))
 	for side in [-1.0,1.0]:
 		var blossom := _box(pos+Vector3(side*0.3,0.26,0.28),Vector3(0.18,0.12,0.15),CORAL if side<0 else GOLD)
 		blossom.rotation.y=side*0.35
@@ -1796,7 +1802,7 @@ func _kiosk(pos: Vector3, title: String, color: Color) -> void:
 	for i in range(5):
 		product_transforms.append(Transform3D(Basis().scaled(Vector3(0.34,0.08,0.65)),Vector3(-1.1+i*0.55,1.45,0.7)))
 		product_colors.append([CORAL,GOLD,TEAL,Color("#7abec3"),CORAL][i])
-	_multi_mesh(BoxMesh.new(),pos,product_transforms,product_colors,_vertex_color_material("kiosk-products"))
+	_multi_mesh(BoxMesh.new(),pos,product_transforms,product_colors,_vertex_color_material("kiosk-products", 0.9, true))
 	_box(pos+Vector3(0,1.7,0),Vector3(4.2,0.3,3),color)
 	var support_transforms: Array[Transform3D]=[]
 	var support_colors: Array[Color]=[]
@@ -1804,7 +1810,7 @@ func _kiosk(pos: Vector3, title: String, color: Color) -> void:
 		for row in range(2):
 			support_transforms.append(Transform3D(Basis().scaled(Vector3(0.16 if row==0 else 0.12,1.4 if row==0 else 1.2,0.16 if row==0 else 0.12)),Vector3(side*(1.65 if row==0 else 1.87),1.85 if row==0 else 1.9,0.0 if row==0 else 0.8)))
 			support_colors.append(TEAL if row==0 else Color("#9a7854"))
-	_multi_mesh(BoxMesh.new(),pos,support_transforms,support_colors,_vertex_color_material("kiosk-supports"))
+	_multi_mesh(BoxMesh.new(),pos,support_transforms,support_colors,_vertex_color_material("kiosk-supports", 0.9, true))
 	# Two printed-paper roof planes make the stand read as a little harbor pavilion.
 	var roof_left := _box(pos+Vector3(-1.08,2.62,0),Vector3(2.35,0.28,3.35),color)
 	var roof_right := _box(pos+Vector3(1.08,2.62,0),Vector3(2.35,0.28,3.35),color)
@@ -1818,7 +1824,7 @@ func _kiosk(pos: Vector3, title: String, color: Color) -> void:
 		var tilt := 0.04 if i%2==0 else -0.04
 		scallop_transforms.append(Transform3D(Basis().rotated(Vector3.FORWARD,tilt).scaled(Vector3(0.45,0.38,0.13)),Vector3(-1.8+i*0.45,2.25,1.72)))
 		scallop_colors.append(CREAM if i%2==0 else Color("#f1d9a9"))
-	_multi_mesh(BoxMesh.new(),pos,scallop_transforms,scallop_colors,_vertex_color_material("kiosk-awning-fringe"))
+	_multi_mesh(BoxMesh.new(),pos,scallop_transforms,scallop_colors,_vertex_color_material("kiosk-awning-fringe", 0.9, true))
 	var plaque := _box(pos+Vector3(0,2.01,1.59),Vector3(2.7,0.54,0.12),Color("#755a3c"))
 	_box(pos+Vector3(0,2.01,1.67),Vector3(2.55,0.4,0.06),color)
 	_local_label(title,pos+Vector3(0,1.94,1.73),19).set_meta(SIGN_TITLE, true)
@@ -1831,13 +1837,13 @@ func _kiosk(pos: Vector3, title: String, color: Color) -> void:
 				var tile_basis := Basis().rotated(Vector3.FORWARD,-side*0.18).scaled(Vector3(0.32,0.035,0.58))
 				tile_transforms.append(Transform3D(tile_basis,Vector3(side*(0.32+col*0.43),2.79-row*0.075,-1.0+row*0.8)))
 				tile_colors.append(Color("#a96d55") if (col+row)%3==0 else color)
-	_multi_mesh(BoxMesh.new(),pos,tile_transforms,tile_colors,_vertex_color_material("kiosk-roof-tiles"))
+	_multi_mesh(BoxMesh.new(),pos,tile_transforms,tile_colors,_vertex_color_material("kiosk-roof-tiles", 0.9, true))
 	var stud_transforms: Array[Transform3D]=[]
 	var stud_colors: Array[Color]=[]
 	for side in [-1.0,1.0]:
 		stud_transforms.append(Transform3D(Basis().scaled(Vector3(0.1,0.1,0.06)),Vector3(side*1.9,1.95,1.73)))
 		stud_colors.append(GOLD)
-	_multi_mesh(BoxMesh.new(),pos,stud_transforms,stud_colors,_vertex_color_material("kiosk-studs"))
+	_multi_mesh(BoxMesh.new(),pos,stud_transforms,stud_colors,_vertex_color_material("kiosk-studs", 0.9, true))
 	occlusion_controller.finish_building(blocker)
 
 func _lamppost(pos: Vector3) -> void:
@@ -2054,7 +2060,7 @@ func _build_wind_sail_terrace(district: Node3D) -> void:
 	for plank_index in range(12):
 		deck_seams.append(Transform3D(Basis().scaled(Vector3(0.035,0.012,9.85)),Vector3(-13.3 + plank_index*0.74,0.178,-20.5)))
 		seam_colors.append(Color("#c3a16c"))
-	var seams := _multi_mesh(BoxMesh.new(),Vector3.ZERO,deck_seams,seam_colors,_vertex_color_material("deck-seams"))
+	var seams := _multi_mesh(BoxMesh.new(),Vector3.ZERO,deck_seams,seam_colors,_vertex_color_material("deck-seams", 0.9, true))
 	seams.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	# Narrow, separated canvas slats leave the kite and balloon silhouettes visible above the counter.
 	for post_x in [-11.7,-6.7]:
