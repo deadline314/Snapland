@@ -387,6 +387,10 @@ func _candy_ui() -> void:
 			var hotel_ids: Array = book._entries().map(func(entry: Dictionary) -> String: return entry.id)
 			_check(hotel_ids.has("photo-hotel-game-1") and _labels(book).contains("折頁走廊"),
 				"Hotel album lists its delivered game under its own slot number")
+		elif book._region == "sky":
+			var sky_ids: Array = book._entries().map(func(entry: Dictionary) -> String: return entry.id)
+			_check(sky_ids.has("photo-sky-game-7") and _labels(book).contains("羽球上升流"),
+				"Sky park album lists its delivered game under its own slot number")
 	main._close()
 	main._show_tasks()
 	_check(_labels(main.overlay).contains("糖果工廠目前沒有當地任務") and main.overlay.find_child("Task_quest-001",true,false)==null, "candy tasks name the current region and preserve welcome quest destination")

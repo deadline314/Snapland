@@ -160,6 +160,8 @@ func _check_sites() -> void:
 			_check(not box.grow(1.4).has_point(Vector2(landmark.x, landmark.z)), "site %d keeps clear of the landmarks" % index)
 		for entry: Dictionary in _world.points:
 			var at: Vector3 = entry.position
+			# A game standing on this site uses the site's own point.
+			if at.is_equal_approx(point): continue
 			_check(not box.grow(1.2).has_point(Vector2(at.x, at.z)) and Vector2(at.x, at.z).distance_to(Vector2(point.x, point.z)) >= 1.6,
 				"site %d stays clear of %s" % [index, entry.id])
 	for area: Dictionary in World.AREAS:

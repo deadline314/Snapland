@@ -65,6 +65,11 @@ const STANDS := {
 		{"id": "game-088", "title": "夢泡搬運", "prompt": "夢泡搬運 · 頂著泡泡慢慢走",
 			"stand": Vector3(14.8, 0.2, 3.6), "point": Vector3(15.75, 0.2, 4.95), "prop": "bubble", "paint": Color("#4f6f9a")},
 	],
+	# Sky park stands use the kept sites in sky_world.STAND_SITES (stand and point copied).
+	"sky": [
+		{"id": "game-103", "title": "羽球上升流", "prompt": "羽球上升流 · 左右跑接羽球",
+			"stand": Vector3(-12.4, 1.85, 14.4), "point": Vector3(-11.45, 1.85, 15.75), "prop": "shuttle", "paint": Color("#3d6fb0")},
+	],
 }
 const FOOTPRINT := Vector3(1.5, 2.0, 1.0)
 const DARK := Color("#343b42")
@@ -106,6 +111,7 @@ static func build(world: Node3D, region: String) -> void:
 			"bee": _bee_prop(sculpt)
 			"book": _book_prop(sculpt)
 			"bubble": _bubble_prop(sculpt)
+			"shuttle": _shuttle_prop(sculpt)
 			"lock": _lock_prop(sculpt)
 			"slide": _slide_prop(sculpt)
 		var stand: MeshInstance3D = world._mesh(sculpt.mesh(), Vector3.ZERO, world._vertex_color_material("arcade-stand"))
@@ -623,3 +629,20 @@ static func _musicbox_prop(sculpt: Kit.Sculpt) -> void:
 	sculpt.tube(Vector3(0.0, 1.05, 0.1), 0.07, 0.07, 0.34, brass, 10, Basis(Vector3.BACK, PI * 0.5))
 	for tooth in 5:
 		sculpt.box(Vector3(-0.12 + tooth * 0.06, 1.0, 0.22), Vector3(0.03, 0.02, 0.14), Color("#c3c8cf"))
+
+
+## A big shuttlecock on the roof, cork down and feathers up, with a racket
+## leaning on it, and a little racket and shuttle lying on the counter.
+static func _shuttle_prop(sculpt: Kit.Sculpt) -> void:
+	var white := Color("#fbfdff")
+	var coral := Color("#ff8a6b")
+	var cork := Color("#e9c98f")
+	sculpt.ball(Vector3(-0.1, 2.62, -0.3), 0.16, cork, Color.TRANSPARENT, 10, 6)
+	sculpt.tube(Vector3(-0.1, 2.76, -0.3), 0.15, 0.15, 0.05, coral, 10)
+	sculpt.tube(Vector3(-0.1, 2.98, -0.3), 0.16, 0.34, 0.42, white, 12)
+	sculpt.box(Vector3(0.34, 2.86, -0.3), Vector3(0.04, 0.5, 0.04), Color("#a87a4f"), Basis(Vector3.BACK, 0.35))
+	sculpt.tube(Vector3(0.44, 3.16, -0.3), 0.16, 0.16, 0.03, coral, 12, Basis(Vector3.RIGHT, PI * 0.5) * Basis(Vector3.FORWARD, 0.35))
+	sculpt.box(Vector3(-0.22, 1.0, 0.12), Vector3(0.36, 0.02, 0.04), Color("#a87a4f"))
+	sculpt.tube(Vector3(0.06, 1.01, 0.12), 0.1, 0.1, 0.02, coral, 10)
+	sculpt.ball(Vector3(0.3, 1.02, 0.16), 0.04, cork, Color.TRANSPARENT, 6, 3)
+	sculpt.tube(Vector3(0.36, 1.03, 0.16), 0.03, 0.07, 0.1, white, 8, Basis(Vector3.BACK, PI * 0.5))

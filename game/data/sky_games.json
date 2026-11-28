@@ -1,0 +1,22 @@
+[
+  {
+    "id": "game-103",
+    "mode": "shuttle_updraft",
+    "zone": "sky",
+    "local_index": 7,
+    "arcade": true,
+    "name": "羽球上升流",
+    "goal": "羽球順著上升氣流飄下來，左右跑用頭上的球拍接住，它會自己被挑高；別讓它落到地板上，連續不落地越久越高分。",
+    "instructions": "← →、A D 或手把十字鍵、左搖桿：左右跑。羽球落到頭上的球拍就會自己被挑高，打在拍子正中間有加分。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助接住羽球拿到金牌",
+    "ordinary": "左右跑接住羽球別讓它落地，拿到銅牌",
+    "attraction_tag": "風箏露台羽球",
+    "island_invitation": "風箏露台的上升氣流會把羽球吹得亂飄！左右跑去接，漏接的話羽球會插在你頭上，漏越多頭上的羽毛帽越高。",
+    "retake_props": [
+      "mascot",
+      "sign",
+      "lantern"
+    ]
+  }
+]
