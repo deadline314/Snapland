@@ -39,6 +39,33 @@ func _run() -> void:
 	_panel.reveal_all()
 	assert(_panel.text_label.visible_characters == -1, "the first advance reveals the full line")
 	assert(_panel.advance_button.text == _panel.ADVANCE_NEXT_TEXT and not _panel.is_revealing(), "a fully shown line offers the next line")
+	var screen: Vector2 = get_viewport().get_visible_rect().size
+	_panel.fit(screen, 1.0)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var note := _panel.find_child("DialoguePlaque", true, false) as Control
+	var bust := _panel.find_child("DialoguePortrait", true, false) as Control
+	assert(note.size.x <= screen.x * 0.7, "the note never spans the whole screen")
+	assert(bust.size.x > 96.0 and bust.size.y >= 150.0, "the bust is larger than the old thumbnail")
+	assert(_panel.side == "left" and bust.get_global_rect().position.x < note.get_global_rect().position.x, "a host's note docks left with the bust beside it")
+	_panel.show_line("主角", "好。", 1)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	assert(_panel.side == "right" and bust.get_global_rect().position.x > note.get_global_rect().position.x, "the walker answers from the right")
+	assert(get_viewport().get_visible_rect().encloses(note.get_global_rect()) and get_viewport().get_visible_rect().encloses(bust.get_global_rect()), "the docked note and bust stay on screen")
+	_panel.show_line("票票", "一句會說很久的話，讓胸像跟著晃一晃。", 1, false, "right")
+	assert(_panel.side == "right", "a caller can dock the note to the speaker's side")
+	var bobbed := false
+	for frame in 12:
+		_panel.text_label.visible_characters = mini(frame + 1, 4)
+		await get_tree().process_frame
+		bobbed = bobbed or _panel._bust.bob != 0.0
+	assert(bobbed, "the bust bobs while its line is spoken")
+	_panel.reduced_motion = true
+	_panel.text_label.visible_characters = 1
+	await get_tree().process_frame
+	assert(_panel._bust.bob == 0.0, "reduced motion keeps the bust still")
+	_panel.reduced_motion = false
 	_panel.show_line("票票", "最後一句。", 2, true)
 	_panel.text_label.visible_characters = _panel.text_label.text.length()
 	await get_tree().process_frame

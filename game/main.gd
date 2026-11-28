@@ -1511,7 +1511,9 @@ func _render_dialogue() -> void:
 	if line.has("text_key"):
 		var text_args: Dictionary = line.get("text_args", {})
 		dialogue_text=Localization.text(str(line.text_key), text_args)
-	dialogue_panel.show_line(speaker,dialogue_text,dialogue_index,dialogue_index==dialogue.size()-1)
+	var actor_id := str(line.get("actor",STAGE_ACTOR_BY_SPEAKER.get(speaker,"")))
+	dialogue_panel.reduced_motion=bool(Progress.settings.get("reduced_motion",false))
+	dialogue_panel.show_line(speaker,dialogue_text,dialogue_index,dialogue_index==dialogue.size()-1,_dialogue_side(actor_id),_dialogue_mood(line))
 	if line.has("speaker_key"):
 		var speaker_args: Dictionary = line.get("speaker_args", {})
 		dialogue_panel.speaker_label.text=Localization.text(str(line.speaker_key), speaker_args)
@@ -1521,6 +1523,30 @@ func _render_dialogue() -> void:
 	reveal_hold=0.0
 	modal_kind="dialogue"
 	_stage_line(line, speaker)
+
+## Which side of the screen the note docks to: the side the speaker stands on
+## relative to the walker; the walker answers from the other side. Empty when unknown.
+var _last_dialogue_side := "left"
+func _dialogue_side(actor_id: String) -> String:
+	if actor_id=="player": return "left" if _last_dialogue_side=="right" else "right"
+	var camera := get_viewport().get_camera_3d()
+	# On the ferry 小角 only exists while he peeks, so a lookup must not summon him.
+	var who: Node3D = null
+	if not actor_id.is_empty() and not (actor_id=="imp" and is_instance_valid(boat_stage)): who=_stage_actor(actor_id)
+	var me := _stage_actor("player")
+	if camera==null or who==null or me==null: return ""
+	var gap := camera.unproject_position(who.global_position).x-camera.unproject_position(me.global_position).x
+	if absf(gap)<4.0: return ""
+	_last_dialogue_side="left" if gap<0.0 else "right"
+	return _last_dialogue_side
+
+## The bust's expression for a line: an explicit "mood", else the staged action or emote.
+const MOOD_BY_EMOTE := {"!":"interact","!?":"interact","?":"interact","sweat":"interact","♪":"greet","♥":"greet"}
+static func _dialogue_mood(line: Dictionary) -> String:
+	if line.has("mood"): return str(line.mood)
+	var cue: Dictionary = line.get("cue",{}) if line.get("cue",{}) is Dictionary else {}
+	if cue.has("action") and str(cue.get("action_on","")).is_empty(): return str(cue.action)
+	return str(MOOD_BY_EMOTE.get(str(cue.get("emote","")) if str(cue.get("emote_on","")).is_empty() else "","idle"))
 
 ## Plays a line's staging cue; a hold or a pantomime beat keeps the subtitle back.
 func _stage_line(line: Dictionary, speaker: String) -> void:
@@ -1644,20 +1670,8 @@ func _dialogue_panel_resized() -> void:
 	if not is_instance_valid(dialogue_panel): return
 	var scale_factor := Paper.physical_scale(dialogue_panel)
 	Paper.adapt_menu(dialogue_panel, scale_factor)
-	if is_instance_valid(dialogue_label): dialogue_label.custom_minimum_size.y=82.0/scale_factor
-	var plaque := dialogue_panel.find_child("DialoguePlaque", true, false) as Control
-	var height := 210.0/scale_factor
-	if plaque != null:
-		plaque.custom_minimum_size=Vector2(get_viewport().get_visible_rect().size.x-48.0/scale_factor,0)
-		height=maxf(height,plaque.get_combined_minimum_size().y)
-		plaque.custom_minimum_size.y=height
-	var center := dialogue_panel.get_child(0) as CenterContainer
-	center.anchor_top=1.0
-	center.anchor_bottom=1.0
-	center.offset_left=24.0/scale_factor
-	center.offset_right=-24.0/scale_factor
-	center.offset_top=-height-20.0/scale_factor
-	center.offset_bottom=-20.0/scale_factor
+	if is_instance_valid(dialogue_label): dialogue_label.custom_minimum_size.y=72.0/scale_factor
+	dialogue_panel.fit(get_viewport().get_visible_rect().size,scale_factor)
 
 func _interact(id: String, title: String) -> void:
 	if quitting or changing_region or session!=null or modal_kind!="": return
