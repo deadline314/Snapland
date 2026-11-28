@@ -121,6 +121,18 @@ const SITES := {
 		"ground": Color("#b9d3e6"), "ground_strength": 0.5,
 		"shore": true,
 	},
+	# The lagoon between the spit and the candy peninsula: a film lot on its
+	# sandbars, reached by a pier from the end of the spit's boardwalk.
+	"cinema": {
+		"script": "res://game/world/cinema_world.gd",
+		"at": Vector3(81, 0, -116.5),
+		"claim": Rect2(-18, -14, 36, 28),
+		"approach": Rect2(0.6, -22.0, 4.0, 10.2), "approach_y": 0.19,
+		"arrival": Vector3(2.6, 0.2, -11.0),
+		"gate": Vector3(2.6, -21.6, 180),
+		"cutouts": [],
+		"ground": Color("#d6b98a"), "ground_strength": 0.45,
+	},
 }
 
 static var _tint: ImageTexture

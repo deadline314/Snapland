@@ -181,6 +181,25 @@ const GAMES := {
 			"layout": [Vector2(0, -1.3), Vector2(-2.7, 0.9), Vector2(2.7, 0.9), Vector2(0, 2.6), Vector2(-2.6, -2.0), Vector2(2.6, -2.0)],
 		},
 	],
+	# The cinema's two outdoor sets stand on the lagoon's banks: west of the lot
+	# by the lookout, and south of it by the coastal loop.
+	"cinema": [
+		{
+			"id": "cinema-dolly", "script": "res://game/world/field/games/dolly_track.gd",
+			"type": "推", "title": "推軌跟拍", "prompt": "玩推軌跟拍", "hint": "從後面推攝影車，讓主角留在兩面黃旗之間！", "glyph": "拍", "color": Color("#7fc4f2"),
+			"at": Vector3(-22.0, 0, 8.2), "arena": Vector3(-26.0, 0, 6.0), "radius": 5.4, "seconds": 30.0,
+			"medals": [12, 30, 50],
+			"lines": ["主角跑出畫面，只拍到一片空地", "拍到幾段，剪一剪還能用", "鏡頭跟得穩穩的，導演點頭了", "一鏡到底！影帝想跟你合作"],
+			"track_radius": 3.2, "layout": [Vector2(2.96, 1.22), Vector2(1.22, 2.96), Vector2(-1.22, 2.96), Vector2(-2.96, 1.22), Vector2(-2.96, -1.22), Vector2(-1.22, -2.96), Vector2(1.22, -2.96), Vector2(2.96, -1.22)],
+		},
+		{
+			"id": "cinema-dodge", "script": "res://game/world/field/games/prop_dodge.gd",
+			"type": "閃避", "title": "躲道具", "prompt": "玩躲道具", "hint": "看到影子就閃開，別被掉下來的道具砸到！", "glyph": "躲", "color": Color("#e8b54f"),
+			"at": Vector3(5.0, 0, 21.6), "arena": Vector3(8.0, 0, 24.5), "radius": 3.2, "seconds": 30.0,
+			"medals": [8, 15, 22],
+			"lines": ["被泡棉石頭砸成了大頭照", "躲過幾樣，導演說再來一條", "身手俐落，特技組來挖角了", "連一根羽毛都沒碰到你"],
+		},
+	],
 }
 
 ## Toy row: id, kind (see field_toys.gd, or a script toys/<kind>.gd), prompt,
@@ -219,6 +238,10 @@ const TOYS := {
 	"garden": [
 		{"id": "garden-dandelion", "kind": "dandelion", "prompt": "吹蒲公英", "at": Vector3(19.0, 0, 29.0)},
 		{"id": "garden-sunflower", "kind": "sunflower", "prompt": "和向日葵打招呼", "at": Vector3(-11.0, 0, 27.0)},
+	],
+	"cinema": [
+		{"id": "cinema-popcorn", "kind": "popcorn_cart", "prompt": "爆一鍋爆米花", "at": Vector3(0.4, 0, -6.6)},
+		{"id": "cinema-clapper", "kind": "clapperboard", "prompt": "打一下場記板", "at": Vector3(12.6, 0, 9.4)},
 	],
 }
 

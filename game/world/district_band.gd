@@ -89,6 +89,14 @@ const BANDS := {
 		"colors": [Color("#ff8a6b"), Color("#7cc4ec"), Color("#ffd35c"), Color("#8fe0c4"), Color("#fbfdff")],
 		"tiles": [Color("#c9bfa8"), Color("#b8ae98"), Color("#d4cbb5"), Color("#a9bccb")],
 	},
+	"cinema": {
+		# Film cans roll out of the lot onto the lagoon's banks; little
+		# clapperboards on stakes and floor spotlights point the way to the pier.
+		"density": 0.5, "props": [["film_can", 3.0, 0.0], ["clapper_post", 2.5, 0.0], ["ticket_sign", 1.2, 0.25], ["spot_lamp", 1.6, 0.2]],
+		"colors": [Color("#a8243a"), Color("#e8b54f"), Color("#2a2238"), Color("#fff1d6"), Color("#7fc4f2")],
+		"tiles": [Color("#d8c39f"), Color("#cdb48a"), Color("#e2cfa8"), Color("#a8243a")],
+		"beach": true,
+	},
 	"harbor": {
 		# The bay keeps the harbour off the island: only the headland by its pier is band.
 		"density": 8.0, "props": [["crates", 3.0, 0.0], ["rope_coil", 3.0, 0.0], ["net_poles", 1.5, 0.15], ["dinghy", 1.2, 0.25]],
@@ -107,9 +115,10 @@ const RADIUS := {
 	"crates": 0.85, "rope_coil": 0.45, "net_poles": 1.2, "dinghy": 1.4,
 	"luggage": 0.6, "umbrella_stand": 0.35, "paper_crane": 0.4, "number_post": 0.4,
 	"cloud_puff": 0.7, "windsock": 0.4, "kite_stake": 0.5,
+	"film_can": 0.45, "clapper_post": 0.4, "spot_lamp": 0.45,
 }
 ## Kinds that face the camera (signs, wheels, lattices) turn only a little.
-const FACING := ["pinwheel", "windup_key", "ticket_sign", "wagon", "vending_cart", "trellis", "net_poles", "pennant_stake", "dinghy", "number_post", "paper_crane", "kite_stake"]
+const FACING := ["pinwheel", "windup_key", "ticket_sign", "wagon", "vending_cart", "trellis", "net_poles", "pennant_stake", "dinghy", "number_post", "paper_crane", "kite_stake", "clapper_post"]
 ## Kinds that lie flat: no contact shadow, no grass at the foot.
 const FLAT := ["puddle", "slate_patch"]
 ## Kinds big enough to walk into: they get an invisible obstacle.
@@ -1002,6 +1011,42 @@ func _kite_stake(h: PackedFloat32Array, pal: Array) -> Array[Vector3]:
 	for bow in 3:
 		var at := bottom + Vector3(0.06 * sin(float(bow) * 1.6), -0.18 * float(bow + 1), 0)
 		props.sheet(at, at + Vector3(0.08, 0.04, 0), at + Vector3(0.08, -0.04, 0), pal[(bow + 1) % 4])
+	return []
+
+## Film cans spilled from the lot: a stack lying flat and one rolled onto its edge.
+func _film_can(h: PackedFloat32Array, pal: Array) -> Array[Vector3]:
+	var tin := Color("#9aa1ab")
+	for can in 1 + int(h[0] * 2.5):
+		props.tube(Vector3(0.04 * float(can), 0.05 + float(can) * 0.1, 0.03 * float(can)), 0.3, 0.3, 0.09, tin.darkened(0.06 * float(can)), 12)
+		props.tube(Vector3(0.04 * float(can), 0.1 + float(can) * 0.1, 0.03 * float(can)), 0.08, 0.08, 0.02, pal[1], 8)
+	var edge := Vector3(0.5, 0.26, 0.1 + h[1] * 0.2)
+	props.tube(edge, 0.25, 0.25, 0.08, tin, 12, Basis(Vector3.RIGHT, PI * 0.5) * Basis(Vector3.FORWARD, h[2]))
+	# A curl of film spilling out of the open can.
+	for frame in 4:
+		props.box(edge + Vector3(-0.1 - float(frame) * 0.14, -0.22 + 0.04 * float(frame % 2), 0.12), Vector3(0.13, 0.015, 0.1), pal[2], Basis(Vector3.UP, 0.3 * float(frame)))
+	return []
+
+## A little clapperboard on a stake: slate, striped stick and a chalked take.
+func _clapper_post(h: PackedFloat32Array, pal: Array) -> Array[Vector3]:
+	props.tube(Vector3(0, 0.45, 0), 0.03, 0.025, 0.9, WOOD, 5)
+	props.box(Vector3(0, 0.95, 0.03), Vector3(0.5, 0.36, 0.04), pal[2])
+	for line in 2:
+		props.box(Vector3(0, 0.98 - float(line) * 0.12, 0.055), Vector3(0.42, 0.015, 0.01), pal[3])
+	var open := 0.15 + h[0] * 0.35
+	for stripe in 4:
+		var tone: Color = pal[3] if stripe % 2 == 0 else pal[2]
+		props.box(Vector3(-0.19 + float(stripe) * 0.125, 1.16 + open * (float(stripe) * 0.12), 0.03), Vector3(0.125, 0.07, 0.045), tone, Basis(Vector3.BACK, open))
+	return []
+
+## A floor spotlight on a short tripod, its lens glowing after dark.
+func _spot_lamp(h: PackedFloat32Array, pal: Array) -> Array[Vector3]:
+	for leg in 3:
+		var angle := TAU * float(leg) / 3.0
+		_rod(props, Vector3(cos(angle) * 0.3, 0, sin(angle) * 0.3), Vector3(0, 0.55, 0), 0.02, DARK, 4)
+	var aim := Basis(Vector3.RIGHT, PI * 0.5 - 0.5 - h[0] * 0.3)
+	props.tube(Vector3(0, 0.68, 0), 0.17, 0.2, 0.34, Color("#2e2a33"), 10, aim)
+	props.tube(Vector3(0, 0.68, 0) + aim * Vector3(0, 0.18, 0), 0.15, 0.15, 0.02, pal[1], 10, aim)
+	glow.ball(Vector3(0, 0.68, 0) + aim * Vector3(0, 0.19, 0), 0.12, WARM, Color.TRANSPARENT, 8, 3, 0.4)
 	return []
 
 ## Smooth 1D value noise in 0..1.

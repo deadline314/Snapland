@@ -14,6 +14,7 @@ const WORLDS := {
 	"garden": "res://game/world/garden_world.gd",
 	"hotel": "res://game/world/hotel_world.gd",
 	"sky": "res://game/world/sky_world.gd",
+	"cinema": "res://game/world/cinema_world.gd",
 }
 const PHASES := ["dawn", "noon", "dusk", "night"]
 const STEP := 1.0 / 60.0

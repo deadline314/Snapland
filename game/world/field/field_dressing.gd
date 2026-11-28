@@ -80,6 +80,14 @@ const THEMES := {
 		"rim": {"garden": 5, "tone": Color("#8c8572"), "moss": 0.4},
 		"props": ["pot", "can", "pot", "stones"],
 	},
+	"cinema": {
+		"board": {"paint": Color("#2a2238")},
+		"roof": {"tile": [Color("#a8243a"), Color("#f2d6a0"), Color("#6e1626")], "pattern": 1, "size": 0.25},
+		"ink": Color("#ffe39a"), "cap": Color("#e8b54f"), "bulb": Color("#ffe3a0"),
+		"floor": {"coastal": 1, "size": 0.9, "tint": Color("#6a6070")},
+		"rim": {"coastal": 7, "size": 0.5, "tint": Color("#ffe0a0")},
+		"props": ["reels", "spot", "chair", "sandbags"],
+	},
 }
 
 ## Prop parts: [shape, surface, position, scale, colour]. "paint" takes the
@@ -172,6 +180,31 @@ const PROPS := {
 		["cyl", "paint", Vector3(0, 0.3, 0), Vector3(0.44, 0.6, 0.44), Color("#6fa3d8")],
 		["box", "paint", Vector3(0, 0.75, 0), Vector3(0.5, 0.3, 0.5), Color("#f2c75a")],
 		["cone", "paint", Vector3(0, 1.1, 0), Vector3(0.56, 0.4, 0.56), Color("#e8674f")],
+	],
+	"reels": [
+		["cyl", "paint", Vector3(0, 0.05, 0), Vector3(0.66, 0.1, 0.66), Color("#9aa1ab")],
+		["cyl", "paint", Vector3(0.04, 0.15, 0.02), Vector3(0.62, 0.1, 0.62), Color("#b8bec6")],
+		["cyl", "paint", Vector3(0.02, 0.25, -0.02), Vector3(0.58, 0.1, 0.58), Color("#8d939d")],
+		["disc", "paint", Vector3(0.62, 0.28, 0.1), Vector3(0.56, 0.08, 0.56), Color("#9aa1ab")],
+		["cyl", "paint", Vector3(0.02, 0.31, -0.02), Vector3(0.16, 0.03, 0.16), Color("#e8b54f")],
+	],
+	"spot": [
+		["cyl", "paint", Vector3(0, 0.04, 0), Vector3(0.5, 0.08, 0.5), Color("#3a3640")],
+		["cyl", "paint", Vector3(0, 0.55, 0), Vector3(0.06, 1.0, 0.06), Color("#6d7380")],
+		["cyl", "paint", Vector3(0, 1.12, 0.04), Vector3(0.36, 0.4, 0.36), Color("#2e2a33")],
+		["ball", "glow", Vector3(0, 1.12, 0.22), Vector3(0.26, 0.26, 0.1), Color("#fff2c8")],
+	],
+	"chair": [
+		["box", {"wood": Color("#6e4c32")}, Vector3(-0.22, 0.3, 0), Vector3(0.05, 0.6, 0.4), Color.WHITE],
+		["box", {"wood": Color("#6e4c32")}, Vector3(0.22, 0.3, 0), Vector3(0.05, 0.6, 0.4), Color.WHITE],
+		["box", "paint", Vector3(0, 0.46, 0), Vector3(0.46, 0.04, 0.36), Color("#2a2238")],
+		["box", "paint", Vector3(0, 0.8, -0.17), Vector3(0.48, 0.26, 0.03), Color("#2a2238")],
+		["box", "paint", Vector3(0, 0.8, -0.15), Vector3(0.34, 0.06, 0.01), Color("#fff1d6")],
+	],
+	"sandbags": [
+		["ball", "paint", Vector3(0, 0.12, 0), Vector3(0.5, 0.26, 0.36), Color("#c9a873")],
+		["ball", "paint", Vector3(0.44, 0.12, 0.06), Vector3(0.48, 0.26, 0.34), Color("#b8955e")],
+		["ball", "paint", Vector3(0.22, 0.32, 0.02), Vector3(0.46, 0.24, 0.34), Color("#c9a873")],
 	],
 	"pot": [
 		["pot", "paint", Vector3(0, 0.24, 0), Vector3(0.6, 0.48, 0.6), Color("#b8674a")],

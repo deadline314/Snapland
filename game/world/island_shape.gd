@@ -10,7 +10,7 @@ const DistrictSites = preload("res://game/world/district_sites.gd")
 ## the bake is cached for the life of the process.
 
 ## Clockwise from the dock bay: the sky park peninsula off the east breakwater, east headland, the greenhouse peninsula, east
-## bay, the candy peninsula, lagoon and its sand spit, the circus and toy town
+## bay, the candy peninsula, the lagoon (the cinema lot stands on its sandbars) and the sand spit, the circus and toy town
 ## headland, the star-court cove, the night-market valley, west inlet, west cape, west bay, south-west cape, the harbor spit that
 ## hooks round the south-west bay, the hotel peninsula off the west breakwater, west headland. District sites (see
 ## DistrictSites) stand on the peninsulas and in the bay.
@@ -22,7 +22,7 @@ const COAST_CONTROL := [
 	Vector2(84,6), Vector2(92,16), Vector2(100,27), Vector2(112,33.5), Vector2(125,31.5), Vector2(138,33), Vector2(151,24), Vector2(158,10), Vector2(164,-4), Vector2(160,-19), Vector2(153,-30), Vector2(141,-35.5), Vector2(128,-32), Vector2(115,-35.5), Vector2(104,-32.5), Vector2(95,-34), Vector2(83.5,-33),
 	Vector2(74.5,-36), Vector2(67,-43.5), Vector2(65,-54.5), Vector2(70.5,-64.5),
 	Vector2(82,-67), Vector2(92,-65.5), Vector2(101,-58), Vector2(112,-55.5), Vector2(123,-48.5), Vector2(136,-52), Vector2(150,-47.5), Vector2(166,-52), Vector2(180,-61), Vector2(187,-74), Vector2(184.5,-88), Vector2(188,-101), Vector2(183,-114), Vector2(173,-123.5), Vector2(159,-125.5), Vector2(147,-131), Vector2(134,-126.5), Vector2(123,-128.5), Vector2(113,-124.5), Vector2(106,-116), Vector2(99,-105.5), Vector2(85.5,-97),
-	Vector2(76.5,-103), Vector2(67,-108.5), Vector2(63,-119.5), Vector2(70.5,-129), Vector2(82,-129), Vector2(87.5,-121.5), Vector2(91,-118), Vector2(93.5,-118.6), Vector2(96,-125), Vector2(91,-136.5),
+	Vector2(76,-101.5), Vector2(66.5,-106.5), Vector2(62.5,-119), Vector2(69,-130), Vector2(81,-131.2), Vector2(91,-131.6), Vector2(95.5,-132.4), Vector2(98.3,-134.8), Vector2(99,-139.5),
 	Vector2(98,-146), Vector2(108,-154), Vector2(113.5,-168), Vector2(115,-186), Vector2(113.5,-205), Vector2(104.5,-218), Vector2(88,-221.5), Vector2(72,-222), Vector2(58,-219), Vector2(49,-222.5),
 	Vector2(34,-222.5), Vector2(18,-226), Vector2(2,-225), Vector2(-14,-222), Vector2(-27,-214), Vector2(-32,-200), Vector2(-33,-184), Vector2(-31.5,-168), Vector2(-28.5,-155), Vector2(-25,-146),
 	Vector2(-30,-141.5), Vector2(-40,-144), Vector2(-46,-153), Vector2(-47.5,-167), Vector2(-48,-183), Vector2(-54,-195), Vector2(-68,-200.5), Vector2(-86,-201.5), Vector2(-102,-199), Vector2(-114,-191),

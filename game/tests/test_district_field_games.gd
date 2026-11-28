@@ -12,9 +12,10 @@ const STEP := 1.0 / 60.0
 const RUN_SPEED := 1.5
 const STROLL_SPEED := 0.8
 const WELCOME_TYPES := ["踩踏", "追逐", "時機", "收集競速", "拍照"]
-## The districts MAIN-61 gave instant games and toys. A district joins this list
-## with its own rows; the hotel (MAIN-63) and the sky park (MAIN-65) have none yet.
-const FIELD_DISTRICTS := ["harbor", "candy", "nightmarket", "circus", "toy", "garden"]
+## The districts MAIN-61 gave instant games and toys, and the cinema (MAIN-68). A
+## district joins this list with its own rows; the hotel (MAIN-63) and the sky
+## park (MAIN-65) have none yet.
+const FIELD_DISTRICTS := ["harbor", "candy", "nightmarket", "circus", "toy", "garden", "cinema"]
 
 var failures: Array[String] = []
 var main: Node
@@ -72,6 +73,7 @@ func _run() -> void:
 	_test_circus()
 	_test_toy()
 	_test_garden()
+	_test_cinema()
 	_test_toys()
 	_test_stable_nodes()
 	_test_free()
@@ -80,7 +82,7 @@ func _run() -> void:
 	main.queue_free()
 	await frames(5)
 	if failures.is_empty():
-		print("PASS: district instant games: table, lifecycle, twelve games, twelve toys and stable nodes")
+		print("PASS: district instant games: table, lifecycle, fourteen games, fourteen toys and stable nodes")
 	quit(0 if failures.is_empty() else 1)
 
 
@@ -197,7 +199,7 @@ func _test_table() -> void:
 			check(not WELCOME_TYPES.has(kind) and not types.has(kind), "%s plays a kind of its own (%s)" % [entry.id, kind])
 			types[kind] = true
 			check(String(entry.prompt).length() <= 8 and not String(entry.hint).contains("\n"), "%s has a one-line prompt and hint" % entry.id)
-	check(types.size() >= 12, "twelve district games cover twelve kinds of play (%d)" % types.size())
+	check(types.size() >= 14, "fourteen district games cover fourteen kinds of play (%d)" % types.size())
 	# The district checker notices each kind of misplaced row.
 	var walk_all := func(_spot: Vector3) -> bool: return true
 	var none: Array[Vector3] = []
@@ -563,6 +565,62 @@ func _herder(speed: float, train: int) -> void:
 			if flock.state[index] == flock.WANDER and (best < 0 or flock.duck_at(index).distance_to(feet()) < flock.duck_at(best).distance_to(feet())):
 				best = index
 	walk(flock.duck_at(best) if best >= 0 else flock.pond(), speed)
+
+
+func _test_cinema() -> void:
+	medal_runs("cinema-dolly", _pusher.bind(RUN_SPEED), _pusher.bind(STROLL_SPEED), stand_still)
+	var dolly := game("cinema-dolly")
+	var rammed := play_round("cinema-dolly", _rammer)
+	check(dolly.bumps > 0 and int(rammed.medal) < 3, "cinema-dolly: ramming the star spoils the take (scored %d, %d bumps)" % [int(rammed.score), dolly.bumps])
+	medal_runs("cinema-dodge", _dodger.bind(RUN_SPEED), _dodger.bind(STROLL_SPEED), stand_still)
+	var drop := game("cinema-dodge")
+	play_round("cinema-dodge", stand_still)
+	check(drop.hits > 0 and drop.dodged == 0, "cinema-dodge: standing still gets bonked by every prop (%d hits)" % drop.hits)
+
+
+## Gets in behind the dolly, then pushes it so the star stays mid-shot.
+func _pusher(speed: float) -> void:
+	var dolly := game("cinema-dolly")
+	var here := feet()
+	var behind := fposmod(dolly.dolly_s - dolly.track_s(here), dolly.circumference())
+	var mid_shot: float = dolly.actor_s - (dolly.FRAME_NEAR + dolly.FRAME_FAR) * 0.5 - dolly.PUSH_GAP
+	var goal: Vector3 = dolly.track_point(mid_shot) if dolly.rail_offset(here) < 0.9 and behind < 1.6 else dolly.track_point(dolly.dolly_s - 1.2)
+	walk(goal, speed)
+
+
+## Shoves the dolly right up to the star.
+func _rammer() -> void:
+	var dolly := game("cinema-dolly")
+	var behind := fposmod(dolly.dolly_s - dolly.track_s(feet()), dolly.circumference())
+	walk(dolly.track_point(dolly.actor_s) if dolly.rail_offset(feet()) < 0.9 and behind < 1.6 else dolly.track_point(dolly.dolly_s - 1.2), RUN_SPEED)
+
+
+## Steps to whichever nearby spot is farthest from every falling prop's shadow.
+func _dodger(speed: float) -> void:
+	var drop := game("cinema-dodge")
+	var middle := arena("cinema-dodge")
+	var threats: Array[Vector3] = []
+	for index in range(drop.PROPS):
+		var spot: Vector3 = drop.landing(index)
+		if spot.is_finite():
+			threats.append(spot)
+	if threats.is_empty():
+		return
+	var best := feet()
+	var best_gap := -1.0
+	for turn in range(12):
+		for reach: float in [1.0, 1.4]:
+			var angle := TAU * float(turn) / 12.0
+			var goal := feet() + Vector3(cos(angle), 0, sin(angle)) * reach
+			if drop.flat_distance(goal, middle) > 2.3:
+				continue
+			var gap := INF
+			for spot in threats:
+				gap = minf(gap, drop.flat_distance(goal, spot))
+			if gap > best_gap:
+				best_gap = gap
+				best = goal
+	walk(best, speed)
 
 
 # --- toys ---

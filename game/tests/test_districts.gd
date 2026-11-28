@@ -2,6 +2,7 @@ extends SceneTree
 ## The themed districts embedded in the one island world: building, gates,
 ## walking reach, mechanics, light blending, streaming and the saved position.
 
+const FieldRegistry = preload("res://game/world/field/field_registry.gd")
 const DistrictSites = preload("res://game/world/district_sites.gd")
 const IslandShape = preload("res://game/world/island_shape.gd")
 const RegionRoutes = preload("res://game/core/region_routes.gd")
@@ -124,8 +125,16 @@ func _check_builds(world: Node3D, host: Node) -> void:
 		_check(district.find_children("*", "Camera3D", true, false).is_empty() and district.find_children("*", "DirectionalLight3D", true, false).is_empty()
 			and district.find_children("*", "WorldEnvironment", true, false).is_empty(), "%s builds no camera, sun or sky of its own" % region)
 		_check_budget(region, district)
-		var own_points: Array = world.points.filter(func(point: Dictionary) -> bool: return point.get("region", "") == region)
+		# Instant games and toys inside a claim carry the district's name on the
+		# island but stay off the district's own list (see FieldGames.add_district).
+		var field_ids: Array = FieldRegistry.games(region).map(func(row: Dictionary) -> String: return FieldRegistry.point_id(row)) 			+ FieldRegistry.toys(region).map(func(row: Dictionary) -> String: return FieldRegistry.point_id(row, true))
+		var own_points: Array = world.points.filter(func(point: Dictionary) -> bool:
+			return point.get("region", "") == region and not field_ids.has(String(point.id)))
 		_check(own_points.size() == district.points.size() and not own_points.is_empty(), "%s lists every interaction point in the island" % region)
+		for row: Dictionary in FieldRegistry.games(region) + FieldRegistry.toys(region):
+			var inside := DistrictSites.claims(Vector2(DistrictSites.to_world(region, row.at).x, DistrictSites.to_world(region, row.at).z))
+			var island_point: Dictionary = world._point_by_id(FieldRegistry.point_id(row, not row.has("script")))
+			_check(not island_point.is_empty() and (String(island_point.get("region", "")) == region) == inside, "%s field row %s carries the district's name only inside its claim" % [region, row.id])
 		_check(district.points.any(func(point: Dictionary) -> bool: return point.id == "region:welcome"), "%s keeps its free return to the plaza" % region)
 		for point: Dictionary in own_points:
 			var local: Dictionary = district._point_by_id(point.id)
@@ -274,6 +283,8 @@ func _check_mechanics(world: Node3D, host: Node) -> void:
 	_check(hotel.ring_bell().contains("歡迎") and hotel._life._ring > 0.0, "the hotel desk bell rings embedded")
 	var sky: Node3D = host.built("sky")
 	_check(sky.push_wheel().contains("摩天輪") and sky._life._push > 0.0, "the sky park's wheel answers a push embedded")
+	var cinema: Node3D = host.built("cinema")
+	_check(cinema.walk_carpet().contains("紅毯") and cinema._life._carpet > 0.0, "the cinema's red carpet answers a walk embedded")
 	world.place_player(DistrictSites.arrival("candy"))
 	candy.reset_to_entry()
 	_check(world.player.global_position.distance_to(candy.to_global(candy.ENTRY)) < 0.05, "candy reset returns the island walker to the factory entry")

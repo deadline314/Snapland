@@ -5,8 +5,7 @@ const Routes = preload("res://game/core/region_routes.gd")
 const GATE_STATUSES := {
 	"6 張 · 不消耗": ["harbor", "candy", "nightmarket"],
 	"30 張 · 不消耗": ["circus", "toy", "garden"],
-	"60 張 · 不消耗": ["hotel", "sky"],
-	"60 張 · 準備中": ["cinema"],
+	"60 張 · 不消耗": ["hotel", "sky", "cinema"],
 }
 var main: Node
 var failures: Array[String] = []
@@ -161,7 +160,7 @@ func _run() -> void:
 		await _spawn()
 		_check(main.world_region=="welcome" and main.boat_stage==null, "legacy/invalid saved region starts welcome")
 		await _dispose()
-	for region in ["circus", "toy", "garden", "hotel", "sky"]:
+	for region in ["circus", "toy", "garden", "hotel", "sky", "cinema"]:
 		await _same_batch_trip(region)
 	await _failure_process()
 	await _finish()
@@ -361,7 +360,7 @@ func _candy_ui() -> void:
 	var selector: OptionButton=main.overlay.find_child("AlbumRegionSelector",true,false)
 	var book: Node=selector.get_parent().get_parent()
 	_check(selector.item_count==Routes.ORDER.size() and selector.selected==2 and book._region=="candy" and book._entries().size()==Catalog.definitions("candy").size() and _labels(book).contains("拉糖橋") and _labels(book).contains("餅乾翻模") and _labels(book).contains("糖漿分洪") and _labels(book).contains("果凍彈床") and _labels(book).contains("巧克力蝕刻"), "candy album shows all delivered local games")
-	var ordinary_slots := [18,12,Catalog.definitions("candy").size(),Catalog.definitions("nightmarket").size()+1,Catalog.definitions("circus").size()+2,Catalog.definitions("toy").size()+2,Catalog.definitions("garden").size()+2,Catalog.definitions("hotel").size(),Catalog.definitions("sky").size()]
+	var ordinary_slots := [18,12,Catalog.definitions("candy").size(),Catalog.definitions("nightmarket").size()+1,Catalog.definitions("circus").size()+2,Catalog.definitions("toy").size()+2,Catalog.definitions("garden").size()+2,Catalog.definitions("hotel").size(),Catalog.definitions("sky").size(),Catalog.definitions("cinema").size()]
 	for index in Routes.ORDER.size():
 		selector.select(index)
 		selector.item_selected.emit(index)

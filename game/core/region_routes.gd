@@ -1,6 +1,6 @@
 extends RefCounted
 
-const ORDER := ["welcome", "harbor", "candy", "nightmarket", "circus", "toy", "garden", "hotel", "sky"]
+const ORDER := ["welcome", "harbor", "candy", "nightmarket", "circus", "toy", "garden", "hotel", "sky", "cinema"]
 const ROUTES := {
 	"welcome": {"title": "迎賓大道", "map": "今天想去哪一邊？", "threshold": 0, "travel_button": ""},
 	"harbor": {"title": "潮汐碼頭", "map": "潮汐碼頭 · 燈塔與環岸步道", "threshold": 6, "travel_button": "TravelHarborButton"},
@@ -11,6 +11,7 @@ const ROUTES := {
 	"garden": {"title": "苔光溫室", "map": "苔光溫室 · 木棧道與葉臺", "threshold": 30, "travel_button": "TravelGardenButton"},
 	"hotel": {"title": "幽幽旅館", "map": "幽幽旅館 · 櫃檯、走廊與夢境客房", "threshold": 60, "travel_button": "TravelHotelButton"},
 	"sky": {"title": "雲端遊樂場", "map": "雲端遊樂場 · 摩天輪、浮島步道、風箏台與攝影點", "threshold": 60, "travel_button": "TravelSkyButton"},
+	"cinema": {"title": "星光影城", "map": "星光影城 · 紅毯、放映館、布景街與攝影台", "threshold": 60, "travel_button": "TravelCinemaButton"},
 }
 
 static func supports(region: String) -> bool:

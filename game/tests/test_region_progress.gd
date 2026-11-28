@@ -2,7 +2,7 @@ extends SceneTree
 
 const ProgressScript = preload("res://game/core/progress.gd")
 const SaveGuard = preload("res://game/core/test_save_guard.gd")
-const INVALID_REGIONS := [null, true, 12, 1.5, [], {}, "", "moon", "cinema", "WELCOME", " harbor "]
+const INVALID_REGIONS := [null, true, 12, 1.5, [], {}, "", "moon", "theater", "WELCOME", " harbor "]
 const ROLLBACK_DESTINATIONS := {"welcome": "circus", "harbor": "welcome", "candy": "harbor", "nightmarket": "candy", "circus": "toy", "toy": "garden", "garden": "welcome"}
 var failures: Array[String] = []
 var save_path := ""
@@ -80,7 +80,7 @@ func _test_round_trips(progress: Node) -> void:
 		var backup := FileAccess.get_file_as_string(save_path + ".bak")
 		_check(DirAccess.make_dir_absolute(save_path + ".tmp") == OK, "block writes during no-op checks")
 		_check(progress.call("set_current_region", region) == true, "same destination succeeds without writing")
-		for rejected in ["", "moon", "cinema", "WELCOME", " harbor "]:
+		for rejected in ["", "moon", "theater", "WELCOME", " harbor "]:
 			_check(progress.call("set_current_region", rejected) == false, "unsupported input rejected: " + rejected)
 		_check(progress.get("current_region") == region and changes == 0, "rejected and no-op calls preserve memory and signals")
 		_check(FileAccess.get_file_as_string(save_path) == saved and FileAccess.get_file_as_string(save_path + ".bak") == backup, "rejected and no-op calls preserve both files")
