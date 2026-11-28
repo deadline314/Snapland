@@ -79,15 +79,210 @@ func _draw() -> void:
 
 # --- Backdrop ---------------------------------------------------------------
 
+## Back to front: tiled wall with tall windows onto a sky where sweets fall up,
+## a slow far layer of drifting candy, glass syrup tubes running the wrong way,
+## gravity bubbles and a near layer of candy, the workers on their catwalks,
+## the upside-down conveyor on the ceiling and the floor belt.
 func _draw_backdrop() -> void:
 	stamp(_wall(), Vector2.ZERO)
-	_draw_pipes()
-	_draw_sprinkles()
-	# The ceiling shelf the jellies hang from, and the floor belt below.
-	panel(Rect2(-8, SHELF_Y - 34.0, 1296, 34), "enamel", SHELF, Color("#e9c68f"))
-	draw_rect(Rect2(0, SHELF_Y, 1280, 6), Color(0.2, 0.1, 0.2, 0.35))
+	_draw_windows()
+	_draw_drift(0)
+	_draw_tubes()
+	_draw_bubbles()
+	_draw_drift(1)
+	_draw_workers()
+	_draw_ceiling_belt()
 	stamp(_belt(), Vector2(0, BELT_Y))
 	draw_rect(Rect2(0, BELT_Y - 6.0, 1280, 6), Color(0.2, 0.1, 0.2, 0.25))
+
+
+## Three tall arched windows; through them a pastel sky with sweets rising.
+func _draw_windows() -> void:
+	var frame := Pixels.bake("jelly|window", Vector2i(44, 78), func(x: int, y: int) -> Color:
+		var arch := Vector2(x + 0.5 - 22.0, y + 0.5 - 22.0)
+		var inside := y >= 22 or arch.length() <= 22.0
+		if not inside:
+			return Pixels.CLEAR
+		var inner := (y >= 22 and x >= 3 and x <= 40 and y <= 74) or (y < 22 and arch.length() <= 19.0)
+		if not inner:
+			return Pixels.wood(Color("#b7798f"), x, y, 4)
+		if x == 21 or x == 22 or y == 46:
+			return Color("#9a6178")
+		return Color("#ffd9c9").lerp(Color("#bfe3f5"), clampf(float(y) / 74.0, 0.0, 1.0)))
+	for i in 3:
+		var at := Vector2(210.0 + i * 360.0, 230.0)
+		stamp(frame, at)
+		# Sweets rising past the window, clipped to its glass.
+		for k in 4:
+			var rise := 0.0 if reduced_motion else now * 22.0
+			var y := at.y + 300.0 - fposmod(k * 80.0 + i * 37.0 + rise, 280.0)
+			if y > at.y + 20.0 and y < at.y + 296.0:
+				var tone: Color = SPRINKLES[(i + k) % SPRINKLES.size()]
+				draw_rect(Rect2(at + Vector2(24.0 + (k * 37) % 120, y - at.y), Vector2(12, 8)), Color(tone, 0.7))
+
+
+## Wrapped sweets, sugar cubes, gumdrops and lollipops, baked once each.
+func _sweet(kind: int) -> Texture2D:
+	return Pixels.bake("jelly|sweet|%d" % kind, Vector2i(10, 8), func(x: int, y: int) -> Color:
+		var tone: Color = SPRINKLES[kind % SPRINKLES.size()]
+		match kind % 4:
+			0:
+				# A wrapped sweet with twisted ends.
+				var body := absf(x + 0.5 - 5.0) < 2.6 and y >= 1 and y <= 6
+				var tail := (x <= 2 or x >= 7) and absf(y + 0.5 - 4.0) < float(absi(x - 5)) * 0.7 - 0.6
+				if body:
+					return Pixels.rounded(tone, Vector2((x - 5.0) / 3.0, (y - 3.5) / 3.0))
+				return tone.lightened(0.25) if tail else Pixels.CLEAR
+			1:
+				# A sugar cube with a sparkle.
+				if x < 1 or x > 7 or y < 1 or y > 7:
+					return Pixels.CLEAR
+				return Color("#fffaf2") if x + y < 6 else Color("#e8e2ea")
+			2:
+				var drop := Vector2((x + 0.5 - 5.0) / 4.0, (y + 0.5 - 5.0) / 3.5)
+				return Pixels.rounded(tone, drop) if drop.length_squared() <= 1.0 and y >= 1 else Pixels.CLEAR
+		var disc := Vector2(x + 0.5 - 5.0, y + 0.5 - 4.0)
+		if disc.length() <= 3.6:
+			return tone if int(disc.angle() * 2.0 + disc.length()) % 2 == 0 else Color("#fffaf2")
+		return Pixels.CLEAR)
+
+
+## Sweets falling upward: layer 0 small, slow and faint (far), layer 1 big and quicker (near).
+func _draw_drift(layer: int) -> void:
+	var count := 14 if layer == 0 else 8
+	var speed := 18.0 if layer == 0 else 46.0
+	var size := 2.0 if layer == 0 else TEXEL
+	var alpha := 0.55 if layer == 0 else 0.95
+	for i in count:
+		var rise := 0.0 if reduced_motion else now * speed * (1.0 + 0.15 * float(i % 3))
+		var y := 720.0 - fposmod(i * 97.0 + layer * 41.0 + rise, 640.0)
+		var sway := 0.0 if reduced_motion else sin(now * 0.8 + i * 1.7) * (10.0 + layer * 14.0)
+		var x := fposmod(i * 173.0 + layer * 89.0, 1300.0) - 10.0 + sway
+		var spin := 0.0 if reduced_motion else now * (0.6 + 0.2 * (i % 3)) * (1.0 if i % 2 == 0 else -1.0)
+		draw_set_transform(Vector2(x, y), spin)
+		Props.stamp(self, _sweet(i + layer * 3), Vector2(-5, -4) * size, size, Color(1, 1, 1, alpha))
+		draw_set_transform(Vector2.ZERO)
+
+
+## Glass tubes standing ceiling to floor, brass collars, syrup and bubbles
+## climbing inside them the wrong way.
+func _draw_tubes() -> void:
+	# Cached, not baked: the baker makes every texel opaque, and this is glass.
+	var glass := Pixels.cached("jelly|tube", func() -> Image:
+		var image := Image.create(12, 92, false, Image.FORMAT_RGBA8)
+		for y in 92:
+			for x in 12:
+				var tone := Color("#e6f4fa", 0.22)
+				if x == 0 or x == 11:
+					tone = Color("#7f97ad")
+				elif x == 2 or x == 3:
+					tone = Color("#ffffff", 0.7)
+				elif x == 9:
+					tone = Color("#bcd4e2", 0.45)
+				if y % 30 < 3:
+					tone = Pixels.metal(Color("#c9953e"), x, y)
+				image.set_pixel(x, y, tone)
+		return image)
+	for tube in 4:
+		var x := 90.0 + tube * 360.0
+		var top := SHELF_Y + 6.0
+		# Syrup slugs and bubbles rising inside, drawn first so the glass shines over them.
+		for slug in 5:
+			var rise := 0.0 if reduced_motion else now * (70.0 + tube * 9.0)
+			var y := BELT_Y - fposmod(slug * 76.0 + tube * 23.0 + rise, BELT_Y - top)
+			draw_rect(Rect2(x + 8.0, roundf(y / TEXEL) * TEXEL, 32, 28), Color(SYRUP, 0.8))
+			draw_rect(Rect2(x + 12.0, roundf(y / TEXEL) * TEXEL + 4.0, 8, 4), Color("#ffd37a"))
+		for bubble in 6:
+			var rise := 0.0 if reduced_motion else now * 110.0
+			var y := BELT_Y - fposmod(bubble * 59.0 + tube * 11.0 + rise, BELT_Y - top)
+			draw_rect(Rect2(x + 16.0 + (bubble % 3) * 6.0, roundf(y / TEXEL) * TEXEL, TEXEL, TEXEL), Color("#fff4e2", 0.8))
+		draw_texture_rect(glass, Rect2(x, top, 48, BELT_Y - top), false)
+
+
+## Big gravity bubbles drifting up, each carrying a sweet, wobbling as they go.
+func _draw_bubbles() -> void:
+	for i in 5:
+		var rise := 0.0 if reduced_motion else now * (24.0 + i * 5.0)
+		var y := 700.0 - fposmod(i * 131.0 + rise, 560.0)
+		var x := 160.0 + fposmod(i * 263.0, 980.0) + (0.0 if reduced_motion else sin(now * 1.1 + i) * 24.0)
+		var radius := 30.0 + (i % 3) * 8.0
+		var wobble := Vector2(1.0, 1.0) if reduced_motion else Vector2(1.0 + 0.06 * sin(now * 3.0 + i), 1.0 - 0.06 * sin(now * 3.0 + i))
+		draw_set_transform(Vector2(x, y), 0.0, wobble)
+		draw_circle(Vector2.ZERO, radius, Color("#e6f6ff", 0.16))
+		draw_arc(Vector2.ZERO, radius, 0.0, TAU, 28, Color("#ffffff", 0.55), TEXEL * 0.75)
+		draw_arc(Vector2.ZERO, radius * 0.7, -2.4, -1.6, 6, Color("#ffffff", 0.8), TEXEL)
+		Props.stamp(self, _sweet(i + 1), Vector2(-5, -4) * 3.0, 3.0, Color(1, 1, 1, 0.85))
+		draw_set_transform(Vector2.ZERO)
+
+
+## The conveyor on the ceiling, running upside down: rollers, a moving belt and
+## boxes of sweets riding along under it.
+func _draw_ceiling_belt() -> void:
+	var travel := 0.0 if reduced_motion else fposmod(now * 50.0, 32.0)
+	panel(Rect2(-8, SHELF_Y - 40.0, 1296, 20), "enamel", SHELF, Color("#e9c68f"))
+	for x in range(-32, 1312, 32):
+		var at := float(x) + travel
+		draw_rect(Rect2(at, SHELF_Y - 20.0, 24, 14), BELT.lightened(0.12))
+		draw_rect(Rect2(at + 24.0, SHELF_Y - 20.0, 8, 14), BELT.darkened(0.25))
+	for roller in 14:
+		var c := Vector2(40.0 + roller * 94.0, SHELF_Y - 22.0)
+		draw_circle(c, 9.0, Color("#5b5368"))
+		draw_circle(c, 4.0, Color("#c9953e"))
+	draw_rect(Rect2(0, SHELF_Y - 6.0, 1280, 6), Color(0.2, 0.1, 0.2, 0.35))
+	# Sweet boxes hanging under the belt, carried along it.
+	for box in 5:
+		var x := fposmod(box * 290.0 + (0.0 if reduced_motion else now * 50.0), 1450.0) - 80.0
+		var tone: Color = SPRINKLES[box % SPRINKLES.size()]
+		panel(Rect2(x, SHELF_Y - 6.0, 56, 40), "paper", tone.lerp(Color("#fff4e2"), 0.4))
+		draw_rect(Rect2(x + 6.0, SHELF_Y + 14.0, 44, 6), tone)
+
+
+## A factory hand in silhouette: rounded shoulders, a head, and a white toque
+## catching the light.
+func _worker() -> Texture2D:
+	return Pixels.bake("jelly|worker", Vector2i(14, 22), func(x: int, y: int) -> Color:
+		var dx := x + 0.5 - 7.0
+		if y < 7:
+			var puff := Vector2(dx / 4.5, (y + 0.5 - 3.5) / 3.5)
+			return Pixels.rounded(Color("#f6efe6"), puff * 0.5) if puff.length_squared() <= 1.0 or (y >= 5 and absf(dx) < 3.5) else Pixels.CLEAR
+		if y < 12:
+			return Color("#4a3a5c") if Vector2(dx / 3.4, (y + 0.5 - 9.5) / 3.0).length_squared() <= 1.0 else Pixels.CLEAR
+		var shoulder := absf(dx) < minf(6.5, 3.0 + float(y - 11) * 1.6)
+		return (Color("#5a4a6e") if y == 12 else Color("#3a2c4a")) if shoulder else Pixels.CLEAR)
+
+
+## Factory hands in toques on the side catwalks: they bob while watching, jump
+## with their arms up when the real jelly is scooped, slump at a burst copy and
+## cheer at the cake.
+func _draw_workers() -> void:
+	var walk := Pixels.bake("jelly|catwalk", Vector2i(40, 4), func(x: int, y: int) -> Color:
+		return Pixels.metal(Color("#7a7088"), x, y) if y < 2 or x % 6 == 0 else Pixels.CLEAR)
+	var scooped := now - float(state.get("scoop_at", -99.0))
+	var goo := now - float(state.get("goo_at", -99.0))
+	var cheer := str(state.get("phase", "")) == "finale"
+	for side in 2:
+		var base_x := 0.0 if side == 0 else 1120.0
+		stamp(walk, Vector2(base_x, 470))
+		for worker in 2:
+			var x := base_x + 40.0 + worker * 70.0
+			var lift := 0.0
+			var arms_up := false
+			if not reduced_motion:
+				lift = 2.0 * sin(now * 1.6 + worker + side)
+				if (scooped >= 0.0 and scooped < 0.8) or cheer:
+					lift -= 22.0 * absf(sin(PI * fposmod(now * 1.6 + worker * 0.3, 1.0)))
+					arms_up = true
+				elif goo >= 0.0 and goo < 1.2:
+					lift += 6.0
+			var foot := Vector2(x, 470.0 + lift).round()
+			var ink := Color("#3a2c4a")
+			stamp(_worker(), foot - Vector2(7, 22) * TEXEL)
+			if arms_up:
+				for hand: float in [-1.0, 1.0]:
+					draw_rect(Rect2(foot + Vector2(hand * 26.0 - 4.0, -92), Vector2(8, 40)), ink)
+					draw_rect(Rect2(foot + Vector2(hand * 26.0 - 6.0, -100), Vector2(12, 10)), Color("#f6efe6"))
+			if (scooped >= 0.0 and scooped < 0.9) and worker == side:
+				label(foot + Vector2(0, -102.0 - 20.0 * scooped), "好耶！", 20, GOLD, 1.0, 1.0 - scooped)
 
 
 func _wall() -> Texture2D:
@@ -122,23 +317,6 @@ func _belt() -> Texture2D:
 		return image)
 
 
-## Copper pipes with syrup bands climbing them: everything here falls up.
-func _draw_pipes() -> void:
-	for pipe in 4:
-		var x := 90.0 + pipe * 360.0
-		panel(Rect2(x, SHELF_Y, 36, BELT_Y - SHELF_Y), "pole", PIPE)
-		for band in 6:
-			var rise := 0.0 if reduced_motion else now * 90.0
-			var y := BELT_Y - fposmod(band * 66.0 + rise, BELT_Y - SHELF_Y)
-			draw_rect(Rect2(x + 10.0, roundf(y / TEXEL) * TEXEL, 16, 18), Color(SYRUP, 0.85))
-
-
-func _draw_sprinkles() -> void:
-	for i in 26:
-		var rise := 0.0 if reduced_motion else now * (30.0 + float(i % 4) * 12.0)
-		var y := BELT_Y - fposmod(i * 47.0 + rise, BELT_Y - SHELF_Y)
-		var x := fposmod(i * 137.0 + (0.0 if reduced_motion else sin(now + i) * 10.0), 1280.0)
-		draw_rect(Rect2((Vector2(x, y) / TEXEL).floor() * TEXEL, Vector2(TEXEL * 2.0, TEXEL)), Color(SPRINKLES[i % SPRINKLES.size()], 0.8))
 
 
 # --- Scene ------------------------------------------------------------------
