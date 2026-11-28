@@ -95,6 +95,8 @@ const STANDS := {
 			"stand": Vector3(7.0, 2.35, 11.4), "point": Vector3(7.95, 2.35, 12.75), "prop": "starnet", "paint": Color("#3a2f6e")},
 		{"id": "game-107", "title": "雲影快門", "prompt": "雲影快門 · 雲變對形狀時拍",
 			"stand": Vector3(14.0, 2.35, 11.6), "point": Vector3(14.95, 2.35, 12.95), "prop": "cloudcam", "paint": Color("#5b7bb0")},
+		{"id": "game-099", "title": "氣壓彈射", "prompt": "氣壓彈射 · 指針到綠區放手",
+			"stand": Vector3(3.0, 0.20, -8.4), "point": Vector3(3.95, 0.20, -7.05), "prop": "pump", "paint": Color("#d2554a")},
 	],
 }
 const FOOTPRINT := Vector3(1.5, 2.0, 1.0)
@@ -149,6 +151,7 @@ static func build(world: Node3D, region: String) -> void:
 			"windkite": _wind_kite_prop(sculpt)
 			"starnet": _star_net_prop(sculpt)
 			"cloudcam": _cloud_camera_prop(sculpt)
+			"pump": _pump_prop(sculpt)
 			"lock": _lock_prop(sculpt)
 			"slide": _slide_prop(sculpt)
 			"cloudhop": _cloudhop_prop(sculpt)
@@ -872,6 +875,27 @@ static func _sleeper_prop(sculpt: Kit.Sculpt) -> void:
 	sculpt.box(Vector3(0.2, 3.03, -0.22), Vector3(0.03, 0.18, 0.02), Color("#d8d2ff"), Basis(Vector3.BACK, -0.7))
 	sculpt.box(Vector3(0.24, 1.02, 0.1), Vector3(0.36, 0.1, 0.24), Color("#f3ecfa"))
 	sculpt.box(Vector3(-0.28, 1.0, 0.1), Vector3(0.3, 0.06, 0.22), Color("#5b3f74"))
+
+
+## A brass launcher on the roof tilted at the sky with a pink-ribboned cloud
+## bundle in its mouth, a round gauge beside it, and a red pump on the counter.
+static func _pump_prop(sculpt: Kit.Sculpt) -> void:
+	var brass := Color("#d6a444")
+	var red := Color("#d2554a")
+	var cloud := Color("#f4f0fa")
+	var tilt := Basis(Vector3.BACK, -0.6)
+	sculpt.tube(Vector3(0.0, 2.6, -0.25), 0.13, 0.17, 0.62, brass, 12, tilt)
+	sculpt.tube(Vector3(-0.14, 2.47, -0.25), 0.15, 0.15, 0.06, Color("#9a6a2a"), 12, tilt)
+	sculpt.ball(Vector3(0.22, 2.94, -0.25), 0.15, cloud, Color.TRANSPARENT, 8, 4, 0.8)
+	sculpt.box(Vector3(0.22, 2.94, -0.25), Vector3(0.03, 0.26, 0.3), Color("#f08cb0"))
+	sculpt.box(Vector3(-0.1, 2.3, -0.25), Vector3(0.36, 0.08, 0.2), DARK)
+	sculpt.tube(Vector3(-0.48, 2.55, -0.2), 0.16, 0.16, 0.05, brass, 14, Basis(Vector3.RIGHT, PI * 0.5))
+	sculpt.tube(Vector3(-0.48, 2.55, -0.17), 0.13, 0.13, 0.02, CREAM, 14, Basis(Vector3.RIGHT, PI * 0.5))
+	sculpt.box(Vector3(-0.44, 2.58, -0.15), Vector3(0.1, 0.02, 0.02), red, Basis(Vector3.BACK, 0.7))
+	sculpt.tube(Vector3(-0.25, 1.12, 0.12), 0.06, 0.06, 0.26, red, 10)
+	sculpt.box(Vector3(-0.25, 1.3, 0.12), Vector3(0.02, 0.12, 0.02), Color("#c3c8cf"))
+	sculpt.box(Vector3(-0.25, 1.36, 0.12), Vector3(0.18, 0.03, 0.04), Color("#a87a4f"))
+	sculpt.box(Vector3(0.3, 1.0, 0.1), Vector3(0.4, 0.06, 0.3), CREAM)
 
 
 ## A big hoop net on a pole over the roof with a gold star caught in it, and a

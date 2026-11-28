@@ -40,6 +40,26 @@
     ]
   },
   {
+    "id": "game-099",
+    "mode": "pump_launch",
+    "zone": "sky",
+    "local_index": 3,
+    "arcade": true,
+    "name": "氣壓彈射",
+    "goal": "按住替彈射筒打氣，氣壓錶指針落在綠區時放開，把雲包彈到對面浮著的平台上；正中靶心分數最多。",
+    "instructions": "空白鍵、E 或手把 A 鍵：按住替氣筒打氣，氣壓錶指針落在綠區時放開，把雲包彈到對面的平台上；打過紅區氣筒會爆開。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助把雲包彈上平台拿到金牌",
+    "ordinary": "把雲包彈到對面的平台上，拿到銅牌",
+    "attraction_tag": "摩天輪廣場彈射筒",
+    "island_invitation": "替大氣筒打氣，把雲包彈到對面的浮台上！指針到綠區就放手；打太飽的話……氣筒會爆開，你會頂著一頭爆炸頭飄起來。",
+    "retake_props": [
+      "balloon",
+      "camera",
+      "sign"
+    ]
+  },
+  {
     "id": "game-103",
     "mode": "shuttle_updraft",
     "zone": "sky",

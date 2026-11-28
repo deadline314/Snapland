@@ -22,7 +22,7 @@ func _run() -> void:
 	var sky: Array = catalog.definitions("sky")
 	var all_games: Array = catalog.all_definitions()
 	_check(welcome == JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json")), "default definitions preserve the original welcome row shape and order")
-	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 12 and toy.size() == 12 and garden.size() == 11 and hotel.size() == 8 and sky.size() == 7 and all_games.size() == 98, "only the 98 delivered games are exposed")
+	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 12 and toy.size() == 12 and garden.size() == 11 and hotel.size() == 8 and sky.size() == 8 and all_games.size() == 99, "only the 99 delivered games are exposed")
 	for index in range(welcome.size()):
 		_check(welcome[index].id == "game-%03d" % (index + 1), "welcome numbering stays ordered")
 	_check(all_games == welcome + harbor + candy + nightmarket + circus + toy + garden + hotel + sky and catalog.definitions("cinema").is_empty(), "games retain global order and future regions remain unavailable")
@@ -137,7 +137,7 @@ func _run() -> void:
 	_check(catalog.identity("game-088") == dream_bubble and catalog.identity("dream_bubble") == dream_bubble and hotel[3].name == "夢泡搬運" and hotel[3].arcade == true,
 		"hotel slot 4 keeps its own global number and the arcade flow flag")
 	var updraft := {"id":"game-103", "mode":"shuttle_updraft", "zone":"sky", "local_index":7, "photo_id":"photo-sky-game-7", "devil_photo_id":"photo-sky-devil-7", "achievement_id":"ACH_GAME_103"}
-	_check(catalog.identity("game-103") == updraft and catalog.identity("shuttle_updraft") == updraft and sky[2].name == "羽球上升流" and sky[1].arcade == true,
+	_check(catalog.identity("game-103") == updraft and catalog.identity("shuttle_updraft") == updraft and sky[3].name == "羽球上升流" and sky[1].arcade == true,
 		"the seventh sky park game keeps its own global number and the arcade flow flag")
 	var hop := {"id":"game-097", "mode":"cloud_hop", "zone":"sky", "local_index":1, "photo_id":"photo-sky-game-1", "devil_photo_id":"photo-sky-devil-1", "achievement_id":"ACH_GAME_097"}
 	_check(catalog.identity("game-097") == hop and catalog.identity("cloud_hop") == hop and sky[0].name == "雲梯換層" and sky[0].arcade == true,
@@ -145,26 +145,29 @@ func _run() -> void:
 	var wing := {"id":"game-098", "mode":"paper_wing", "zone":"sky", "local_index":2, "photo_id":"photo-sky-game-2", "devil_photo_id":"photo-sky-devil-2", "achievement_id":"ACH_GAME_098"}
 	_check(catalog.identity("game-098") == wing and catalog.identity("paper_wing") == wing and sky[1].name == "紙翼穿峽" and sky[1].arcade == true,
 		"the second sky park game keeps its own global number and the arcade flow flag")
+	var pump := {"id":"game-099", "mode":"pump_launch", "zone":"sky", "local_index":3, "photo_id":"photo-sky-game-3", "devil_photo_id":"photo-sky-devil-3", "achievement_id":"ACH_GAME_099"}
+	_check(catalog.identity("game-099") == pump and catalog.identity("pump_launch") == pump and sky[2].name == "氣壓彈射" and sky[2].arcade == true,
+		"the third sky park game keeps its own global number and the arcade flow flag")
 	var ghost_window := {"id":"game-089", "mode":"ghost_window", "zone":"hotel", "local_index":5, "photo_id":"photo-hotel-game-5", "devil_photo_id":"photo-hotel-devil-5", "achievement_id":"ACH_GAME_089"}
 	_check(catalog.identity("game-089") == ghost_window and catalog.identity("ghost_window") == ghost_window and hotel[4].name == "鬼影擦窗" and hotel[4].arcade == true,
 		"hotel slot 5 keeps its own global number and the arcade flow flag")
 	var rope_bridge := {"id":"game-104", "mode":"rope_bridge", "zone":"sky", "local_index":8, "photo_id":"photo-sky-game-8", "devil_photo_id":"photo-sky-devil-8", "achievement_id":"ACH_GAME_104"}
-	_check(catalog.identity("game-104") == rope_bridge and catalog.identity("rope_bridge") == rope_bridge and sky[3].name == "繩橋共振" and sky[2].arcade == true,
+	_check(catalog.identity("game-104") == rope_bridge and catalog.identity("rope_bridge") == rope_bridge and sky[4].name == "繩橋共振" and sky[2].arcade == true,
 		"sky park slot 8 keeps its own global number and the arcade flow flag")
 	var lift_brake := {"id":"game-090", "mode":"lift_brake", "zone":"hotel", "local_index":6, "photo_id":"photo-hotel-game-6", "devil_photo_id":"photo-hotel-devil-6", "achievement_id":"ACH_GAME_090"}
 	_check(catalog.identity("game-090") == lift_brake and catalog.identity("lift_brake") == lift_brake and hotel[5].name == "電梯借重" and hotel[5].arcade == true,
 		"hotel slot 6 keeps its own global number and the arcade flow flag")
 	var kite_wind := {"id":"game-105", "mode":"kite_wind", "zone":"sky", "local_index":9, "photo_id":"photo-sky-game-9", "devil_photo_id":"photo-sky-devil-9", "achievement_id":"ACH_GAME_105"}
-	_check(catalog.identity("game-105") == kite_wind and catalog.identity("kite_wind") == kite_wind and sky[4].name == "風箏追風" and sky[4].arcade == true,
+	_check(catalog.identity("game-105") == kite_wind and catalog.identity("kite_wind") == kite_wind and sky[5].name == "風箏追風" and sky[5].arcade == true,
 		"sky park slot 9 keeps its own global number and the arcade flow flag")
 	var quiet_steps := {"id":"game-091", "mode":"quiet_steps", "zone":"hotel", "local_index":7, "photo_id":"photo-hotel-game-7", "devil_photo_id":"photo-hotel-devil-7", "achievement_id":"ACH_GAME_091"}
 	_check(catalog.identity("game-091") == quiet_steps and catalog.identity("quiet_steps") == quiet_steps and hotel[6].name == "枕頭靜步" and hotel[6].arcade == true,
 		"hotel slot 7 keeps its own global number and the arcade flow flag")
 	var star_net := {"id":"game-106", "mode":"star_net", "zone":"sky", "local_index":10, "photo_id":"photo-sky-game-10", "devil_photo_id":"photo-sky-devil-10", "achievement_id":"ACH_GAME_106"}
-	_check(catalog.identity("game-106") == star_net and catalog.identity("star_net") == star_net and sky[5].name == "落星接網" and sky[5].arcade == true,
+	_check(catalog.identity("game-106") == star_net and catalog.identity("star_net") == star_net and sky[6].name == "落星接網" and sky[6].arcade == true,
 		"sky park slot 10 keeps its own global number and the arcade flow flag")
 	var cloud_shutter := {"id":"game-107", "mode":"cloud_shutter", "zone":"sky", "local_index":11, "photo_id":"photo-sky-game-11", "devil_photo_id":"photo-sky-devil-11", "achievement_id":"ACH_GAME_107"}
-	_check(catalog.identity("game-107") == cloud_shutter and catalog.identity("cloud_shutter") == cloud_shutter and sky[6].name == "雲影快門" and sky[6].arcade == true,
+	_check(catalog.identity("game-107") == cloud_shutter and catalog.identity("cloud_shutter") == cloud_shutter and sky[7].name == "雲影快門" and sky[7].arcade == true,
 		"sky park slot 11 keeps its own global number and the arcade flow flag")
 	var sheep_count := {"id":"game-092", "mode":"sheep_count", "zone":"hotel", "local_index":8, "photo_id":"photo-hotel-game-8", "devil_photo_id":"photo-hotel-devil-8", "achievement_id":"ACH_GAME_092"}
 	_check(catalog.identity("game-092") == sheep_count and catalog.identity("sheep_count") == sheep_count and hotel[7].name == "窗簾星圖" and hotel[7].arcade == true,
