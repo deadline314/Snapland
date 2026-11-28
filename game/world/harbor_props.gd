@@ -128,13 +128,27 @@ static func lighthouse(world: Node3D, kit: Kit, at: Vector3) -> Dictionary:
 	kit.detail.box(at + Vector3(0.5, 1.66, 0.94), Vector3(0.22, 0.05, 0.22), IRON)
 	return {"glass": glass, "rotor": rotor, "beam_material": beam_material, "top": top}
 
-## Market stall facing local +Z: counter, plank back wall, slanted striped awning,
-## framed name board and a small emblem that hints at the game.
+## Market stall facing local +Z: counter, plank back wall, a roof and a painted
+## name board under a large emblem that shows the game from across the harbour.
+## `variation` picks one of three roofs (slanted awning, gable, peaked tent) so
+## a row of stalls never reads as one repeated box (ART-80).
 static func stall(world: Node3D, kit: Kit, ground: Vector3, yaw: float, title: String, tint: Color, emblem_kind: String, variation: int) -> void:
 	var frame := Transform3D(Basis(Vector3.UP, yaw), ground)
 	kit.surface(world._coastal_surface(1, 1.3)).add(frame * Vector3(0, 0.44, 0.28), Vector3(1.8, 0.88, 0.56), frame.basis)
 	kit.surface(world._coastal_surface(3, 1.2)).add(frame * Vector3(0, 0.95, -0.54), Vector3(1.8, 1.9, 0.1), frame.basis)
-	kit.surface(world._coastal_surface(6, 1.1, tint)).add(frame * Vector3(0, 2.08, 0.12), Vector3(2.3, 0.06, 1.8), frame.basis * Basis(Vector3.RIGHT, 0.3))
+	var roof := kit.surface(world._coastal_surface(6, 1.1, tint))
+	match variation % 3:
+		0:
+			roof.add(frame * Vector3(0, 2.08, 0.12), Vector3(2.3, 0.06, 1.8), frame.basis * Basis(Vector3.RIGHT, 0.3))
+		1:
+			# A gable over the counter, ridge running front to back.
+			for side: float in [-1.0, 1.0]:
+				roof.add(frame * Vector3(side * 0.6, 2.12, 0.1), Vector3(1.38, 0.06, 1.9), frame.basis * Basis(Vector3.BACK, -side * 0.42))
+		2:
+			# A peaked tent: four steep panels meeting over the middle.
+			for turn in 4:
+				var facing := Basis(Vector3.UP, TAU * float(turn) / 4.0)
+				roof.add(frame * (Vector3(0, 2.25, 0.05) + facing * Vector3(0, 0, 0.55)), Vector3(2.0, 0.06, 1.3), frame.basis * facing * Basis(Vector3.RIGHT, 0.62))
 	var detail := kit.detail
 	detail.frame = frame
 	detail.box(Vector3(0, 0.91, 0.28), Vector3(1.96, 0.07, 0.7), PALE_WOOD)
@@ -154,12 +168,13 @@ static func stall(world: Node3D, kit: Kit, ground: Vector3, yaw: float, title: S
 	detail.box(Vector3(-0.55, 1.03, 0.3), Vector3(0.34, 0.16, 0.3), DARK_WOOD.lightened(0.2))
 	detail.box(Vector3(-0.55, 1.12, 0.3), Vector3(0.28, 0.04, 0.24), wares[variation % wares.size()])
 	detail.tube(Vector3(0.5, 1.05, 0.28), 0.1, 0.1, 0.2, wares[(variation + 2) % wares.size()], 6)
-	detail.box(Vector3(0, 2.7, -0.5), Vector3(1.74, 0.5, 0.08), DARK_WOOD.darkened(0.15))
+	# The board is painted in the stall's colour so it never reads as a blank slate.
+	detail.box(Vector3(0, 2.7, -0.5), Vector3(1.74, 0.5, 0.08), tint.darkened(0.35))
 	for edge: float in [-1.0, 1.0]:
 		detail.box(Vector3(0, 2.7 + edge * 0.26, -0.5), Vector3(1.84, 0.06, 0.12), PALE_WOOD)
 		detail.box(Vector3(edge * 0.89, 2.7, -0.5), Vector3(0.06, 0.5, 0.12), PALE_WOOD)
 		detail.box(Vector3(edge * 0.6, 2.4, -0.5), Vector3(0.06, 0.2, 0.06), DARK_WOOD)
-	detail.frame = frame * Transform3D(Basis.IDENTITY, Vector3(0, 2.99, -0.5))
+	detail.frame = frame * Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * 1.8), Vector3(0, 2.99, -0.5))
 	emblem(detail, emblem_kind)
 	detail.frame = Transform3D.IDENTITY
 	kit.glow.frame = frame
