@@ -11,6 +11,7 @@ const IslandEvents = preload("res://game/world/island_events.gd")
 const ArcadeMedal = preload("res://game/ui/arcade_medal.gd")
 const ParkVariety = preload("res://game/core/park_variety.gd")
 const RegionTransitionScript = preload("res://game/ui/region_transition.gd")
+const ArrivalStampScript = preload("res://game/ui/arrival_stamp.gd")
 const Story = preload("res://game/story/story_director.gd")
 const Audio = preload("res://game/audio/audio_director.gd")
 const Catalog = preload("res://game/core/game_catalog.gd")
@@ -37,6 +38,7 @@ var ui: Control
 var hud: Control
 var overlay: Control
 var region_transition: Control
+var arrival_stamp: Control
 ## Collection totals last shown on the HUD; gains since then are announced when it returns.
 var _hud_seen: Dictionary = {}
 var modal_body: VBoxContainer
@@ -189,6 +191,7 @@ func _on_district_changed(region: String) -> void:
 	if not Progress.set_current_region(region):
 		world_region=previous
 		return
+	_stamp_arrival(region)
 	_hud_seen=_collection_totals()
 	_refresh_quest_line()
 	_sync_audio_environment()
@@ -255,11 +258,16 @@ func _begin_region_travel(destination: String) -> void:
 		return
 	var market := destination=="nightmarket"
 	region_transition.move_to_front()
-	region_transition.cover(RegionRoutes.title(destination),"SNAPLAND   /   前往",Color("#17132b") if market else Color("#08202b"),Color("#f7bd9d") if market else Paper.TEAL)
+	region_transition.cover(Color("#17132b") if market else Color("#08202b"),Color("#f7bd9d") if market else Paper.TEAL)
 	await region_transition.covered
 	if quitting or not is_instance_valid(region_transition): return
 	_replace_region(destination,true)
 	if is_instance_valid(region_transition): region_transition.reveal()
+
+## First arrival in a district: press its passport stamp once (ART-66).
+func _stamp_arrival(region: String, delay := 0.0) -> void:
+	if is_instance_valid(arrival_stamp) and Progress.stamp_arrival(region):
+		arrival_stamp.show_region(region,delay)
 
 func _replace_region(destination: String, returning: bool = false) -> void:
 	if quitting: return
@@ -282,6 +290,8 @@ func _replace_region(destination: String, returning: bool = false) -> void:
 		else:
 			world.place_player(spot)
 			world.settle_avatar()
+			# Let the cover open before the stamp lands.
+			_stamp_arrival(destination,0.4 if _transition_busy() else 0.0)
 		world.refresh_standing()
 	elif returning and destination=="welcome":
 		for point in world.points:
@@ -559,6 +569,8 @@ func _build_ui() -> void:
 	hud.add_child(toast)
 	field_chip=FieldGameChip.new()
 	hud.add_child(field_chip)
+	arrival_stamp=ArrivalStampScript.new()
+	hud.add_child(arrival_stamp)
 	overlay=Control.new()
 	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	ui.add_child(overlay)

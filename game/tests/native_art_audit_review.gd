@@ -78,6 +78,13 @@ func _travel_shots() -> void:
 		await _until(func() -> bool: return not main._transition_busy(), 6.0)
 		await _wait(0.6)
 		await _snap("travel-%s-c-arrived" % destination)
+	# Walking in (no cover): the first step into a district.
+	var walk_in: Vector3 = main.world.arrival_point("candy")
+	main.world.place_player(walk_in)
+	main.world.settle_avatar()
+	await _wait(1.1)
+	await _snap("travel-candy-d-walked-in")
+	_quiet_stamp()
 
 
 func _district_shots() -> void:
@@ -85,6 +92,7 @@ func _district_shots() -> void:
 		var spot: Vector3 = main.world.arrival_point(region)
 		if not spot.is_finite(): continue
 		await _stand(spot)
+		_quiet_stamp()
 		for phase in phases:
 			_set_phase(phase)
 			await _wait(0.7)
@@ -164,6 +172,12 @@ func _game_shots() -> void:
 		main._cancel_game()
 		await _wait(0.6)
 		_dismiss()
+
+
+## Views that are not about arrival keep the first-visit stamp out of frame.
+func _quiet_stamp() -> void:
+	var stamp: Control = main.get("arrival_stamp")
+	if is_instance_valid(stamp): stamp.dismiss()
 
 
 func _stand(spot: Vector3) -> void:

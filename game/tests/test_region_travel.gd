@@ -121,8 +121,10 @@ func _run() -> void:
 		main._show_pause()
 		_check(main.overlay.find_child("PauseBoatPrologueButton",true,false)!=null, "welcome boat replay remains available after return")
 		main._close()
+		main.arrival_stamp.dismiss()
 		_check(main._travel_to_region("harbor"), "repeat qualified trip starts")
 		await _frames(4)
+		_check(not main.arrival_stamp.showing() and Progress.arrival_stamps.has("harbor"), "a repeat trip to the harbor shows no second stamp")
 	await _candy_trips(before)
 	_check(_snapshot()==before, "repeated trips preserve all rewards and appearance")
 	_check(_world_count()==1, "steady state has exactly one world")
@@ -133,6 +135,7 @@ func _run() -> void:
 	Progress.prologue_seen=false
 	await _spawn()
 	_check(main.world_region=="harbor" and main.world.standing_region()=="harbor" and main.boat_stage==null and main.modal_kind=="", "saved harbor restart stands in the harbor and skips welcome boat/arrival")
+	_check(Progress.arrival_stamps.has("harbor") and Progress.arrival_stamps.has("nightmarket") and not main.arrival_stamp.showing(), "arrival stamps survive a restart and are not pressed again")
 	main._show_map()
 	main.overlay.find_child("RegionGamesButton",true,false).pressed.emit()
 	Progress.reset_progress()
@@ -184,6 +187,8 @@ func _nightmarket_trip(before: Dictionary) -> void:
 		"Nightmarket gate takes the walker to the saved market without changing collections or rewards")
 	if not reached:
 		return
+	_check(Progress.arrival_stamps.has("nightmarket") and main.arrival_stamp.showing() and main.arrival_stamp.region == "nightmarket",
+		"the first trip to Nightmarket presses its arrival stamp and saves it")
 	var market: Node = main.world
 	market.interaction_requested.emit("region:welcome", "返回迎賓大道")
 	await _frames(4)

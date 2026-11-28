@@ -5,6 +5,7 @@ extends SceneTree
 const PaperMotion = preload("res://game/ui/paper_motion.gd")
 const Paper = preload("res://game/ui/paper_ui.gd")
 const RegionTransition = preload("res://game/ui/region_transition.gd")
+const ArrivalStamp = preload("res://game/ui/arrival_stamp.gd")
 const Collage = preload("res://game/ui/collage_kit.gd")
 
 var failures := 0
@@ -158,7 +159,7 @@ func _run() -> void:
 	var revealed := [false]
 	transition.covered.connect(func() -> void: covered[0] = true)
 	transition.revealed.connect(func() -> void: revealed[0] = true)
-	transition.cover("潮汐碼頭", "前往", Color("#08202b"), Color("#6fc7b7"))
+	transition.cover(Color("#08202b"), Color("#6fc7b7"))
 	_check(transition.busy() and transition.visible, "cover holds input at once")
 	_check(transition.mouse_filter == Control.MOUSE_FILTER_STOP, "cover blocks the pointer")
 	for frame in 120:
@@ -175,9 +176,23 @@ func _run() -> void:
 	_check(revealed[0] and not transition.busy() and not transition.visible, "reveal releases and hides")
 	_check(transition.mouse_filter == Control.MOUSE_FILTER_IGNORE, "reveal frees the pointer")
 
-	transition.cover("糖果工廠", "前往", Color("#08202b"), Color("#6fc7b7"))
+	transition.cover(Color("#08202b"), Color("#6fc7b7"))
 	transition.cancel()
 	_check(not transition.busy() and not transition.visible, "cancel releases immediately")
+	_check(transition.find_children("*", "Label", true, false).is_empty(), "the travel cover carries no words")
+
+	var stamp := ArrivalStamp.new()
+	host.add_child(stamp)
+	_check(not stamp.showing() and stamp.mouse_filter == Control.MOUSE_FILTER_IGNORE, "arrival stamp starts hidden and never takes the pointer")
+	stamp.show_region("harbor")
+	_check(stamp.showing() and stamp.region == "harbor", "arrival stamp shows the district it was pressed for")
+	var deadline := Time.get_ticks_msec() + 6000
+	while stamp.showing() and Time.get_ticks_msec() < deadline:
+		await process_frame
+	_check(not stamp.showing() and stamp.region.is_empty(), "arrival stamp lifts away by itself")
+	stamp.show_region("candy", 0.3)
+	stamp.dismiss()
+	_check(not stamp.showing(), "arrival stamp can be dismissed at once")
 
 	host.queue_free()
 	await process_frame

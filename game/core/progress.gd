@@ -91,6 +91,8 @@ var thief_catches := 0
 ## Resident errands by region: the step being worked on (ResidentErrands);
 ## absent until the host first asks.
 var errands: Dictionary = {}
+## Districts whose arrival stamp was already shown: {region: true}.
+var arrival_stamps: Dictionary = {}
 var _extra_fields: Dictionary = {}
 var _loading := false
 var _suppress_changed_save := false
@@ -214,6 +216,17 @@ func set_current_region(region: String) -> bool:
 		current_region = previous
 		return false
 	# Main refreshes after replacing the world; changed would save a second time.
+	return true
+
+## Record the first arrival in a district. True only the first time, once it
+## is saved; the welcome island and unknown regions never get a stamp.
+func stamp_arrival(region: String) -> bool:
+	if region == "welcome" or not SUPPORTED_REGIONS.has(region) or arrival_stamps.has(region):
+		return false
+	arrival_stamps[region] = true
+	if not save_progress():
+		arrival_stamps.erase(region)
+		return false
 	return true
 
 func has_seen_tutorial(game_id: String) -> bool:
@@ -914,6 +927,7 @@ func save_progress() -> bool:
 		"daily_bonus": daily_bonus,
 		"fail_stickers": fail_stickers,
 		"thief_catches": thief_catches,
+		"arrival_stamps": arrival_stamps,
 		"errands": errands,
 	}, true)
 	var temporary := path + ".tmp"
@@ -1303,7 +1317,7 @@ func _apply_save(payload: Dictionary) -> void:
 	_loading = true
 	_reset_memory()
 	for key in payload:
-		if key not in ["version", "photos", "achievements", "quests", "settings", "visited", "intro_seen", "prologue_seen", "current_region", "platform_pending_achievements", "appearance", "equipped", "owned_clothes", "coins", "wardrobe_rewarded_games", "tutorial_seen_games", "attempted_games", "field_records", "daily_bonus", "fail_stickers", "player_position", "thief_catches", "errands"]:
+		if key not in ["version", "photos", "achievements", "quests", "settings", "visited", "intro_seen", "prologue_seen", "current_region", "platform_pending_achievements", "appearance", "equipped", "owned_clothes", "coins", "wardrobe_rewarded_games", "tutorial_seen_games", "attempted_games", "field_records", "daily_bonus", "fail_stickers", "player_position", "thief_catches", "errands", "arrival_stamps"]:
 			_extra_fields[key] = payload[key]
 	var loaded_photos: Variant = payload.get("photos", {})
 	if typeof(loaded_photos) == TYPE_DICTIONARY:
@@ -1397,6 +1411,11 @@ func _apply_save(payload: Dictionary) -> void:
 	else:
 		push_warning("Invalid 'thief_catches' field in progress file '%s'; starting the thief over." % _save_path())
 	errands = _validated_errands(payload.get("errands", {}))
+	var loaded_stamps: Variant = payload.get("arrival_stamps", {})
+	if typeof(loaded_stamps) == TYPE_DICTIONARY:
+		for key: Variant in loaded_stamps:
+			if loaded_stamps[key] == true and SUPPORTED_REGIONS.has(str(key)) and str(key) != "welcome":
+				arrival_stamps[str(key)] = true
 	if not payload.has("attempted_games"):
 		for definition: Dictionary in GameCatalog.all_definitions():
 			var identity := GameCatalog.identity(definition.id)
@@ -1465,6 +1484,7 @@ func _reset_memory() -> void:
 	daily_bonus = {}
 	fail_stickers = {}
 	thief_catches = 0
+	arrival_stamps = {}
 	errands = {}
 	settings["time_phase"] = TimeOfDay.DEFAULT_PHASE
 	_extra_fields = {}
