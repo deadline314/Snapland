@@ -948,7 +948,7 @@ func _process(delta: float) -> void:
 		if context_appeared:
 			PaperMotion.fade_in(context_bar,0.12)
 			PaperMotion.flash(context_action,PaperMotion.GAIN_TINT,0.3)
-	if modal_kind=="dialogue" and is_instance_valid(dialogue_label) and dialogue_label.visible_characters>=0:
+	if modal_kind=="dialogue" and is_instance_valid(dialogue_label) and dialogue_label.visible_characters>=0 and cue_hold_left<=0.0:
 		var previous_count := dialogue_label.visible_characters
 		if reveal_hold>0.0: reveal_hold=maxf(0.0,reveal_hold-delta)
 		else: reveal+=delta*34.0*float(Progress.settings.get("text_speed",1.0))
@@ -1011,6 +1011,10 @@ func _unhandled_input(event: InputEvent) -> void:
 			world.interact()
 		get_viewport().set_input_as_handled()
 	elif event is InputEventKey and event.pressed and not event.echo and event.keycode==KEY_SPACE and modal_kind=="dialogue":
+		_next_dialogue()
+		get_viewport().set_input_as_handled()
+	elif event is InputEventMouseButton and event.pressed and cue_pantomime and modal_kind=="dialogue":
+		# A pantomime beat has no plaque to click: any click moves it on.
 		_next_dialogue()
 		get_viewport().set_input_as_handled()
 	elif event is InputEventKey and event.pressed and not event.echo and event.keycode==KEY_C:
@@ -1465,7 +1469,8 @@ func _stage_line(line: Dictionary, speaker: String) -> void:
 			stage_cues=null
 	var hold: float = stage_cues.apply(cue,str(line.get("actor",STAGE_ACTOR_BY_SPEAKER.get(speaker,"")))) if is_instance_valid(stage_cues) else 0.0
 	cue_hold_left=maxf(hold,0.9) if cue_pantomime else hold
-	if cue_hold_left>0.0: dialogue_panel.hide()
+	# A hold keeps the plaque and its advance button (the text simply waits); only pantomime has no subtitle.
+	if cue_pantomime: dialogue_panel.hide()
 
 ## Actor id to node; with an action, also plays that authored NPC action.
 func _stage_actor(id: String, action: String) -> Node3D:

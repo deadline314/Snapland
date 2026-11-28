@@ -39,9 +39,11 @@ func _run() -> void:
 	main._next_dialogue()
 	main.dialogue_panel.reveal_all()
 	main._next_dialogue()
-	_check(main.dialogue_index == 2 and main.cue_hold_left > 0.0 and not main.dialogue_panel.visible, "held line keeps the subtitle back")
+	await _frames(5)
+	_check(main.dialogue_index == 2 and main.cue_hold_left > 0.0 and main.dialogue_label.visible_characters == 0, "held line keeps its text back")
+	_check(main.dialogue_panel.visible and main.dialogue_panel.advance_button.is_visible_in_tree(), "a hold keeps the plaque and its advance button clickable")
 	_check(main.stage_cues.emote_visible(), "emote pops over the actor")
-	main._next_dialogue()
+	main.dialogue_panel.advance_button.pressed.emit()
 	_check(main.dialogue_index == 2 and main.cue_hold_left == 0.0 and main.dialogue_panel.visible, "advance during a hold only ends the hold")
 	main._cancel_dialogue()
 	await _frames(2)
@@ -56,6 +58,15 @@ func _run() -> void:
 		{"speaker": "小角", "text": "沒事！", "cue": {"frame": "wide"}},
 	], Callable())
 	_check(main.cue_pantomime and not main.dialogue_panel.visible, "pantomime beat hides the subtitle")
+	var click := InputEventMouseButton.new()
+	click.button_index = MOUSE_BUTTON_LEFT
+	click.pressed = true
+	main._unhandled_input(click)
+	_check(main.dialogue_index == 1 and not main.cue_pantomime and main.dialogue_panel.visible, "a click anywhere moves a pantomime beat on")
+	main._start_dialogue([
+		{"speaker": "小角", "text": "", "pantomime": true, "cue": {"frame": "imp", "emote": "?", "hold": 0.3}},
+		{"speaker": "小角", "text": "沒事！", "cue": {"frame": "wide"}},
+	], Callable())
 	await get_tree().create_timer(1.3).timeout
 	_check(main.dialogue_index == 1 and main.dialogue_panel.visible and not main.cue_pantomime, "pantomime advances by itself")
 	main._next_dialogue()
