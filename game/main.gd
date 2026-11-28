@@ -29,6 +29,8 @@ const Errands = preload("res://game/story/resident_errands.gd")
 const RegionalVisitPhotoPanel = preload("res://game/ui/regional_visit_photo_panel.gd")
 const DialoguePanelScript = preload("res://game/ui/dialogue_panel.gd")
 const BoatPrologueStage = preload("res://game/story/boat_prologue_stage.gd")
+const StageCues = preload("res://game/story/stage_cues.gd")
+const STAGE_ACTOR_BY_SPEAKER := {"票票": "ticket", "小角": "imp", "阿浪": "announcer", "主角": "player"}
 var world: Node3D
 var world_region := "welcome"
 var changing_region := false
@@ -76,6 +78,10 @@ var dialogue_label: Label
 var dialogue_panel: Control
 var boat_stage: Node3D
 var boat_first_run := false
+## Per-line dialogue staging (camera, emotes, holds); lives only while a cued dialogue plays.
+var stage_cues: Node3D
+var cue_hold_left := 0.0
+var cue_pantomime := false
 var dialogue_done := Callable()
 var dialogue_cancelled := Callable()
 var reveal := 0.0
@@ -917,6 +923,9 @@ func _refresh_quest_line() -> void:
 
 func _process(delta: float) -> void:
 	if quitting or changing_region: return
+	if cue_hold_left>0.0:
+		cue_hold_left-=delta
+		if cue_hold_left<=0.0: _end_cue_hold()
 	if is_instance_valid(world) and _on_island(world_region): Progress.player_position=world.player.global_position
 	if session!=null and DisplayServer.get_name()!="headless" and session.elapsed>=next_snapshot and not session.ended:
 		next_snapshot=session.elapsed+0.9
@@ -1427,8 +1436,55 @@ func _render_dialogue() -> void:
 	call_deferred("_dialogue_panel_resized")
 	reveal=0
 	modal_kind="dialogue"
+	_stage_line(line, speaker)
+
+## Plays a line's staging cue; a hold or a pantomime beat keeps the subtitle back.
+func _stage_line(line: Dictionary, speaker: String) -> void:
+	cue_hold_left=0.0
+	cue_pantomime=bool(line.get("pantomime",false))
+	var cue: Dictionary = line.get("cue",{}) if line.get("cue",{}) is Dictionary else {}
+	if cue.is_empty() and not cue_pantomime: return
+	if not is_instance_valid(stage_cues) and is_instance_valid(world):
+		stage_cues=StageCues.new()
+		stage_cues.actor_lookup=_stage_actor
+		world.add_child(stage_cues)
+		if not stage_cues.begin(get_viewport().get_camera_3d(),bool(Progress.settings.get("reduced_motion",false))):
+			stage_cues.queue_free()
+			stage_cues=null
+	var hold: float = stage_cues.apply(cue,str(line.get("actor",STAGE_ACTOR_BY_SPEAKER.get(speaker,"")))) if is_instance_valid(stage_cues) else 0.0
+	cue_hold_left=maxf(hold,0.9) if cue_pantomime else hold
+	if cue_hold_left>0.0: dialogue_panel.hide()
+
+## Actor id to node; with an action, also plays that authored NPC action.
+func _stage_actor(id: String, action: String) -> Node3D:
+	if not is_instance_valid(world): return null
+	if id=="player": return world.get("avatar") as Node3D
+	var place := region_world()
+	if not is_instance_valid(place) or not place.has_method("story_actor"): return null
+	if not action.is_empty(): place.react_story_npc(id,action)
+	return place.story_actor(id)
+
+func _end_cue_hold() -> void:
+	cue_hold_left=0.0
+	if cue_pantomime:
+		cue_pantomime=false
+		dialogue_index+=1
+		_render_dialogue()
+	elif is_instance_valid(dialogue_panel):
+		dialogue_panel.show()
+
+func _end_stage() -> void:
+	cue_hold_left=0.0
+	cue_pantomime=false
+	if is_instance_valid(stage_cues):
+		stage_cues.finish()
+		stage_cues.queue_free()
+	stage_cues=null
 
 func _next_dialogue() -> void:
+	if cue_hold_left>0.0:
+		_end_cue_hold()
+		return
 	if not is_instance_valid(dialogue_label): return
 	if dialogue_label.visible_characters>=0 and dialogue_label.visible_characters<dialogue_label.text.length():
 		reveal=dialogue_label.text.length()
@@ -1442,6 +1498,7 @@ func _finish_dialogue(cancelled: bool = false) -> void:
 	var cancel_callback := dialogue_cancelled
 	dialogue_done=Callable()
 	dialogue_cancelled=Callable()
+	_end_stage()
 	if is_instance_valid(dialogue_panel):
 		dialogue_panel.set_process_unhandled_key_input(false)
 		dialogue_panel.hide()
@@ -1472,6 +1529,7 @@ func _cancel_dialogue() -> void:
 func _dialogue_panel_exiting(panel: Control) -> void:
 	if dialogue_panel!=panel: return
 	_clear_boat_prologue()
+	_end_stage()
 	if is_instance_valid(audio):
 		audio.set_dialogue_active(false)
 	dialogue_panel=null

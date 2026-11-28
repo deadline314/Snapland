@@ -3403,6 +3403,11 @@ func react_story_npc(role: String, action: String) -> bool:
 		return false
 	return npc_activity.request_action(sprite, action, "front")
 
+## The sprite standing in for a story role here (null when the role is absent).
+func story_actor(role: String) -> Node3D:
+	var sprite: Variant = _npc_record_for_role(role).get("sprite")
+	return sprite as Node3D if is_instance_valid(sprite) else null
+
 func _npc_record_for_role(role: String) -> Dictionary:
 	for actor_record in character_sprites:
 		if String(actor_record.get("role", "")) == role:

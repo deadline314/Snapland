@@ -97,10 +97,12 @@ func _validate_story_data() -> Array[String]:
 			continue
 		for index in range(lines.size()):
 			var line: Variant = lines[index]
-			if not line is Dictionary or not ALLOWED_SPEAKERS.has(str(line.get("speaker", ""))) or str(line.get("text", "")).strip_edges().is_empty():
+			if not line is Dictionary or not ALLOWED_SPEAKERS.has(str(line.get("speaker", ""))) or (str(line.get("text", "")).strip_edges().is_empty() and not bool(line.get("pantomime", false))):
 				errors.append("%s[%d] has unknown speaker or empty text" % [field, index])
 			elif str(line.get("speaker", "")) == "露露":
 				errors.append("%s[%d] uses unavailable character 露露" % [field, index])
+			elif not cue_valid(line):
+				errors.append("%s[%d] has an invalid staging cue" % [field, index])
 	errors.append_array(_validate_prologue_lines())
 	errors.append_array(_validate_conversations())
 	var missions: Variant = _story_data.get("quest_missions", {})
@@ -133,6 +135,20 @@ func _validate_story_data() -> Array[String]:
 				if not ["interaction", "photo", "observation", "minigame_result", "time_phase"].has(str(step.get("kind", ""))) or str(step.get("target_id", "")).is_empty() or str(step.get("goal", "")).is_empty():
 					errors.append("mission '%s' step %d has invalid kind, target_id or goal" % [quest_id, index])
 	return errors
+
+const CUE_KEYS := ["frame", "zoom", "emote", "emote_on", "action", "hold"]
+const StageCues = preload("res://game/story/stage_cues.gd")
+
+## A staging cue only names known keys and emotes; a pantomime line must carry one.
+static func cue_valid(line: Dictionary) -> bool:
+	var cue: Variant = line.get("cue", {})
+	if not cue is Dictionary: return false
+	if bool(line.get("pantomime", false)) and (cue as Dictionary).is_empty(): return false
+	for key in cue:
+		if not CUE_KEYS.has(str(key)): return false
+	if cue.has("emote") and not StageCues.MARKS.has(str(cue.emote)): return false
+	if cue.has("hold") and not (float(cue.hold) >= 0.0 and float(cue.hold) <= 2.5): return false
+	return true
 
 func _validate_conversations() -> Array[String]:
 	var errors: Array[String] = []

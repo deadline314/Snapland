@@ -28,10 +28,10 @@
     {"speaker": "主角", "text": "準備好了。走上棧橋，去看看第一個風景吧。", "pose": "idle"}
   ],
   "intro_lines": [
-    {"speaker": "票票", "text": "船已靠岸。沿木棧橋進廣場，找戴圓眼鏡、背棕色包的票票。"},
-    {"speaker": "主角", "text": "我先把相機拿好。這裡的路牌和海風都值得拍。"},
-    {"speaker": "小角", "text": "等等，我想到新點子了：把尾巴彩帶當成構圖靈感。可以先用你的角色試拍看看嗎？"},
-    {"speaker": "票票", "text": "他在大道左側。先逛一圈，想幫忙或補拍都隨時可以回來。"}
+    {"speaker": "票票", "text": "船已靠岸。沿木棧橋進廣場，找戴圓眼鏡、背棕色包的票票。", "cue": {"frame": "ticket", "zoom": 0.6, "action": "greet"}},
+    {"speaker": "主角", "text": "我先把相機拿好。這裡的路牌和海風都值得拍。", "cue": {"frame": "player", "zoom": 0.7}},
+    {"speaker": "小角", "text": "等等，我想到新點子了：把尾巴彩帶當成構圖靈感。可以先用你的角色試拍看看嗎？", "cue": {"frame": "imp", "zoom": 0.55, "emote": "!", "hold": 1.0, "action": "greet"}},
+    {"speaker": "票票", "text": "他在大道左側。先逛一圈，想幫忙或補拍都隨時可以回來。", "cue": {"frame": "ticket", "zoom": 0.6, "emote": "sweat"}}
   ],
   "main_lines": [
     {"speaker": "票票", "text": "迎賓大道的設施都能重玩。拍貼也能補拍，不必趕行程。"},
