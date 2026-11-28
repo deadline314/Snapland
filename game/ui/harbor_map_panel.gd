@@ -498,8 +498,8 @@ func _ready() -> void:
 	# Drawn above the focused back stub's rim, which reaches up past the footer.
 	locations.z_index=2
 	# Each place is a small paper label; the gap keeps the labels apart.
-	locations.add_theme_constant_override("h_separation",14)
-	locations.add_theme_constant_override("v_separation",8)
+	locations.add_theme_constant_override("h_separation",12)
+	locations.add_theme_constant_override("v_separation",6)
 	add_child(locations)
 	for index in range(snapshot.points.size()):
 		var point: Dictionary=snapshot.points[index]
