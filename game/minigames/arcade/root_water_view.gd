@@ -1,8 +1,10 @@
 extends "res://game/minigames/arcade/arcade_view.gd"
-## Picture for 根系蓄水: a long potting bench across the greenhouse with
-## rollers along its front edge. Terracotta pots ride the rollers; each has a
-## glass side showing dark soil threaded with roots, and a chalk line with a
-## little leaf tab on either side. The island traveller (arcade_hero) stands
+## Picture for 根系蓄水: a long potting bench across the greenhouse with a
+## conveyor of wooden slats over rollers and a gear at each end. Tapered
+## terracotta pots with rolled rims and moss stains ride the slats, each with a
+## seedling in its soil and a clear glazed gauge strip down the front showing
+## the soil, the roots and the water rising, with a chalk line and a little
+## leaf tab on either side. The island traveller (arcade_hero) stands
 ## behind the bench holding a green watering can over the pot at the station;
 ## pouring tips the can and a stream of drops falls in, the water darkening the
 ## soil from below. Spot-on pots sprout a fresh shoot. Leaky pots are patched
@@ -38,6 +40,8 @@ var _soil: Array[ImageTexture] = []
 var _can: ImageTexture
 var _sprout: ImageTexture
 var _roller: ImageTexture
+var _slat: ImageTexture
+var _gear: ImageTexture
 
 
 func _init() -> void:
@@ -55,6 +59,8 @@ func _ready() -> void:
 	_can = Pixels.bake("water-can", Vector2i(22, 13), _paint_can)
 	_sprout = Pixels.bake("pot-sprout", Vector2i(9, 9), _paint_sprout)
 	_roller = Pixels.bake("bench-roller", Vector2i(5, 5), _paint_roller)
+	_slat = Pixels.bake("belt-slat", Vector2i(11, 3), _paint_slat)
+	_gear = Pixels.bake("belt-gear", Vector2i(11, 11), _paint_gear)
 
 
 func _draw_backdrop() -> void:
@@ -95,29 +101,43 @@ func _pot_px(pot: Dictionary) -> Vector2:
 
 ## Bottom centre of a pot on the bench.
 func _pot_foot(pot: Dictionary) -> Vector2:
-	return Vector2(float(pot.x) * DESIGN.x, BENCH_TOP + 2.0)
+	return Vector2(float(pot.x) * DESIGN.x, BENCH_TOP - 10.0)
 
 
-## The glass window of a pot (soil area), in design pixels.
-func _window(pot: Dictionary) -> Rect2:
-	var px := _pot_px(pot)
-	var top_left := _pot_foot(pot) - Vector2(px.x * 0.5, px.y)
-	return Rect2(top_left + Vector2(4, 3) * POT_SCALE, px - Vector2(8, 5) * POT_SCALE)
+## The glazed gauge strip down the front of a pot, in texels.
+static func gauge(texels: Vector2i) -> Rect2i:
+	var width := maxi(6, int(texels.x * 0.44))
+	return Rect2i((texels.x - width) / 2, 5, width, texels.y - 8)
 
 
 # --- The bench ------------------------------------------------------------------
 
 func _draw_bench() -> void:
 	bench(BENCH_TOP, WOOD)
-	# Rollers along the lip turn while a pot is moving.
+	# The conveyor: wooden slats riding over a row of rollers, with a gear at
+	# each end. Slats and gears move only while a pot is sliding.
 	var moving := false
 	for pot: Dictionary in state.pots:
 		moving = moving or pot.phase != "under"
-	var turn := 0.0 if reduced_motion or not moving else fposmod(now * 40.0, 24.0)
-	var x := -turn
-	while x < DESIGN.x:
-		stamp(_roller, Vector2(x, BENCH_TOP + 6.0), TEXEL, MORNING)
+	var run := not reduced_motion and moving
+	draw_rect(Rect2(28, BENCH_TOP - 2.0, DESIGN.x - 56.0, 10), Color("#3a2a1e"))
+	var x := 34.0 - (fposmod(now * 24.0, 24.0) if run else 0.0)
+	while x < DESIGN.x - 34.0:
+		if x > 28.0:
+			stamp(_roller, Vector2(x, BENCH_TOP + 2.0), TEXEL, MORNING)
 		x += 24.0
+	var belt := Rect2(40, BENCH_TOP - 12.0, DESIGN.x - 80.0, 12)
+	draw_rect(belt.grow(2.0), INK)
+	var slat := belt.position.x - (fposmod(now * 60.0, 48.0) if run else 0.0)
+	while slat < belt.end.x:
+		if slat >= belt.position.x - 2.0 and slat + 44.0 <= belt.end.x + 2.0:
+			stamp(_slat, Vector2(slat, belt.position.y), TEXEL, MORNING)
+		slat += 48.0
+	for end: float in [belt.position.x, belt.end.x]:
+		var turn := -now * 2.4 if run else 0.0
+		draw_set_transform(Vector2(end, BENCH_TOP - 4.0), turn, Vector2.ONE)
+		stamp(_gear, Vector2(-24, -24), TEXEL, MORNING)
+		draw_set_transform(Vector2.ZERO)
 
 
 # --- The pots -----------------------------------------------------------------
@@ -134,7 +154,8 @@ func _draw_pot(pot: Dictionary, with_hero: bool) -> void:
 	# Inside the pot everything is drawn in texel units, scaled up by GROW.
 	draw_set_transform(origin, 0.0, squish * GROW)
 	stamp(_soil[size], Vector2.ZERO, TEXEL, MORNING)
-	var window := Rect2(Vector2(4, 3) * TEXEL, Vector2(POT_SIZES[size] - Vector2i(8, 5)) * TEXEL)
+	var strip := gauge(POT_SIZES[size])
+	var window := Rect2(Vector2(strip.position) * TEXEL, Vector2(strip.size) * TEXEL)
 	# Water darkens the soil from the bottom up, with a bright surface line.
 	var level := clampf(float(pot.level), 0.0, 1.0)
 	if level > 0.0:
@@ -154,14 +175,28 @@ func _draw_pot(pot: Dictionary, with_hero: bool) -> void:
 	draw_set_transform(Vector2.ZERO)
 	if pot.kind == "leaky" and level > 0.0 and pot.phase != "out":
 		_draw_drips(foot, px)
-	if pot.result == "perfect":
-		var shoot := pop_in(age(float(pot.result_at)), 0.35)
-		stamp(_sprout, foot - Vector2(27, px.y + 50.0 * shoot), POT_SCALE * shoot, MORNING)
+	if not with_hero:
+		_draw_seedling(pot, foot, px)
 	if bool(pot.spilled):
 		# Water sheets over the rim on both sides.
 		for side: float in [-1.0, 1.0]:
 			var lip := foot + Vector2(side * px.x * 0.5, -px.y)
 			draw_rect(Rect2(lip + Vector2(-6 if side < 0.0 else 0.0, 0), Vector2(12, px.y)), Color(WATER, 0.55))
+
+
+## Every pot holds a little seedling: pale and droopy while it waits, a
+## bright fresh shoot once watered spot on, browning if left dry or drowned.
+func _draw_seedling(pot: Dictionary, foot: Vector2, px: Vector2) -> void:
+	var tint := Color(0.86, 0.9, 0.62)
+	var grow := 0.55
+	match str(pot.result):
+		"perfect":
+			tint = MORNING
+			grow = lerpf(0.55, 1.0, pop_in(age(float(pot.result_at)), 0.35))
+		"dry", "soggy", "spilled":
+			tint = Color(0.78, 0.62, 0.4)
+	var scale_factor := POT_SCALE * grow
+	stamp(_sprout, foot - Vector2(4.5 * scale_factor, px.y + 8.0 * scale_factor - POT_SCALE), scale_factor, tint)
 
 
 func _draw_line(window: Rect2, line: float) -> void:
@@ -172,7 +207,7 @@ func _draw_line(window: Rect2, line: float) -> void:
 		draw_rect(Rect2(x, y - TEXEL * 0.5, TEXEL * 2.0, TEXEL), CHALK)
 		x += TEXEL * 3.0
 	for side: float in [-1.0, 1.0]:
-		var tab := Vector2(window.position.x - 3.0 * TEXEL if side < 0.0 else window.end.x + TEXEL, y - TEXEL)
+		var tab := Vector2(window.position.x - 4.0 * TEXEL if side < 0.0 else window.end.x + 2.0 * TEXEL, y - TEXEL)
 		draw_rect(Rect2(tab, Vector2(2.0 * TEXEL, 2.0 * TEXEL)), INK)
 		draw_rect(Rect2(tab + Vector2(1, 1), Vector2(2.0 * TEXEL - 2.0, 2.0 * TEXEL - 2.0)), LEAF)
 
@@ -208,8 +243,8 @@ func _draw_can(station: Dictionary) -> void:
 	var spout := grip + (Vector2(58, -22) * GROW).rotated(tilt)
 	var bottom := BENCH_TOP - 20.0
 	if not station.is_empty():
-		var window := _window(station)
-		bottom = window.end.y - window.size.y * clampf(float(station.level), 0.0, 1.0)
+		# The drops land on the soil just inside the rim.
+		bottom = _pot_foot(station).y - _pot_px(station).y + POT_SCALE * 2.0
 	var y := spout.y
 	var step := 0
 	while y < bottom:
@@ -249,41 +284,58 @@ func _draw_puddle(since: float) -> void:
 # --- Texel painters ---------------------------------------------------------------
 
 func _paint_shell(x: int, y: int, texels: Vector2i, kind: String) -> Color:
-	# A terracotta pot: a thick rim on top, sides tapering in, and a glass
-	# window cut into the front (left clear so the soil shows through).
-	var taper := int(floor(float(y - 3) / texels.y * 3.0)) if y >= 3 else -1
-	var left := 0 if y < 3 else 1 + taper
-	var right := texels.x - 1 - left
-	if x < left or x > right:
+	# A tapered terracotta pot seen from the front: soil heaped just above a
+	# rolled rim, the body narrowing to a foot, lit from the left, a moss stain
+	# low down on the shady side and a clear glazed gauge strip down the middle.
+	var w := texels.x
+	var h := texels.y
+	if y == 0:
+		return Pixels.grainy(SOIL.lightened(0.12), x, y, 0.1) if x >= 3 and x <= w - 4 else Pixels.CLEAR
+	if y <= 3:
+		# The rolled rim: rounded ends, a lit top and a shaded underside.
+		if (x == 0 or x == w - 1) and y != 2:
+			return Pixels.CLEAR
+		var light := 0.5 if y == 1 else (0.1 if y == 2 else -0.45)
+		return Pixels.lit(CLAY.lightened(0.18), light - float(x) / w * 0.4, x, y)
+	var inset := 1 + int(floor(float(y - 4) / maxf(1.0, h - 5) * w * 0.14))
+	if y == h - 1:
+		inset += 1
+	if x < inset or x > w - 1 - inset:
 		return Pixels.CLEAR
+	var strip := gauge(texels)
+	if strip.has_point(Vector2i(x, y)):
+		return Pixels.CLEAR
+	if strip.grow(1).has_point(Vector2i(x, y)):
+		# The glaze around the gauge: a creamy ring, brighter on its lit side.
+		return Color("#f4ead0") if x < strip.position.x or y < strip.position.y else Color("#d9cba8")
+	var across := float(x - inset) / maxf(1.0, w - 1 - 2 * inset)
 	var tone := CLAY
-	if y < 3:
-		tone = CLAY.lightened(0.12)
-		return Pixels.lit(tone, 0.4 - y * 0.3, x, y)
-	var inside := x >= 4 and x <= texels.x - 5 and y >= 3 and y <= texels.y - 3
-	if inside:
-		# The glass: clear in the middle, a glint along one edge.
-		if x == 4 or y == 3:
-			return Color(1, 1, 1, 0.0)
-		return Pixels.CLEAR
-	if kind == "grow" and y >= texels.y - 5 and y <= texels.y - 4:
-		return LEAF if (x / 2) % 2 == 0 else Color("#ffd166")
-	if kind == "leaky" and (x == 2 and y == texels.y - 4 or x == texels.x - 3 and y == texels.y - 6):
-		return Color("#3a2418")
-	if kind == "leaky" and x <= 3 and y >= 6 and y <= 8:
-		return Color("#d9c08a")
-	var shade := float(x - left) / maxf(1.0, right - left)
-	return Pixels.grainy(Pixels.lit(tone, 0.35 - shade * 0.7, x, y), x, y, 0.06)
+	if y == h - 1:
+		tone = CLAY.darkened(0.25)
+	if kind == "grow" and (y == 5 or y == 6):
+		tone = LEAF if (x / 2) % 2 == 0 else Color("#ffd166")
+	if kind == "leaky":
+		if x >= inset + 1 and x <= inset + 3 and y >= 7 and y <= 9:
+			return Color("#d9c08a") if (x + y) % 3 != 0 else Color("#a89048")
+		if (x == w - 2 - inset and y == h - 5) or (x == inset + 2 and y == h - 3):
+			return Color("#2a1810")
+	# A greenish moss stain creeping up from the foot on the shady side.
+	var low := float(y) / h
+	if low > 0.55 and across > 0.55 and Pixels.noise(x, y, 53) > 1.25 - low:
+		tone = tone.lerp(Color("#6f8a4a"), 0.65)
+	return Pixels.grainy(Pixels.lit(tone, 0.45 - across * 0.9, x, y), x, y, 0.06)
 
 
 func _paint_soil(x: int, y: int, texels: Vector2i) -> Color:
-	# The inside seen through the glass: crumbly soil with pale roots winding down.
-	if x < 3 or x > texels.x - 4 or y < 3 or y > texels.y - 2:
+	# Seen through the gauge: crumbly soil with pale roots winding down.
+	var strip := gauge(texels)
+	if not strip.has_point(Vector2i(x, y)):
 		return Pixels.CLEAR
-	var root := absf(sin(float(y) * 0.55 + float(x) * 0.18) * 3.0 + texels.x * 0.5 - x) < 0.8 and y > 4
-	var side_root := absf(sin(float(y) * 0.7 + 2.0) * 2.5 + texels.x * 0.32 - x) < 0.7 and y > 6
+	var middle := strip.position.x + strip.size.x * 0.5
+	var root := absf(sin(float(y) * 0.6) * 1.2 + middle - 0.5 - x) < 0.7
+	var side_root := absf(sin(float(y) * 0.8 + 2.0) * 1.0 + middle - 1.6 - x) < 0.6 and y > strip.position.y + 3
 	if root or side_root:
-		return ROOT.darkened(0.1 * float(y) / texels.y)
+		return ROOT.darkened(0.15 * float(y) / texels.y)
 	var tone := SOIL.lightened(0.08 * (1.0 - float(y) / texels.y))
 	if Pixels.noise(x, y, 41) > 0.9:
 		tone = tone.lightened(0.18)
@@ -315,6 +367,25 @@ func _paint_sprout(x: int, y: int) -> Color:
 		if leaf.length() <= 1.0:
 			return Pixels.rounded(LEAF, leaf)
 	return Pixels.CLEAR
+
+
+func _paint_slat(x: int, y: int) -> Color:
+	# One wooden slat of the conveyor, rounded at the ends.
+	if (x == 0 or x == 10) and y != 1:
+		return Pixels.CLEAR
+	return Pixels.wood(WOOD.lightened(0.1 - y * 0.12), x, y, 3, false)
+
+
+func _paint_gear(x: int, y: int) -> Color:
+	# A small iron gear: a toothed ring around a dark hub.
+	var at := Vector2(x + 0.5 - 5.5, y + 0.5 - 5.5)
+	var reach := at.length()
+	var teeth := sin(at.angle() * 8.0) > 0.0
+	if reach > (5.4 if teeth else 4.2):
+		return Pixels.CLEAR
+	if reach < 1.3:
+		return INK
+	return Pixels.rounded(Color("#8a8f99"), at / 5.5) if reach > 2.2 else Color("#6a6f79")
 
 
 func _paint_roller(x: int, y: int) -> Color:
