@@ -138,5 +138,25 @@
       "lantern",
       "bench"
     ]
+  },
+  {
+    "id": "game-092",
+    "mode": "sheep_count",
+    "zone": "hotel",
+    "local_index": 8,
+    "arcade": true,
+    "name": "窗簾星圖",
+    "goal": "躺在床上數窗外跳柵欄的羊：每隻真的羊跳到柵欄上時按一下，就縫成窗簾上的一顆星；混在裡面的小鬼羊不能數。數錯的話，你會先睡著滾下床。",
+    "instructions": "空白鍵、E、↑ 或手把 A 鈕：數一隻。真的羊在草地上有影子，小鬼羊沒有。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助數羊拿到金牌",
+    "ordinary": "在真的羊跳過柵欄時數羊，拿到銅牌",
+    "attraction_tag": "窗簾星圖",
+    "island_invitation": "睡不著就來數羊！每數到一隻真的羊，窗簾上就多一顆星星。小心混進來的小鬼羊，數錯的話，你會比羊先睡著，咕咚滾下床。",
+    "retake_props": [
+      "mascot",
+      "lantern",
+      "bench"
+    ]
   }
 ]

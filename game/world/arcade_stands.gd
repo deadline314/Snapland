@@ -74,6 +74,8 @@ const STANDS := {
 			"stand": Vector3(-11.0, 0.2, 5.6), "point": Vector3(-10.05, 0.2, 6.95), "prop": "lift", "paint": Color("#8a6030")},
 		{"id": "game-091", "title": "枕頭靜步", "prompt": "枕頭靜步 · 打呼時才能走",
 			"stand": Vector3(12.8, 0.2, 7.0), "point": Vector3(13.75, 0.2, 8.35), "prop": "sleeper", "paint": Color("#c0485e")},
+		{"id": "game-092", "title": "窗簾星圖", "prompt": "窗簾星圖 · 數真的羊",
+			"stand": Vector3(7.4, 0.2, 3.4), "point": Vector3(8.35, 0.2, 4.75), "prop": "sheep", "paint": Color("#3e4380")},
 	],
 	# Sky stands use the kept sites in sky_world.STAND_SITES (stand and point copied).
 	"sky": [
@@ -134,6 +136,7 @@ static func build(world: Node3D, region: String) -> void:
 			"roots": _roots_prop(sculpt)
 			"leafboat": _leafboat_prop(sculpt)
 			"book": _book_prop(sculpt)
+			"sheep": _sheep_prop(sculpt)
 			"sleeper": _sleeper_prop(sculpt)
 			"lift": _lift_prop(sculpt)
 			"window": _window_prop(sculpt)
@@ -873,3 +876,22 @@ static func _cloud_camera_prop(sculpt: Kit.Sculpt) -> void:
 		sculpt.box(Vector3(-0.2 + ear, 3.32, -0.3), Vector3(0.03, 0.1, 0.03), white)
 	for card in 3:
 		sculpt.box(Vector3(-0.15 + card * 0.02, 1.0 + card * 0.01, 0.12), Vector3(0.12, 0.01, 0.14), white.darkened(0.05 * card))
+
+
+## A little wooden fence on the roof with a woolly sheep leaping it under a
+## crescent moon and a stitched star, and a nightcap and a tally slate on the
+## counter.
+static func _sheep_prop(sculpt: Kit.Sculpt) -> void:
+	var wood := Color("#8a6a4a")
+	for post: float in [-0.36, 0.36]:
+		sculpt.box(Vector3(post, 2.62, -0.3), Vector3(0.06, 0.36, 0.06), wood)
+	for rail: float in [2.56, 2.72]:
+		sculpt.box(Vector3(0, rail, -0.3), Vector3(0.78, 0.05, 0.04), wood.lightened(0.08))
+	sculpt.ball(Vector3(0.02, 3.0, -0.26), 0.16, Color("#f4f0ff"), Color("#d8d2ea"), 10, 5, 0.75)
+	sculpt.ball(Vector3(0.2, 3.04, -0.2), 0.07, Color("#3a3040"), Color.TRANSPARENT, 6, 3)
+	for leg: float in [-0.08, 0.1]:
+		sculpt.box(Vector3(leg, 2.86, -0.22), Vector3(0.03, 0.1, 0.03), Color("#3a3040"), Basis(Vector3.BACK, 0.6))
+	sculpt.tube(Vector3(-0.34, 3.36, -0.3), 0.1, 0.1, 0.03, Color("#fff2c4"), 10, Basis(Vector3.RIGHT, PI * 0.5))
+	sculpt.box(Vector3(0.32, 3.34, -0.28), Vector3(0.08, 0.08, 0.02), Color("#ffd98a"), Basis(Vector3.BACK, 0.785))
+	sculpt.tube(Vector3(-0.26, 1.04, 0.1), 0.1, 0.02, 0.2, Color("#5b3f74"), 8, Basis(Vector3.BACK, 0.5))
+	sculpt.box(Vector3(0.28, 1.06, 0.06), Vector3(0.3, 0.2, 0.03), Color("#2a2a32"), Basis(Vector3.RIGHT, -0.3))

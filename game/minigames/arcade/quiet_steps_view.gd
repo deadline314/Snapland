@@ -197,12 +197,22 @@ func _paint_bed(x: int, y: int, quilt: Color) -> Color:
 	return Pixels.lit(quilt.lightened(0.1) if patch else quilt, 0.3 - (y - 13) * 0.05, x, y)
 
 
-## A plump pillow with tufted corners.
+## A plump pillow in a ticking-stripe case: lilac stripes, a stitched seam
+## round the edge, tufted corners and a rounded shade toward the bottom.
 func _paint_pillow(x: int, y: int) -> Color:
 	var at := Vector2((x + 0.5) / 7.0 - 1.0, (y + 0.5) / 4.5 - 1.0)
 	if absf(at.y) > 1.0 - 0.15 * absf(at.x) or (absf(at.x) > 0.86 and absf(at.y) > 0.72):
 		return Pixels.CLEAR
-	return Pixels.lit(Color("#f3ecfa"), 0.5 - at.y * 0.6 - absf(at.x) * 0.3, x, y)
+	if (x == 0 or x == 13) and (y == 1 or y == 7):
+		return Color("#c9b6ff")
+	var base := Color("#f3ecfa")
+	if posmod(x, 4) == 1:
+		base = Color("#b7a3df")
+	# A dotted seam just inside the edge.
+	var inside := absf(at.y) > 0.62 - 0.12 * absf(at.x) and absf(at.y) < 0.8 and posmod(x, 2) == 0
+	if inside:
+		return Color("#8f78b8")
+	return Pixels.lit(base, 0.6 - at.y * 0.7 - absf(at.x) * 0.35, x, y)
 
 
 ## A floppy striped nightcap with a pom-pom.
