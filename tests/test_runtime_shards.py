@@ -57,7 +57,7 @@ class RuntimeShardTests(unittest.TestCase):
         indices = ast.literal_eval(matrix.group(1))
         command = re.findall(r"^        run: python tools/run_game_tests.py (.+)$", runtime, re.M)
         self.assertEqual(len(command), 1)
-        flags = re.fullmatch(r"--shard-index \$\{\{ matrix.shard-index \}\} --shard-count (\d+)", command[0])
+        flags = re.fullmatch(r"--shard-index \$\{\{ matrix.shard-index \}\} --shard-count (\d+)(?: --keep-going)?", command[0])
         self.assertIsNotNone(flags, "CI must run its complete shard without local filters")
         count = int(flags.group(1))
         self.assertEqual(count, 4)
@@ -81,7 +81,10 @@ class RuntimeShardTests(unittest.TestCase):
         self.assertIn("tests.test_runtime_result_contract", runtime)
         self.assertIn("tests.test_godot_entrypoints", runtime)
         for job in (source, runtime):
-            self.assertNotRegex(job, r"(?m)^\s+(?:if|continue-on-error):")
+            # Steps may keep running after an earlier failure or upload its logs, but nothing may turn a failure green.
+            self.assertNotRegex(job, r"(?m)^\s+continue-on-error:")
+            for condition in re.findall(r"(?m)^\s+if: (.+)$", job):
+                self.assertIn(condition, ("${{ !cancelled() }}", "${{ failure() }}"))
             self.assertIn("Godot_v4.7.2-stable_linux.x86_64.zip", job)
 
     def test_scheduled_runs_do_not_cancel_change_runs(self) -> None:

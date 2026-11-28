@@ -172,7 +172,8 @@ def _background_creationflags(env: Mapping[str, str] | None = None) -> int:
     source = env if env is not None else os.environ
     if not _WINDOWS or source.get("SNAPLAND_TEST_PRIORITY", "").lower() == "normal":
         return 0
-    return subprocess.BELOW_NORMAL_PRIORITY_CLASS
+    # The constant only exists on Windows; tests that simulate Windows run on Linux CI too.
+    return getattr(subprocess, "BELOW_NORMAL_PRIORITY_CLASS", 0x00004000)
 
 
 def _stop_owned_process(process: subprocess.Popen[str]) -> tuple[str, str]:

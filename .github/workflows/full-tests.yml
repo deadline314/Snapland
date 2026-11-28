@@ -91,6 +91,7 @@ jobs:
       - name: Verify runtime completion, entrypoint and shard coverage contracts
         run: python -m unittest tests.test_runtime_result_contract tests.test_godot_entrypoints tests.test_runtime_shards -v
       - name: Install pinned Godot 4.7.2
+        if: ${{ !cancelled() }}
         shell: bash
         run: |
           curl --fail --location --retry 3 --output godot.zip https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip
@@ -98,4 +99,15 @@ jobs:
           chmod +x Godot_v4.7.2-stable_linux.x86_64
           echo "GODOT_BIN=$PWD/Godot_v4.7.2-stable_linux.x86_64" >> "$GITHUB_ENV"
       - name: Run native Godot startup and runtime tests
-        run: python tools/run_game_tests.py --shard-index ${{ matrix.shard-index }} --shard-count 4
+        if: ${{ !cancelled() }}
+        env:
+          SNAPLAND_TEST_LOG_DIR: ${{ runner.temp }}/godot-logs
+        run: python tools/run_game_tests.py --shard-index ${{ matrix.shard-index }} --shard-count 4 --keep-going
+      - name: Upload full suite logs
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: godot-logs-shard-${{ matrix.shard-index }}
+          path: ${{ runner.temp }}/godot-logs
+          retention-days: 7
+          if-no-files-found: ignore

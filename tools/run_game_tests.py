@@ -370,6 +370,36 @@ def fail(message: str) -> int:
     return 1
 
 
+class SuiteReport:
+    """Full per-suite logs (SNAPLAND_TEST_LOG_DIR) and a CI step summary (GITHUB_STEP_SUMMARY)."""
+
+    def __init__(self) -> None:
+        log_dir = os.environ.get("SNAPLAND_TEST_LOG_DIR")
+        self.log_dir = Path(log_dir) if log_dir else None
+        if self.log_dir:
+            self.log_dir.mkdir(parents=True, exist_ok=True)
+        self.rows: list[tuple[str, str, float, str]] = []
+
+    def record(self, index: int, label: str, output: str, seconds: float, message: str | None) -> None:
+        if self.log_dir:
+            slug = re.sub(r"[^a-z0-9]+", "-", label.lower()).strip("-")
+            (self.log_dir / f"{index:03d}-{slug}.log").write_text(output, encoding="utf-8", errors="replace")
+        self.rows.append((label, "FAIL" if message else "PASS", seconds, (message or "")[-3000:]))
+
+    def write_summary(self, title: str) -> None:
+        path = os.environ.get("GITHUB_STEP_SUMMARY")
+        if not path or not self.rows:
+            return
+        failed = [row for row in self.rows if row[1] == "FAIL"]
+        lines = [f"### {title}: {len(self.rows) - len(failed)} passed, {len(failed)} failed", "",
+                 "| Suite | Result | Seconds |", "|---|---|---|"]
+        lines += [f"| {label} | {status} | {seconds:.1f} |" for label, status, seconds, _ in self.rows]
+        for label, _, _, tail in failed:
+            lines += ["", f"<details><summary>{label}</summary>", "", "~~~~", tail, "~~~~", "</details>"]
+        with open(path, "a", encoding="utf-8") as summary:
+            summary.write("\n".join(lines) + "\n")
+
+
 def result_error(label: str, result: subprocess.CompletedProcess[str], expected_save_path: str | None = None) -> str | None:
     """A completed engine process still needs its own error-free completion line."""
     output = (result.stdout or "") + "\n" + (result.stderr or "")
@@ -823,6 +853,8 @@ def main(argv: list[str] | None = None) -> int:
         except ValueError as error:
             return fail(str(error))
         failures: list[str] = []
+        report = SuiteReport()
+        title = f"Shard {options.shard_index}/{options.shard_count}" if options.shard_count else "Runtime suites"
         for suite_index, (label, command) in enumerate(checks):
             # Photos, decoder proofs and caches live beside the JSON profile.
             # Distinct filenames in one parent still let suites affect each other.
@@ -840,16 +872,20 @@ def main(argv: list[str] | None = None) -> int:
                 output = decoded(error.stdout) + "\n" + decoded(error.stderr)
                 message = f"{label} timed out after {timeout:g} seconds:\n{output.strip()[-6000:]}"
             except (ValueError, OSError, subprocess.SubprocessError) as error:
-                message = f"{label} could not run: {error}"
+                output = message = f"{label} could not run: {error}"
             else:
+                output = (result.stdout or "") + "\n" + (result.stderr or "")
                 message = result_error(label, result, env["SNAPLAND_SAVE_PATH"])
+            report.record(suite_index, label, output, time.monotonic() - started, message)
             if message:
                 if label == "clean project import" or not options.keep_going:
+                    report.write_summary(title)
                     return fail(message)
                 fail(message)
                 failures.append(label)
                 continue
             print(f"PASS: {label} ({time.monotonic() - started:.2f}s)", flush=True)
+        report.write_summary(title)
     if failures:
         return fail(f"{len(failures)} of {len(checks)} runtime checks failed: {failures!r}")
     return 0
