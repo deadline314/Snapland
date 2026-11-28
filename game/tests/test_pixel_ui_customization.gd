@@ -46,6 +46,16 @@ func _run() -> void:
 	get_tree().root.add_child(main)
 	get_tree().root.size=Vector2i(800,450)
 	await _frames(3)
+	# A long notice wraps onto several lines and stays fully on screen (ART-78).
+	for dims in [Vector2i(800,450),Vector2i(1280,720),Vector2i(1920,1080)]:
+		get_tree().root.size=dims
+		await _frames(3)
+		main._notice("地底惡魔劇場的閘門打開了，直接走進閘門就能挑戰今晚的惡魔拍貼，別錯過散場前的最後一場！")
+		await _frames(3)
+		_check(main.toast.get_line_count()>1 and get_viewport().get_visible_rect().encloses(main.toast.get_global_rect()),"a long notice wraps and stays on screen at %s / 1.25: %s"%[dims,main.toast.get_global_rect()])
+	main._notice("")
+	get_tree().root.size=Vector2i(800,450)
+	await _frames(3)
 	# Exercise the same retained Main -> RefCounted-panel path as the player, then
 	# record real settled control geometry before asserting visual availability.
 	main._show_settings()
