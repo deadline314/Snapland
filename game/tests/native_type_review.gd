@@ -38,6 +38,8 @@ func _run() -> void:
 	main = MainScene.instantiate()
 	add_child(main)
 	await _settle(1.2)
+	main._notice("午後陣雨來了！找個屋簷躲一下吧。")
+	await _settle(0.5)
 	await _snap(size_arg + "01-park-hud")
 	main._show_pause()
 	await _settle(0.5)

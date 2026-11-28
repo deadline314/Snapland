@@ -610,7 +610,9 @@ func _build_ui() -> void:
 	context_action.name="ContextAction"
 	context_action.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	context_action.visible=false
-	Paper.set_button_role(context_action,"primary")
+	# A coral key sticker with a hand on its band instead of a flat red bar (ART-78);
+	# the button keeps its text, hit area and focus.
+	Collage.dress(context_action,"stub",6,"grab",Paper.CORAL,-1.5)
 	context_bar.visible=false
 	# Notices arrive as a cream voyage ticket so they read over any scene.
 	toast=Paper.label("",21,Paper.TICKET_INK)
@@ -619,14 +621,16 @@ func _build_ui() -> void:
 	toast.size=Vector2(620,90)
 	toast.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
 	toast.add_theme_color_override("font_color",Paper.TICKET_INK)
-	var toast_paper := Paper.ticket(30.0)
-	toast_paper.content_margin_left=44
-	toast_paper.content_margin_right=20
-	toast_paper.content_margin_top=10
-	toast_paper.content_margin_bottom=13
+	# A torn note taped over the scene (ART-78); it slaps down with each notice.
+	var toast_paper := StyleBoxEmpty.new()
+	toast_paper.content_margin_left=28
+	toast_paper.content_margin_right=28
+	toast_paper.content_margin_top=12
+	toast_paper.content_margin_bottom=14
 	toast.add_theme_stylebox_override("normal",toast_paper)
 	toast.visible=false
 	hud.add_child(toast)
+	Collage.backing(toast,"note",5,Collage.CREAM,2.0)
 	field_chip=FieldGameChip.new()
 	hud.add_child(field_chip)
 	arrival_stamp=ArrivalStampScript.new()
@@ -1037,11 +1041,12 @@ func _process(delta: float) -> void:
 			var prompt := _context_prompt()
 			if context_action.text!=prompt:
 				context_action.text=prompt
+				context_action.get_node("CollageArt").queue_redraw()
 				context_action.tooltip_text = "F 可向站定的角色揮手。" if not world.is_riding() and STORY_CHARACTER_BY_POINT.has(str(world.nearest.get("id", ""))) else ""
 				_adapt_hud()
 		if context_appeared:
 			PaperMotion.fade_in(context_bar,0.12)
-			PaperMotion.flash(context_action,PaperMotion.GAIN_TINT,0.3)
+			context_action.get_node("CollageArt").fly_in(0.0)
 	if modal_kind=="dialogue" and is_instance_valid(dialogue_label) and dialogue_label.visible_characters>=0 and cue_hold_left<=0.0:
 		var previous_count := dialogue_label.visible_characters
 		if reveal_hold>0.0: reveal_hold=maxf(0.0,reveal_hold-delta)
@@ -3193,6 +3198,8 @@ func _notice(message: String) -> void:
 	if not message.is_empty():
 		PaperMotion.pop(toast,1.08)
 		PaperMotion.flash(toast,PaperMotion.GAIN_TINT,0.5)
+		var note: Node = toast.get_node_or_null("CollageBacking")
+		if note != null: note.fly_in(0.0)
 	var timer := get_tree().create_timer(3.5)
 	timer.timeout.connect(func(): if is_instance_valid(toast) and toast.text==message: toast.text=""; toast.visible=false)
 
