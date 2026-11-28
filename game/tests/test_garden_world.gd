@@ -66,6 +66,7 @@ const STAND_ROUTES := {
 	"game-080": [Vector2(0, 4.65), Vector2(4.0, 4.65), Vector2(4.0, -6.15)],
 	"game-076": [Vector2(0, 4.65), Vector2(-7.2, 4.65), Vector2(-7.2, -5.4)],
 	"game-078": [Vector2(0, 4.65), Vector2(7.2, 4.65), Vector2(7.2, -4.6)],
+	"game-081": [Vector2(0, 4.65), Vector2(7.2, 4.65), Vector2(7.2, -1.6)],
 	"game-075": [Vector2(0, 4.65), Vector2(4.0, 4.65), Vector2(4.0, -6.15), Vector2(4.0, -9.3)],
 }
 

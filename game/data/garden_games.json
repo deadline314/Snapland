@@ -158,5 +158,25 @@
       "camera",
       "bench"
     ]
+  },
+  {
+    "id": "game-081",
+    "mode": "root_water",
+    "zone": "garden",
+    "local_index": 9,
+    "arcade": true,
+    "name": "根系蓄水",
+    "goal": "按住替一盆盆幼苗澆水，水到盆上的刻線就放手；澆太多水會滿出來，主角踩到水滑一跤坐進盆裡。",
+    "instructions": "空白鍵、Enter 或手把 A 鈕、按住畫面：按住澆水，放開停。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助澆水拿到金牌",
+    "ordinary": "替幼苗澆到刻線，拿到銅牌",
+    "attraction_tag": "育苗工作台",
+    "island_invitation": "一盆盆幼苗排隊等喝水，水要剛好停在刻線上。小心別澆太滿，地上一灘水會讓你一屁股坐進盆裡！",
+    "retake_props": [
+      "flower_horn",
+      "hat",
+      "bench"
+    ]
   }
 ]

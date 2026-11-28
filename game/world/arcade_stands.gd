@@ -53,6 +53,8 @@ const STANDS := {
 			"stand": Vector3(7.0, 0.2, 6.0), "point": Vector3(5.85, 0.2, 7.35), "prop": "mushroom", "paint": Color("#8a4a3a")},
 		{"id": "game-080", "title": "螢火蟲對暗號", "prompt": "螢火蟲對暗號 · 照閃光按回去",
 			"stand": Vector3(2.6, 0.2, -7.7), "point": Vector3(1.55, 0.2, -6.35), "prop": "code", "paint": Color("#3a3f5c")},
+		{"id": "game-081", "title": "根系蓄水", "prompt": "根系蓄水 · 按住澆到刻線",
+			"stand": Vector3(8.45, 0.86, -3.1), "point": Vector3(7.75, 0.86, -1.95), "prop": "roots", "paint": Color("#4f7f6a")},
 	],
 	# Hotel stands use the kept sites in hotel_world.STAND_SITES (stand and point copied).
 	"hotel": [
@@ -113,6 +115,7 @@ static func build(world: Node3D, region: String) -> void:
 			"vine": _vine_prop(sculpt)
 			"post": _post_prop(sculpt)
 			"bee": _bee_prop(sculpt)
+			"roots": _roots_prop(sculpt)
 			"book": _book_prop(sculpt)
 			"window": _window_prop(sculpt)
 			"bubble": _bubble_prop(sculpt)
@@ -526,6 +529,29 @@ static func _bee_prop(sculpt: Kit.Sculpt) -> void:
 		var at := Vector3(0.22 + (bloom % 2) * 0.16, 1.24 + floorf(bloom * 0.5) * 0.08, 0.06 + (bloom % 3) * 0.04)
 		sculpt.ball(at, 0.06, Color("#f2a7b8"), Color("#ffd166"), 6, 3)
 	sculpt.box(Vector3(-0.3, 1.0, 0.1), Vector3(0.36, 0.06, 0.26), CREAM)
+
+
+## A big green watering can tipped over a seedling pot on the roof, a stream
+## of drops between them, and three little pots with sprouts on the counter.
+static func _roots_prop(sculpt: Kit.Sculpt) -> void:
+	var can := Color("#4f8f6a")
+	var clay := Color("#c0673f")
+	var leaf := Color("#6fb04f")
+	var tip := Basis(Vector3.BACK, 0.45)
+	sculpt.tube(Vector3(-0.3, 2.78, -0.3), 0.2, 0.2, 0.34, can, 10, tip * Basis(Vector3.RIGHT, PI * 0.5))
+	sculpt.box(Vector3(-0.38, 3.0, -0.3), Vector3(0.05, 0.22, 0.05), can.darkened(0.2), tip)
+	sculpt.box(Vector3(0.0, 2.88, -0.3), Vector3(0.36, 0.05, 0.05), can.darkened(0.1), Basis(Vector3.BACK, -0.35))
+	sculpt.box(Vector3(0.2, 2.8, -0.3), Vector3(0.09, 0.12, 0.12), Color("#c9b26a"))
+	for drop in 3:
+		sculpt.box(Vector3(0.3 + drop * 0.03, 2.66 - drop * 0.11, -0.3), Vector3(0.035, 0.06, 0.035), Color("#8fd0f0"))
+	sculpt.tube(Vector3(0.4, 2.42, -0.3), 0.14, 0.11, 0.16, clay, 8)
+	sculpt.ball(Vector3(0.4, 2.55, -0.3), 0.07, leaf, Color.TRANSPARENT, 6, 3, 0.6)
+	for pot in 3:
+		var at := Vector3(-0.42 + pot * 0.34, 1.02, 0.12)
+		sculpt.tube(at, 0.09, 0.07, 0.14, clay.darkened(0.06 * pot), 8)
+		sculpt.box(at + Vector3(0, 0.12, 0), Vector3(0.02, 0.1, 0.02), leaf.darkened(0.2))
+		for side: float in [-1.0, 1.0]:
+			sculpt.ball(at + Vector3(side * 0.04, 0.17, 0), 0.035, leaf, Color.TRANSPARENT, 5, 2, 0.6)
 
 
 ## A big open book on the roof with its two pages swinging up to clap, a
