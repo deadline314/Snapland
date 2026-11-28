@@ -1519,6 +1519,7 @@ func _stage_line(line: Dictionary, speaker: String) -> void:
 ## Actor id to node; with an action, also plays that authored NPC action.
 func _stage_actor(id: String, action: String) -> Node3D:
 	if not is_instance_valid(world): return null
+	if is_instance_valid(boat_stage): return boat_stage.actor(id,action)
 	if id=="player": return world.get("avatar") as Node3D
 	var place := region_world()
 	if not is_instance_valid(place) or not place.has_method("story_actor"): return null

@@ -274,7 +274,7 @@ func _validate_prologue_lines() -> Array[String]:
 		return errors
 	for index in range(lines.size()):
 		var line: Variant = lines[index]
-		if not line is Dictionary or not ALLOWED_SPEAKERS.has(line.get("speaker", null)) or not line.get("text", null) is String or str(line.get("text", "")).strip_edges().is_empty() or not ["idle", "interact", "photograph", "wave"].has(line.get("pose", null)):
+		if not line is Dictionary or not ALLOWED_SPEAKERS.has(line.get("speaker", null)) or not line.get("text", null) is String or (str(line.get("text", "")).strip_edges().is_empty() and not bool(line.get("pantomime", false))) or not ["idle", "interact", "photograph", "wave"].has(line.get("pose", null)) or not cue_valid(line):
 			errors.append("prologue_lines[%d] requires an existing speaker, non-empty text and supported pose" % index)
 	return errors
 

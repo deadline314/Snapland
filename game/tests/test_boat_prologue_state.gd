@@ -85,10 +85,12 @@ func _test_saves(progress: Node) -> void:
 
 func _test_story(story: RefCounted) -> void:
 	var lines: Array = story.call("prologue_lines")
-	_check(lines.size() == 5, "exactly five prologue beats")
-	if lines.size() == 5:
-		_check(lines.map(func(line: Dictionary) -> String: return str(line.speaker)) == ["阿浪", "主角", "主角", "阿浪", "主角"], "speakers follow the five beats")
-		_check(lines.map(func(line: Dictionary) -> String: return str(line.pose)) == ["idle", "interact", "photograph", "wave", "idle"], "poses follow the five beats")
+	_check(lines.size() == 7, "exactly seven prologue beats")
+	if lines.size() == 7:
+		_check(lines.map(func(line: Dictionary) -> String: return str(line.speaker)) == ["阿浪", "主角", "主角", "主角", "主角", "阿浪", "主角"], "speakers follow the seven beats")
+		_check(lines.map(func(line: Dictionary) -> String: return str(line.pose)) == ["idle", "interact", "photograph", "photograph", "idle", "wave", "idle"], "poses follow the seven beats")
+		_check(lines.filter(func(line: Dictionary) -> bool: return bool(line.get("pantomime", false))).size() == 1, "one wordless beat")
+		_check(lines.all(func(line: Dictionary) -> bool: return (line.get("cue", {}) as Dictionary).size() > 0), "every beat is staged")
 		lines[0]["text"] = "mutated"
 		_check(story.call("prologue_lines")[0].text != "mutated", "getter returns a deep copy")
 	var parsed: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(StoryDirector.STORY_DATA_PATH))

@@ -66,12 +66,15 @@ func _run() -> void:
 		await _finish()
 		return
 	_check(main.boat_stage._appearance == appearance and main.boat_stage._equipped == equipped,"boat uses currently loaded complete appearance")
-	for beat in range(5):
+	for beat in range(main.story.prologue_lines().size()):
 		_check(main.dialogue_index == beat and main.boat_stage.beat_index == beat,"Main presents expected beat")
-		main.dialogue_panel.reveal_all()
-		await get_tree().create_timer(0.3).timeout
+		await get_tree().create_timer(0.9).timeout
+		if not main.cue_pantomime: main.dialogue_panel.reveal_all()
 		await _capture("first-run-beat-%d" % (beat+1))
-		main.dialogue_panel.advance_button.pressed.emit()
+		if main.cue_pantomime or main.cue_hold_left > 0.0: main._next_dialogue()
+		if not main.cue_pantomime and main.dialogue_index == beat:
+			main.dialogue_panel.reveal_all()
+			main.dialogue_panel.advance_button.pressed.emit()
 	_check(Progress.prologue_seen and not Progress.intro_seen and main.boat_stage == null,"first-run finish continues to original arrival")
 	main.dialogue_panel.reveal_all()
 	await _capture("arrival")

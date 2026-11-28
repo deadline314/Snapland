@@ -28,10 +28,16 @@ func _run() -> void:
 	_check(main.boat_stage == original_stage, "reentrant start retains one stage")
 	var before := _snapshot()
 	var camera: Transform3D = main.boat_stage._camera_transform
-	for index in range(5):
+	var beats: int = main.story.prologue_lines().size()
+	for index in range(beats):
 		_check(main.dialogue_index == index and main.boat_stage.beat_index == index, "each line supplies its beat")
-		main.dialogue_panel.reveal_all()
-		main._next_dialogue()
+		if index == 0:
+			_check(main.boat_stage.find_child("FerryAnnouncerStandIn", false, false) != null, "阿浪 waits on the pier while he speaks")
+		if bool(main.dialogue[index].get("pantomime", false)):
+			_check(main.boat_stage.find_child("FerryImpStandIn", false, false).visible and not main.dialogue_panel.visible, "wordless beat shows 小角 peeking with no subtitle")
+		elif index > 0 and bool(main.dialogue[index - 1].get("pantomime", false)):
+			_check(not main.boat_stage.find_child("FerryImpStandIn", false, false).visible, "小角 only peeks for one beat")
+		_advance_beat()
 	_check(Progress.prologue_seen and not Progress.intro_seen and main.boat_stage == null, "finish saves boat flag and starts original arrival")
 	_check(main.dialogue == main.story.intro_lines(), "arrival text remains original")
 	var saved: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(Progress._save_path()))
@@ -76,14 +82,14 @@ func _run() -> void:
 		_check(not main.dialogue_panel.cancel_button.tooltip_text.is_empty(), "boat skip has contextual help")
 		_check(main.world.is_processing() and not main.audio._paused,"replay resumes world presentation and dialogue audio after pause")
 		if repeat == 0:
-			for index in range(5):
-				main.dialogue_panel.reveal_all()
-				main._next_dialogue()
+			for index in range(main.story.prologue_lines().size()):
+				_advance_beat()
 		else: main._cancel_dialogue()
 		main._cancel_dialogue()
 		_check(main.modal_kind == "" and main.boat_stage == null and main.world.player.transform == position and main.world.camera.transform == camera and main.world.player.visible and main.world.is_physics_processing(), "repeat skip and duplicate completion return to exact free roam")
 		await _frames(2)
-		_check(main.world.find_children("FerryTravellerPreview", "Sprite3D", true, false).is_empty(), "replay frees its actor")
+		_check(main.world.find_children("FerryTravellerPreview", "Sprite3D", true, false).is_empty() and main.world.find_children("Ferry*StandIn", "Sprite3D", true, false).is_empty(), "replay frees its actors")
+		_check(get_viewport().get_camera_3d() == main.world.camera, "replay hands the view back to the world camera")
 	_check(_snapshot() == before, "replay changes no rewards or appearance")
 	main.session = main.Session.new()
 	main._show_pause()
@@ -199,6 +205,16 @@ func _dispose() -> void:
 
 func _frames(count: int) -> void:
 	for index in range(count): await get_tree().process_frame
+
+## One player press per beat: a wordless beat moves on at once; a held line
+## first ends its hold, then the line is revealed and passed.
+func _advance_beat() -> void:
+	if main.cue_pantomime:
+		main._next_dialogue()
+		return
+	if main.cue_hold_left > 0.0: main._next_dialogue()
+	main.dialogue_panel.reveal_all()
+	main._next_dialogue()
 
 func _check(condition: bool, reason: String) -> void:
 	if not condition: failures.append(reason)

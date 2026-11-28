@@ -24,6 +24,15 @@ var _camera_size := 0.0
 var _camera_projection := Camera3D.PROJECTION_ORTHOGONAL
 var _last_action := ""
 var _last_frame := -1
+## Stand-ins the dialogue cues can frame: 阿浪 waiting on the pier, 小角 peeking
+## into the shot for one beat, and a point on the island for the viewfinder line.
+const PIER_SPOT := Vector3(1.6, 0.0, 22.2)
+const PEEK_OFFSET := Vector3(1.0, 0.0, -0.9)
+const ISLAND_SPOT := Vector3(0.0, 1.2, -3.0)
+var _stand_ins: Dictionary = {}
+var _peek_beat := -1
+var _island: Marker3D
+var _hidden_live: Sprite3D
 
 func configure(world: Node3D, appearance: Dictionary, equipped: Dictionary, reduced_motion: bool) -> bool:
 	if _active or not is_instance_valid(world) or world != get_parent() or not is_inside_tree(): return false
@@ -78,8 +87,69 @@ func configure(world: Node3D, appearance: Dictionary, equipped: Dictionary, redu
 	set_process(true)
 	return true
 
+## The node a staging cue names on the ferry, made on first use. An action
+## ("greet") swaps the stand-in to its greeting pose; any other keeps it at rest.
+func actor(id: String, requested_action := "") -> Node3D:
+	if not _active: return null
+	match id:
+		"player": return preview
+		"island":
+			if not is_instance_valid(_island):
+				_island = Marker3D.new()
+				_island.name = "FerryIslandView"
+				add_child(_island)
+				_island.global_position = _world.to_global(ISLAND_SPOT)
+			return _island
+		"announcer", "imp":
+			var stand_in := _stand_in(id)
+			if stand_in == null: return null
+			if id == "imp" and _peek_beat != beat_index:
+				# 小角 only slips into this one beat of the shot.
+				_peek_beat = beat_index
+				stand_in.global_position = _ground(preview.global_position + PEEK_OFFSET) + Vector3(0, float(stand_in.get_meta("lift")), 0)
+				stand_in.visible = true
+			if not requested_action.is_empty():
+				stand_in.texture = stand_in.get_meta("greet") if requested_action == "greet" else stand_in.get_meta("rest")
+			return stand_in
+	return null
+
+func _stand_in(role: String) -> Sprite3D:
+	if _stand_ins.has(role): return _stand_ins[role]
+	var live := _world.call("story_actor", role) as Sprite3D if _world.has_method("story_actor") else null
+	if live == null or live.texture == null: return null
+	var sprite := Sprite3D.new()
+	sprite.name = "Ferry%sStandIn" % role.capitalize()
+	sprite.texture = live.texture
+	sprite.pixel_size = live.pixel_size
+	sprite.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	sprite.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+	sprite.shaded = true
+	sprite.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	var greet: Texture2D = live.texture
+	var library: Variant = _renderer.get("animation_library")
+	if library != null and _world.has_method("_fit_npc_rest_texture"):
+		var frame: Variant = library.texture(role, "greet", "front", 4)
+		if frame is Texture2D: greet = _world.call("_fit_npc_rest_texture", frame)
+	sprite.set_meta("rest", live.texture)
+	sprite.set_meta("greet", greet)
+	sprite.set_meta("lift", live.position.y)
+	add_child(sprite)
+	sprite.global_position = _ground(_world.to_global(PIER_SPOT)) + Vector3(0, live.position.y, 0)
+	if role == "announcer":
+		# He is on the pier now, so the plaza copy steps out of view until the ferry lands.
+		_hidden_live = live
+		live.visible = false
+	_stand_ins[role] = sprite
+	return sprite
+
+func _ground(point: Vector3) -> Vector3:
+	if _world.has_method("ground_surface_y"): point.y = float(_world.call("ground_surface_y", point))
+	return point
+
 func show_beat(index: int, requested_action: String) -> void:
 	if not _active or index <= beat_index or requested_action not in ACTIONS: return
+	var peeking: Variant = _stand_ins.get("imp")
+	if peeking != null and is_instance_valid(peeking): peeking.visible = false
 	if requested_action != "idle" and not _renderer.has_authored_action(requested_action, "front"): return
 	beat_index = index
 	if _reduced_motion: return
@@ -119,6 +189,14 @@ func finish() -> void:
 	if is_instance_valid(_world): _world.set_physics_process(_physics_enabled)
 	if is_instance_valid(preview): preview.free()
 	preview = null
+	for stand_in in _stand_ins.values():
+		if is_instance_valid(stand_in): stand_in.free()
+	_stand_ins.clear()
+	if is_instance_valid(_hidden_live): _hidden_live.visible = true
+	_hidden_live = null
+	if is_instance_valid(_island): _island.free()
+	_island = null
+	_peek_beat = -1
 
 func _exit_tree() -> void:
 	finish()

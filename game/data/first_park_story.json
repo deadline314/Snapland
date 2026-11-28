@@ -21,11 +21,13 @@
     }
   },
   "prologue_lines": [
-    {"speaker": "阿浪", "text": "晚風號快靠岸了，歡迎來到拍貼樂園！棧橋就在前方。", "pose": "idle"},
-    {"speaker": "主角", "text": "先把相機背帶扣好。海風也來打招呼了。", "pose": "interact"},
-    {"speaker": "主角", "text": "從取景窗看過去，島上的燈像一排小星星。", "pose": "photograph"},
-    {"speaker": "阿浪", "text": "向島上揮揮手吧！今天就照自己的步調逛。", "pose": "wave"},
-    {"speaker": "主角", "text": "準備好了。走上棧橋，去看看第一個風景吧。", "pose": "idle"}
+    {"speaker": "阿浪", "text": "晚風號快靠岸了，歡迎來到拍貼樂園！棧橋就在前方。", "pose": "idle", "cue": {"frame": "announcer", "zoom": 0.6, "action": "greet", "emote": "♪"}},
+    {"speaker": "主角", "text": "先把相機背帶扣好。海風也來打招呼了。", "pose": "interact", "cue": {"frame": "player", "zoom": 0.55}},
+    {"speaker": "主角", "text": "從取景窗看過去，整座島都擠進小小的框裡了。", "pose": "photograph", "cue": {"frame": "island", "zoom": 1.05, "hold": 0.8}},
+    {"speaker": "主角", "text": "", "pantomime": true, "pose": "photograph", "cue": {"frame": "player", "zoom": 0.5, "emote": "!", "emote_on": "imp", "hold": 1.5}},
+    {"speaker": "主角", "text": "……剛剛取景窗裡，是不是多了一條尾巴？", "pose": "idle", "cue": {"emote": "?", "emote_on": "player", "hold": 0.5}},
+    {"speaker": "阿浪", "text": "向島上揮揮手吧！今天就照自己的步調逛。", "pose": "wave", "cue": {"frame": "two", "zoom": 0.8, "action": "greet"}},
+    {"speaker": "主角", "text": "準備好了。走上棧橋，去看看第一個風景吧。", "pose": "idle", "cue": {"frame": "wide"}}
   ],
   "intro_lines": [
     {"speaker": "票票", "text": "船已靠岸。沿木棧橋進廣場，找戴圓眼鏡、背棕色包的票票。", "cue": {"frame": "ticket", "zoom": 0.6, "action": "greet"}},

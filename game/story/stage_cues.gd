@@ -18,7 +18,9 @@ const GLIDE_SECONDS := 0.45
 const EMOTE_SECONDS := 1.6
 ## The subtitle covers the lower third, so a framed actor sits a little high.
 const SUBTITLE_LIFT := 0.16
-const MARKS := ["!", "?", "!?", "…", "♪", "♥", "sweat"]
+## Orthographic framing only needs the focus in front of the near plane; this is room to spare.
+const MIN_DEPTH := 20.0
+const MARKS :=["!", "?", "!?", "…", "♪", "♥", "sweat"]
 
 ## Resolves an actor id to the node to frame: set by the caller.
 var actor_lookup: Callable
@@ -92,16 +94,20 @@ func _frame(frame: String, speaker_id: String, zoom: float) -> void:
 			if node != null: focus = _head(node)
 		if not focus.is_finite(): return
 		var forward := -_start.basis.z.normalized()
-		var on_axis := _start.origin + forward * forward.dot(focus - _start.origin)
-		target_transform.origin = _start.origin + (focus - on_axis) - _start.basis.y.normalized() * target_size * SUBTITLE_LIFT
+		# Keep the focus comfortably in front of the lens: a target that lies behind the
+		# starting camera (the island seen from the ferry) would otherwise fall past the near plane.
+		var depth := maxf(forward.dot(focus - _start.origin), MIN_DEPTH)
+		target_transform.origin = focus - forward * depth - _start.basis.y.normalized() * target_size * SUBTITLE_LIFT
 	if is_instance_valid(_tween): _tween.kill()
 	if _reduced:
 		camera.global_transform = target_transform
 		camera.size = target_size
 		return
+	# Long pans (across the bay to the island) take a little longer than a punch-in.
+	var seconds := clampf(camera.global_position.distance_to(target_transform.origin) / 24.0, GLIDE_SECONDS, 1.1)
 	_tween = create_tween().set_parallel(true).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	_tween.tween_property(camera, "global_transform", target_transform, GLIDE_SECONDS)
-	_tween.tween_property(camera, "size", target_size, GLIDE_SECONDS)
+	_tween.tween_property(camera, "global_transform", target_transform, seconds)
+	_tween.tween_property(camera, "size", target_size, seconds)
 
 func _head(node: Node3D) -> Vector3:
 	var height := 1.0
