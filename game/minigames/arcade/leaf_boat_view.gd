@@ -14,9 +14,9 @@ const DEEP := Color("#2c6f86")
 const FOAM := Color("#e8f6f4")
 const MOSS := Color("#5f8a4a")
 const LEAF := Color("#5fa04a")
-const PETAL := Color("#f2a7b8")
-const ANT := Color("#2a2020")
-const ROCK := Color("#7f8a8c")
+const PETAL := Color("#f7c6d0")
+const ANT := Color("#9a3b22")
+const ROCK := Color("#8f989a")
 const MORNING := Color(1.0, 0.98, 0.94)
 const ROW := 8.0
 ## The leaf is drawn bigger than other sprites so its passengers read.
@@ -45,8 +45,8 @@ func _ready() -> void:
 	_leaf = Pixels.bake("leaf-boat", Vector2i(15, 24), _paint_leaf.bind(false))
 	_flipped = Pixels.bake("leaf-boat-flipped", Vector2i(15, 24), _paint_leaf.bind(true))
 	_petal = Pixels.bake("ant-petal", Vector2i(12, 9), _paint_petal)
-	_ant = Pixels.bake("ant", Vector2i(7, 5), _paint_ant)
-	_rock = Pixels.bake("stream-rock", Vector2i(13, 11), _paint_rock)
+	_ant = Pixels.bake("ant-red", Vector2i(10, 8), _paint_ant)
+	_rock = Pixels.bake("stream-rock-moss", Vector2i(16, 13), _paint_rock)
 
 
 ## A seamless repeating tile (no outline, unlike Pixels.bake sprites).
@@ -173,33 +173,47 @@ func _draw_petal(thing: Dictionary) -> void:
 	var size := Vector2(_petal.get_size()) * TEXEL
 	ground_shadow(at + Vector2(6, 10), Vector2(size.x * 0.45, 8), 0.25)
 	stamp(_petal, at - size * 0.5 + Vector2(0, bob), TEXEL, MORNING)
+	# Up to three ants stand apart on the petal, waving.
+	var spots: Array[Vector2] = [Vector2(-14, -10), Vector2(-34, 4), Vector2(6, 6)]
 	for ant in int(thing.count):
 		var hop := 0.0 if taken < 0.0 else -40.0 * taken
-		var wave := 0.0 if reduced_motion else 2.0 * sin(now * 10.0 + ant * 2.0)
-		stamp(_ant, at + Vector2(-26.0 + ant * 18.0, -14.0 + bob + wave + hop), TEXEL, MORNING)
+		var wave := 0.0 if reduced_motion else roundf(2.0 * sin(now * 10.0 + ant * 2.0))
+		stamp(_ant, at + spots[ant] + Vector2(0, -8.0 + bob + wave + hop), TEXEL * 0.6, MORNING)
 
 
 func _draw_rock(thing: Dictionary) -> void:
 	var at := Vector2(float(thing.x) * DESIGN.x, _sy(float(thing.y)))
 	var size := Vector2(_rock.get_size()) * TEXEL
 	# A ring of foam where the water parts round the rock.
-	var froth := 0.0 if reduced_motion else 3.0 * sin(now * 6.0 + float(thing.y) * 5.0)
-	draw_rect(Rect2(at + Vector2(-size.x * 0.6, size.y * 0.25), Vector2(size.x * 1.2, 8 + froth)), Color(FOAM, 0.7))
-	draw_rect(Rect2(at + Vector2(-size.x * 0.45, -size.y * 0.55), Vector2(size.x * 0.9, 6)), Color(FOAM, 0.5))
+	var froth := 0.0 if reduced_motion else 2.0 * sin(now * 6.0 + float(thing.y) * 5.0)
+	# The current runs up the screen and breaks white on the rock's lower side,
+	# then trails off in two thin streaks above it.
+	ground_shadow(at + Vector2(6, 10), Vector2(size.x * 0.55, size.y * 0.35), 0.35)
+	for dot in 13:
+		var angle := PI * (0.05 + 0.9 * dot / 12.0)
+		var spot := at + Vector2(cos(angle) * (size.x * 0.62 + froth), sin(angle) * (size.y * 0.55 + froth))
+		draw_rect(Rect2(spot.snappedf(TEXEL) - Vector2(TEXEL, TEXEL * 0.5), Vector2(TEXEL * 2.0, TEXEL * 1.5)), Color(FOAM, 0.9))
+	for side: float in [-1.0, 1.0]:
+		for streak in 3:
+			var spot := at + Vector2(side * (size.x * 0.42 + streak * 4.0), -size.y * 0.5 - streak * 14.0)
+			draw_rect(Rect2(spot.snappedf(TEXEL), Vector2(TEXEL, TEXEL * 2.0)), Color(FOAM, 0.6 - streak * 0.15))
 	stamp(_rock, at - size * 0.5, TEXEL, MORNING)
 
 
 func _draw_whirl(thing: Dictionary) -> void:
 	var at := Vector2(float(thing.x) * DESIGN.x, _sy(float(thing.y)))
 	var spin := 0.0 if reduced_motion else now * 2.2
-	draw_circle(at, float(state.whirl_eye) * DESIGN.y * 0.8, Color(DEEP.darkened(0.45), 0.9))
-	for ring in 3:
-		var radius := float(state.whirl_eye) * DESIGN.y + ring * 28.0
-		var dashes := 10 + ring * 4
-		for dash in dashes:
-			var angle := dash * TAU / dashes + spin * (1.6 - ring * 0.4)
-			var spot := at + Vector2.from_angle(angle) * radius
-			draw_rect(Rect2(spot.snappedf(TEXEL) - Vector2(TEXEL * 1.5, TEXEL * 0.5), Vector2(TEXEL * 3.0, TEXEL * 1.5)), Color(FOAM, 0.95 - ring * 0.2))
+	# A darker bowl of water, then two spiral arms of foam winding into the eye.
+	draw_circle(at, 96.0, Color(DEEP, 0.35))
+	draw_circle(at, 52.0, Color(DEEP.darkened(0.2), 0.5))
+	draw_circle(at, float(state.whirl_eye) * DESIGN.y * 0.7, Color(DEEP.darkened(0.5), 0.95))
+	for arm in 2:
+		for dot in 26:
+			var wind := dot / 25.0
+			var angle := arm * PI + wind * TAU * 1.4 - spin
+			var radius := lerpf(96.0, 14.0, wind)
+			var spot := at + Vector2(cos(angle), sin(angle) * 0.8) * radius
+			draw_rect(Rect2(spot.snappedf(TEXEL) - Vector2(TEXEL, TEXEL * 0.5), Vector2(TEXEL * 2.0, TEXEL * 1.5)), Color(FOAM, lerpf(0.95, 0.45, wind)))
 
 
 # --- The leaf and the traveller -------------------------------------------------
@@ -222,11 +236,18 @@ func _draw_boat() -> void:
 	draw_set_transform(at, tilt, Vector2.ONE)
 	stamp(_leaf, -size * 0.5, BOAT_SCALE, MORNING)
 	# Ants riding along the rim of the leaf.
-	var riders := mini(int(state.ants), 12)
+	# Passengers queue up at the stern and the bow, clear of the traveller, each
+	# carrying a crumb of something home over its head.
+	var riders := mini(int(state.ants), 8)
+	var berths: Array[Vector2] = [Vector2(-12, 38), Vector2(-12, 56), Vector2(-12, -70), Vector2(-12, 74),
+		Vector2(-40, 30), Vector2(16, 30), Vector2(-40, 50), Vector2(16, 50)]
 	for rider in riders:
-		var side := -1.0 if rider % 2 == 0 else 1.0
-		var row := float(rider / 2)
-		stamp(_ant, Vector2(side * (size.x * 0.34) - 8.0, -size.y * 0.34 + row * 13.0), TEXEL * 0.55, MORNING)
+		var step := 0.0 if reduced_motion else roundf(2.0 * sin(now * 9.0 + rider * 1.3))
+		var spot := berths[rider] + Vector2(0, step)
+		stamp(_ant, spot, TEXEL * 0.55, MORNING)
+		var crumb := Rect2(spot + Vector2(12, -8), Vector2(8, 6))
+		draw_rect(crumb, Color("#ffd166") if rider % 3 != 1 else Color("#e8f4ff"))
+		draw_rect(crumb, INK, false, 1.5)
 	# The traveller, seen from behind, and the paddle dipping on the stroke side.
 	var hero := Hero.texture(&"idle", false, "plain")
 	stamp(hero, Vector2(-21, -30) * 1.7, 1.7, MORNING)
@@ -253,8 +274,8 @@ func _draw_rescue(flip: Dictionary, since: float) -> void:
 	var march := 1.0 if reduced_motion else smoothstep(0.35, float(state.flip_seconds), since)
 	var carried := Vector2(lerpf(start.x, home, march), start.y - 40.0)
 	for bearer in 4:
-		var step := 0.0 if reduced_motion else 3.0 * sin(now * 16.0 + bearer * 1.7)
-		stamp(_ant, carried + Vector2(-58.0 + bearer * 32.0, 24.0 + step), TEXEL, MORNING)
+		var step := 0.0 if reduced_motion else roundf(3.0 * sin(now * 16.0 + bearer * 1.7))
+		stamp(_ant, carried + Vector2(-66.0 + bearer * 38.0, 20.0 + step), TEXEL * 0.6, MORNING)
 	var hero := Hero.texture(&"idle", true, "soaked")
 	draw_set_transform(carried, -PI * 0.5, Vector2.ONE * 1.6)
 	draw_texture(hero, -Vector2(hero.get_size()) * 0.5)
@@ -321,23 +342,37 @@ func _paint_petal(x: int, y: int) -> Color:
 
 
 func _paint_ant(x: int, y: int) -> Color:
-	# A little ant from above facing right: round head, a pinched waist and a
-	# big abdomen, with three legs sticking out on each side.
-	if y == 0 or y == 4:
-		return ANT.lightened(0.3) if x == 2 or x == 3 or x == 5 else Pixels.CLEAR
-	var head := x >= 5 and (y == 2 or x == 5)
-	var waist := x == 4 and y == 2
-	var abdomen := x <= 3 and not ((x == 0) and y != 2)
-	if head or waist or abdomen:
-		return ANT.lightened(0.25) if y == 1 and x != 4 else ANT
+	# A red-brown ant from above, facing right: a round abdomen, a pinched
+	# waist, a thorax and a head with a tiny bright eye, two bent antennae and
+	# three legs on each side.
+	if (x == 8 and y == 1) or (x == 9 and y == 0) or (x == 8 and y == 6) or (x == 9 and y == 7):
+		return ANT.darkened(0.3)
+	for leg: int in [3, 5, 6]:
+		if x == leg and (y == 1 or y == 6) or (x == leg - 1 and (y == 0 or y == 7)):
+			return ANT.darkened(0.35)
+	var parts := [[Vector2(1.9, 3.5), Vector2(2.0, 1.7)], [Vector2(5.0, 3.5), Vector2(1.1, 1.0)], [Vector2(7.4, 3.5), Vector2(1.4, 1.4)]]
+	for part: Array in parts:
+		var offset: Vector2 = (Vector2(x + 0.5, y + 0.5) - part[0]) / part[1]
+		if offset.length() <= 1.0:
+			if x == 7 and y == 2:
+				return Color("#fff2dc")
+			return Pixels.rounded(ANT, offset)
+	if x == 4 and (y == 3 or y == 4):
+		return ANT.darkened(0.2)
 	return Pixels.CLEAR
 
 
 func _paint_rock(x: int, y: int) -> Color:
-	var at := Vector2((x + 0.5 - 6.5) / 6.5, (y + 0.5 - 5.5) / 5.5)
+	# A rounded grey stone lit from the upper left, with cracks and moss
+	# patches on its top and a darker wet base.
+	var at := Vector2((x + 0.5 - 8.0) / 8.0, (y + 0.5 - 6.5) / 6.5)
 	if at.length() > 1.0:
 		return Pixels.CLEAR
 	var tone := ROCK
-	if at.y < -0.2 and Pixels.noise(x, y, 83) > 0.35:
-		tone = MOSS.lightened(0.1)
+	if at.y > 0.5:
+		tone = ROCK.darkened(0.25)
+	elif at.y < 0.1 and Pixels.noise(x / 2, y / 2, 83) > 0.45:
+		tone = MOSS.lightened(0.15 if Pixels.noise(x, y, 89) > 0.5 else 0.0)
+	if posmod(x * 3 - y * 2, 13) == 0 and at.length() < 0.8:
+		tone = tone.darkened(0.3)
 	return Pixels.grainy(Pixels.rounded(tone, at), x, y, 0.08)
