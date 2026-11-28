@@ -68,8 +68,11 @@ func _run() -> void:
 	if is_instance_valid(story_marker):
 		story_marker.visibility_changed.connect(func() -> void: marker_states.append(story_marker.visible))
 	main.world.interact()
-	_check(main.modal_kind == "dialogue" and main.dialogue[0].speaker == "小角" and str(main.dialogue[2].text).contains("幕幕"),
+	_check(main.modal_kind == "dialogue" and main.dialogue[0].speaker == "小角" and main.dialogue.any(func(line: Dictionary) -> bool: return str(line.get("text", "")).contains("幕幕")),
 		"real world interaction opens the on-duty story")
+	_check(main.cue_pantomime and is_instance_valid(main.stage_cues) and main.stage_cues.find_child("StageMirror", false, false) != null,
+		"the greeting opens on the reflection bowing first, without a subtitle")
+	_check(Visit.lines(REGION).all(func(line: Dictionary) -> bool: return main.Story.cue_valid(line)), "every staged circus line is a valid cue")
 	if main.modal_kind != "dialogue":
 		await _finish()
 		return
@@ -199,6 +202,8 @@ func _save_then_replay() -> bool:
 	remote_replay.pressed.emit()
 	_check(main.modal_kind == "dialogue" and main.dialogue_panel.cancel_button.text == "略過",
 		"remote archive replays the short text while keeping the set on-site")
+	_check(main.dialogue.all(func(line: Dictionary) -> bool: return not line.has("cue") and not bool(line.get("pantomime", false))) and not is_instance_valid(main.stage_cues),
+		"away from the circus the replay carries only the words")
 	main.dialogue_panel.cancel_button.pressed.emit()
 	_check(main.modal_kind == "album" and main.world_region == "welcome" and main.visit_photo_panel == null
 		and progress.photos[PHOTO] == photo and FileAccess.get_sha256(original) == original_hash,

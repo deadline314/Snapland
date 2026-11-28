@@ -1516,6 +1516,8 @@ func _stage_line(line: Dictionary, speaker: String) -> void:
 	if not is_instance_valid(stage_cues) and is_instance_valid(world):
 		stage_cues=StageCues.new()
 		stage_cues.actor_lookup=_stage_actor
+		stage_cues.react=_stage_react
+		stage_cues.pose_lookup=func(role: String, action: String) -> Texture2D: return region_world().story_pose(role,action) if is_instance_valid(world) and region_world().has_method("story_pose") else null
 		world.add_child(stage_cues)
 		if not stage_cues.begin(get_viewport().get_camera_3d(),bool(Progress.settings.get("reduced_motion",false))):
 			stage_cues.queue_free()
@@ -1525,15 +1527,21 @@ func _stage_line(line: Dictionary, speaker: String) -> void:
 	# A hold keeps the plaque and its advance button (the text simply waits); only pantomime has no subtitle.
 	if cue_pantomime: dialogue_panel.hide()
 
-## Actor id to node; with an action, also plays that authored NPC action.
-func _stage_actor(id: String, action: String) -> Node3D:
+## Actor id to the node staging cues frame.
+func _stage_actor(id: String, _action := "") -> Node3D:
 	if not is_instance_valid(world): return null
-	if is_instance_valid(boat_stage): return boat_stage.actor(id,action)
+	if is_instance_valid(boat_stage): return boat_stage.actor(id)
 	if id=="player": return world.get("avatar") as Node3D
 	var place := region_world()
 	if not is_instance_valid(place) or not place.has_method("story_actor"): return null
-	if not action.is_empty(): place.react_story_npc(id,action)
 	return place.story_actor(id)
+
+## Plays a role's authored action; false when nothing here can play it.
+func _stage_react(id: String, action: String) -> bool:
+	if not is_instance_valid(world): return false
+	if is_instance_valid(boat_stage): return boat_stage.actor(id,action)!=null
+	var place := region_world()
+	return is_instance_valid(place) and place.has_method("react_story_npc") and place.react_story_npc(id,action)
 
 func _end_cue_hold() -> void:
 	cue_hold_left=0.0
@@ -1846,14 +1854,24 @@ func _start_region_story_visit(region: String, from_album := false, errand := fa
 		_close()
 	var back_to_album := _show_album.bind(region) if from_album else Callable()
 	if world_region != region:
-		# An archived story may be reviewed elsewhere while the live set stays in its region.
+		# An archived story may be reviewed elsewhere while the live set stays in its region:
+		# only its words travel, since its staging names actors who are not here.
 		if from_album:
-			_start_dialogue(lines, back_to_album, back_to_album, "略過")
+			_start_dialogue(_unstaged(lines), back_to_album, back_to_album, "略過")
 		return
 	if not from_album and Progress.normal_count() < RegionRoutes.threshold(region):
 		_notice("集滿 %d 張不同普通拍貼，就能在這裡合照。" % RegionRoutes.threshold(region))
 		return
 	_start_dialogue(lines, _open_region_story_photo.bind(region, from_album, errand), back_to_album, "略過到合照")
+
+static func _unstaged(lines: Array) -> Array:
+	var spoken: Array = []
+	for line: Dictionary in lines:
+		if bool(line.get("pantomime", false)): continue
+		var copy := line.duplicate()
+		copy.erase("cue")
+		spoken.append(copy)
+	return spoken
 
 func _open_region_story_photo(region: String, from_album: bool, errand := false) -> void:
 	if quitting or changing_region or session != null or modal_kind != "" or world_region != region:

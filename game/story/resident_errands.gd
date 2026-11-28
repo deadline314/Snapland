@@ -9,6 +9,7 @@ extends RefCounted
 ## 0..2 = working on that step, DONE = the errand photo is in the album.
 
 const RegionalVisit = preload("res://game/story/regional_visit.gd")
+const StoryDirector = preload("res://game/story/story_director.gd")
 const STEP_KINDS := ["reach", "field_game", "toy", "talk"]
 const PHOTO_STEP := 2
 const DONE := 3
@@ -21,13 +22,16 @@ const ERRANDS := {
 		"title": "倒影偷走領結",
 		"instructions": "幫小角從鏡廊追回領結，再和他合照。",
 		"saved_notice": "領結回來了，合照收進本子裡。",
+		# The reflection bows, holds up 小角's bowtie and slips away with it.
 		"intro": [
-			{"speaker": "小角", "text": "鏡廊裡的倒影學我鞠躬，順手把我的領結也拿走了。"},
-			{"speaker": "主角", "text": "倒影也要謝幕？"},
+			{"speaker": "小角", "text": "", "pantomime": true, "cue": {"frame": "imp", "zoom": 0.55, "action": "greet", "action_on": "imp_mirror", "prop": "bowtie", "prop_on": "imp_mirror", "hold": 1.4}},
+			{"speaker": "小角", "text": "", "pantomime": true, "cue": {"exit": "imp_mirror", "emote": "!?", "hold": 0.9}},
+			{"speaker": "小角", "text": "鏡廊裡的倒影學我鞠躬，順手把我的領結也拿走了。", "cue": {"emote": "sweat"}},
+			{"speaker": "主角", "text": "倒影也要謝幕？", "cue": {"frame": "two", "zoom": 0.7}},
 			{"speaker": "小角", "text": "他說沒領結不好意思上台。先去鏡廊找找！"},
 		],
 		"finale": [
-			{"speaker": "小角", "text": "領結回來了！倒影說，那他改戴我的尾巴。"},
+			{"speaker": "小角", "text": "領結回來了！倒影說，那他改戴我的尾巴。", "cue": {"frame": "imp", "zoom": 0.6, "prop": "bowtie", "emote": "♪"}},
 			{"speaker": "主角", "text": "那你的尾巴呢？"},
 			{"speaker": "小角", "text": "……先合照，晚點再數。"},
 		],
@@ -159,7 +163,7 @@ static func problems() -> Array[String]:
 				found.append("%s errand step '%s' needs a done line" % [region, goal])
 		for key in ["intro", "finale"]:
 			for line: Dictionary in errand.get(key, []):
-				if not [RegionalVisit.host_name(region), "主角"].has(str(line.get("speaker", ""))) or str(line.get("text", "")).is_empty():
+				if not [RegionalVisit.host_name(region), "主角"].has(str(line.get("speaker", ""))) or (str(line.get("text", "")).is_empty() and not bool(line.get("pantomime", false))) or not StoryDirector.cue_valid(line):
 					found.append("%s errand %s line has an unknown speaker or no text" % [region, key])
 		if not str(errand.get("id", "")).begins_with("photo-%s-quest-" % region):
 			found.append("%s errand photo must use the region's quest sticker id" % region)

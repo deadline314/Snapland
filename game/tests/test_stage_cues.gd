@@ -48,6 +48,9 @@ func _run() -> void:
 	main._cancel_dialogue()
 	await _frames(2)
 	_check(main.modal_kind == "" and main.stage_cues == null, "cancel frees the stage")
+	var ticket := main.region_world().story_actor("ticket") as Sprite3D
+	var ticket_material := ticket.material_override as ShaderMaterial if ticket != null else null
+	_check(ticket != null and (ticket_material == null or ticket_material.get_shader_parameter("texture_albedo") != main.region_world().story_pose("ticket", "greet")), "a held greeting pose is handed back when the scene ends")
 	_check(get_viewport().get_camera_3d() == world_camera, "cancel hands the view back to the world camera")
 	_check(main.world.find_child("StageCueCamera", true, false) == null and main.world.find_child("StageEmote", true, false) == null, "no stage nodes remain")
 	_check(before == _snapshot(), "staging awards nothing")

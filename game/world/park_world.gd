@@ -3402,6 +3402,17 @@ func story_actor(role: String) -> Node3D:
 	var sprite: Variant = _npc_record_for_role(role).get("sprite")
 	return sprite as Node3D if is_instance_valid(sprite) else null
 
+var _story_pose_cache: Dictionary = {}
+## A role's authored front key pose for an action, fitted to the NPC canvas
+## (null when the role has no such action). Made once per role and action.
+func story_pose(role: String, action: String) -> Texture2D:
+	var key := role + ":" + action
+	if not _story_pose_cache.has(key):
+		var library: Variant = avatar_renderer.animation_library if avatar_renderer != null else null
+		var frame: Variant = library.texture(role, action, "front", 4) if library != null else null
+		_story_pose_cache[key] = _fit_npc_rest_texture(frame) if frame is Texture2D else null
+	return _story_pose_cache[key]
+
 func _npc_record_for_role(role: String) -> Dictionary:
 	for actor_record in character_sprites:
 		if String(actor_record.get("role", "")) == role:

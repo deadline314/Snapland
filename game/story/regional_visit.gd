@@ -35,10 +35,14 @@ const VISITS := {
 		"saved_notice": "馬戲團造訪已登記，合照收進本子裡。",
 		"title": "尾巴先報幕",
 		"instructions": "到鏡之馬戲團入口找小角，在帳篷裡合照。",
+		# The reflection bows first; 小角 notices a beat late, then bows too.
 		"lines": [
-			{"speaker": "小角", "text": "我剛練習報幕，鏡子裡的小角比我先鞠躬。"},
-			{"speaker": "主角", "text": "你們分工真好。誰負責藏尾巴？"},
-			{"speaker": "小角", "text": "尾巴才不肯排練。幕幕還在改首演的開場白，先合張照幫他試試燈吧。"},
+			{"speaker": "小角", "text": "", "pantomime": true, "cue": {"frame": "imp", "zoom": 0.55, "action": "greet", "action_on": "imp_mirror", "hold": 1.3}},
+			{"speaker": "小角", "text": "", "pantomime": true, "cue": {"emote": "!?", "hold": 0.9}},
+			{"speaker": "小角", "text": "我剛練習報幕，鏡子裡的小角比我先鞠躬。", "cue": {"action": "greet", "emote": "sweat"}},
+			{"speaker": "主角", "text": "你們分工真好。誰負責藏尾巴？", "cue": {"frame": "two", "zoom": 0.7}},
+			{"speaker": "小角", "text": "尾巴才不肯排練。幕幕還在改首演的開場白，先合張照幫他試試燈吧。", "cue": {"frame": "imp", "zoom": 0.6, "exit": "imp_mirror"}},
+			{"speaker": "小角", "text": "", "pantomime": true, "cue": {"frame": "two", "zoom": 0.8, "emote": "♪", "hold": 0.9}},
 		],
 	},
 	TOY: {

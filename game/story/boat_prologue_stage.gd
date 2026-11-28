@@ -125,11 +125,8 @@ func _stand_in(role: String) -> Sprite3D:
 	sprite.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
 	sprite.shaded = true
 	sprite.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	var greet: Texture2D = live.texture
-	var library: Variant = _renderer.get("animation_library")
-	if library != null and _world.has_method("_fit_npc_rest_texture"):
-		var frame: Variant = library.texture(role, "greet", "front", 4)
-		if frame is Texture2D: greet = _world.call("_fit_npc_rest_texture", frame)
+	var greet: Variant = _world.call("story_pose", role, "greet") if _world.has_method("story_pose") else null
+	if not greet is Texture2D: greet = live.texture
 	sprite.set_meta("rest", live.texture)
 	sprite.set_meta("greet", greet)
 	sprite.set_meta("lift", live.position.y)
