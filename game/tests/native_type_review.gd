@@ -41,6 +41,9 @@ func _run() -> void:
 	main._notice("午後陣雨來了！找個屋簷躲一下吧。")
 	await _settle(0.5)
 	await _snap(size_arg + "01-park-hud")
+	# The notice times out after 3.5 s; the scene behind it (dock sign) gets its own shot.
+	await _settle(4.0)
+	await _snap(size_arg + "01b-park-scene")
 	main._show_pause()
 	await _settle(0.5)
 	await _snap(size_arg + "02-pause")

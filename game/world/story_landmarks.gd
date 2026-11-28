@@ -14,8 +14,11 @@ const ARCH_HALF_WIDTH := 4.0
 const BROADCAST_STAND := Vector3(1.9, 0, -5.7)
 const SIGN_READ_DISTANCE := 10.0
 const SIGN_SWITCH_MARGIN := 0.5
-## The live directions are painted on a board fixed to the post, not floating words.
-const BOARD_COLOR := Color("#18383d")
+## The live directions are painted on a warm plank board fixed to the post, not
+## floating words; a darker cap rail crowns it like the park's other signs (ART-79).
+const BOARD_COLOR := Color("#9a6c44")
+const CAP_COLOR := Color("#5e3c24")
+const SIGN_INK_RIM := Color("#3a2414")
 const BOARD_PAD := Vector2(0.34, 0.26)
 ## Twice the 12 px pixel font, so the glyphs stay on whole pixels.
 const SIGN_TEXT_SIZE := 24
@@ -35,6 +38,7 @@ var _last_sign_position := Vector2.INF
 var _world: Node3D
 ## One board, carried to whichever signpost is being read (the island's node budget is tight).
 var _board: MeshInstance3D
+var _cap: MeshInstance3D
 ## point id -> {"icon": Sprite3D, "wanted": bool}
 var _requests: Dictionary = {}
 
@@ -48,10 +52,16 @@ func configure(world: Node3D) -> void:
 	_build_request_icons(world)
 	_board = world._box(Vector3.ZERO, Vector3.ONE, BOARD_COLOR)
 	_board.name = "SignBoard"
-	_board.material_override = world._coastal_surface(6, 0.9, BOARD_COLOR)
+	_board.material_override = world._wood_material(BOARD_COLOR)
 	_board.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_board.reparent(self, false)
 	_board.hide()
+	_cap = world._box(Vector3.ZERO, Vector3.ONE, CAP_COLOR)
+	_cap.name = "SignBoardCap"
+	_cap.material_override = world._wood_material(CAP_COLOR)
+	_cap.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_cap.reparent(self, false)
+	_cap.hide()
 	_apply_outcomes()
 
 ## snapshot keys: story_photo, steps, photos (see Wayfinding.entry_status).
@@ -124,6 +134,7 @@ func update_signpost_visibility(player_position: Vector3) -> void:
 		_seat_board.call_deferred(focused)
 	else:
 		_board.hide()
+		_cap.hide()
 
 
 func _apply_outcomes() -> void:
@@ -171,6 +182,7 @@ func _build_signpost(world: Node3D, signpost: Dictionary) -> void:
 	board.name = "SignText"
 	board.billboard = BaseMaterial3D.BILLBOARD_DISABLED
 	board.outline_size = 4
+	board.outline_modulate = SIGN_INK_RIM
 	board.line_spacing = 2.0
 	board.visibility_range_end = 0.0
 	board.set_meta(&"post_top", board.position.y - 1.3)
@@ -190,6 +202,10 @@ func _seat_board(label: Label3D) -> void:
 	_board.scale = Vector3(size.x, size.y, 0.08)
 	_board.position = Vector3(0, 0, -0.06)
 	_board.show()
+	if _cap.get_parent() != label: _cap.reparent(label, false)
+	_cap.scale = Vector3(size.x + 0.14, 0.1, 0.14)
+	_cap.position = Vector3(0, size.y * 0.5 + 0.04, -0.05)
+	_cap.show()
 
 func _build_request_icons(world: Node3D) -> void:
 	for point_id: String in REQUEST_ROLES:
