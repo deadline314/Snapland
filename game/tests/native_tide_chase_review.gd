@@ -25,9 +25,14 @@ func _run() -> void:
 	progress.intro_seen = true
 	for index in range(1, 12):
 		progress.photos["photo-harbor-devil-%d" % index] = {"devil": true}
+	# Enough ordinary stickers to walk into the harbour and see the gate itself.
+	for index in range(1, 7):
+		progress.photos["photo-welcome-game-%d" % index] = {"game_id": "game-%03d" % index}
 	main = _instantiate_main()
 	get_tree().root.add_child(main)
 	await get_tree().create_timer(1.5).timeout
+	if not await _see_the_gate():
+		return
 	main._open_rift("harbor", "查看逆潮港")
 	await _settle(8)
 	if main.overlay.find_child("RiftEnter", true, false) != null or _find_label(main.overlay, "還差 1 張") == null:
@@ -38,6 +43,7 @@ func _run() -> void:
 	await _settle()
 	progress.photos["photo-harbor-devil-12"] = {"devil": true}
 	var coins_before: int = progress.coins
+	var normal_before: int = progress.normal_count()
 	main._open_rift("harbor", "查看逆潮港")
 	await _settle()
 	var enter := main.overlay.find_child("RiftEnter", true, false) as BaseButton
@@ -54,7 +60,7 @@ func _run() -> void:
 	await _settle(30)
 	_save("result")
 	var photo: Dictionary = progress.photos.get(ProgressScript.rift_photo_id("harbor"), {})
-	if photo.is_empty() or (photo.get("frames", []) as Array).is_empty() or progress.coins != coins_before + ProgressScript.RIFT_FIRST_COINS or progress.normal_count() != 0:
+	if photo.is_empty() or (photo.get("frames", []) as Array).is_empty() or progress.coins != coins_before + ProgressScript.RIFT_FIRST_COINS or progress.normal_count() != normal_before:
 		await _fail("The lamp's return should keep one framed photo, pay and change no counts: %s" % str(photo))
 		return
 	main._close()
@@ -72,6 +78,28 @@ func _run() -> void:
 	_save_strip()
 	print("PASS: tide chase native door, chase, finale, result and postcard: %s" % ", ".join(shots.keys()))
 	await main._quit_game()
+
+
+## Walk into the harbour and stand south of the 逆潮港 gate for a picture.
+func _see_the_gate() -> bool:
+	main._travel_to_region("harbor")
+	var deadline := Time.get_ticks_msec() + 60000
+	while (main.world_region != "harbor" or main.changing_region) and Time.get_ticks_msec() < deadline:
+		await get_tree().process_frame
+	await get_tree().create_timer(2.0).timeout
+	var point: Dictionary = main.world._point_by_id("harbor:rift")
+	if main.world_region != "harbor" or point.is_empty():
+		await _fail("Could not reach the harbour gate (region %s)" % main.world_region)
+		return false
+	main.world.player.global_position = (point.position as Vector3) + Vector3(0, 0.3, 3.2)
+	await get_tree().create_timer(1.5).timeout
+	await _settle(10)
+	_save("gate")
+	if str(main.world.nearest.get("id", "")) != "harbor:rift":
+		main.world.player.global_position = (point.position as Vector3) + Vector3(0, 0.3, 0.6)
+		await get_tree().create_timer(1.0).timeout
+	print("gate nearest: %s" % str(main.world.nearest.get("id", "")))
+	return true
 
 
 func _play(bot: bool) -> bool:

@@ -374,6 +374,58 @@ static func tide_clock(world: Node3D, kit: Kit, at: Vector3) -> Dictionary:
 	bell.name = "HarborTideBell"
 	return {"hand": hand, "bell": bell}
 
+## The 逆潮港 gate across the west quay, where the tide runs the wrong way: two
+## rope-bound pilings whose barnacles and weed line sit at the top, a beam
+## with kelp growing up off it, a wave crest curling back toward the land and
+## an anchor hanging upside down. `wide` is the clear span between pilings.
+static func rift_gate(world: Node3D, kit: Kit, at: Vector3, wide: float) -> Label3D:
+	var detail := kit.detail
+	detail.frame = Transform3D(Basis.IDENTITY, at)
+	var kelp := Color("#4f8a4a")
+	for side: float in [-1.0, 1.0]:
+		var x := side * wide * 0.5
+		detail.tube(Vector3(x, 0.12, 0), 0.42, 0.36, 0.24, STONE, 10)
+		detail.tube(Vector3(x, 0.3, 0), 0.32, 0.3, 0.12, STONE.lightened(0.12), 10)
+		detail.tube(Vector3(x, 1.95, 0), 0.24, 0.22, 3.3, DARK_WOOD.lightened(0.12), 10)
+		for wrap: float in [0.9, 1.05, 2.2]:
+			detail.tube(Vector3(x, wrap, 0), 0.26, 0.26, 0.08, ROPE, 10)
+		# High-water marks the wrong way up: barnacles and weed at the top.
+		detail.tube(Vector3(x, 3.25, 0), 0.25, 0.25, 0.42, TEAL.darkened(0.15), 10)
+		for barnacle in 5:
+			var angle := float(barnacle) * 1.3 + side
+			detail.ball(Vector3(x + cos(angle) * 0.24, 3.05 + 0.1 * float(barnacle % 3), sin(angle) * 0.24), 0.07, CREAM, Color.TRANSPARENT, 6, 3)
+		# A buoy hanging from each piling.
+		detail.box(Vector3(x - side * 0.36, 2.0, 0.18), Vector3(0.03, 0.5, 0.03), ROPE)
+		detail.ball(Vector3(x - side * 0.36, 1.66, 0.18), 0.17, CORAL, CREAM, 8, 4)
+		kit.blocker(at + Vector3(x, 1.0, 0), Vector3(0.6, 2.0, 0.6))
+	# The beam, trimmed top and bottom, with kelp growing up off it.
+	detail.box(Vector3(0, 3.7, 0), Vector3(wide + 0.9, 0.42, 0.5), PALE_WOOD.darkened(0.1))
+	for edge: float in [-1.0, 1.0]:
+		detail.box(Vector3(0, 3.7 + edge * 0.24, 0), Vector3(wide + 1.05, 0.07, 0.56), CREAM.darkened(0.08))
+	for strand in 7:
+		var x := -wide * 0.42 + float(strand) * wide * 0.14
+		var lean := Basis(Vector3.BACK, 0.25 * sin(float(strand) * 1.7))
+		detail.box(Vector3(x, 4.18 + 0.08 * float(strand % 2), 0.12), Vector3(0.07, 0.5 + 0.12 * float(strand % 3), 0.04), kelp.lightened(0.08 * float(strand % 2)), lean)
+	# A wave crest curling back toward the land, foam on its lip.
+	for step in 7:
+		var u := float(step) / 6.0
+		var crest := Vector3(lerpf(-wide * 0.45, wide * 0.4, u), 4.05 + 0.75 * sin(PI * u * 0.9), -0.05)
+		var tilt := Basis(Vector3.BACK, lerpf(0.6, -1.4, u))
+		detail.box(crest, Vector3(0.62, 0.3, 0.36), TEAL.lightened(0.1 + 0.1 * u), tilt)
+		detail.box(crest + Vector3(0, 0.18, 0.02), Vector3(0.5, 0.1, 0.32), WHITEWASH, tilt)
+	# The anchor, hanging upside down from the middle of the beam.
+	detail.box(Vector3(0, 3.22, 0.27), Vector3(0.08, 0.6, 0.06), GOLD)
+	detail.box(Vector3(0, 3.48, 0.27), Vector3(0.44, 0.07, 0.06), GOLD)
+	for side: float in [-1.0, 1.0]:
+		detail.box(Vector3(side * 0.16, 2.98, 0.27), Vector3(0.3, 0.07, 0.06), GOLD.darkened(0.1), Basis(Vector3.BACK, side * 0.55))
+	# The name board under the beam.
+	detail.box(Vector3(0, 2.86, 0.22), Vector3(1.9, 0.46, 0.08), TEAL.darkened(0.25))
+	for edge: float in [-1.0, 1.0]:
+		detail.box(Vector3(0, 2.86 + edge * 0.25, 0.22), Vector3(2.0, 0.05, 0.11), GOLD.darkened(0.2))
+	detail.frame = Transform3D.IDENTITY
+	return world._local_label("逆潮港", at + Vector3(0, 2.86, 0.4), 30)
+
+
 ## Crates, a barrel and a rope coil; `variation` reshuffles the stack.
 static func cargo(kit: Kit, at: Vector3, variation: int) -> void:
 	var detail := kit.detail

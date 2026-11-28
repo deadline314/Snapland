@@ -190,32 +190,99 @@ func _draw_scene() -> void:
 	_draw_postcard()
 
 
-## Each lane's current: foam streaks drifting with it and a chevron at the
-## left edge, teal when it carries you toward 錨錨, rust when it pulls you back.
+## Each lane is a band of water whose wave crests and foam run with its tide:
+## the crests scroll its way, and foam streaks are comets (a bright head, a
+## tail fading behind) so even a still picture shows which way it runs. A lane
+## carrying you toward 錨錨 runs fast and frothy; one against you is choppier
+## and darker. Troughs, not ropes, part the lanes.
 func _draw_currents() -> void:
 	var currents: Array = state.get("currents", [0, 0, 0, 0])
 	for lane in 4:
 		var flow := float(currents[lane])
 		var y := lane_y(lane)
-		var tone := WITH if flow > 0.0 else AGAINST
-		# Rope lines with floats divide the lanes.
-		if lane > 0:
-			var divider := y - LANE_GAP * 0.5
-			draw_rect(Rect2(0, divider, 1280, 2), Color("#d9c59a", 0.5))
-			for i in 16:
-				draw_rect(Rect2(i * 84.0 + 20.0, divider - 4.0, 12, 8), Color("#e2604f") if i % 2 == 0 else CREAM)
-		for i in 9:
-			var speed := 0.0 if reduced_motion else flow * 1.6
-			var x := fposmod(i * 151.0 + lane * 37.0 + now * speed, 1400.0) - 60.0
-			var length := 24.0 + absf(flow) * 0.35
-			draw_rect(Rect2(roundf(x / TEXEL) * TEXEL, y - 14.0 + (i % 3) * 12.0, length, TEXEL), Color(tone, 0.55))
-		var arrow := Vector2(64, y)
+		var top := y - LANE_GAP * 0.5
 		var dir := 1.0 if flow > 0.0 else -1.0
-		for k in 2:
-			var tip := arrow + Vector2(dir * (10.0 + k * 18.0), 0)
-			draw_colored_polygon(PackedVector2Array([tip, tip + Vector2(-dir * 14.0, -12.0), tip + Vector2(-dir * 14.0, 12.0)]), Color(tone, 0.9))
+		var shift := 0.0 if reduced_motion else fposmod(now * flow * 0.9, 320.0)
+		var water := _lane_water(flow > 0.0)
+		for tile in 6:
+			stamp(water, Vector2(roundf((shift - 320.0 + tile * 320.0) / TEXEL) * TEXEL, top), TEXEL, Color(1, 1, 1, 0.85))
+		# The trough between lanes: a dark wave line with foam caps breaking on it.
+		if lane > 0:
+			for x in range(0, 1280, int(TEXEL)):
+				var dip := roundf(sin(x * 0.045 + lane * 1.3 + (0.0 if reduced_motion else now * 1.2)) * 1.5) * TEXEL
+				draw_rect(Rect2(x, top + dip, TEXEL, TEXEL), Color("#1d4f66", 0.55))
+				if fposmod(x * 0.37 + lane * 11.0 + (0.0 if reduced_motion else now * flow * 0.3), 53.0) < 4.0:
+					draw_rect(Rect2(x, top + dip - TEXEL, TEXEL * 2.0, TEXEL), Color(CREAM, 0.7))
+		# Foam comets riding the tide.
+		var count := 7 + int(absf(flow) / 12.0)
+		for i in count:
+			var speed := 0.0 if reduced_motion else flow * 1.7
+			var x := fposmod(i * 163.0 + lane * 61.0 + now * speed, 1440.0) - 80.0
+			var row := y - 30.0 + float((i * 29) % 60)
+			var length := 16.0 + absf(flow) * 0.45
+			for piece in 4:
+				var reach := length * float(piece) / 4.0
+				var at := Vector2(x - dir * reach, row + (TEXEL if piece == 3 else 0.0))
+				var alpha := 0.9 - 0.22 * piece
+				draw_rect(Rect2((at / TEXEL).floor() * TEXEL, Vector2(length / 4.0 + TEXEL, TEXEL)), Color(Color("#f4fbff") if flow > 0.0 else Color("#e6dcd2"), alpha))
+		# Glints of the dusk sky on the crests.
+		if not reduced_motion:
+			for i in 6:
+				var twinkle := fposmod(now * 0.9 + i * 0.41 + lane * 0.17, 1.0)
+				if twinkle < 0.35:
+					var gx := fposmod(i * 211.0 + lane * 97.0 + now * flow * 0.9, 1280.0)
+					draw_rect(Rect2((Vector2(gx, top + 10.0 + float((i * 17) % 70)) / TEXEL).floor() * TEXEL, Vector2(TEXEL * (2.0 if twinkle < 0.15 else 1.0), TEXEL)), Color("#ffe6b8", 0.9))
 		if roundi(float(state.get("raft_lane", 1))) == lane:
-			label(Vector2(150, y - 30.0), "順流" if flow > 0.0 else "逆流", 20, tone)
+			label(Vector2(150, y - 30.0), "順流" if flow > 0.0 else "逆流", 20, WITH if flow > 0.0 else AGAINST)
+
+
+## A tileable strip of lane water: rows of wave crests with light faces and
+## dark backs; a lane with you is smooth and bright, one against you choppier.
+func _lane_water(with_you: bool) -> Texture2D:
+	return Pixels.cached("tide|lane|%s" % with_you, func() -> Image:
+		var size := Vector2i(80, int(LANE_GAP / TEXEL))
+		var image := Image.create(size.x, size.y, false, Image.FORMAT_RGBA8)
+		var base := SEA.lightened(0.04) if with_you else SEA_DEEP.lightened(0.04)
+		var waves := 2.0 if with_you else 3.0
+		for y in size.y:
+			for x in size.x:
+				var phase := TAU * waves * float(x) / size.x + float(y) * 0.85 + sin(TAU * float(x) / size.x + y * 0.3) * 0.8
+				var crest := sin(phase)
+				var tone := base.darkened(0.04 * float(y) / size.y)
+				if crest > 0.86:
+					tone = tone.lightened(0.24)
+				elif crest > 0.6:
+					tone = tone.lightened(0.1)
+				elif crest < -0.75:
+					tone = tone.darkened(0.12)
+				image.set_pixel(x, y, tone)
+		return image)
+
+
+## Spray where a barrel smacks into the water: a crown of droplets thrown up
+## and falling back, with a ring of foam spreading under it.
+func _spray(at: Vector2, age: float) -> void:
+	if age < 0.0 or age > 0.7:
+		return
+	var u := age / 0.7
+	draw_arc(at, 20.0 + 50.0 * u, 0.0, TAU, 20, Color(CREAM, 0.8 * (1.0 - u)), TEXEL)
+	if reduced_motion:
+		return
+	for drop in 12:
+		var angle := -PI * (0.12 + 0.76 * float(drop) / 11.0)
+		var speed := 180.0 + 60.0 * float(drop % 3)
+		var point := at + Vector2(cos(angle), sin(angle)) * speed * age + Vector2(0, 420.0 * age * age)
+		draw_rect(Rect2((point / TEXEL).floor() * TEXEL, Vector2(TEXEL, TEXEL * 2.0)), Color("#e9fbff", 1.0 - u))
+
+
+## Wake behind something moving through the water: a fan of foam dashes.
+func _wake(at: Vector2, toward: float, width: float) -> void:
+	for i in 6:
+		var age := fposmod((0.0 if reduced_motion else now * 1.5) + i / 6.0, 1.0)
+		var spread := width * (0.3 + age)
+		for side: float in [-1.0, 1.0]:
+			var point := at + Vector2(-toward * 120.0 * age, side * spread * 0.25)
+			draw_rect(Rect2((point / TEXEL).floor() * TEXEL, Vector2(TEXEL * 3.0, TEXEL)), Color(CREAM, 0.7 * (1.0 - age)))
 
 
 ## Before the lanes trade currents, a wall of foam rolls in from the right.
@@ -258,7 +325,7 @@ func _draw_barrels() -> void:
 		var bob := 0.0 if reduced_motion else sin(now * 4.0 + at.x * 0.01) * 3.0
 		if age >= 0.55:
 			Props.oval_shadow(self, at + Vector2(0, 14), Vector2(30, 7), 0.3, SPRITE_SHADE)
-			dust_puffs(at + Vector2(0, 10), age - 0.55, 40.0)
+			_spray(at + Vector2(0, 8), age - 0.55)
 		stamp(_barrel(), at + Vector2(-28, -26 + bob))
 
 
@@ -272,6 +339,7 @@ func _draw_boss() -> void:
 	var at := Vector2(boss_x(), y + 20.0)
 	var bob := 0.0 if reduced_motion else sin(now * 2.2) * 4.0
 	Props.oval_shadow(self, at + Vector2(0, 6), Vector2(110, 16), 0.3, SPRITE_SHADE)
+	_wake(at + Vector2(-70, 4), 1.0, 60.0)
 	var size := Vector2(Anmao.STAGE) * TEXEL
 	draw_texture_rect(boss_stage.get_texture(), Rect2(at + Vector2(0, bob) - Anmao.ROOT * TEXEL, size), false)
 	if bool(state.get("in_reach", false)):
@@ -297,6 +365,7 @@ func _draw_raft() -> void:
 	var bob := 0.0 if reduced_motion else sin(now * 3.0) * 3.0
 	var at := Vector2(RAFT_X, y + 14.0 + bob)
 	Props.oval_shadow(self, at + Vector2(0, 10), Vector2(70, 12), 0.3, SPRITE_SHADE)
+	_wake(at + Vector2(-60, 8), 1.0, 40.0)
 	draw_set_transform(at, spin)
 	Props.stamp(self, _raft(), Vector2(-60, -12), TEXEL)
 	var mood := "shocked" if bumped >= 0.0 and bumped < 1.2 else "plain"

@@ -482,7 +482,8 @@ func _regional_map_location_flow(map: Node) -> void:
 	_check(readable,"%s map flows complete numbered locations on one line within flow and viewport bounds at 800x600 / 1.25" % main.world_region)
 	_check(_within_viewport(map) and _within_viewport(main.modal_footer), "%s real map and fixed footer fit 800x600 / 1.25" % main.world_region)
 	if main.world_region=="harbor":
-		_check(map.snapshot.points.size()==17, "harbor regression uses all seventeen real locations")
+		# Twelve games, the tide clock, two ferry piers, the lighthouse note, the way home and the 逆潮港 gate.
+		_check(map.snapshot.points.size()==18, "harbor regression uses all eighteen real locations")
 		var entrance: Button=main.overlay.find_child("RegionGamesButton",true,false)
 		_check(entrance!=null and main.modal_footer.get_child_count()==2, "regional map has one game entrance and fixed back action")
 		if entrance!=null:
