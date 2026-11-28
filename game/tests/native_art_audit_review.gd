@@ -7,7 +7,7 @@ extends Node
 ##
 ## User args (after --): --only=<section,...> limits the run to sections
 ## (districts, travel, welcome, menus, events, games). --phases=noon,dusk,night.
-## --regions=candy,toy limits the district views.
+## --regions=candy,toy limits the district views; --games=game-001,... picks the minigames.
 const MainScene = preload("res://game/main.tscn")
 const RegionRoutes = preload("res://game/core/region_routes.gd")
 const DistrictSites = preload("res://game/world/district_sites.gd")
@@ -19,7 +19,7 @@ const WELCOME_VIEWS := [
 	["harbor-headland", Vector3(-86.0, 0.3, 66.0)],
 	["toy-circus-band", Vector3(48.5, 0.3, -182.0)],
 ]
-const GAMES := ["game-001", "game-006", "game-014", "game-027", "game-040", "game-052", "game-064", "game-075", "game-085"]
+var games := ["game-001", "game-006", "game-014", "game-027", "game-040", "game-052", "game-064", "game-075", "game-085"]
 
 var main: Node
 var out := ""
@@ -43,6 +43,7 @@ func _run() -> void:
 		if arg.begins_with("--only="): sections = arg.trim_prefix("--only=").split(",", false)
 		elif arg.begins_with("--phases="): phases = arg.trim_prefix("--phases=").split(",", false)
 		elif arg.begins_with("--regions="): regions = arg.trim_prefix("--regions=").split(",", false)
+		elif arg.begins_with("--games="): games = Array(arg.trim_prefix("--games=").split(",", false))
 	DirAccess.make_dir_recursive_absolute(out)
 	Progress.reset_progress()
 	Progress.intro_seen = true
@@ -163,7 +164,7 @@ func _menu_shots() -> void:
 
 func _game_shots() -> void:
 	_set_phase("noon")
-	for id: String in GAMES:
+	for id: String in games:
 		main._launch_game(id, false)
 		if main.session == null: continue
 		await _wait(0.8)
