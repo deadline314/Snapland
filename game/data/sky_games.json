@@ -38,5 +38,25 @@
       "sign",
       "lantern"
     ]
+  },
+  {
+    "id": "game-104",
+    "mode": "rope_bridge",
+    "zone": "sky",
+    "local_index": 8,
+    "arcade": true,
+    "name": "繩橋共振",
+    "goal": "浮島之間的吊橋左右晃，跟著晃動的拍子左右交替踩步過橋：橋往左晃到底按 ←、往右晃到底按 →，踩在拍上橋就穩，踩錯橋越晃越大。",
+    "instructions": "← →、A D 或手把十字鍵：橋晃到哪一邊就踩那一邊，亮起來的腳印就是下一步。遇到斷掉的橋板按 ↑ 跨大步。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助踩著拍子過橋拿到金牌",
+    "ordinary": "跟著吊橋的拍子左右踩步過橋，拿到銅牌",
+    "attraction_tag": "浮島吊橋",
+    "island_invitation": "浮島群的吊橋會跟著風晃！跟著拍子左右踩就穩，踩錯的話橋會整個翻過來，你就倒掛在繩子上像一件晾著的衣服。",
+    "retake_props": [
+      "lantern",
+      "mascot",
+      "bench"
+    ]
   }
 ]

@@ -8,6 +8,7 @@ extends "res://game/minigames/arcade/arcade_view.gd"
 ## one more feather in a crooked hat. Baked pixel art in the sky park palette.
 
 const Hero = preload("res://game/minigames/arcade/arcade_hero.gd")
+const SkyBackdrop = preload("res://game/minigames/arcade/sky_backdrop.gd")
 const LEFT := 120.0
 const WIDE := 1040.0
 const DECK_Y := 640.0
@@ -15,9 +16,7 @@ const TALL := 460.0
 const HERO_SCALE := 3.0
 const RAIL_Y := 566.0
 const POLE_X := 70.0
-const SKY := Color("#7cc4ec")
 const DEEP := Color("#3d6fb0")
-const PALE := Color("#d8eefa")
 const WHITE := Color("#fbfdff")
 const CLOUD_SHADE := Color("#d5e3f6")
 const SUN := Color("#ffd35c")
@@ -30,8 +29,6 @@ const NAVY := Color("#2f4a7a")
 const CORK := Color("#e9c98f")
 const NOON := Color(1.0, 0.99, 0.96)
 
-var _sky: ImageTexture
-var _cloud: ImageTexture
 var _shuttle: ImageTexture
 var _kites: Array[ImageTexture] = []
 
@@ -42,8 +39,6 @@ func _init() -> void:
 
 
 func _ready() -> void:
-	_sky = Pixels.bake("updraft-sky", Vector2i(322, 182), _paint_sky)
-	_cloud = Pixels.bake("updraft-cloud", Vector2i(30, 12), _paint_cloud)
 	_shuttle = Pixels.bake("updraft-shuttle", Vector2i(9, 12), _paint_shuttle)
 	for tone: Color in [CORAL, MINT_KITE, LILAC]:
 		_kites.append(Pixels.bake("updraft-kite|%s" % tone.to_html(), Vector2i(12, 15), _paint_kite.bind(tone)))
@@ -59,15 +54,9 @@ func _y(height: float) -> float:
 
 # --- Backdrop -----------------------------------------------------------------
 
-## A plain afternoon sky over a sea of clouds. Stands in until the sky park's
-## shared arcade backdrop arrives; the terrace below is this game's own.
+## The sky park's shared backdrop; the terrace below is this game's own.
 func _draw_backdrop() -> void:
-	stamp(_sky, Vector2(-TEXEL * 2.0, -TEXEL * 2.0))
-	# Little clouds drifting past behind the kites.
-	for index in 4:
-		var drift := 0.0 if reduced_motion else now * (10.0 + index * 4.0)
-		var x := fposmod(index * 360.0 + drift, DESIGN.x + 260.0) - 180.0
-		stamp(_cloud, Vector2(x, 150.0 + index * 58.0), 3.0 + index % 2, NOON)
+	SkyBackdrop.draw(self, now, reduced_motion)
 	_draw_kites()
 	_draw_rail()
 	stage_floor(DECK_Y, WOOD, DARK_WOOD)
@@ -316,34 +305,6 @@ func _draw_rally() -> void:
 
 
 # --- Texel painters -------------------------------------------------------------
-
-func _paint_sky(x: int, y: int) -> Color:
-	# Deep blue at the top fading to pale near a sea of clouds, a warm glow
-	# round the sun, and the rounded tops of the cloud sea along the bottom.
-	var fall := float(y) / 182.0
-	var tone := DEEP.lerp(SKY, smoothstep(0.0, 0.55, fall)).lerp(PALE, smoothstep(0.5, 0.95, fall))
-	var sun := Vector2(262, 40)
-	var glow := 1.0 - clampf((Vector2(x, y) - sun).length() / 70.0, 0.0, 1.0)
-	tone = tone.lerp(Color("#fff1c8"), glow * glow * 0.55)
-	if (Vector2(x, y) - sun).length() < 9.0:
-		return SUN.lightened(0.4)
-	var crest := 128.0 - 7.0 * absf(sin(x * 0.09)) - 5.0 * absf(sin(x * 0.037 + 1.3)) - 3.0 * Pixels.noise(x / 3, 0, 4)
-	if y >= crest:
-		var depth := (y - crest) / 20.0
-		var cloud := WHITE.lerp(CLOUD_SHADE, clampf(depth, 0.0, 1.0))
-		return Pixels.lit(cloud, 0.6 - depth, x, y)
-	return Pixels.lit(tone, 0.15, x, y)
-
-
-func _paint_cloud(x: int, y: int) -> Color:
-	var at := Vector2(x + 0.5, y + 0.5)
-	var puffs := [Vector3(8, 7, 5), Vector3(15, 5, 6), Vector3(22, 7, 5), Vector3(15, 8, 4)]
-	for puff: Vector3 in puffs:
-		var offset := (at - Vector2(puff.x, puff.y)) / puff.z
-		if offset.length() <= 1.0:
-			return WHITE if offset.y < 0.35 else CLOUD_SHADE
-	return Pixels.CLEAR
-
 
 func _paint_shuttle(x: int, y: int) -> Color:
 	# Feather skirt on top (wide, white, ribbed), a red band, and a round cork below.

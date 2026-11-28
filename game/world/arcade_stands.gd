@@ -75,6 +75,8 @@ const STANDS := {
 			"stand": Vector3(-12.6, 0.75, -6.0), "point": Vector3(-11.65, 0.75, -4.65), "prop": "cloudhop", "paint": Color("#5a8ac0")},
 		{"id": "game-103", "title": "羽球上升流", "prompt": "羽球上升流 · 左右跑接羽球",
 			"stand": Vector3(-12.4, 1.85, 14.4), "point": Vector3(-11.45, 1.85, 15.75), "prop": "shuttle", "paint": Color("#3d6fb0")},
+		{"id": "game-104", "title": "繩橋共振", "prompt": "繩橋共振 · 跟著拍子左右踩",
+			"stand": Vector3(0.6, 1.80, 5.8), "point": Vector3(1.55, 1.80, 7.15), "prop": "ropebridge", "paint": Color("#6e4c32")},
 	],
 }
 const FOOTPRINT := Vector3(1.5, 2.0, 1.0)
@@ -120,6 +122,7 @@ static func build(world: Node3D, region: String) -> void:
 			"window": _window_prop(sculpt)
 			"bubble": _bubble_prop(sculpt)
 			"shuttle": _shuttle_prop(sculpt)
+			"ropebridge": _rope_bridge_prop(sculpt)
 			"lock": _lock_prop(sculpt)
 			"slide": _slide_prop(sculpt)
 			"cloudhop": _cloudhop_prop(sculpt)
@@ -712,3 +715,22 @@ static func _window_prop(sculpt: Kit.Sculpt) -> void:
 	sculpt.tube(Vector3(0.28, 1.06, 0.1), 0.12, 0.1, 0.16, Color("#8a8aa0"), 8)
 	sculpt.box(Vector3(0.28, 1.16, 0.1), Vector3(0.26, 0.04, 0.22), Color("#f4ecd8"), Basis(Vector3.BACK, 0.2))
 	sculpt.box(Vector3(-0.28, 1.0, 0.1), Vector3(0.3, 0.05, 0.2), Color("#e79bb6"))
+
+
+## A little plank rope bridge on the roof between two posts with lanterns,
+## and a coil of rope with a spare plank on the counter.
+static func _rope_bridge_prop(sculpt: Kit.Sculpt) -> void:
+	var wood := Color("#a87a4f")
+	var dark := Color("#6e4c32")
+	var rope := Color("#d9c08a")
+	for side: float in [-0.42, 0.32]:
+		sculpt.box(Vector3(side, 2.78, -0.3), Vector3(0.05, 0.42, 0.05), dark)
+		sculpt.ball(Vector3(side, 3.02, -0.3), 0.05, Color("#ffd35c"), Color.TRANSPARENT, 6, 3)
+	for plank in 6:
+		var x := -0.33 + plank * 0.12
+		var sag := 0.06 * sin(PI * (plank + 0.5) / 6.0)
+		sculpt.box(Vector3(x, 2.6 - sag, -0.3), Vector3(0.09, 0.02, 0.26), wood.darkened(0.08 * (plank % 2)))
+	for z: float in [-0.43, -0.17]:
+		sculpt.box(Vector3(-0.05, 2.82, z), Vector3(0.74, 0.015, 0.015), rope)
+	sculpt.tube(Vector3(-0.18, 1.01, 0.12), 0.1, 0.1, 0.05, rope, 10)
+	sculpt.box(Vector3(0.22, 1.0, 0.14), Vector3(0.3, 0.02, 0.08), wood)
