@@ -259,9 +259,10 @@ func _build_floors() -> void:
 	# yard is laid its own way (ART-69); checker stays on the mint runner and the
 	# small mooring, the two mats meant to catch the eye.
 	var surfaces: Array[Material] = [
-		Props.tile(world, "aisle", 3, Props.CREAM, Props.PINK.lightened(0.2), 0.9),
-		Props.tile(world, "lab", 5, Props.CREAM, Props.MINT, 1.0),
-		Props.tile(world, "gallery", 4, Props.CREAM, Props.LEMON, 0.8),
+		# Mid-tone bases, not cream, so the noon sun cannot bleach the yards (ART-83).
+		Props.tile(world, "aisle", 3, Color("#f0c4bc"), Color("#d77c95"), 0.9),
+		Props.tile(world, "lab", 5, Color("#d8ecdf"), Color("#4fae8c"), 1.0),
+		Props.tile(world, "gallery", 4, Color("#f2d58e"), Color("#c99536"), 0.8),
 		Props.tile(world, "mooring", 0, Props.CREAM, Props.LILAC, 1.0),
 		Props.toned(world, 1, 1.25, Props.WAFER),
 	]
