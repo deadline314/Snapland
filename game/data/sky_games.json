@@ -118,5 +118,25 @@
       "lantern",
       "mascot"
     ]
+  },
+  {
+    "id": "game-107",
+    "mode": "cloud_shutter",
+    "zone": "sky",
+    "local_index": 11,
+    "arcade": true,
+    "name": "雲影快門",
+    "goal": "天上的雲一直變形，告示牌喊出要拍的形狀（兔子、鯨魚、茶壺）；在雲剛好變成那個形狀的瞬間按下快門。",
+    "instructions": "空白鍵、↓ 或手把 A 鈕：按快門。雲變成告示牌上的形狀時按下；很像但不對的雲別拍。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助拍下每一朵指定的雲拿到金牌",
+    "ordinary": "在雲變成指定形狀時按下快門，拿到銅牌",
+    "attraction_tag": "拍照點拍雲",
+    "island_invitation": "雲上拍照點的雲會變形！等它變成兔子、鯨魚或茶壺的那一刻按快門。拍錯的話，雲會變成你的臉對著你吐舌頭。",
+    "retake_props": [
+      "sign",
+      "mascot",
+      "bench"
+    ]
   }
 ]

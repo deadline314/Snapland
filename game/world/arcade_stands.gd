@@ -89,6 +89,8 @@ const STANDS := {
 			"stand": Vector3(-7.6, 1.85, 12.0), "point": Vector3(-6.65, 1.85, 13.35), "prop": "windkite", "paint": Color("#ff8a6b")},
 		{"id": "game-106", "title": "落星接網", "prompt": "落星接網 · 左右跑接星星",
 			"stand": Vector3(7.0, 2.35, 11.4), "point": Vector3(7.95, 2.35, 12.75), "prop": "starnet", "paint": Color("#3a2f6e")},
+		{"id": "game-107", "title": "雲影快門", "prompt": "雲影快門 · 雲變對形狀時拍",
+			"stand": Vector3(14.0, 2.35, 11.6), "point": Vector3(14.95, 2.35, 12.95), "prop": "cloudcam", "paint": Color("#5b7bb0")},
 	],
 }
 const FOOTPRINT := Vector3(1.5, 2.0, 1.0)
@@ -140,6 +142,7 @@ static func build(world: Node3D, region: String) -> void:
 			"ropebridge": _rope_bridge_prop(sculpt)
 			"windkite": _wind_kite_prop(sculpt)
 			"starnet": _star_net_prop(sculpt)
+			"cloudcam": _cloud_camera_prop(sculpt)
 			"lock": _lock_prop(sculpt)
 			"slide": _slide_prop(sculpt)
 			"cloudhop": _cloudhop_prop(sculpt)
@@ -853,3 +856,20 @@ static func _star_net_prop(sculpt: Kit.Sculpt) -> void:
 	sculpt.tube(Vector3(-0.15, 1.02, 0.12), 0.12, 0.09, 0.1, Color("#c99a5b"), 10)
 	for star in 3:
 		sculpt.ball(Vector3(-0.2 + star * 0.05, 1.09, 0.12), 0.03, gold, Color.TRANSPARENT, 5, 3)
+
+
+## A big camera on a tripod on the roof aimed at a puffy cloud shaped like a
+## rabbit, and a little stack of prints on the counter.
+static func _cloud_camera_prop(sculpt: Kit.Sculpt) -> void:
+	var dark := Color("#3d3f52")
+	var white := Color("#fbfdff")
+	for leg: float in [-0.12, 0.0, 0.12]:
+		sculpt.box(Vector3(0.25 + leg, 2.72, -0.3 + leg * 0.5), Vector3(0.025, 0.3, 0.025), Color("#6e4c32"), Basis(Vector3.BACK, leg))
+	sculpt.box(Vector3(0.25, 2.92, -0.3), Vector3(0.22, 0.14, 0.14), dark)
+	sculpt.tube(Vector3(0.12, 2.94, -0.3), 0.05, 0.05, 0.08, Color("#6f86b8"), 10, Basis(Vector3.BACK, PI * 0.5))
+	sculpt.ball(Vector3(-0.2, 3.05, -0.3), 0.12, white, Color.TRANSPARENT, 8, 4)
+	sculpt.ball(Vector3(-0.2, 3.2, -0.3), 0.07, white, Color.TRANSPARENT, 6, 3)
+	for ear: float in [-0.04, 0.04]:
+		sculpt.box(Vector3(-0.2 + ear, 3.32, -0.3), Vector3(0.03, 0.1, 0.03), white)
+	for card in 3:
+		sculpt.box(Vector3(-0.15 + card * 0.02, 1.0 + card * 0.01, 0.12), Vector3(0.12, 0.01, 0.14), white.darkened(0.05 * card))
