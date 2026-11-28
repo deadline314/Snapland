@@ -18,5 +18,25 @@
       "mascot",
       "bench"
     ]
+  },
+  {
+    "id": "game-086",
+    "mode": "sheet_slide",
+    "zone": "hotel",
+    "local_index": 2,
+    "arcade": true,
+    "name": "被單滑梯",
+    "goal": "坐在床單一角從長長的被單滑梯溜下去，左右傾身撿起路上的枕頭，閃過睡著的貓；撞到會被床單捲成春捲。",
+    "instructions": "← →、A D 或手把十字鍵、左搖桿：往那邊傾身。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助溜被單滑梯拿到金牌",
+    "ordinary": "左右傾身撿枕頭、閃過貓溜到底，拿到銅牌",
+    "attraction_tag": "被單滑梯",
+    "island_invitation": "從旅館的大床一路溜下去！枕頭要撿、睡著的貓要閃，有的貓還會翻身擋路。撞到的話，你會被床單捲成一條春捲滾到底。",
+    "retake_props": [
+      "mascot",
+      "lantern",
+      "bench"
+    ]
   }
 ]

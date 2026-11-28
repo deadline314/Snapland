@@ -52,6 +52,8 @@ const STANDS := {
 	"hotel": [
 		{"id": "game-085", "title": "折頁走廊", "prompt": "折頁走廊 · 書頁闔上時跳起來",
 			"stand": Vector3(-3.6, 0.2, 4.6), "point": Vector3(-2.65, 0.2, 5.95), "prop": "book", "paint": Color("#5b3f74")},
+		{"id": "game-086", "title": "被單滑梯", "prompt": "被單滑梯 · 左右傾身撿枕頭",
+			"stand": Vector3(10.8, 0.2, 3.6), "point": Vector3(11.75, 0.2, 4.95), "prop": "slide", "paint": Color("#7a5aa8")},
 	],
 }
 const FOOTPRINT := Vector3(1.5, 2.0, 1.0)
@@ -90,6 +92,7 @@ static func build(world: Node3D, region: String) -> void:
 			"vine": _vine_prop(sculpt)
 			"post": _post_prop(sculpt)
 			"book": _book_prop(sculpt)
+			"slide": _slide_prop(sculpt)
 		var stand: MeshInstance3D = world._mesh(sculpt.mesh(), Vector3.ZERO, world._vertex_color_material("arcade-stand"))
 		stand.name = "ArcadeStand_" + str(row.id)
 		var body := StaticBody3D.new()
@@ -493,3 +496,24 @@ static func _book_prop(sculpt: Kit.Sculpt) -> void:
 		sculpt.box(Vector3(0.28, 1.0 + book * 0.09, 0.1), Vector3(0.36 - book * 0.04, 0.08, 0.26), tone, Basis(Vector3.UP, book * 0.25))
 	sculpt.box(Vector3(0.3, 0.96, 0.25), Vector3(0.04, 0.2, 0.01), Color("#d9a64e"))
 	sculpt.box(Vector3(-0.3, 1.02, 0.1), Vector3(0.3, 0.1, 0.22), paper)
+
+
+## A little bed on the roof with its pinstriped sheet running down as a slide,
+## a sleeping cat curled on the sheet, and a pillow and a folded quilt on the
+## counter.
+static func _slide_prop(sculpt: Kit.Sculpt) -> void:
+	var sheet := Color("#efe6f4")
+	var plum := Color("#5b3f74")
+	sculpt.box(Vector3(-0.35, 2.62, -0.3), Vector3(0.5, 0.16, 0.42), plum)
+	sculpt.box(Vector3(-0.35, 2.74, -0.3), Vector3(0.48, 0.06, 0.4), sheet)
+	sculpt.box(Vector3(-0.58, 2.86, -0.3), Vector3(0.06, 0.34, 0.42), plum.darkened(0.2))
+	sculpt.box(Vector3(-0.44, 2.8, -0.3), Vector3(0.14, 0.07, 0.3), Color("#f3ecfa"))
+	var slope := Basis(Vector3.BACK, 0.42)
+	sculpt.box(Vector3(0.25, 2.55, -0.3), Vector3(0.78, 0.03, 0.4), sheet, slope)
+	for stripe: float in [-0.12, 0.12]:
+		sculpt.box(Vector3(0.25, 2.565, -0.3 + stripe), Vector3(0.78, 0.01, 0.02), Color("#9c86c8"), slope)
+	sculpt.ball(Vector3(0.2, 2.62, -0.25), 0.08, Color("#d98a4a"), Color.TRANSPARENT, 8, 4, 0.7)
+	sculpt.ball(Vector3(0.12, 2.66, -0.25), 0.05, Color("#d98a4a"), Color.TRANSPARENT, 6, 3)
+	sculpt.box(Vector3(-0.25, 1.04, 0.1), Vector3(0.36, 0.1, 0.24), Color("#f3ecfa"))
+	sculpt.box(Vector3(0.28, 1.0, 0.1), Vector3(0.36, 0.06, 0.26), Color("#e79bb6"))
+	sculpt.box(Vector3(0.28, 1.06, 0.1), Vector3(0.34, 0.05, 0.24), Color("#4f8f86"))
