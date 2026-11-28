@@ -64,10 +64,10 @@ func _run() -> void:
 					_check(absf(hit.position.y - world.ground_surface_y(sample)) < 0.001, "floor height agreement")
 		var reached := _reachable_cells(snapshot, Vector2i(0, 9))
 		_check(reached.has(Vector2i(9, 2)), "the canal bridge joins the pipe gallery and the bubble mooring")
-		_check(snapshot.points.size() == world.points.size() and snapshot.points.size() == expected_games.size() + 5, "all actual factory interactions mapped")
+		_check(snapshot.points.size() == world.points.size() and snapshot.points.size() == expected_games.size() + 6, "all actual factory interactions mapped")
 		for point in snapshot.points:
 			_check(point.size() == 3 and point.position is Vector3, "point contains only id/label/position")
-			_check(point.id in ["region:welcome", "candy:temperature", "candy:reset"] or point.id.begins_with("candy:info:") or point.id in expected_games, "only delivered games and observation IDs")
+			_check(point.id in ["region:welcome", "candy:temperature", "candy:reset", "candy:rift"] or point.id.begins_with("candy:info:") or point.id in expected_games, "only delivered games and observation IDs")
 			_check(reached.has(Vector2i(roundi(point.position.x), roundi(point.position.z))), "connected safe walking route to %s" % point.id)
 			world.player.position = point.position
 			world.player.velocity = Vector3.ZERO

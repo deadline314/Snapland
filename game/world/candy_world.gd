@@ -65,6 +65,9 @@ func _build_entries() -> void:
 	_point("candy:reset", "免費回到工廠入口", Vector3(9, GROUND_Y, 9))
 	_point("candy:info:workbench", "材料工作台 · 不影響進度", Vector3(-8, GROUND_Y, 3))
 	_point("candy:info:pipes", "糖漿管道與輸送廊", Vector3(9, GROUND_Y, -4))
+	_point("candy:rift", "查看反重力糖廠", Vector3(11.6, GROUND_Y, -3.3))
+	# The gate stands just north of its point, between the pipe note and the syrup tanks.
+	Props.rift_gate(self, _kit, Vector3(11.6, GROUND_Y, -5.0), 2.6)
 	_point("game-025", "拉糖橋 · 抓端搭橋與運糖", Vector3(0, GROUND_Y, -9))
 	_point("game-026", "餅乾翻模 · 鬆角翻轉與滑接", Vector3(-5, GROUND_Y, 2))
 	_point("game-027", "糖漿分洪 · 冷熱切管與關閥", Vector3(7, GROUND_Y, -6))

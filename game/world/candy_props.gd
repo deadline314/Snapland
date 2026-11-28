@@ -547,6 +547,39 @@ static func gate_arch(world: Node3D, kit: Kit, at: Vector3, text: String, note: 
 	board(detail, at + Vector3(0, 2.05, 0), 2.4, 0.74)
 	lettering(world, note, at + Vector3(0, 2.05, 0.12), 24)
 
+## The 反重力糖廠 gate, where sweets fall up: two candy canes standing on their
+## hooks, syrup dripping upward off the name board, and gumdrops and jelly
+## cubes floating in a rising column above it. `wide` is the clear span.
+static func rift_gate(world: Node3D, kit: Kit, at: Vector3, wide: float) -> Label3D:
+	var detail := kit.detail
+	for side: float in [-1.0, 1.0]:
+		var foot := at + Vector3(side * wide * 0.5, 0, 0)
+		detail.tube(foot + Vector3(0, 0.12, 0), 0.4, 0.34, 0.24, PLUM, 10)
+		# Upside down: the hook curls on the ground, the straight end points up.
+		detail.tube(foot + Vector3(0, 0.3, 0), 0.22, 0.22, 0.12, WHITE, 10)
+		cane(detail, foot + Vector3(0, 0.36, 0), 3.2, 0.13, Vector3.ZERO, RED if side < 0.0 else MINT.darkened(0.25))
+		detail.tube(foot + Vector3(-side * 0.32, 0.36, 0), 0.16, 0.16, 0.3, RED if side < 0.0 else MINT.darkened(0.25), 8, Basis(Vector3.BACK, PI * 0.5))
+		lollipop_disc(kit, detail, foot + Vector3(0, 3.78, 0), 0.38, LEMON if side < 0.0 else PINK)
+		kit.blocker(foot + Vector3(0, 1.0, 0), Vector3(0.36, 2.0, 0.36))
+	board(detail, at + Vector3(0, 3.05, 0), wide - 0.4, 0.86)
+	# Syrup running up off the board's top edge, thinning as it rises.
+	for drip in 6:
+		var x := -wide * 0.36 + float(drip) * wide * 0.144
+		var rise := 0.28 + 0.22 * float((drip * 3) % 4)
+		detail.tube(at + Vector3(x, 3.48 + rise * 0.5, 0.02), 0.07, 0.03, rise, CARAMEL, 6)
+		detail.ball(at + Vector3(x, 3.5 + rise + 0.06, 0.02), 0.08, CARAMEL.lightened(0.15), Color.TRANSPARENT, 6, 3)
+	# A column of sweets falling upward, smallest highest.
+	for floating in 5:
+		var lift := 4.1 + float(floating) * 0.42
+		var drift := sin(float(floating) * 1.9) * 0.6
+		var tone: Color = SWEETS[floating % SWEETS.size()]
+		if floating % 2 == 0:
+			detail.ball(at + Vector3(drift, lift, 0), 0.22 - 0.025 * floating, tone, tone.lightened(0.3), 8, 4, 0.8, true)
+		else:
+			detail.box(at + Vector3(drift, lift, 0), Vector3.ONE * (0.3 - 0.03 * floating), tone.lightened(0.1), Basis(Vector3(1, 1, 0).normalized(), 0.6 * floating))
+	return lettering(world, "反重力糖廠", at + Vector3(0, 3.05, 0.12), 22)
+
+
 ## Crates and a syrup drum; `variation` reshuffles them.
 static func crates(kit: Kit, at: Vector3, variation: int) -> void:
 	var detail := kit.detail

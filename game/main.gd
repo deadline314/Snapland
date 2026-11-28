@@ -88,7 +88,13 @@ const RIFTS := {
 		"place": "逆潮港", "music": "game-020", "assist": "輔助進入（逆流拉得慢、木桶漂得慢）",
 		"intro": "門後是逆潮港，潮水倒著流，錨錨提著偷來的燈塔燈逃跑。\n換到順流的水道追上牠，追近時拋繩勾住牠。",
 		"won": "燈塔燈拿回來了！", "lost": "錨錨開船跑了", "kept": "燈塔重新亮起的照片收進相簿的小惡魔頁了。", "again": "港口又亮了一次。",
-		"fail_kept": "錨錨寄來一張你濕透的明信片，也收進相簿了。", "retry": "看清箭頭，挑順流的水道再追一次吧。"},
+		"fail_kept": "錨錨寄來一張你濕透的明信片，也收進相簿了。", "retry": "看清浪花往哪流，挑順流的水道再追一次吧。"},
+	"candy": {"id": "rift-candy", "mode": "jelly_shell", "arcade": true, "name": "果凍真身", "zone": "candy",
+		"goal": "從分身裡舀出真的啵啵三次", "instructions": "← → 選果凍，空白鍵舀起", "devil_hint": "", "devil": "", "ordinary": "",
+		"place": "反重力糖廠", "music": "game-028", "assist": "輔助進入（真身慢得更明顯、換位更慢）",
+		"intro": "門後是反重力糖廠，糖往天花板落。果凍主廚啵啵分裂成好幾個分身換來換去。\\n分身一起抖，只有真身慢半拍：盯住牠，把牠舀進模子裡。",
+		"won": "果凍蛋糕完成！", "lost": "被果凍包住了", "kept": "啵啵的果凍蛋糕照收進相簿的小惡魔頁了。", "again": "又做好一個果凍蛋糕。",
+		"fail_kept": "你被做成果凍了，這張照片也收進相簿。", "retry": "看誰晃得慢半拍，再舀一次吧。"},
 }
 ## The finale's closing picture (curtain call or keepsake of a loss), grabbed while it is on screen.
 var rift_shot: Image
@@ -1786,6 +1792,8 @@ func _interact(id: String, title: String) -> void:
 		elif id=="candy:reset":
 			place.reset_to_entry()
 			_notice("已免費回到工廠入口。")
+		elif id=="candy:rift":
+			_open_rift("candy",title)
 		elif id.begins_with("candy:info:"):
 			_start_dialogue([{ "speaker":title, "text":"觀察冷、溫、熱三態的糖料形狀與黏度；觀察不授予拍貼或遊園幣。"+_candy_info_text()+"可隨時免費返回迎賓大道。" }],Callable())
 		return
