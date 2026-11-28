@@ -255,11 +255,13 @@ func _lawn_quad(lawn: SurfaceTool, west: float, east: float, z: float, west_next
 		lawn.add_vertex(corner)
 
 func _build_floors() -> void:
-	# Main aisle, material lab, pipe gallery, bubble mooring, canal bridge.
+	# Main aisle, material lab, pipe gallery, bubble mooring, canal bridge. Each
+	# yard is laid its own way (ART-69); checker stays on the mint runner and the
+	# small mooring, the two mats meant to catch the eye.
 	var surfaces: Array[Material] = [
-		Props.tile(world, "aisle", 0, Props.CREAM, Props.PINK.lightened(0.2), 1.0),
-		Props.tile(world, "lab", 0, Props.CREAM, Props.MINT, 1.0),
-		Props.tile(world, "gallery", 0, Props.CREAM, Props.LEMON, 1.0),
+		Props.tile(world, "aisle", 3, Props.CREAM, Props.PINK.lightened(0.2), 0.9),
+		Props.tile(world, "lab", 5, Props.CREAM, Props.MINT, 1.0),
+		Props.tile(world, "gallery", 4, Props.CREAM, Props.LEMON, 0.8),
 		Props.tile(world, "mooring", 0, Props.CREAM, Props.LILAC, 1.0),
 		Props.toned(world, 1, 1.25, Props.WAFER),
 	]
@@ -286,6 +288,7 @@ func _build_floors() -> void:
 		kerb.add(Vector3(middle.x, _ground_y + 0.02, middle.y), Vector3(length, 0.07, 0.26) if is_zero_approx(outward.x) else Vector3(0.26, 0.07, length))
 		if int(edge[6]) == 1:
 			Props.cane_fence(kit, from - outward * 0.13, to - outward * 0.13, _ground_y + 0.05)
+	_scatter_crumbs()
 	# Syrup has stained the canal walls up to its high mark.
 	kit.detail.box(Vector3(8.5, -0.04, 0.03), Vector3(9.0, 0.16, 0.06), Props.CARAMEL.darkened(0.25))
 	kit.detail.box(Vector3(4.03, -0.04, 2.5), Vector3(0.06, 0.16, 5.0), Props.CARAMEL.darkened(0.25))
@@ -561,6 +564,36 @@ func _build_planting() -> void:
 	var tower_at := Vector3(23.5, LAWN_Y, -8.5)
 	Props.cooling_tower(kit, tower_at)
 	Props.pipe_run(kit.detail, [tower_at + Vector3(-2.4, 0.5, 0.6), tower_at + Vector3(-4.2, 0.5, 0.6), tower_at + Vector3(-4.2, 0.1, 0.6)], 0.16, Props.COPPER)
+
+## Sugar sprinkles and the odd sweet wrapper collect along the floor edges and
+## the runner, where sweeping misses them. One batched mesh, fixed by seed.
+func _scatter_crumbs() -> void:
+	var lines: Array = []
+	for edge: Array in EDGES:
+		lines.append([Vector2(float(edge[0]), float(edge[1])), Vector2(float(edge[2]), float(edge[3])), -Vector2(float(edge[4]), float(edge[5]))])
+	for side: float in [-1.0, 1.0]:
+		lines.append([Vector2(side * 1.7, -11.5), Vector2(side * 1.7, 11.5), Vector2(side, 0)])
+	var count := 0
+	for line: Array in lines:
+		var from: Vector2 = line[0]
+		var to: Vector2 = line[1]
+		var inward: Vector2 = line[2]
+		var steps := int(from.distance_to(to) / 0.55)
+		for step in steps:
+			count += 1
+			var roll := _scatter(float(count) * 1.37)
+			if roll < 0.25: continue
+			var along := from.lerp(to, (float(step) + _scatter(float(count) * 2.11)) / float(steps))
+			var at := along + inward * (0.18 + 0.75 * _scatter(float(count) * 3.7) * _scatter(float(count) * 5.3))
+			var turn := Basis(Vector3.UP, TAU * _scatter(float(count) * 7.9))
+			var tone: Color = Props.SWEETS[count % Props.SWEETS.size()]
+			if roll > 0.93:
+				# A flattened wrapper with its twisted ends.
+				kit.detail.box(Vector3(at.x, _ground_y + 0.006, at.y), Vector3(0.24, 0.012, 0.13), tone, turn)
+				for end: float in [-1.0, 1.0]:
+					kit.detail.box(Vector3(at.x, _ground_y + 0.008, at.y) + turn * Vector3(end * 0.16, 0, 0), Vector3(0.07, 0.014, 0.09), tone.lightened(0.25), turn)
+			else:
+				kit.detail.box(Vector3(at.x, _ground_y + 0.012, at.y), Vector3(0.2, 0.035, 0.07), tone, turn)
 
 ## Repeatable 0..1 scatter value, so the scenery is identical on every visit.
 func _scatter(seed_value: float) -> float:

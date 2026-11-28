@@ -7,6 +7,7 @@ extends Node
 ##
 ## User args (after --): --only=<section,...> limits the run to sections
 ## (districts, travel, welcome, menus, events, games). --phases=noon,dusk,night.
+## --regions=candy,toy limits the district views.
 const MainScene = preload("res://game/main.tscn")
 const RegionRoutes = preload("res://game/core/region_routes.gd")
 const DistrictSites = preload("res://game/world/district_sites.gd")
@@ -24,6 +25,7 @@ var main: Node
 var out := ""
 var sections: PackedStringArray = ["districts", "travel", "welcome", "menus", "events", "games"]
 var phases: PackedStringArray = ["noon", "dusk", "night"]
+var regions: PackedStringArray = []
 var shots := 0
 
 
@@ -40,6 +42,7 @@ func _run() -> void:
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--only="): sections = arg.trim_prefix("--only=").split(",", false)
 		elif arg.begins_with("--phases="): phases = arg.trim_prefix("--phases=").split(",", false)
+		elif arg.begins_with("--regions="): regions = arg.trim_prefix("--regions=").split(",", false)
 	DirAccess.make_dir_recursive_absolute(out)
 	Progress.reset_progress()
 	Progress.intro_seen = true
@@ -89,6 +92,7 @@ func _travel_shots() -> void:
 
 func _district_shots() -> void:
 	for region: String in DistrictSites.regions():
+		if not regions.is_empty() and not region in regions: continue
 		var spot: Vector3 = main.world.arrival_point(region)
 		if not spot.is_finite(): continue
 		await _stand(spot)
