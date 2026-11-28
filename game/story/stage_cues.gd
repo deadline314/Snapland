@@ -158,7 +158,7 @@ func _show_prop(kind: String, holder: Node3D) -> void:
 	# Held up beside the holder's shoulder.
 	var top := 1.0
 	if holder is Sprite3D and (holder as Sprite3D).texture != null:
-		top = (holder as Sprite3D).texture.get_height() * (holder as Sprite3D).pixel_size * 0.5
+		top = _half_height(holder as Sprite3D)
 	_prop.global_position = holder.global_position + Vector3(0, top * 0.55, 0) + _start.basis.x.normalized() * 0.45
 	_prop_holder = holder
 
@@ -180,6 +180,11 @@ static func _show_pose(sprite: Sprite3D, texture: Texture2D, uv_rect: Vector4) -
 	if material != null:
 		material.set_shader_parameter("texture_albedo", texture)
 		material.set_shader_parameter("uv_rect", uv_rect)
+
+## Half the drawn height of one frame: an atlas sprite (the thief) shows one cell, not the sheet.
+static func _half_height(sprite: Sprite3D) -> float:
+	var height := float(sprite.region_rect.size.y) if sprite.region_enabled else float(sprite.texture.get_height()) / maxi(sprite.vframes, 1)
+	return height * sprite.pixel_size * 0.5
 
 func _clear_prop() -> void:
 	if is_instance_valid(_prop): _prop.free()
@@ -220,7 +225,7 @@ func _frame(frame: String, speaker_id: String, zoom: float) -> void:
 func _head(node: Node3D) -> Vector3:
 	var height := 1.0
 	if node is Sprite3D and (node as Sprite3D).texture != null:
-		height = (node as Sprite3D).texture.get_height() * (node as Sprite3D).pixel_size * 0.5
+		height = _half_height(node as Sprite3D)
 	return node.global_position + Vector3(0, height * 0.5, 0)
 
 func _show_emote(mark: String, node: Node3D) -> void:
@@ -251,7 +256,7 @@ func _show_emote(mark: String, node: Node3D) -> void:
 	add_child(_emote)
 	var top := 2.0
 	if node is Sprite3D and (node as Sprite3D).texture != null:
-		top = (node as Sprite3D).texture.get_height() * (node as Sprite3D).pixel_size * 0.5
+		top = _half_height(node as Sprite3D)
 	_emote_base = node.global_position + Vector3(0.35, top + 0.45, 0)
 	_emote.global_position = _emote_base
 	_emote_left = EMOTE_SECONDS

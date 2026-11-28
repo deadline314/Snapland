@@ -184,7 +184,15 @@ func _three_catches_reward_once() -> void:
 	_check(progress.thief_catches == 3 and progress.achievements.has(progress.THIEF_ACHIEVEMENT) and unlocked == [progress.THIEF_ACHIEVEMENT], "the third catch grants the keepsake stamp")
 	_run_for(Thief.CAUGHT_SECONDS + 0.1, START)
 	_check(finished_arcs == 1 and main.modal_kind == "dialogue", "the third catch closes the arc with a short scene")
+	_check(thief.visible and main.cue_pantomime and is_instance_valid(main.stage_cues) and main._stage_actor("thief") == thief.sprite,
+		"the closing scene opens on the thief himself, sweating, with no subtitle")
+	_check(main.dialogue.any(func(line: Dictionary) -> bool: return str(line.get("text", "")).contains("首演")), "he lets the premiere slip without saying who he is")
 	main._cancel_dialogue()
+	_check(not is_instance_valid(main.stage_cues), "skipping the scene hands the view back")
+	main._show_achievements()
+	var back := main.overlay.find_child("AchievementBack_" + progress.THIEF_ACHIEVEMENT, true, false) as Label
+	_check(back != null and back.text.contains("首演道具組"), "the mask keepsake's back carries the prop-crew stamp")
+	main._close()
 	_run_for(Thief.PUFF_SECONDS + 0.1, START)
 	var again: Dictionary = progress.record_thief_catch()
 	_check(not bool(again.saved) and progress.thief_catches == 3 and unlocked.size() == 1, "the keepsake is given exactly once")

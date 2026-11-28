@@ -33,7 +33,7 @@ const DialoguePanelScript = preload("res://game/ui/dialogue_panel.gd")
 const BoatPrologueStage = preload("res://game/story/boat_prologue_stage.gd")
 const StageCues = preload("res://game/story/stage_cues.gd")
 const ScriptPages = preload("res://game/story/script_pages.gd")
-const STAGE_ACTOR_BY_SPEAKER := {"票票": "ticket", "小角": "imp", "阿浪": "announcer", "主角": "player"}
+const STAGE_ACTOR_BY_SPEAKER := {"票票": "ticket", "小角": "imp", "阿浪": "announcer", "主角": "player", "怪盜": "thief"}
 var world: Node3D
 var world_region := "welcome"
 var changing_region := false
@@ -1601,6 +1601,7 @@ func _stage_actor(id: String, _action := "") -> Node3D:
 	if not is_instance_valid(world): return null
 	if is_instance_valid(boat_stage): return boat_stage.actor(id)
 	if id=="player": return world.get("avatar") as Node3D
+	if id=="thief": return thief.sprite if is_instance_valid(thief) and thief.visible else null
 	var place := region_world()
 	if not is_instance_valid(place) or not place.has_method("story_actor"): return null
 	return place.story_actor(id)
@@ -1626,6 +1627,8 @@ func _end_stage() -> void:
 	cue_pantomime=false
 	if is_instance_valid(stage_cues):
 		stage_cues.finish()
+		# Out of the world at once, so nothing staged lingers until the frame ends.
+		if stage_cues.get_parent()!=null: stage_cues.get_parent().remove_child(stage_cues)
 		stage_cues.queue_free()
 	stage_cues=null
 
@@ -3233,10 +3236,16 @@ func _snap_island_moment(sticker: String) -> Dictionary:
 ## Third catch: the thief owns up and leaves his mask as a keepsake (already saved).
 func _on_thief_arc_finished() -> void:
 	if session!=null or modal_kind!="": return
+	# He is still standing there dizzy (the world holds while dialogue plays), so the
+	# scene is staged on him; he slips away in his puff once it closes.
 	_start_dialogue([
-		{"speaker":"怪盜","text":"哎呀呀，又被你抓到了！三次了，我認輸。"},
-		{"speaker":"怪盜","text":"偷來的東西都還回去了。這副面具送你，當作我們追來追去的紀念。"},
-		{"speaker":"旁白","text":"獲得紀念章「怪盜的面具」，在成就的島嶼里程碑裡。"},
+		{"speaker":"怪盜","text":"","pantomime":true,"cue":{"frame":"thief","zoom":0.55,"emote":"sweat","hold":1.2}},
+		{"speaker":"怪盜","text":"哎呀呀，又被你抓到了！三次了，我認輸。","cue":{"emote":"…"}},
+		{"speaker":"怪盜","text":"偷來的東西都還回去了。這副面具送你，當作我們追來追去的紀念。","cue":{"frame":"two","zoom":0.7}},
+		{"speaker":"怪盜","text":"……首演那天，你就坐前排吧。我會——呃，總之別遲到！","mood":"interact","cue":{"emote":"!","hold":0.4}},
+		{"speaker":"主角","text":"首演？什麼首演？","cue":{"emote":"?","emote_on":"player"}},
+		{"speaker":"怪盜","text":"","pantomime":true,"cue":{"emote":"sweat","hold":0.9}},
+		{"speaker":"旁白","text":"怪盜一溜煙不見了。紀念章「怪盜的面具」收在成就的島嶼里程碑裡，翻過來看看背面。","cue":{"frame":"wide"}},
 	],Callable())
 
 func _achievement_toast(id: String) -> void:

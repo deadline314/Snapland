@@ -182,7 +182,8 @@ func _ready() -> void:
 		{"id":"ACH_WELCOME_DEVILS","number":"D","title":"尾巴藏不住","condition":"集齊迎賓大道 12 張小惡魔拍貼","current":welcome_devils,"target":12},
 		{"id":"ACH_ALL_DEVILS","number":"120","title":"每個小惡魔都入鏡","condition":"集齊十區共 120 張小惡魔拍貼","current":total_devils,"target":120},
 		{"id":TimeOfDay.ACHIEVEMENT_ALL_POSTCARDS,"number":"4","title":"四時留影","condition":"收藏凌晨、中午、傍晚與晚上明信片","current":time_count,"target":4},
-		{"id":ProgressScript.THIEF_ACHIEVEMENT,"number":"M","title":"怪盜的面具","condition":"在園區抓到怪盜三次","current":thief_catches,"target":ProgressScript.THIEF_CATCH_GOAL},
+		{"id":ProgressScript.THIEF_ACHIEVEMENT,"number":"M","title":"怪盜的面具","condition":"在園區抓到怪盜三次","current":thief_catches,"target":ProgressScript.THIEF_CATCH_GOAL,
+			"back":"面具背面蓋著一個章：「首演道具組」。旁邊黏著一根酒紅色的披風線頭。"},
 	]
 	for item in milestones:
 		var unlocked: bool=_progress.achievements.has(item.id)
@@ -198,6 +199,13 @@ func _ready() -> void:
 		copy.add_child(Paper.label(str(item.title),19))
 		copy.add_child(Paper.label(str(item.condition),16,Paper.INK))
 		copy.add_child(Paper.label("已蓋章" if unlocked else "%d / %d" % [int(item.current),int(item.target)],15,Paper.TEAL if unlocked else Paper.INK))
+		# A keepsake's back is only readable once it is in your hands.
+		if unlocked and item.has("back"):
+			var back := Paper.label("背面｜"+str(item.back),15,Paper.INK)
+			back.name="AchievementBack_"+str(item.id)
+			back.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+			back.add_theme_color_override("font_color",Color("#8d3c33"))
+			copy.add_child(back)
 		row.add_child(copy)
 		_milestone_section.add_child(tile)
 	milestone_card.tooltip_text="成就保存在遊戲內；Steam 同步接點尚未連線。"

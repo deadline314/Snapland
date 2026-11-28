@@ -250,6 +250,7 @@ func _request_cancel() -> void:
 ## taped beside the note. The pose picks the expression; mirrored on the right.
 class Bust extends Control:
 	const Library = preload("res://game/world/character_animation_library.gd")
+	const ThiefSprites = preload("res://game/world/thief_sprites.gd")
 	const ACTORS := {"小角": "imp", "主角": "traveller", "票票": "ticket", "阿浪": "announcer"}
 	## Share of the figure's height kept: head and shoulders down to the waist.
 	const CROP := 0.56
@@ -266,6 +267,10 @@ class Bust extends Control:
 
 	func show_speaker(who: String, pose: String) -> void:
 		speaker = who
+		if who == "怪盜":
+			texture = _thief_frame(pose)
+			queue_redraw()
+			return
 		texture = _frame(ACTORS.get(who, ""), pose)
 		if texture == null and pose != "idle": texture = _frame(ACTORS.get(who, ""), "idle")
 		queue_redraw()
@@ -277,6 +282,17 @@ class Bust extends Control:
 		if frames.is_empty(): return null
 		var frame: Variant = frames[int(frames.size() * 0.5) if pose != "idle" else 0]
 		return frame.get("texture") if frame is Dictionary and frame.get("texture") is Texture2D else null
+
+	## The masked thief is painted in code (thief_sprites.gd): one cell of his atlas per mood.
+	static var _thief_cells: Dictionary = {}
+	static func _thief_frame(pose: String) -> Texture2D:
+		var cell: int = {"interact": ThiefSprites.DIZZY, "greet": ThiefSprites.TAUNT}.get(pose, ThiefSprites.STAND)
+		if not _thief_cells.has(cell):
+			var atlas := AtlasTexture.new()
+			atlas.atlas = ThiefSprites.atlas()
+			atlas.region = Rect2(Vector2(cell * ThiefSprites.CELL.x, 0), Vector2(ThiefSprites.CELL))
+			_thief_cells[cell] = atlas
+		return _thief_cells[cell]
 
 	static func _figure(texture: Texture2D) -> Rect2:
 		if not _used.has(texture):
@@ -291,7 +307,8 @@ class Bust extends Control:
 			draw_string(ThemeDB.fallback_font, inner.get_center() + Vector2(-11, 8), speaker.substr(0, 1), HORIZONTAL_ALIGNMENT_LEFT, -1, 24, Color("#12303b"))
 			return
 		var figure := _figure(texture)
-		var source := Rect2(figure.position, Vector2(figure.size.x, figure.size.y * CROP))
+		# The thief is drawn big-headed, so keep more of him to reach his shoulders.
+		var source := Rect2(figure.position, Vector2(figure.size.x, figure.size.y * (0.72 if speaker == "怪盜" else CROP)))
 		var scale_factor := minf(inner.size.x / source.size.x, inner.size.y / source.size.y) * 1.08
 		var drawn := source.size * scale_factor
 		# Waist sits on the photo's bottom edge; the head peeks a little above it.

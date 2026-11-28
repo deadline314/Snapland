@@ -50,7 +50,8 @@ static func clue_texture(kind: String) -> Texture2D:
 				var band := v > 0.52 and v <= 0.62 and u > 0.3 and u < 0.94
 				return 2 if band else (1 if brim or crown else 0)
 		return 0
-	var fill := {"cape": [Color("#6b2a5e"), Color("#e0b04f")], "glove": [Color("#f7f1e3"), Color("#c9584f")], "hat": [Color("#2f4f86"), Color("#e0b04f")]}
+	# The cape and hat are the masked thief's own colours (thief_sprites.gd): a quiet match.
+	var fill := {"cape": [Color("#9b3a58"), Color("#e3ae4a")], "glove": [Color("#f7f1e3"), Color("#c9584f")], "hat": [Color("#433c66"), Color("#e3ae4a")]}
 	var tones: Array = fill.get(kind, [Color("#6b2a5e"), Color("#e0b04f")])
 	for y in range(size.y):
 		for x in range(size.x):
