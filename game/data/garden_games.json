@@ -100,6 +100,26 @@
     ]
   },
   {
+    "id": "game-078",
+    "mode": "bee_herd",
+    "zone": "garden",
+    "local_index": 6,
+    "arcade": true,
+    "name": "蜂巢調音",
+    "goal": "蜜蜂會躲開主角，繞到牠們後面把四處亂飛的蜜蜂趕回蜂巢；被叮到臉會腫成一顆圓氣球。",
+    "instructions": "方向鍵、WASD 或手把十字鍵、左搖桿：走過去趕蜂。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助趕蜂拿到金牌",
+    "ordinary": "把蜜蜂趕回蜂巢，拿到銅牌",
+    "attraction_tag": "蜂巢花圃",
+    "island_invitation": "蜜蜂一看到你就躲，得繞到後面才趕得回蜂巢。小心那隻愛唱反調的蜂，牠會直直朝你飛過來！",
+    "retake_props": [
+      "flower_horn",
+      "hat",
+      "bench"
+    ]
+  },
+  {
     "id": "game-079",
     "mode": "mushroom_brolly",
     "zone": "garden",

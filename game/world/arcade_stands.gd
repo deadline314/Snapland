@@ -47,6 +47,8 @@ const STANDS := {
 			"stand": Vector3(-7.0, 0.2, -6.6), "point": Vector3(-5.6, 0.2, -5.4), "prop": "post", "paint": Color("#b5553c")},
 		{"id": "game-077", "title": "睡蓮踏浪", "prompt": "睡蓮踏浪 · 踩葉過池",
 			"stand": Vector3(-2.6, 0.2, -7.7), "point": Vector3(-1.55, 0.2, -6.35), "prop": "lily", "paint": Color("#3f6f5a")},
+		{"id": "game-078", "title": "蜂巢調音", "prompt": "蜂巢調音 · 繞到後面趕蜂回巢",
+			"stand": Vector3(5.95, 1.12, -7.1), "point": Vector3(6.1, 1.12, -5.8), "prop": "bee", "paint": Color("#b07a2a")},
 		{"id": "game-079", "title": "蘑菇撐傘", "prompt": "蘑菇撐傘 · 替幼苗接雨",
 			"stand": Vector3(7.0, 0.2, 6.0), "point": Vector3(5.85, 0.2, 7.35), "prop": "mushroom", "paint": Color("#8a4a3a")},
 		{"id": "game-080", "title": "螢火蟲對暗號", "prompt": "螢火蟲對暗號 · 照閃光按回去",
@@ -101,6 +103,7 @@ static func build(world: Node3D, region: String) -> void:
 			"dew": _dew_prop(sculpt)
 			"vine": _vine_prop(sculpt)
 			"post": _post_prop(sculpt)
+			"bee": _bee_prop(sculpt)
 			"book": _book_prop(sculpt)
 			"bubble": _bubble_prop(sculpt)
 			"lock": _lock_prop(sculpt)
@@ -487,6 +490,30 @@ static func _post_prop(sculpt: Kit.Sculpt) -> void:
 	sculpt.box(Vector3(-0.1, 1.24, 0.12), Vector3(0.02, 0.2, 0.02), Color("#5a4a3a"))
 	sculpt.box(Vector3(-0.05, 1.3, 0.12), Vector3(0.1, 0.07, 0.02), Color("#ffd166"))
 	sculpt.box(Vector3(0.3, 1.0, 0.1), Vector3(0.4, 0.06, 0.3), CREAM)
+
+
+## A striped wooden beehive on the roof with three bees bobbing on wires
+## round its door, and a pot of pink flowers on the counter.
+static func _bee_prop(sculpt: Kit.Sculpt) -> void:
+	var honey := Color("#e0a83a")
+	var roof := Color("#c8483e")
+	for box in 3:
+		sculpt.box(Vector3(0, 2.5 + box * 0.17, -0.3), Vector3(0.56 - box * 0.04, 0.15, 0.4), honey.darkened(0.08 * box))
+	sculpt.box(Vector3(0, 3.03, -0.3), Vector3(0.66, 0.06, 0.48), roof)
+	sculpt.box(Vector3(0, 3.1, -0.3), Vector3(0.44, 0.08, 0.36), Color("#f4e6c4"))
+	sculpt.box(Vector3(0, 2.5, -0.08), Vector3(0.2, 0.06, 0.02), Color("#2a1a10"))
+	sculpt.box(Vector3(0, 2.44, -0.02), Vector3(0.36, 0.03, 0.14), TIMBER)
+	for bee in 3:
+		var at := Vector3(-0.5 + bee * 0.5, 2.75 + 0.18 * (bee % 2), 0.0)
+		sculpt.box(at + Vector3(0, 0.12, 0), Vector3(0.008, 0.24, 0.008), Color("#5a4a3a"))
+		sculpt.ball(at, 0.07, honey, Color("#2a2020"), 6, 3, 1.3)
+		sculpt.box(at + Vector3(0, 0.0, 0), Vector3(0.03, 0.12, 0.15), Color("#2a2020"))
+		sculpt.box(at + Vector3(0, 0.07, -0.03), Vector3(0.1, 0.02, 0.06), Color("#e8f4ff"))
+	sculpt.tube(Vector3(0.3, 1.06, 0.1), 0.12, 0.09, 0.16, Color("#b5553c"), 8)
+	for bloom in 4:
+		var at := Vector3(0.22 + (bloom % 2) * 0.16, 1.24 + floorf(bloom * 0.5) * 0.08, 0.06 + (bloom % 3) * 0.04)
+		sculpt.ball(at, 0.06, Color("#f2a7b8"), Color("#ffd166"), 6, 3)
+	sculpt.box(Vector3(-0.3, 1.0, 0.1), Vector3(0.36, 0.06, 0.26), CREAM)
 
 
 ## A big open book on the roof with its two pages swinging up to clap, a

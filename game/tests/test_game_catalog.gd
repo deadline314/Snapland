@@ -21,7 +21,7 @@ func _run() -> void:
 	var hotel: Array = catalog.definitions("hotel")
 	var all_games: Array = catalog.all_definitions()
 	_check(welcome == JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json")), "default definitions preserve the original welcome row shape and order")
-	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 12 and toy.size() == 12 and garden.size() == 7 and hotel.size() == 4 and all_games.size() == 83, "only the 83 delivered games are exposed")
+	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 12 and toy.size() == 12 and garden.size() == 8 and hotel.size() == 4 and all_games.size() == 84, "only the 84 delivered games are exposed")
 	for index in range(welcome.size()):
 		_check(welcome[index].id == "game-%03d" % (index + 1), "welcome numbering stays ordered")
 	_check(all_games == welcome + harbor + candy + nightmarket + circus + toy + garden + hotel and catalog.definitions("sky").is_empty(), "games retain global order and future regions remain unavailable")
@@ -102,14 +102,17 @@ func _run() -> void:
 	var post := {"id":"game-076", "mode":"dandelion_post", "zone":"garden", "local_index":4, "photo_id":"photo-garden-game-4", "devil_photo_id":"photo-garden-devil-4", "achievement_id":"ACH_GAME_076"}
 	_check(catalog.identity("game-076") == post and catalog.identity("dandelion_post") == post and garden[3].name == "蒲公英落郵" and garden[3].arcade == true,
 		"greenhouse slot 4 keeps its own number")
+	var bees := {"id":"game-078", "mode":"bee_herd", "zone":"garden", "local_index":6, "photo_id":"photo-garden-game-6", "devil_photo_id":"photo-garden-devil-6", "achievement_id":"ACH_GAME_078"}
+	_check(catalog.identity("game-078") == bees and catalog.identity("bee_herd") == bees and garden[5].name == "蜂巢調音" and garden[5].arcade == true,
+		"greenhouse slot 6 keeps its own number")
 	var lily := {"id":"game-077", "mode":"lily_hop", "zone":"garden", "local_index":5, "photo_id":"photo-garden-game-5", "devil_photo_id":"photo-garden-devil-5", "achievement_id":"ACH_GAME_077"}
 	_check(catalog.identity("game-077") == lily and catalog.identity("lily_hop") == lily and garden[4].name == "睡蓮踏浪" and garden[4].arcade == true,
 		"a greenhouse game keeps the number of the slot it fills, leaving slots still in design empty")
 	var brolly := {"id":"game-079", "mode":"mushroom_brolly", "zone":"garden", "local_index":7, "photo_id":"photo-garden-game-7", "devil_photo_id":"photo-garden-devil-7", "achievement_id":"ACH_GAME_079"}
-	_check(catalog.identity("game-079") == brolly and catalog.identity("mushroom_brolly") == brolly and garden[5].name == "蘑菇撐傘" and garden[5].arcade == true,
+	_check(catalog.identity("game-079") == brolly and catalog.identity("mushroom_brolly") == brolly and garden[6].name == "蘑菇撐傘" and garden[6].arcade == true,
 		"the next greenhouse game keeps its own slot number too")
 	var code := {"id":"game-080", "mode":"firefly_code", "zone":"garden", "local_index":8, "photo_id":"photo-garden-game-8", "devil_photo_id":"photo-garden-devil-8", "achievement_id":"ACH_GAME_080"}
-	_check(catalog.identity("game-080") == code and catalog.identity("firefly_code") == code and garden[6].name == "螢火蟲對暗號" and garden[6].arcade == true,
+	_check(catalog.identity("game-080") == code and catalog.identity("firefly_code") == code and garden[7].name == "螢火蟲對暗號" and garden[7].arcade == true,
 		"neighbouring slots fill without a gap")
 	var corridor := {"id":"game-085", "mode":"page_corridor", "zone":"hotel", "local_index":1, "photo_id":"photo-hotel-game-1", "devil_photo_id":"photo-hotel-devil-1", "achievement_id":"ACH_GAME_085"}
 	_check(catalog.identity("game-085") == corridor and catalog.identity("page_corridor") == corridor and hotel[0].name == "折頁走廊" and hotel[0].arcade == true,
