@@ -416,6 +416,13 @@ func _entries() -> Array[Dictionary]:
 				var identity := GameCatalog.identity(str(game.get("id","")))
 				if identity.get("zone", "") != _region: continue
 				entries.append(_game_entry(game,identity,true))
+			# 倒影大道's finale tucks its keepsakes in after the twelve cards once
+			# they exist; they are photos, not cards, so the page never lists them as missing.
+			if _region=="welcome" and _progress!=null:
+				if _progress.photos.has("photo-welcome-backstage"):
+					entries.append(_entry("photo-welcome-backstage","倒影大道 · 後台劇照","倒影首映照謝幕時留下的劇照。不計入拍貼數。"))
+				if _progress.photos.has("photo-welcome-backstage-selfie"):
+					entries.append(_entry("photo-welcome-backstage-selfie","倒影大道 · 倒倒的自拍","倒影首映照時間用完時，倒倒拿你的相機拍的。不計入拍貼數。"))
 		"time":
 			if _region!="welcome": return entries
 			for phase in _time_phases:

@@ -16,6 +16,7 @@ const ArrivalStampScript = preload("res://game/ui/arrival_stamp.gd")
 const Story = preload("res://game/story/story_director.gd")
 const Audio = preload("res://game/audio/audio_director.gd")
 const Catalog = preload("res://game/core/game_catalog.gd")
+const ProgressScript = preload("res://game/core/progress.gd")
 const Session = preload("res://game/minigames/session.gd")
 const PhotoStage = preload("res://game/ui/photo_stage.gd")
 const WardrobePanel = preload("res://game/ui/wardrobe_panel.gd")
@@ -73,6 +74,11 @@ var celebrate_on_close := false
 var marathon: Dictionary = {}
 ## The game whose fail sticker was saved during the round now ending.
 var fresh_fail_sticker := ""
+## 倒影大道's finale: an arcade encounter outside the catalogue (design/01-park/other-space.md).
+const RIFT_ENCOUNTER := {"id": "rift-welcome", "mode": "reflection_premiere", "arcade": true, "name": "倒影首映照", "zone": "welcome",
+	"goal": "拍下倒倒的六次亮相", "instructions": "← → 移動取景框，空白鍵快門", "devil_hint": "", "devil": "", "ordinary": ""}
+## The finale's curtain-call (or selfie) picture, grabbed while it is on screen.
+var rift_shot: Image
 ## Seconds after a fail beat starts before it is photographed, so the gag shows.
 const FAIL_CAPTURE_DELAY := 0.5
 var dialogue: Array=[]
@@ -971,6 +977,9 @@ func _process(delta: float) -> void:
 		cue_hold_left-=delta
 		if cue_hold_left<=0.0: _end_cue_hold()
 	if is_instance_valid(world) and _on_island(world_region): Progress.player_position=world.player.global_position
+	if session!=null and rift_shot==null and session.game_id==str(RIFT_ENCOUNTER.id) and DisplayServer.get_name()!="headless" and bool(session._driver_state.get("photo_ready",false)):
+		rift_shot=Image.new()
+		_grab_rift_shot.call_deferred()
 	if session!=null and DisplayServer.get_name()!="headless" and session.elapsed>=next_snapshot and not session.ended:
 		next_snapshot=session.elapsed+0.9
 		_sample_photo.call_deferred()
@@ -1767,11 +1776,7 @@ func _interact(id: String, title: String) -> void:
 		if not discovery.is_empty():
 			_start_dialogue([{ "speaker":str(discovery.name), "text":str(discovery.text) }],Callable())
 	elif id.begins_with("explore-"): _show_exploration(id)
-	elif id=="rift":
-		var body := _open(title,"LITTLE DEVILS","rift")
-		body.add_child(Paper.label("集齊迎賓大道十二張小惡魔拍貼，倒影大道的門就會記住你。\n目前 %d / 12。"%Progress.devil_count(),24))
-		body.add_child(Paper.label("倒影大道正在準備新的布景；本版保留入口。",22))
-		_back(body)
+	elif id=="rift": _open_rift(title)
 	elif id.begins_with("gate:"):
 		var data: Dictionary=world.park_data()
 		for zone in data.zones:
@@ -2185,6 +2190,104 @@ func _launch_game(id: String, assist: bool, practice: bool = false) -> void:
 		session.show_launch_notice(message)
 	audio.play_context("game", id)
 	audio.set_music_suppressed(session.has_method("owns_music") and session.owns_music())
+
+## The 倒影大道 door: how many devil stickers are still missing and where, or
+## the way in once all twelve are kept.
+func _open_rift(title: String) -> void:
+	var body := _open(title,"LITTLE DEVILS","rift")
+	var have := Progress.devil_count("welcome")
+	if not Progress.rift_open("welcome"):
+		var missing: Array[String] = []
+		for game in Catalog.definitions("welcome"):
+			if not Progress.photos.has(str(Catalog.identity(str(game.id)).get("devil_photo_id",""))): missing.append(str(game.name))
+		body.add_child(Paper.label("集齊迎賓大道十二張小惡魔拍貼，倒影大道的門就會打開。\n目前 %d / 12，還差 %d 張。"%[have,12-have],24))
+		var where := Paper.label("還沒有小惡魔的設施："+"、".join(missing),20)
+		where.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+		body.add_child(where)
+	else:
+		body.add_child(Paper.label("門後是倒影大道，倒倒正在排練首映節目。\n倒影會比本體早一步亮相：跟著倒影找位置，拍下六次亮相。\n不計入拍貼數，隨時可以離開。",22))
+		var enter := Paper.button("進入倒影首映照",_launch_rift.bind(false),body)
+		enter.name="RiftEnter"
+		var helped := Paper.button("輔助進入（預告更長、亮相更久）",_launch_rift.bind(true),body)
+		helped.name="RiftEnterAssisted"
+	_back(body)
+
+func _launch_rift(assisted := false) -> void:
+	if quitting or changing_region or session!=null or not Progress.rift_open("welcome"): return
+	rift_shot=null
+	photo_frames.clear()
+	photo_original_frames.clear()
+	overlay.hide()
+	modal_kind=""
+	hud.hide()
+	world.blocked=true
+	world.hide()
+	world.set_process(false)
+	session=Session.new()
+	session.encounter=RIFT_ENCOUNTER
+	ui.add_child(session)
+	session.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	session.theme=Paper.theme()
+	session.finished.connect(_rift_finished)
+	session.cancelled.connect(_session_cancelled)
+	session.note_played.connect(audio.play_note)
+	session.feedback.connect(audio.play_gameplay_feedback)
+	if session.has_method("set_time_of_day"):
+		session.set_time_of_day(TimeOfDay.normalize(Progress.settings.get("time_phase", TimeOfDay.DEFAULT_PHASE)))
+	session.start(str(RIFT_ENCOUNTER.id),assisted)
+	if session==null or session.game_id!=str(RIFT_ENCOUNTER.id) or session.ended:
+		_cancel_game(false)
+		_notice("倒影大道暫時打不開，請稍後再試。")
+		return
+	audio.play_context("game","game-012")
+
+func _grab_rift_shot() -> void:
+	await RenderingServer.frame_post_draw
+	if session!=null and session.game_id==str(RIFT_ENCOUNTER.id):
+		rift_shot=get_viewport().get_texture().get_image()
+
+func _rift_finished(result: Dictionary) -> void:
+	var practice := bool(result.get("practice",false))
+	var cleared := bool(result.get("success",false)) and not practice
+	var reward := {}
+	if not practice:
+		var paths := _save_rift_shot(cleared) if rift_shot!=null and not rift_shot.is_empty() else {}
+		reward=Progress.record_rift_result("welcome",cleared,int(result.get("score",0)),ParkVariety.medal_of(result),str(paths.get("thumbnail","")),str(paths.get("original","")))
+		if not bool(reward.get("kept",false)): _remove_photo_paths(paths.values())
+	rift_shot=null
+	photo_frames.clear()
+	photo_original_frames.clear()
+	_cancel_game(false)
+	audio.play_sfx("success" if cleared else "miss")
+	var body := _open("謝幕成功！" if cleared else "帷幕提早落下了","倒影首映照","result")
+	body.add_child(Paper.label("劇照 %d 分"%int(result.get("score",0)),24))
+	if practice:
+		body.add_child(Paper.label("練習回合不保存。",20))
+	elif cleared and bool(reward.get("first",false)):
+		body.add_child(Paper.label("後台劇照收進相簿的小惡魔頁了。遊園幣 +%d"%int(reward.get("coins",0)),20,Paper.TEAL))
+	elif cleared:
+		body.add_child(Paper.label("劇團又收下了一組劇照。遊園幣 +%d"%int(reward.get("coins",0)),20,Paper.TEAL))
+	elif bool(reward.get("kept",false)):
+		body.add_child(Paper.label("倒倒用你的相機自拍了一張，也收進相簿了。",20,Paper.CORAL))
+	else:
+		body.add_child(Paper.label("跟著倒影找位置，再演一次吧。",20))
+	var again := Paper.button("再演一次",_launch_rift.bind(bool(result.get("assisted",false))),modal_footer)
+	again.name="RiftAgain"
+	_back(body)
+
+func _save_rift_shot(cleared: bool) -> Dictionary:
+	var original := _prepare_photo_original(rift_shot)
+	var thumbnail := _prepare_photo_thumbnail(original)
+	if thumbnail == null: return {}
+	var directory := _photo_directory()
+	var error := DirAccess.make_dir_recursive_absolute(directory)
+	if error != OK and error != ERR_ALREADY_EXISTS: return {}
+	var base_path := directory + "/" + ProgressScript.rift_photo_id("welcome", not cleared) + "-" + Crypto.new().generate_random_bytes(16).hex_encode()
+	var paths := {"thumbnail": base_path + ".png", "original": base_path + "-original.png"}
+	if not _save_bounded_photo_image(thumbnail, paths.thumbnail) or not _save_bounded_photo_image(original, paths.original):
+		_remove_photo_paths(paths.values())
+		return {}
+	return paths
 
 func _cancel_game(return_to_retake: bool = true) -> void:
 	if session!=null:

@@ -20,6 +20,9 @@ const MAX_FIELD_SCORE := 999999
 ## The roaming thief: catches that end his arc, coins per catch and the keepsake stamp.
 const THIEF_CATCH_GOAL := 3
 const THIEF_CATCH_COINS := 20
+## An other-space curtain call pays more the first time (design/01-park/other-space.md §3).
+const RIFT_FIRST_COINS := 80
+const RIFT_REPEAT_COINS := 30
 const THIEF_ACHIEVEMENT := "ACH_THIEF_MASK"
 const MAX_GAME_PHOTO_FRAMES := 3
 const MAX_GAME_PHOTO_FRAME_CANDIDATES := 12
@@ -333,6 +336,60 @@ func record_event_sticker(sticker: String, frame_path: String = "", original_pat
 		return false
 	changed.emit()
 	return true
+
+## The album photo an other space's finale keeps: the backstage curtain call,
+## or 倒倒's selfie of you when the curtain fell early. Neither is a card.
+static func rift_photo_id(zone: String, selfie := false) -> String:
+	return "photo-%s-backstage%s" % [zone, "-selfie" if selfie else ""]
+
+
+## Every devil sticker of `zone` is kept: its other space is open.
+func rift_open(zone: String) -> bool:
+	return devil_count(zone) >= 12
+
+
+## An other-space finale ended. A curtain call keeps the backstage photo the
+## first time (later ones only raise the best score) and pays coins; an early
+## curtain keeps 倒倒's selfie once. Nothing changes if the save fails.
+func record_rift_result(zone: String, cleared: bool, score: int, medal: int, thumbnail := "", original := "") -> Dictionary:
+	var result := {"saved": false, "first": false, "coins": 0, "kept": false}
+	if not rift_open(zone):
+		return result
+	var photo_id := rift_photo_id(zone, not cleared)
+	var previous_photo: Variant = photos.get(photo_id)
+	var previous_coins := coins
+	var first := cleared and previous_photo == null
+	if previous_photo == null:
+		var record := {"rift": zone, "frames": [thumbnail] if not thumbnail.is_empty() else []}
+		if not original.is_empty():
+			record["original_frames"] = [original]
+		if cleared:
+			record["best"] = score
+			record["medal"] = medal
+		photos[photo_id] = record
+		result.kept = true
+	elif cleared:
+		var updated: Dictionary = (previous_photo as Dictionary).duplicate(true)
+		updated["best"] = maxi(int(updated.get("best", 0)), score)
+		updated["medal"] = maxi(int(updated.get("medal", 0)), medal)
+		photos[photo_id] = updated
+	if cleared:
+		coins = mini(MAX_COINS, coins + (RIFT_FIRST_COINS if first else RIFT_REPEAT_COINS))
+	if not save_progress():
+		coins = previous_coins
+		if previous_photo == null:
+			photos.erase(photo_id)
+		else:
+			photos[photo_id] = previous_photo
+		return result
+	_suppress_changed_save = true
+	changed.emit()
+	_suppress_changed_save = false
+	result.saved = true
+	result.first = first
+	result.coins = coins - previous_coins
+	return result
+
 
 ## Pays a recommended booth's medal coins at the daily rate, once per medal
 ## tier per booth per day; nothing changes if the save fails.

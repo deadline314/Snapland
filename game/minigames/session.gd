@@ -124,6 +124,9 @@ var _shake_applied := false
 var presentation: Control
 var presentation_mode := ""
 var active_driver: RefCounted
+## An arcade encounter outside the catalogue (an other-space finale): {"id", "mode", "arcade", "name", ...}.
+## Set before start(); start() with that id then plays it in the arcade shell, with no catalogue row.
+var encounter: Dictionary = {}
 var _driver_state: Dictionary = {}
 var _fountain_output: TextureRect
 var pipe_connected := false
@@ -290,7 +293,7 @@ func start(id: String, assisted_mode: bool = false) -> void:
 	if is_instance_valid(_melody_voices): _melody_voices.stop_all()
 	game_id = ""
 	mode = ""
-	var item := GameCatalog.find(id)
+	var item := encounter if not encounter.is_empty() and str(encounter.get("id", "")) == id else GameCatalog.find(id)
 	if not item.is_empty():
 		game_id = str(item.id)
 		mode = str(item.mode)
@@ -2719,6 +2722,7 @@ func _warn_prop_asset(message: String) -> void:
 	push_warning(message)
 
 func _definition() -> Dictionary:
+	if not encounter.is_empty() and str(encounter.get("id", "")) == game_id: return encounter
 	var item := GameCatalog.find(game_id)
 	if not item.is_empty(): return item
 	return {"name":"小遊戲", "goal":"完成挑戰", "instructions":"依畫面提示操作", "devil_hint":"完成額外條件", "devil":"完成額外條件", "ordinary":"完成挑戰"}
