@@ -3553,8 +3553,9 @@ func _adapt_open_menu() -> void:
 		pause_actions.columns=2
 		var stack := pause_actions.find_child("PauseActionGrid",true,false) as GridContainer
 		if stack!=null:
-			# Tags overlap a little on paper; their hit areas just touch.
-			stack.add_theme_constant_override("v_separation",0 if compact else 2)
+			# Tags overlap a little on paper; their hit areas keep a hairline gap so a
+			# fitted (scaled) menu cannot round them into each other.
+			stack.add_theme_constant_override("v_separation",1 if compact else 2)
 			for button in stack.get_children():
 				if button is Button: button.custom_minimum_size.y=(44.0 if compact else 64.0)/scale_factor
 	var title_clearance := overlay.find_child("PauseTitleClearance",true,false) as Control
@@ -3734,3 +3735,30 @@ func _fit_modal_viewport() -> void:
 		# Control grows when a category briefly has a larger minimum. Refresh its
 		# parent-sized extent after text/content adaptation so it can shrink again.
 		center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		# Tall scripts at large text sizes can still outgrow a small window after
+		# every compact rule; shrink the whole sheet around the screen centre as a
+		# last resort. The centre is scaled, not the panel: containers reset their
+		# children's scale on every sort.
+		# Pinned cards can sit outside their panel, so measure what is actually drawn.
+		# Only the pause sheet needs this; other pages keep their stable geometry.
+		var to_local := center.get_global_transform().affine_inverse()
+		var drawn := Rect2()
+		for node in (center.find_children("*","Control",true,false) if modal_kind=="pause" else []):
+			var control := node as Control
+			if control.is_visible_in_tree() and control.size!=Vector2.ZERO:
+				var rect := to_local*control.get_global_rect()
+				drawn=rect if drawn.size==Vector2.ZERO else drawn.merge(rect)
+		var margin := 6.0
+		var limit := center.size
+		var fit := 1.0
+		if drawn.size!=Vector2.ZERO and not Rect2(Vector2.ZERO,limit).grow(1.0).encloses(drawn):
+			fit=minf(0.99,minf((limit.x-margin*2.0)/drawn.size.x,(limit.y-margin*2.0)/drawn.size.y))
+		var pivot := center.size*0.5
+		if fit<1.0:
+			# Pick the pivot per axis so the scaled drawing lands inside [margin, limit-margin].
+			for axis in 2:
+				var low := (margin-fit*drawn.position[axis])/(1.0-fit)
+				var high := (limit[axis]-margin-fit*drawn.end[axis])/(1.0-fit)
+				pivot[axis]=(low+high)*0.5
+		center.pivot_offset=pivot
+		center.scale=Vector2.ONE*fit
