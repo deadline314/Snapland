@@ -64,6 +64,8 @@ const STANDS := {
 			"stand": Vector3(-14.6, 0.2, 4.4), "point": Vector3(-13.65, 0.2, 5.75), "prop": "lock", "paint": Color("#6a4058")},
 		{"id": "game-088", "title": "夢泡搬運", "prompt": "夢泡搬運 · 頂著泡泡慢慢走",
 			"stand": Vector3(14.8, 0.2, 3.6), "point": Vector3(15.75, 0.2, 4.95), "prop": "bubble", "paint": Color("#4f6f9a")},
+		{"id": "game-089", "title": "鬼影擦窗", "prompt": "鬼影擦窗 · 把小鬼擦出來",
+			"stand": Vector3(3.6, 0.2, 3.4), "point": Vector3(4.55, 0.2, 4.75), "prop": "window", "paint": Color("#4f8f86")},
 	],
 	# Sky park stands use the kept sites in sky_world.STAND_SITES (stand and point copied).
 	"sky": [
@@ -110,6 +112,7 @@ static func build(world: Node3D, region: String) -> void:
 			"post": _post_prop(sculpt)
 			"bee": _bee_prop(sculpt)
 			"book": _book_prop(sculpt)
+			"window": _window_prop(sculpt)
 			"bubble": _bubble_prop(sculpt)
 			"shuttle": _shuttle_prop(sculpt)
 			"lock": _lock_prop(sculpt)
@@ -646,3 +649,21 @@ static func _shuttle_prop(sculpt: Kit.Sculpt) -> void:
 	sculpt.tube(Vector3(0.06, 1.01, 0.12), 0.1, 0.1, 0.02, coral, 10)
 	sculpt.ball(Vector3(0.3, 1.02, 0.16), 0.04, cork, Color.TRANSPARENT, 6, 3)
 	sculpt.tube(Vector3(0.36, 1.03, 0.16), 0.03, 0.07, 0.1, white, 8, Basis(Vector3.BACK, PI * 0.5))
+
+
+## A little four-pane window on the roof, misted over with one pane wiped
+## clear and a ghost peeking through it, and a cloth over a bucket on the
+## counter.
+static func _window_prop(sculpt: Kit.Sculpt) -> void:
+	var frame := Color("#e8dcc4")
+	sculpt.box(Vector3(0, 2.85, -0.3), Vector3(0.8, 0.7, 0.06), frame)
+	for pane in 4:
+		var x := -0.18 if pane % 2 == 0 else 0.18
+		var y := 3.02 if pane < 2 else 2.68
+		var clear := pane == 1
+		sculpt.box(Vector3(x, y, -0.26), Vector3(0.32, 0.28, 0.02), Color("#2a3060") if clear else Color("#d8d4ec"))
+	sculpt.ball(Vector3(0.18, 3.0, -0.22), 0.09, Color("#eef0ff"), Color.TRANSPARENT, 8, 4)
+	sculpt.box(Vector3(0, 2.46, -0.24), Vector3(0.9, 0.06, 0.12), frame.darkened(0.2))
+	sculpt.tube(Vector3(0.28, 1.06, 0.1), 0.12, 0.1, 0.16, Color("#8a8aa0"), 8)
+	sculpt.box(Vector3(0.28, 1.16, 0.1), Vector3(0.26, 0.04, 0.22), Color("#f4ecd8"), Basis(Vector3.BACK, 0.2))
+	sculpt.box(Vector3(-0.28, 1.0, 0.1), Vector3(0.3, 0.05, 0.2), Color("#e79bb6"))

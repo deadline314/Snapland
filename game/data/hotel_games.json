@@ -78,5 +78,25 @@
       "balloon",
       "lantern"
     ]
+  },
+  {
+    "id": "game-089",
+    "mode": "ghost_window",
+    "zone": "hotel",
+    "local_index": 5,
+    "arcade": true,
+    "name": "鬼影擦窗",
+    "goal": "旅館的大窗一直起霧，小鬼會在某一格窗後偷看；移動抹布擦掉那一格的霧，在他淡掉前把他擦出來跟你打招呼。擦錯格會看到自己的倒影，背後還站著一隻鬼。",
+    "instructions": "方向鍵、WASD 或手把十字鍵、左搖桿：移動抹布，抹布移動就會擦掉霧。在發光的那一格來回擦。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助擦窗拿到金牌",
+    "ordinary": "擦掉霧氣把窗後的小鬼擦出來，拿到銅牌",
+    "attraction_tag": "鬼影擦窗",
+    "island_invitation": "旅館的窗戶起霧了，窗外有小鬼在偷看！拿抹布把他擦出來打招呼。擦錯格的話，你會看到自己的倒影……背後還站著一隻鬼。",
+    "retake_props": [
+      "mascot",
+      "lantern",
+      "sign"
+    ]
   }
 ]
