@@ -38,6 +38,9 @@ const CoastalCircuit = preload("res://game/world/coastal_circuit.gd")
 const CoastalPlay = preload("res://game/world/coastal_play.gd")
 const IslandShape = preload("res://game/world/island_shape.gd")
 const IslandLayout = preload("res://game/world/island_layout.gd")
+const FontProfiles = preload("res://game/ui/font_profiles.gd")
+## Meta on a Label3D that is a sign's title; it prints in the display face (ART-75).
+const SIGN_TITLE := &"sign_title"
 const IslandScenery = preload("res://game/world/island_scenery.gd")
 const WelcomeFerry = preload("res://game/world/welcome_ferry.gd")
 const WATER = preload("res://game/world/water.gdshader")
@@ -1086,6 +1089,7 @@ func _district_label(text: String, pos: Vector3, size: int, color: Color) -> Lab
 	# District names are local wayfinding accents; the nearby physical gateway
 	# carries the durable name, so these do not need to hang over the whole island.
 	var label := _label(text,pos,size,color)
+	label.set_meta(SIGN_TITLE, true)
 	# The player-distance gate below owns locality. Disable camera-distance culling:
 	# the offset camera can be ~30m from the player even when the title is nearby.
 	label.visibility_range_end=0.0
@@ -1617,6 +1621,7 @@ func _arch(pos: Vector3, title: String, color: Color, wide := 5.0) -> void:
 	# Painted on the beam's front face, below the cornice's overhang, so the
 	# deeper cornice can never cover the name (ART-68).
 	var arch_title := _label(title,pos+Vector3(0,3.32,0.51),30)
+	arch_title.set_meta(SIGN_TITLE, true)
 	arch_title.billboard = BaseMaterial3D.BILLBOARD_DISABLED
 	occlusion_controller.register_visibility_label(arch_title)
 	occlusion_controller.finish_building(blocker)
@@ -1816,7 +1821,7 @@ func _kiosk(pos: Vector3, title: String, color: Color) -> void:
 	_multi_mesh(BoxMesh.new(),pos,scallop_transforms,scallop_colors,_vertex_color_material("kiosk-awning-fringe"))
 	var plaque := _box(pos+Vector3(0,2.01,1.59),Vector3(2.7,0.54,0.12),Color("#755a3c"))
 	_box(pos+Vector3(0,2.01,1.67),Vector3(2.55,0.4,0.06),color)
-	_local_label(title,pos+Vector3(0,1.94,1.73),19)
+	_local_label(title,pos+Vector3(0,1.94,1.73),19).set_meta(SIGN_TITLE, true)
 	# Small brass studs and roof tiles share batched meshes across each stand.
 	var tile_transforms: Array[Transform3D]=[]
 	var tile_colors: Array[Color]=[]
@@ -2344,6 +2349,7 @@ func _build_wayfinding() -> void:
 		trim.material_override = _wayfinding_trim
 		var label := _label(entry[2], base + Vector3(0, 1.04, 0.09), 38)
 		label.name = "Title"
+		label.set_meta(SIGN_TITLE, true)
 		label.billboard = BaseMaterial3D.BILLBOARD_DISABLED
 		label.reparent(plaque)
 
@@ -2395,7 +2401,7 @@ func _build_gates() -> void:
 		_zone_crown(i,pos,zone_color)
 		# A gate that faces away from the camera carries its words on the side the camera sees.
 		var face := -1.0 if faces_away else 1.0
-		_local_label(zone["name"],pos+Vector3(0,2.76,0.37*face),20)
+		_local_label(zone["name"],pos+Vector3(0,2.76,0.37*face),20).set_meta(SIGN_TITLE, true)
 		_local_label(ZONE_ICONS[i-1],pos+Vector3(0,1.75,0.43*face),28,GOLD)
 		_adopt_district_geometry(gate,first_part)
 		if faces_away: occlusion_controller.finish_building(see_through)
@@ -3874,5 +3880,6 @@ func refresh_label_fonts(font: Font) -> void:
 	if font == null or font == _last_label_font:
 		return
 	_last_label_font = font
+	var display := FontProfiles.role_font("display")
 	for node: Node in find_children("*", "Label3D", true, false):
-		(node as Label3D).font = font
+		(node as Label3D).font = display if node.has_meta(SIGN_TITLE) else font
