@@ -1,6 +1,9 @@
 shader_type spatial;
 render_mode cull_back;
 
+// 0 dry .. 1 soaked: set by a passing shower (ART-72).
+global uniform float snapland_wetness;
+
 uniform vec4 dry_color : source_color = vec4(0.80, 0.70, 0.51, 1.0);
 uniform vec4 wet_color : source_color = vec4(0.55, 0.47, 0.35, 1.0);
 uniform vec4 turf_color : source_color = vec4(0.38, 0.51, 0.42, 1.0);
@@ -58,6 +61,6 @@ void fragment() {
 	}
 	float fringe = 1.0 - smoothstep(-0.35, 0.75, beyond_lawn + drift * 0.2);
 	sand = mix(sand, turf_color.rgb * (0.9 + grain * 0.2), step(1.0 - fringe * 0.85, cell_seed(cell + 5.0)));
-	ALBEDO = sand;
-	ROUGHNESS = mix(0.96, 0.6, wet);
+	ALBEDO = sand * (1.0 - 0.28 * snapland_wetness);
+	ROUGHNESS = mix(mix(0.96, 0.6, wet), 0.45, snapland_wetness);
 }

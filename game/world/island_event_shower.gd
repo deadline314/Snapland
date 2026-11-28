@@ -27,8 +27,10 @@ const PUDDLE_SPACING := 2.4
 const PUDDLE_LEASH := 11.0
 const UMBRELLAS := 4
 const UMBRELLA_REACH := 40.0
-const RAIN_AMOUNT := 90
-const RAIN_SAVER := 36
+const RAIN_AMOUNT := 150
+const RAIN_SAVER := 60
+## Seconds for the ground to dry once the rain has stopped.
+const DRY_SECONDS := 18.0
 const DROPLETS := 10
 const RAINBOW_WIDTH := 26.0
 const AIR := {"sky": Color("#8394a6"), "ambient": Color("#b4c3d4"), "ambient_scale": 0.82, "sun_scale": 0.32, "saturation_scale": 0.84}
@@ -108,6 +110,7 @@ func step(delta: float, player: Vector3) -> bool:
 		Stage.FADING:
 			if _stage_time >= FADE_SECONDS: _next(Stage.DONE)
 	_update_rain(player)
+	_update_wetness(delta)
 	_update_puddles(delta)
 	_update_umbrellas()
 	_update_rainbow(player)
@@ -142,6 +145,7 @@ func shutter(_player: Vector3) -> void:
 
 func close() -> void:
 	_world.set_event_air({})
+	_set_wetness(0.0)
 
 
 func rainbow_strength() -> float:
@@ -257,9 +261,27 @@ func _update_puddles(delta: float) -> void:
 
 # --- rain ----------------------------------------------------------------------
 
+## The ground soaks as the cloud gathers and dries slowly after it passes.
+var _wetness := 0.0
+
+func _update_wetness(delta: float) -> void:
+	var target := _cover if stage == Stage.RAIN else 0.0
+	_set_wetness(target if target > _wetness else maxf(target, _wetness - delta / DRY_SECONDS))
+
+
+func _set_wetness(amount: float) -> void:
+	if absf(amount - _wetness) < 0.002 and amount > 0.0: return
+	_wetness = amount
+	RenderingServer.global_shader_parameter_set(&"snapland_wetness", amount)
+
+
+func wetness() -> float:
+	return _wetness
+
+
 func _update_rain(player: Vector3) -> void:
 	if rain == null: return
-	var falling := raining() and not _reduced and _cover > 0.3
+	var falling := raining() and not _reduced and _cover > 0.12
 	if rain.emitting != falling: rain.emitting = falling
 	rain.visible = raining() and not _reduced
 	if player.is_finite(): rain.global_position = player + Vector3(0, 8.5, 0)

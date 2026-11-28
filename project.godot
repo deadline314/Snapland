@@ -38,3 +38,7 @@ snapland_walker={
 "type": "vec3",
 "value": Vector3(0, -1000, 0)
 }
+snapland_wetness={
+"type": "float",
+"value": 0.0
+}

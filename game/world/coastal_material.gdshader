@@ -1,5 +1,8 @@
 shader_type spatial;
 render_mode diffuse_burley;
+
+// 0 dry .. 1 soaked: set by a passing shower (ART-72).
+global uniform float snapland_wetness;
 uniform sampler2D atlas_texture : source_color, filter_nearest;
 uniform int tile_index = 0;
 uniform float world_tile_size = 2.0;
@@ -58,4 +61,8 @@ void fragment() {
 	ALBEDO = texture(atlas_texture, cell_origin + safe_uv * cell_size).rgb * tint.rgb;
 	ROUGHNESS = 0.86;
 	SPECULAR = 0.14;
+	// Rain darkens stone and boards and leaves a sheen on them.
+	ALBEDO *= 1.0 - 0.3 * snapland_wetness;
+	ROUGHNESS = mix(0.86, 0.3, snapland_wetness);
+	SPECULAR = mix(0.14, 0.5, snapland_wetness);
 }

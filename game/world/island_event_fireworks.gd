@@ -26,6 +26,11 @@ const PEAK := 0.42
 const SCORE_SPAN := 0.55
 const STICKER_SCORE := 60
 const FIRST_LAUNCH := 3.0
+## Away from the lookout, the first shells pop at the edge of the walker's view on
+## the side of the bay, so the sky itself says where the show is (ART-72).
+const TEASER_SHELLS := 3
+const TEASER_REACH := 8.0
+const TEASER_FIRST := 1.2
 const INTERVAL := Vector2(3.6, 5.2)
 const QUIET_END := 6.0
 const SHUTTER_GAP := 0.5
@@ -50,6 +55,8 @@ var _world: Node3D
 var _seconds := 90.0
 var _clock := 0.0
 var _next_launch := FIRST_LAUNCH
+var _player := Vector3.INF
+var _teasers := 0
 var _shutter_wait := 0.0
 var _reduced := false
 var _spark_count := SPARKS
@@ -78,10 +85,13 @@ func begin(director: Node3D, player: Vector3) -> void:
 	var near := Vector2(player.x - lookout.x, player.z - lookout.z).length() < VIEW_RADIUS
 	director.say("煙火開始了！在觀景台等煙火開到最大時按 E 或 P。" if near else "傍晚的海灣要放煙火了！到海風觀景台（地圖上的星星）拍下最漂亮的一發。")
 	director.note(4)
+	_player = player
+	if not near: _next_launch = TEASER_FIRST
 
 
 func step(delta: float, player: Vector3) -> bool:
 	_clock += delta
+	_player = player
 	_shutter_wait = maxf(0.0, _shutter_wait - delta)
 	if _clock < _seconds - QUIET_END:
 		_next_launch -= delta
@@ -179,9 +189,16 @@ func _launch() -> void:
 		var rng: RandomNumberGenerator = _director.rng()
 		var base := Vector3(shore_x + rng.randf_range(1.5, 5.5), IslandScenery.SEA_Y, lookout.z + rng.randf_range(-6.0, -1.0))
 		while IslandShape.contains(Vector2(base.x, base.z)) and base.x < shore_x + 40.0: base.x += 2.0
+		if _teasers < TEASER_SHELLS and far_from_lookout():
+			_teasers += 1
+			var toward := Vector3(lookout.x - _player.x, 0, lookout.z - _player.z).normalized()
+			base = _player + toward * TEASER_REACH + Vector3(0, 0.5, 0)
+			# The batch is culled around the lookout; let it reach this burst too.
+			_batch.custom_aabb = _batch.custom_aabb.merge(AABB(base - Vector3(SHELL_RADIUS * 2.0, 1.0, SHELL_RADIUS * 2.0), Vector3(SHELL_RADIUS * 4.0, 8.0, SHELL_RADIUS * 4.0)))
 		shell.age = 0.0
 		shell.base = base
-		shell.apex = base + Vector3(rng.randf_range(-0.6, 0.6), rng.randf_range(5.0, 6.8), 0)
+		# A teaser bursts low so the steep overhead camera still sees it.
+		shell.apex = base + Vector3(rng.randf_range(-0.6, 0.6), rng.randf_range(2.6, 3.2) if base.y > IslandScenery.SEA_Y + 0.1 else rng.randf_range(5.0, 6.8), 0)
 		shell.colour = PALETTE[rng.randi() % PALETTE.size()]
 		shell.kind = KINDS[rng.randi() % KINDS.size()]
 		var dirs: PackedVector3Array = shell.dirs
@@ -198,6 +215,10 @@ func _launch() -> void:
 				var turn := index * 2.39996
 				dirs[index] = Vector3(cos(turn) * ring, y, sin(turn) * ring)
 		return
+
+
+func far_from_lookout() -> bool:
+	return _player.is_finite() and Vector2(_player.x - lookout.x, _player.z - lookout.z).length() >= VIEW_RADIUS
 
 
 ## Writes every spark, rocket and water glow for this frame. No allocations.

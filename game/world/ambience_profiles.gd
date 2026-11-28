@@ -78,9 +78,10 @@ const PARTICLE_KINDS := {
 	},
 	# Island events (IslandEvents) borrow these; no region profile lists them.
 	"rain": {
-		"glyph": "streak", "color": Color(0.82, 0.90, 1.0, 0.62), "scale": 3.2, "life": 0.9, "speed": Vector2(9.0, 11.0),
-		"direction": Vector3(0.12, -1.0, 0.05), "spread": 3.0, "force": Vector3.ZERO,
-		"box": Vector3(15.0, 0.5, 12.0), "lift": 8.5, "ramp": "fade",
+		# Slanted, brighter and spread over the whole view, so a shower reads at a glance (ART-72).
+		"glyph": "streak", "color": Color(0.9, 0.95, 1.0, 0.9), "scale": 4.6, "life": 0.9, "speed": Vector2(9.0, 11.0),
+		"direction": Vector3(0.32, -1.0, 0.08), "spread": 3.0, "force": Vector3.ZERO,
+		"box": Vector3(20.0, 0.5, 15.0), "lift": 8.5, "ramp": "fade",
 	},
 	"gust_leaf": {
 		"glyph": "leaf", "color": Color(0.93, 0.66, 0.30, 1.0), "scale": 2.6, "life": 3.2, "speed": Vector2(3.0, 5.0),

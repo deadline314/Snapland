@@ -1,6 +1,9 @@
 shader_type spatial;
 render_mode cull_back;
 
+// 0 dry .. 1 soaked: set by a passing shower (ART-72).
+global uniform float snapland_wetness;
+
 #include "res://game/world/wind.gdshaderinc"
 
 // Toward a themed district the lawn takes on that district's ground colour:
@@ -67,6 +70,6 @@ void fragment() {
 	// The lawn receives the key light, so its albedo stays about half of an
 	// ambient-only value: sunlit grass keeps the authored meadow tone and cast
 	// shadows read as shadows instead of disappearing on grass.
-	ALBEDO = meadow * shade;
-	ROUGHNESS = 0.97;
+	ALBEDO = meadow * shade * (1.0 - 0.18 * snapland_wetness);
+	ROUGHNESS = mix(0.97, 0.6, snapland_wetness);
 }
