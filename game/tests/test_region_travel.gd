@@ -388,8 +388,8 @@ func _candy_ui() -> void:
 				"Hotel album lists its delivered game under its own slot number")
 		elif book._region == "sky":
 			var sky_ids: Array = book._entries().map(func(entry: Dictionary) -> String: return entry.id)
-			_check(sky_ids.has("photo-sky-game-1") and sky_ids.has("photo-sky-game-7") and sky_ids.has("photo-sky-game-8")
-				and _labels(book).contains("雲梯換層") and _labels(book).contains("羽球上升流") and _labels(book).contains("繩橋共振"),
+			_check(sky_ids.has("photo-sky-game-1") and sky_ids.has("photo-sky-game-7") and sky_ids.has("photo-sky-game-8") and sky_ids.has("photo-sky-game-9")
+				and _labels(book).contains("雲梯換層") and _labels(book).contains("羽球上升流") and _labels(book).contains("繩橋共振") and _labels(book).contains("風箏追風"),
 				"Sky park album lists each delivered game under its own slot number")
 	main._close()
 	main._show_tasks()

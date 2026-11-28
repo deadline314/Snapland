@@ -79,6 +79,8 @@ const STANDS := {
 			"stand": Vector3(-12.4, 1.85, 14.4), "point": Vector3(-11.45, 1.85, 15.75), "prop": "shuttle", "paint": Color("#3d6fb0")},
 		{"id": "game-104", "title": "繩橋共振", "prompt": "繩橋共振 · 跟著拍子左右踩",
 			"stand": Vector3(0.6, 1.80, 5.8), "point": Vector3(1.55, 1.80, 7.15), "prop": "ropebridge", "paint": Color("#6e4c32")},
+		{"id": "game-105", "title": "風箏追風", "prompt": "風箏追風 · 跟著箭頭拉風箏",
+			"stand": Vector3(-7.6, 1.85, 12.0), "point": Vector3(-6.65, 1.85, 13.35), "prop": "windkite", "paint": Color("#ff8a6b")},
 	],
 }
 const FOOTPRINT := Vector3(1.5, 2.0, 1.0)
@@ -126,6 +128,7 @@ static func build(world: Node3D, region: String) -> void:
 			"bubble": _bubble_prop(sculpt)
 			"shuttle": _shuttle_prop(sculpt)
 			"ropebridge": _rope_bridge_prop(sculpt)
+			"windkite": _wind_kite_prop(sculpt)
 			"lock": _lock_prop(sculpt)
 			"slide": _slide_prop(sculpt)
 			"cloudhop": _cloudhop_prop(sculpt)
@@ -755,3 +758,20 @@ static func _lift_prop(sculpt: Kit.Sculpt) -> void:
 	sculpt.tube(Vector3(-0.26, 1.02, 0.1), 0.1, 0.1, 0.1, Color("#c0485e"), 10)
 	sculpt.box(Vector3(-0.26, 0.99, 0.18), Vector3(0.12, 0.02, 0.06), Color("#2a2034"))
 	sculpt.box(Vector3(0.28, 1.0, 0.1), Vector3(0.18, 0.05, 0.14), BRASS)
+
+
+## A big diamond kite flying on a pole over the roof with a ribbon tail, and a
+## reel of string with a little arrow vane on the counter.
+static func _wind_kite_prop(sculpt: Kit.Sculpt) -> void:
+	var coral := Color("#ff8a6b")
+	var sun := Color("#ffd35c")
+	var dark := Color("#6e4c32")
+	sculpt.box(Vector3(0.3, 2.85, -0.3), Vector3(0.04, 0.5, 0.04), dark)
+	var tilt := Basis(Vector3.BACK, PI * 0.25)
+	sculpt.box(Vector3(-0.05, 3.05, -0.32), Vector3(0.36, 0.36, 0.02), coral, tilt)
+	sculpt.box(Vector3(-0.05, 3.05, -0.3), Vector3(0.18, 0.18, 0.02), sun, tilt)
+	for bow in 3:
+		sculpt.box(Vector3(-0.05 - bow * 0.08, 2.72 - bow * 0.1, -0.3), Vector3(0.06, 0.04, 0.02), [coral, sun, Color("#8fe0c4")][bow])
+	sculpt.tube(Vector3(-0.2, 1.02, 0.12), 0.08, 0.08, 0.08, Color("#f4ecd8"), 10, Basis(Vector3.RIGHT, PI * 0.5))
+	sculpt.box(Vector3(0.2, 1.08, 0.12), Vector3(0.02, 0.16, 0.02), dark)
+	sculpt.box(Vector3(0.24, 1.16, 0.12), Vector3(0.12, 0.03, 0.03), sun)

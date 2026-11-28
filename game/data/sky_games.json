@@ -58,5 +58,25 @@
       "mascot",
       "bench"
     ]
+  },
+  {
+    "id": "game-105",
+    "mode": "kite_wind",
+    "zone": "sky",
+    "local_index": 9,
+    "arcade": true,
+    "name": "風箏追風",
+    "goal": "大箭頭指著風往哪裡吹；左右拉線讓風箏一直待在風裡往上飛，順便穿過從天上飄下來的雲圈。",
+    "instructions": "← →、A D 或手把十字鍵：拉風箏線。把風箏拉到箭頭下面那一道風裡就會往上飛，離開風會往下掉。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助追著風穿雲圈拿到金牌",
+    "ordinary": "把風箏拉進風裡、穿過雲圈，拿到銅牌",
+    "attraction_tag": "風箏露台追風",
+    "island_invitation": "風箏露台的風一直換方向！跟著箭頭把風箏拉過去，穿過雲圈。小心亂流會騙你，風箏掉下來的話，線會把你纏起來拖上天。",
+    "retake_props": [
+      "sign",
+      "mascot",
+      "lantern"
+    ]
   }
 ]
