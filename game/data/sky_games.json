@@ -1,5 +1,25 @@
 [
   {
+    "id": "game-097",
+    "mode": "cloud_hop",
+    "zone": "sky",
+    "local_index": 1,
+    "arcade": true,
+    "name": "雲梯換層",
+    "goal": "一排雲台各自上下浮動，在腳下的雲台和下一座剛好一樣高時跳過去，一路跳到出口。",
+    "instructions": "空白鍵、E、→ 或手把 A 鍵：腳下的雲台和下一座雲台一樣高的那一刻按下去跳過去；不一樣高時跳會掉進雲裡。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助跳雲台拿到金牌",
+    "ordinary": "一路跳過雲台到出口，拿到銅牌",
+    "attraction_tag": "浮島雲梯",
+    "island_invitation": "雲台一高一低地飄，等它們一樣高時跳過去。跳錯了……會從雲底下冒出一顆沾滿棉花糖的頭。",
+    "retake_props": [
+      "balloon",
+      "camera",
+      "lantern"
+    ]
+  },
+  {
     "id": "game-103",
     "mode": "shuttle_updraft",
     "zone": "sky",

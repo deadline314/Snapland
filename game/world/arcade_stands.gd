@@ -67,8 +67,10 @@ const STANDS := {
 		{"id": "game-089", "title": "鬼影擦窗", "prompt": "鬼影擦窗 · 把小鬼擦出來",
 			"stand": Vector3(3.6, 0.2, 3.4), "point": Vector3(4.55, 0.2, 4.75), "prop": "window", "paint": Color("#4f8f86")},
 	],
-	# Sky park stands use the kept sites in sky_world.STAND_SITES (stand and point copied).
+	# Sky stands use the kept sites in sky_world.STAND_SITES (stand and point copied).
 	"sky": [
+		{"id": "game-097", "title": "雲梯換層", "prompt": "雲梯換層 · 一樣高時跳過去",
+			"stand": Vector3(-12.6, 0.75, -6.0), "point": Vector3(-11.65, 0.75, -4.65), "prop": "cloudhop", "paint": Color("#5a8ac0")},
 		{"id": "game-103", "title": "羽球上升流", "prompt": "羽球上升流 · 左右跑接羽球",
 			"stand": Vector3(-12.4, 1.85, 14.4), "point": Vector3(-11.45, 1.85, 15.75), "prop": "shuttle", "paint": Color("#3d6fb0")},
 	],
@@ -117,6 +119,7 @@ static func build(world: Node3D, region: String) -> void:
 			"shuttle": _shuttle_prop(sculpt)
 			"lock": _lock_prop(sculpt)
 			"slide": _slide_prop(sculpt)
+			"cloudhop": _cloudhop_prop(sculpt)
 		var stand: MeshInstance3D = world._mesh(sculpt.mesh(), Vector3.ZERO, world._vertex_color_material("arcade-stand"))
 		stand.name = "ArcadeStand_" + str(row.id)
 		var body := StaticBody3D.new()
@@ -633,6 +636,22 @@ static func _musicbox_prop(sculpt: Kit.Sculpt) -> void:
 	for tooth in 5:
 		sculpt.box(Vector3(-0.12 + tooth * 0.06, 1.0, 0.22), Vector3(0.03, 0.02, 0.14), Color("#c3c8cf"))
 
+
+## Three little cloud pads stepping up over the sign, each on a thin pole, the
+## top one with a flag; a puff of cloud on the counter.
+static func _cloudhop_prop(sculpt: Kit.Sculpt) -> void:
+	var cloud := Color("#f4f0fa")
+	for step in 3:
+		var at := Vector3(-0.45 + step * 0.45, 2.3 + step * 0.16, -0.2)
+		sculpt.box(at + Vector3(0, -0.2, 0), Vector3(0.03, 0.4, 0.03), DARK)
+		sculpt.ball(at, 0.16, cloud, Color.TRANSPARENT, 8, 4, 0.55)
+		sculpt.ball(at + Vector3(0.1, 0.03, 0), 0.12, cloud, Color.TRANSPARENT, 8, 4, 0.6)
+		sculpt.ball(at + Vector3(-0.1, 0.02, 0), 0.11, cloud, Color.TRANSPARENT, 8, 4, 0.6)
+	sculpt.box(Vector3(0.45, 2.92, -0.2), Vector3(0.02, 0.3, 0.02), DARK)
+	sculpt.box(Vector3(0.53, 3.0, -0.2), Vector3(0.16, 0.1, 0.02), Color("#e8807a"))
+	sculpt.ball(Vector3(-0.3, 1.04, 0.1), 0.12, cloud, Color.TRANSPARENT, 8, 4, 0.7)
+	sculpt.ball(Vector3(-0.18, 1.02, 0.12), 0.09, cloud, Color.TRANSPARENT, 8, 4, 0.7)
+	sculpt.box(Vector3(0.3, 1.0, 0.1), Vector3(0.4, 0.06, 0.3), CREAM)
 
 ## A big shuttlecock on the roof, cork down and feathers up, with a racket
 ## leaning on it, and a little racket and shuttle lying on the counter.

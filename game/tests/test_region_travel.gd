@@ -383,6 +383,10 @@ func _candy_ui() -> void:
 			_check(garden_ids == expected_ids + ["photo-garden-story-1", "photo-garden-quest-1"] and expected_ids.has("photo-garden-game-5") and book._entries()[-2].story_region == "garden" and book._entries().back().story_errand == "garden"
 				and _labels(book).contains("票票") and garden_games.all(func(row: Dictionary) -> bool: return _labels(book).contains(row.name)),
 				"Garden album lists each delivered game under its own slot number and its story without speculative slots")
+		elif book._region == "sky":
+			var sky_ids: Array = book._entries().map(func(entry: Dictionary) -> String: return entry.id)
+			_check(sky_ids.has("photo-sky-game-1") and _labels(book).contains("雲梯換層"),
+				"Sky park album lists its delivered game under its own slot number")
 		elif book._region == "hotel":
 			var hotel_ids: Array = book._entries().map(func(entry: Dictionary) -> String: return entry.id)
 			_check(hotel_ids.has("photo-hotel-game-1") and _labels(book).contains("折頁走廊"),
