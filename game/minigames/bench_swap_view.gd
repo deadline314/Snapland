@@ -213,8 +213,16 @@ func _draw_waiting_room(palette: Dictionary) -> void:
 	var wall: Color = palette.paper.lerp(palette.window_light, 0.12)
 	var floor_color: Color = palette.paper.lerp(palette.wood, 0.24)
 	var join_color: Color = floor_color.lerp(palette.wood_edge, 0.17)
-	draw_rect(Rect2(0, 128, 1280, 266), wall)
-	draw_rect(Rect2(0, 394, 1280, 326), floor_color)
+	# Wall: light falls off toward the wainscot, over a faint striped paper (polish pass).
+	Props.bands(self, Rect2(0, 128, 1280, 266), wall.lerp(Color.WHITE, 0.12), wall.lerp(palette.wood_edge, 0.12), 10)
+	for x in range(0, 1281, 64):
+		draw_rect(Rect2(x, 128, 28, 222), Color(palette.wood_edge, 0.05))
+		for y in range(160, 340, 64):
+			var dot := Vector2(x + 46 + (16 if (y / 64) % 2 == 1 else 0), y)
+			draw_colored_polygon(PackedVector2Array([dot + Vector2(0, -5), dot + Vector2(4, 0), dot + Vector2(0, 5), dot + Vector2(-4, 0)]), Color(palette.curtain, 0.22))
+	# Floor: real planks, darker toward the viewer.
+	Props.fill_polygon(self, PackedVector2Array([Vector2(0, 394), Vector2(1280, 394), Vector2(1280, 720), Vector2(0, 720)]), Props.wood_texture(floor_color.lerp(palette.wood, 0.35)))
+	Props.bands(self, Rect2(0, 394, 1280, 326), Color(palette.wood_edge, 0.0), Color(palette.wood_edge, 0.28), 8)
 	for x in [36.0, 1244.0]:
 		draw_rect(Rect2(x - 11, 128, 22, 279), palette.wood_edge)
 		draw_rect(Rect2(x - 7, 128, 7, 279), palette.wood)
@@ -231,6 +239,17 @@ func _draw_waiting_room(palette: Dictionary) -> void:
 		draw_line(Vector2(0, y), Vector2(1280, y), join_color, 1.0)
 	_draw_window(Vector2(120, 286), palette)
 	_draw_window(Vector2(1160, 286), palette)
+	# Sun through each window lays a warm patch on the boards, with dust drifting in it.
+	var beam := Color(palette.window_light.lerp(Color("#fff2c8"), 0.5), 0.16 if _time_phase != "night" else 0.08)
+	var clock := 0.0 if _reduced_motion else Time.get_ticks_msec() / 1000.0
+	for side: float in [1.0, -1.0]:
+		var top_x := 640.0 - side * 520.0
+		draw_colored_polygon(PackedVector2Array([Vector2(top_x - 56, 250), Vector2(top_x + 56, 250), Vector2(top_x + side * 230 + 90, 560), Vector2(top_x + side * 230 - 110, 560)]), beam)
+		for mote in 9:
+			var seed := float(mote) * 7.31 + side
+			var rise := fposmod(seed * 37.0 + clock * (6.0 + fposmod(seed, 3.0)), 300.0)
+			var at := Vector2(top_x + side * rise * 0.66 + sin(clock * 0.7 + seed) * 10.0, 540.0 - rise)
+			draw_rect(Rect2(at.snapped(Vector2(2, 2)), Vector2(3, 3)), Color(1, 0.96, 0.84, 0.55))
 	for x in [63.0, 1217.0]:
 		_draw_ellipse(Vector2(x, 497), Vector2(31, 9), palette.shadow)
 		draw_colored_polygon(PackedVector2Array([Vector2(x-22, 459), Vector2(x+22, 459), Vector2(x+16, 493), Vector2(x-16, 493)]), palette.curtain)

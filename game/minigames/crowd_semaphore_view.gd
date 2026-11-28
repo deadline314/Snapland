@@ -71,6 +71,7 @@ var _clearance_pennants: Array[MeshInstance3D] = []
 var _material_cache: Dictionary = {}
 var _phase := "noon"
 var _reduced_motion := false
+var _backdrop_clock := 0.0
 var _walk_lane := -1
 var _clearance_lane := -1
 var _pool_size_at_build := 0
@@ -100,6 +101,8 @@ func is_3d_stage_ready() -> bool:
 ## immediately; only primitive visual fields are retained, never model timers.
 func present_traffic(snapshot: Dictionary, elapsed: float, reduced_motion: bool, time_phase: String) -> void:
 	_reduced_motion = reduced_motion
+	_backdrop_clock = 0.0 if reduced_motion else elapsed
+	queue_redraw()
 	_assisted = bool(snapshot.get("assisted", false))
 	_phase = time_phase if PHASES.has(time_phase) else "noon"
 	var valid := _is_valid_snapshot(snapshot)
@@ -125,10 +128,48 @@ func present_traffic(snapshot: Dictionary, elapsed: float, reduced_motion: bool,
 ## Each planning card sits on a stained board; the card's own border still
 ## carries the risk and advice colours.
 func _draw() -> void:
+	_draw_harbor_backdrop()
 	for child in get_children():
 		if child is PanelContainer:
 			Props.block_shadow(self, Rect2(child.position, child.size), Vector2(4, 6), 0.35)
 			Props.wood_panel(self, Rect2(child.position, child.size), Props.SIGN_TEAL, true)
+
+## The quay the miniature stands on: sky over far headlands, the bay with
+## drifting glints, and the pier's boards in front (polish pass). The 3D
+## board's viewport is transparent, so this shows round it instead of a void.
+func _draw_harbor_backdrop() -> void:
+	var sky: Color = PHASE_SKY[_phase]
+	var sea := sky.lerp(Color("#2d6f7d") if _phase != "night" else Color("#163042"), 0.62)
+	var night := _phase == "night"
+	Props.bands(self, Rect2(0, 0, size.x, size.y * 0.36), sky.lerp(Color.WHITE, 0.18), sky, 6)
+	# Far headlands with a lighthouse, then a nearer, darker ridge.
+	var far := sky.lerp(sea, 0.55).darkened(0.08)
+	var horizon := size.y * 0.36
+	var ridge := PackedVector2Array()
+	for step in 17:
+		var x := size.x * float(step) / 16.0
+		ridge.append(Vector2(x, horizon - 30.0 - 26.0 * absf(sin(float(step) * 1.3)) - 14.0 * absf(sin(float(step) * 2.9))))
+	ridge.append(Vector2(size.x, horizon + 2.0))
+	ridge.append(Vector2(0, horizon + 2.0))
+	draw_colored_polygon(ridge, far)
+	draw_rect(Rect2(size.x * 0.82, horizon - 92.0, 12.0, 42.0), Color("#efe4cf").lerp(far, 0.3))
+	draw_rect(Rect2(size.x * 0.82 - 3.0, horizon - 98.0, 18.0, 8.0), Color("#ffd27a") if night or _phase == "dusk" else Color("#d0574e"))
+	# The bay: darker toward the viewer, with glints that drift and twinkle.
+	Props.bands(self, Rect2(0, horizon, size.x, size.y - horizon), sea.lerp(sky, 0.25), sea.darkened(0.25), 8)
+	for glint in 46:
+		var seed := float(glint) * 12.9898
+		var x := fposmod(fposmod(seed * 78.233, size.x) + _backdrop_clock * (8.0 + fposmod(seed, 6.0)), size.x)
+		var y := horizon + 10.0 + fposmod(seed * 4.7, size.y - horizon - 80.0)
+		var bright := 0.5 + 0.5 * sin(_backdrop_clock * 2.2 + seed)
+		draw_rect(Rect2(Vector2(x, y).snapped(Vector2(2, 2)), Vector2(10.0 + fposmod(seed, 8.0), 2.0)), Color(1, 1, 0.94, 0.12 + 0.22 * bright))
+	# Pier boards along the bottom edge, lit on top and shaded on the face.
+	var deck_top := size.y - 46.0
+	Props.fill_polygon(self, PackedVector2Array([Vector2(0, deck_top), Vector2(size.x, deck_top), Vector2(size.x, size.y), Vector2(0, size.y)]), Props.wood_texture(Color("#a5774c")))
+	draw_rect(Rect2(0, deck_top, size.x, 4.0), Color(1, 0.95, 0.82, 0.35))
+	draw_rect(Rect2(0, deck_top + 4.0, size.x, 8.0), Color(0.1, 0.06, 0.04, 0.25))
+	for post in range(0, int(size.x) + 1, 160):
+		Props.shaded_box(self, Rect2(float(post) - 9.0, deck_top - 26.0, 18.0, 30.0), Color("#6e4c32"), 4.0)
+		Props.rope(self, Vector2(float(post), deck_top - 18.0), Vector2(float(post) + 160.0, deck_top - 18.0), 4.0)
 
 func phase_name_for(valid: bool, snapshot: Dictionary) -> String:
 	return str(snapshot.get("phase", "red")) if valid else "red"

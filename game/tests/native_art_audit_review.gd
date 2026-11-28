@@ -6,11 +6,12 @@ extends Node
 ## is a separate, manual step.
 ##
 ## User args (after --): --only=<section,...> limits the run to sections
-## (districts, travel, welcome, menus, events, games). --phases=noon,dusk,night.
+## (districts, travel, welcome, menus, events, games, arcade --zone=<region>). --phases=noon,dusk,night.
 ## --regions=candy,toy limits the district views; --games=game-001,... picks the minigames.
 const MainScene = preload("res://game/main.tscn")
 const RegionRoutes = preload("res://game/core/region_routes.gd")
 const DistrictSites = preload("res://game/world/district_sites.gd")
+const GameCatalog = preload("res://game/core/game_catalog.gd")
 const WELCOME_VIEWS := [
 	["plaza", Vector3(0, 0.3, 6.5)],
 	["carousel", Vector3(-9.7, 0.3, 14.0)],
@@ -26,6 +27,8 @@ var out := ""
 var sections: PackedStringArray = ["districts", "travel", "welcome", "menus", "events", "games"]
 var phases: PackedStringArray = ["noon", "dusk", "night"]
 var regions: PackedStringArray = []
+## --zone=<region>: the "arcade" section plays every shipped game of that zone.
+var zone := ""
 var shots := 0
 
 
@@ -43,6 +46,7 @@ func _run() -> void:
 		if arg.begins_with("--only="): sections = arg.trim_prefix("--only=").split(",", false)
 		elif arg.begins_with("--phases="): phases = arg.trim_prefix("--phases=").split(",", false)
 		elif arg.begins_with("--regions="): regions = arg.trim_prefix("--regions=").split(",", false)
+		elif arg.begins_with("--zone="): zone = arg.trim_prefix("--zone=")
 		elif arg.begins_with("--games="): games = Array(arg.trim_prefix("--games=").split(",", false))
 	DirAccess.make_dir_recursive_absolute(out)
 	Progress.reset_progress()
@@ -64,6 +68,7 @@ func _run() -> void:
 	if "events" in sections: await _event_shots()
 	if "menus" in sections: await _menu_shots()
 	if "games" in sections: await _game_shots()
+	if "arcade" in sections: await _arcade_shots()
 	print("CAPTURED: %d art audit views in %s; visual acceptance requires image inspection" % [shots, out])
 	await main._quit_game()
 
@@ -183,6 +188,47 @@ func _game_shots() -> void:
 func _quiet_stamp() -> void:
 	var stamp: Control = main.get("arrival_stamp")
 	if is_instance_valid(stamp): stamp.dismiss()
+
+
+## Polish sweep: for each game of `zone`, one play frame three seconds into play
+## and one frame just after its first funny fail, provoked by cycling through
+## mashing, holding and arrow patterns (as the fail sticker tests do).
+func _arcade_shots() -> void:
+	_set_phase("noon")
+	for definition: Dictionary in GameCatalog.definitions(zone):
+		var id := str(definition.id)
+		main._launch_game(id, false)
+		var session: Control = main.session
+		if session == null: continue
+		var failed := [false]
+		if session.has_signal("funny_failed"): session.funny_failed.connect(func(_id: String, _state: Dictionary) -> void: failed[0] = true)
+		await _wait(2.6 + 3.0)
+		await _snap("arcade-%s-play" % id)
+		var tick := 0
+		var deadline := Time.get_ticks_msec() + 14000
+		while is_instance_valid(session) and not failed[0] and Time.get_ticks_msec() < deadline:
+			var driver: RefCounted = session.get("active_driver")
+			if driver != null and float(driver.get("fail_at")) >= 0.0: break
+			var phase := (tick / 60) % 3
+			if phase == 0: _tap(KEY_SPACE, tick % 2 == 0)
+			elif phase == 1: _tap(KEY_SPACE, tick % 50 != 0)
+			else: _tap([KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT][(tick / 4) % 4], tick % 4 == 0)
+			tick += 1
+			await get_tree().process_frame
+		_tap(KEY_SPACE, false)
+		await _wait(0.35)
+		await _snap("arcade-%s-fail" % id)
+		main._cancel_game()
+		await _wait(0.6)
+		_dismiss()
+
+
+func _tap(key: Key, pressed: bool) -> void:
+	var event := InputEventKey.new()
+	event.keycode = key
+	event.physical_keycode = key
+	event.pressed = pressed
+	Input.parse_input_event(event)
 
 
 func _stand(spot: Vector3) -> void:
