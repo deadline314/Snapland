@@ -21,7 +21,7 @@ func _run() -> void:
 	var hotel: Array = catalog.definitions("hotel")
 	var all_games: Array = catalog.all_definitions()
 	_check(welcome == JSON.parse_string(FileAccess.get_file_as_string("res://game/data/welcome_games.json")), "default definitions preserve the original welcome row shape and order")
-	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 12 and toy.size() == 11 and garden.size() == 7 and hotel.size() == 3 and all_games.size() == 81, "only the 81 delivered games are exposed")
+	_check(welcome.size() == 12 and harbor.size() == 12 and candy.size() == 12 and nightmarket.size() == 12 and circus.size() == 12 and toy.size() == 11 and garden.size() == 7 and hotel.size() == 4 and all_games.size() == 82, "only the 82 delivered games are exposed")
 	for index in range(welcome.size()):
 		_check(welcome[index].id == "game-%03d" % (index + 1), "welcome numbering stays ordered")
 	_check(all_games == welcome + harbor + candy + nightmarket + circus + toy + garden + hotel and catalog.definitions("sky").is_empty(), "games retain global order and future regions remain unavailable")
@@ -117,6 +117,9 @@ func _run() -> void:
 	var echo_key := {"id":"game-087", "mode":"echo_key", "zone":"hotel", "local_index":3, "photo_id":"photo-hotel-game-3", "devil_photo_id":"photo-hotel-devil-3", "achievement_id":"ACH_GAME_087"}
 	_check(catalog.identity("game-087") == echo_key and catalog.identity("echo_key") == echo_key and hotel[2].name == "回聲鑰匙" and hotel[2].arcade == true,
 		"hotel slot 3 keeps its own global number and the arcade flow flag")
+	var dream_bubble := {"id":"game-088", "mode":"dream_bubble", "zone":"hotel", "local_index":4, "photo_id":"photo-hotel-game-4", "devil_photo_id":"photo-hotel-devil-4", "achievement_id":"ACH_GAME_088"}
+	_check(catalog.identity("game-088") == dream_bubble and catalog.identity("dream_bubble") == dream_bubble and hotel[3].name == "夢泡搬運" and hotel[3].arcade == true,
+		"hotel slot 4 keeps its own global number and the arcade flow flag")
 	_check(all_games.filter(func(row: Dictionary) -> bool: return row.has("arcade") and row.zone not in ["circus", "toy", "garden", "hotel"]).is_empty(), "earlier games keep their own flow")
 	_check(harbor[0].name == "浪間小艇" and harbor[0].instructions == "划槳、轉舵並側滑靠岸" and harbor[0].ordinary == "載三箱到兩座浮碼頭" and harbor[0].devil == "用浪峰側滑靠岸不撞箱", "harbor row uses the approved concise copy")
 	var expected := {"id": "game-013", "mode": "rowing_cargo", "zone": "harbor", "local_index": 1, "photo_id": "photo-harbor-game-1", "devil_photo_id": "photo-harbor-devil-1", "achievement_id": "ACH_GAME_013"}

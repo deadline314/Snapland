@@ -58,5 +58,25 @@
       "mascot",
       "sign"
     ]
+  },
+  {
+    "id": "game-088",
+    "mode": "dream_bubble",
+    "zone": "hotel",
+    "local_index": 4,
+    "arcade": true,
+    "name": "夢泡搬運",
+    "goal": "頭頂著客人的夢泡泡，從夢境房門走到收件門；走太快泡泡會晃掉，滴水、吊燈碰到也會破。每送到一顆，下一顆更大。",
+    "instructions": "← →、A D 或手把十字鍵、左搖桿：走路。按住一直走泡泡會越晃越厲害，走一走、停一停最穩。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助送夢泡拿到金牌",
+    "ordinary": "頂著夢泡泡走到對面送達，拿到銅牌",
+    "attraction_tag": "夢泡搬運",
+    "island_invitation": "幫旅館的客人把夢送過走廊！泡泡頂在頭上，走太快會晃掉，滴水和吊燈也會碰破它。破掉的話，夢裡的綿羊會掉下來坐在你頭上。",
+    "retake_props": [
+      "mascot",
+      "balloon",
+      "lantern"
+    ]
   }
 ]

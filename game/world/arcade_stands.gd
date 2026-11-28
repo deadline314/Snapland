@@ -58,6 +58,8 @@ const STANDS := {
 			"stand": Vector3(10.8, 0.2, 3.6), "point": Vector3(11.75, 0.2, 4.95), "prop": "slide", "paint": Color("#7a5aa8")},
 		{"id": "game-087", "title": "回聲鑰匙", "prompt": "回聲鑰匙 · 缺口對準時轉鑰匙",
 			"stand": Vector3(-14.6, 0.2, 4.4), "point": Vector3(-13.65, 0.2, 5.75), "prop": "lock", "paint": Color("#6a4058")},
+		{"id": "game-088", "title": "夢泡搬運", "prompt": "夢泡搬運 · 頂著泡泡慢慢走",
+			"stand": Vector3(14.8, 0.2, 3.6), "point": Vector3(15.75, 0.2, 4.95), "prop": "bubble", "paint": Color("#4f6f9a")},
 	],
 }
 const FOOTPRINT := Vector3(1.5, 2.0, 1.0)
@@ -97,6 +99,7 @@ static func build(world: Node3D, region: String) -> void:
 			"vine": _vine_prop(sculpt)
 			"post": _post_prop(sculpt)
 			"book": _book_prop(sculpt)
+			"bubble": _bubble_prop(sculpt)
 			"lock": _lock_prop(sculpt)
 			"slide": _slide_prop(sculpt)
 		var stand: MeshInstance3D = world._mesh(sculpt.mesh(), Vector3.ZERO, world._vertex_color_material("arcade-stand"))
@@ -558,3 +561,16 @@ static func _kart_prop(sculpt: Kit.Sculpt) -> void:
 		sculpt.tube(Vector3(wheel, 0.99, 0.24), 0.05, 0.05, 0.03, Color("#c0503f"), 8, Basis(Vector3.RIGHT, PI * 0.5))
 	sculpt.box(Vector3(-0.08, 1.26, 0.06), Vector3(0.02, 0.2, 0.02), CREAM)
 	sculpt.box(Vector3(-0.02, 1.32, 0.06), Vector3(0.1, 0.07, 0.01), Color("#f7f1e3"))
+
+
+## A big dream bubble on the roof with a little sheep curled inside, and a
+## pillow and a nightcap on the counter.
+static func _bubble_prop(sculpt: Kit.Sculpt) -> void:
+	sculpt.ball(Vector3(0, 2.95, -0.25), 0.42, Color("#d8ccff"), Color("#9fe0e0"), 12, 6, 1.0)
+	sculpt.ball(Vector3(-0.14, 3.1, 0.12), 0.07, Color("#ffffff"), Color.TRANSPARENT, 6, 3)
+	sculpt.ball(Vector3(0.02, 2.9, 0.12), 0.14, Color("#f4f0ff"), Color.TRANSPARENT, 8, 4, 0.8)
+	sculpt.ball(Vector3(-0.12, 2.92, 0.16), 0.06, Color("#4a3a4a"), Color.TRANSPARENT, 6, 3)
+	sculpt.box(Vector3(0, 2.5, -0.25), Vector3(0.05, 0.12, 0.05), BRASS)
+	sculpt.box(Vector3(-0.26, 1.02, 0.1), Vector3(0.36, 0.1, 0.24), Color("#f3ecfa"))
+	sculpt.tube(Vector3(0.28, 1.06, 0.1), 0.12, 0.02, 0.24, Color("#4f6f9a"), 8)
+	sculpt.ball(Vector3(0.3, 1.2, 0.1), 0.04, Color("#ffd166"), Color.TRANSPARENT, 6, 3)
