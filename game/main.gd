@@ -2398,7 +2398,11 @@ func _game_finished(result: Dictionary, saved_frames: Array[String] = [], saved_
 	var score_line := "練習分數 %d（不保存）"%int(result.get("score",0)) if practice else "本次成績 %d   ·   %s"%[int(result.get("score",0)),"輔助遊玩" if result.get("assisted",false) else "標準遊玩"]
 	# An arcade result shows its one score on the medal card below.
 	if arcade_result: score_line="練習回合（不保存）" if practice else ("輔助遊玩" if result.get("assisted",false) else "標準遊玩")
-	result_summary.add_child(Paper.label(score_line,20))
+	var score_record := Paper.label(score_line,20)
+	result_summary.add_child(score_record)
+	# The record keeps its full text from the first frame (readers and checks
+	# see the real score); it pops once instead of rolling (ART-76).
+	if not arcade_result: PaperMotion.pop(score_record,1.12,0.32)
 	if ordinary_eligible and reward_saved:
 		var award := HBoxContainer.new()
 		award.add_theme_constant_override("separation",8)
@@ -2808,11 +2812,14 @@ func _render_arcade_result(parent: VBoxContainer, summary: Dictionary) -> void:
 	card.add_child(words)
 	var rank := Paper.label(ArcadeMedal.NAMES[earned],26,ArcadeMedal.FACES[earned].lightened(0.25))
 	rank.name="ArcadeResultRank"
+	rank.theme_type_variation=&"TitleLabel"
 	words.add_child(rank)
 	var total := Paper.label("%d 分"%int(summary.get("total",0)),40,Paper.GOLD)
 	total.name="ArcadeResultScore"
+	total.theme_type_variation=&"NumeralLabel"
 	words.add_child(total)
-	PaperMotion.count_up(total,int(summary.get("total",0)),"%d 分")
+	total.custom_minimum_size.x=total.get_minimum_size().x
+	PaperMotion.count_up(total,int(summary.get("total",0)),"%d 分",0.6)
 	var verdict := Paper.label(str(summary.get("verdict","")),20)
 	verdict.name="ArcadeResultVerdict"
 	verdict.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
