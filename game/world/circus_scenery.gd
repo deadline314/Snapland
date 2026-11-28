@@ -582,6 +582,20 @@ func _topper(sculpt: Kit.Sculpt, top: Vector3, kind: String) -> void:
 			sculpt.box(top + Vector3(0.1, 1.04, 0), Vector3(0.1, 0.18, 0.08), Props.TEAL)
 			sculpt.box(top + Vector3(0.1, 1.18, 0), Vector3(0.08, 0.08, 0.08), Props.CREAM)
 			sculpt.box(top + Vector3(0.1, 1.06, 0.04), Vector3(0.7, 0.02, 0.02), Props.GOLD, Basis(Vector3.BACK, 0.12))
+		"wave":
+			# A little three-step bleacher; the middle spectators throw their arms up.
+			for step in 3:
+				sculpt.box(top + Vector3(0, 0.08 + step * 0.16, -step * 0.14), Vector3(1.0, 0.06, 0.16), Props.WOOD)
+			for seat in 5:
+				var x := -0.4 + seat * 0.2
+				var up := seat == 2 or seat == 3
+				var tone: Color = [Props.RED, Props.TEAL, Props.GOLD, Props.PLUM, Props.ROSE][seat]
+				var base := top + Vector3(x, 0.16 + (0.08 if up else 0.0), 0.02)
+				sculpt.box(base + Vector3(0, 0.08, 0), Vector3(0.1, 0.14, 0.06), tone)
+				sculpt.box(base + Vector3(0, 0.2, 0), Vector3(0.08, 0.08, 0.07), Props.CREAM)
+				if up:
+					for side: float in [-1.0, 1.0]:
+						sculpt.box(base + Vector3(side * 0.06, 0.26, 0), Vector3(0.025, 0.12, 0.025), tone)
 		"mirror":
 			# A gilt hand mirror held up on a stand, a beam of light bouncing off it
 			# to a balloon tied to the canopy.

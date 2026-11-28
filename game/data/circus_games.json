@@ -178,5 +178,25 @@
       "balloon",
       "lantern"
     ]
+  },
+  {
+    "id": "game-058",
+    "mode": "crowd_wave",
+    "zone": "circus",
+    "local_index": 10,
+    "arcade": true,
+    "name": "觀眾席波浪",
+    "goal": "觀眾席的人浪一圈圈傳過來，在人浪到你那格的瞬間起立，讓人浪繞場不斷。",
+    "instructions": "空白鍵、E、↑ 或手把 A 鍵：人浪傳到你的座位那一刻按下起立；沒有人浪時站起來，全場會只有你一個人站著。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助接人浪拿到金牌",
+    "ordinary": "跟著人浪起立，拿到銅牌",
+    "attraction_tag": "看台人浪",
+    "island_invitation": "人浪來了就站起來！站錯時機的話……全場都會轉頭看你，還有你的爆米花。",
+    "retake_props": [
+      "mascot",
+      "balloon",
+      "sign"
+    ]
   }
 ]
