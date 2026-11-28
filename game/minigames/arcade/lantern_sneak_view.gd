@@ -75,57 +75,176 @@ func _draw() -> void:
 
 # --- Backdrop ---------------------------------------------------------------
 
+## Back to front: night sky and a far skyline hung with paper lanterns, the
+## lit stall fronts along the back of the street, then the wet cobbles.
 func _draw_backdrop() -> void:
 	stamp(_street(), Vector2(0, 0))
-	_draw_shopfronts()
-	_draw_puddle_glints()
+	stamp(_skyline(), Vector2(0, 96))
+	_draw_far_lanterns()
+	_draw_stall_fronts()
+	_draw_reflections()
 
 
-## Rain-wet paving stones in staggered rows, with puddles that will hold the neon.
+## Rounded cobbles, each lit on its upper left and shaded below, with dark
+## grout and rain pooled between them.
 func _street() -> Texture2D:
 	return Pixels.cached("sneak|street", func() -> Image:
 		var image := Image.create(320, 180, false, Image.FORMAT_RGBA8)
 		for y in 180:
 			for x in 320:
-				var row := y / 7
-				var shift := (row % 2) * 6
-				var tone := STONE.lerp(STONE_LIGHT, Pixels.noise((x + shift) / 12, row, 31) * 0.6)
-				if y % 7 == 6 or (x + shift) % 12 == 0:
-					tone = STONE.darkened(0.35)
+				var row := y / 6
+				var shift := (row % 2) * 4
+				var cell := Vector2(float((x + shift) % 8) - 3.5, float(y % 6) - 2.5)
+				var stone := Vector2(cell.x / 3.6, cell.y / 2.7)
+				var tone := STONE.lerp(STONE_LIGHT, Pixels.noise((x + shift) / 8, row, 31) * 0.7)
+				if stone.length_squared() > 1.0:
+					tone = Color("#17142a")
+				else:
+					tone = Pixels.rounded(tone, stone * 0.8)
 				var puddle := sin(x * 0.05 + y * 0.11) + sin(x * 0.021 - y * 0.07) * 1.3
-				if puddle > 1.6:
-					tone = PUDDLE.lerp(Color("#3b4a78"), 0.3 * float((x + y) % 5 == 0))
+				if puddle > 1.5:
+					tone = tone.lerp(PUDDLE, 0.7).lerp(Color("#4a5a90"), 0.25 * float(cell.y < -1.0))
+				# Warmer near the stalls at the back of the street.
+				tone = tone.lerp(Color("#5a3a48"), clampf((60.0 - y) / 60.0, 0.0, 1.0) * 0.35)
 				image.set_pixel(x, y, tone)
 		return image)
 
 
-## Shopfronts along the top of the street: awnings, neon signs and a string of bulbs.
-func _draw_shopfronts() -> void:
+## Tiered roofs and towers against a deep sky, windows lit here and there.
+func _skyline() -> Texture2D:
+	return Pixels.cached("sneak|skyline", func() -> Image:
+		var image := Image.create(320, 18, false, Image.FORMAT_RGBA8)
+		for x in 320:
+			var block := x / 11
+			var top := 3.0 + 9.0 * Pixels.noise(block, 2, 41)
+			if x % 11 < 2:
+				top += 2.0
+			if block % 5 == 2:
+				top = maxf(0.0, top - 6.0 + absf(float(x % 11) - 5.0))
+			for y in 18:
+				var tone := Color("#120f24").lerp(Color("#2a1f40"), float(y) / 17.0 * 0.6)
+				if float(y) >= top:
+					tone = Color("#231b38")
+					if Pixels.noise(x / 2, y / 2, 43) > 0.84 and y > top + 2.0:
+						tone = Color("#ffcf7a").darkened(0.2 * Pixels.noise(x, y, 44))
+				elif Pixels.noise(x, y, 45) > 0.985:
+					tone = Color("#fff4d6")
+				image.set_pixel(x, y, tone)
+		return image)
+
+
+## Strings of paper lanterns across the far roofs, swaying and glowing.
+func _draw_far_lanterns() -> void:
+	for string in 3:
+		var left := string * 430.0 - 40.0
+		for i in 11:
+			var x := left + i * 44.0
+			var sag := 10.0 * sin(PI * float(i) / 10.0)
+			var sway := 0.0 if reduced_motion else sin(now * 1.3 + i * 0.7 + string) * 2.0
+			var at := Vector2(x + sway, 122.0 + sag)
+			var glow := 0.75 + 0.25 * (0.0 if reduced_motion else sin(now * 2.0 + i * 1.7))
+			draw_circle(at, 9.0, Color(Dengdeng.LANTERN_GLOW, 0.18 * glow))
+			draw_rect(Rect2(at - Vector2(4, 5), Vector2(8, 10)), Color(NEON[(i + string) % NEON.size()].lerp(Dengdeng.LANTERN, 0.5), glow))
+
+
+## A lit stall front: shaded striped awning with a scalloped lip, a warm
+## counter, a neon sign, and goods hanging from the awning.
+func _stall_front(colour: Color) -> Texture2D:
+	return Pixels.bake("sneak|front|%s" % colour.to_html(), Vector2i(44, 26), func(x: int, y: int) -> Color:
+		if y < 10:
+			# The awning: lit along its top, shading toward the lip.
+			var stripe := colour if (x / 4) % 2 == 0 else Color("#fff0cd")
+			var tone := stripe.lightened(0.15) if y < 2 else stripe.darkened(0.04 * y)
+			if y == 9 and x % 4 == 1:
+				return Pixels.CLEAR
+			return tone
+		if y < 12:
+			return Color("#2a1f30")
+		if y >= 22:
+			return Pixels.wood(Color("#8a5a3c"), x, y, 6, false)
+		# The lit stall interior, warmest in the middle.
+		var warm := Color("#ffcf7a").lerp(Color("#c46a3a"), absf(x - 22.0) / 22.0)
+		if (x == 1 or x == 42):
+			return Color("#3a2a30")
+		return warm.darkened(0.05 * float((x + y) % 3 == 0)))
+
+
+func _draw_stall_fronts() -> void:
 	for i in 7:
-		var x := i * 190.0 - 20.0
-		var tone: Color = AWNINGS[i % AWNINGS.size()]
-		panel(Rect2(x, 120, 180, 50), "planks", Color("#4a3a52"))
-		for stripe in 6:
-			draw_rect(Rect2(x + stripe * 30.0, 160, 30, 16), tone if stripe % 2 == 0 else Color("#fff0cd"))
+		var x := i * 186.0 - 10.0
+		var colour: Color = AWNINGS[i % AWNINGS.size()]
+		stamp(_stall_front(colour), Vector2(x, 132))
+		# The neon sign on the awning, buzzing now and then.
 		var glow: Color = NEON[i % NEON.size()]
-		var buzz := 1.0 if reduced_motion else 0.75 + 0.25 * float(sin(now * (3.0 + i) + i * 2.0) > -0.8)
-		draw_rect(Rect2(x + 40.0, 132, 100, 18), Color(glow, 0.25 * buzz))
-		draw_rect(Rect2(x + 46.0, 138, 88, 6), Color(glow, 0.9 * buzz))
-	for bulb in 26:
-		var x := bulb * 50.0 + 10.0
-		var y := 184.0 + 8.0 * sin(PI * fposmod(x, 250.0) / 250.0)
-		draw_rect(Rect2(x - 4.0, y, 8, 8), Color(NEON[bulb % NEON.size()], 0.85))
+		var buzz := 1.0 if reduced_motion else (0.4 if sin(now * (2.3 + i) + i * 5.0) > 0.97 else 1.0)
+		draw_rect(Rect2(x + 52.0, 138, 76, 14), Color(glow, 0.22 * buzz))
+		draw_rect(Rect2(x + 58.0, 142, 64, 6), Color(glow, 0.95 * buzz))
+		# Goods hanging from the awning lip, swinging a little.
+		for item in 4:
+			var swing := 0.0 if reduced_motion else sin(now * 1.6 + item + i) * 0.12
+			var hook := Vector2(x + 28.0 + item * 40.0, 176)
+			draw_set_transform(hook, swing)
+			draw_line(Vector2.ZERO, Vector2(0, 10), Color("#2a1f30"), 2.0)
+			var good: Color = [Color("#e2604f"), Color("#ffc46b"), Color("#7df0db"), Color("#f2e9d4")][(item + i) % 4]
+			draw_rect(Rect2(-6, 10, 12, 14), good.darkened(0.15))
+			draw_rect(Rect2(-6, 10, 6, 14), good)
+			draw_set_transform(Vector2.ZERO)
+		# Steam from the food stalls, drifting up past the awning.
+		if i % 2 == 0 and not reduced_motion:
+			for puff in 4:
+				var rise := fposmod(now * 18.0 + puff * 14.0 + i * 7.0, 56.0)
+				var at := Vector2(x + 90.0 + sin(now + puff * 2.0) * 8.0, 196.0 - rise)
+				draw_circle(at, 6.0 + rise * 0.12, Color("#f4ecff", 0.18 * (1.0 - rise / 56.0)))
 
 
-## Neon colours shimmering in the puddles.
-func _draw_puddle_glints() -> void:
-	if reduced_motion:
+## The stall lights and lanterns reflected in the wet cobbles, shimmering.
+func _draw_reflections() -> void:
+	for i in 7:
+		var x := i * 186.0 + 78.0
+		for streak in 5:
+			var wave := 0.0 if reduced_motion else sin(now * 3.0 + streak * 1.3 + i) * 3.0
+			var y := 214.0 + streak * 12.0
+			draw_rect(Rect2(x - 14.0 + wave, y, 28.0 - streak * 4.0, TEXEL), Color("#ffcf7a", 0.22 - streak * 0.035))
+	if not reduced_motion:
+		for i in 22:
+			var twinkle := fposmod(now * 0.7 + i * 0.29, 1.0)
+			if twinkle < 0.4:
+				var at := Vector2(fposmod(i * 157.0, 1280.0), 240.0 + fposmod(i * 89.0, 460.0))
+				draw_rect(Rect2((at / TEXEL).floor() * TEXEL, Vector2(TEXEL * 3.0, TEXEL)), Color(NEON[i % NEON.size()], 0.5))
+
+
+## Warm light spilling from each stall onto the street, drawn over the night.
+func _draw_stall_glow() -> void:
+	for i in 7:
+		var centre := Vector2(i * 186.0 + 78.0, 214.0)
+		for ring in 4:
+			draw_circle(centre, 110.0 - ring * 22.0, Color("#ffb45e", 0.04))
+
+
+## Shoppers drifting past in the foreground: the traveller's own pixel build,
+## dark against the lights, some under umbrellas.
+func _draw_shoppers() -> void:
+	for i in 6:
+		var speed := 0.0 if reduced_motion else (26.0 + i * 5.0) * (1.0 if i % 2 == 0 else -1.0)
+		var x := fposmod(i * 233.0 + now * speed, 1480.0) - 100.0
+		var at := Vector2(x, 792.0 + (i % 3) * 6.0)
+		var bob := 0.0 if reduced_motion else absf(sin(now * 4.0 + i)) * 3.0
+		var tint := Color("#1a1530")
+		Props.stamp(self, Hero.texture(&"idle", i % 3 != 0, "plain"), at - Hero.FEET * 3.2 - Vector2(0, bob), 3.2, tint)
+		if i % 3 == 1:
+			var top := at - Vector2(0, 160 + bob)
+			draw_colored_polygon(PackedVector2Array([top + Vector2(-46, 18), top + Vector2(0, -6), top + Vector2(46, 18)]), Color("#2a2140"))
+			draw_line(top + Vector2(0, 0), top + Vector2(0, 50), Color("#2a2140"), 3.0)
+
+
+## Drizzle on the drizzle variant: fine slanted streaks.
+func _draw_drizzle() -> void:
+	if str(state.get("variant_id", "")) != "drizzle" or reduced_motion:
 		return
-	for i in 24:
-		var twinkle := fposmod(now * 0.7 + i * 0.29, 1.0)
-		if twinkle < 0.4:
-			var at := Vector2(fposmod(i * 157.0, 1280.0), 210.0 + fposmod(i * 89.0, 500.0))
-			draw_rect(Rect2((at / TEXEL).floor() * TEXEL, Vector2(TEXEL * 3.0, TEXEL)), Color(NEON[i % NEON.size()], 0.55))
+	for i in 60:
+		var fall := fposmod(now * 520.0 + i * 97.0, 640.0)
+		var at := Vector2(fposmod(i * 131.0 + fall * 0.2, 1280.0), 120.0 + fall)
+		draw_line(at, at + Vector2(-4, 14), Color("#b9c6f0", 0.35), 1.5)
 
 
 # --- Scene ------------------------------------------------------------------
@@ -133,7 +252,8 @@ func _draw_puddle_glints() -> void:
 func _draw_scene() -> void:
 	var finale := str(state.get("phase", "")) == "finale"
 	# The night: everything dims except what the lanterns light.
-	draw_rect(Rect2(0, 196, 1280, 524), Color("#0e0a1c", 0.25 if finale else 0.45))
+	draw_rect(Rect2(0, 196, 1280, 524), Color("#0e0a1c", 0.25 if finale else 0.42))
+	_draw_stall_glow()
 	_draw_cart_targets()
 	if finale:
 		_draw_lit_street()
@@ -143,6 +263,8 @@ func _draw_scene() -> void:
 	_draw_carts()
 	_draw_keeper()
 	_draw_player()
+	_draw_shoppers()
+	_draw_drizzle()
 	_draw_lanterned()
 
 
@@ -208,24 +330,51 @@ func _draw_cart_targets() -> void:
 				draw_line(a.lerp(b, u), a.lerp(b, u + 0.09), Color(GOLD, 0.5 + 0.4 * flash), TEXEL * 0.75)
 
 
-func _cart() -> Texture2D:
-	return Pixels.bake("sneak|cart", Vector2i(30, 18), func(x: int, y: int) -> Color:
-		if y < 6:
-			return AWNINGS[0] if (x / 4) % 2 == 0 else Color("#fff0cd")
-		if y < 7:
-			return Color("#4a3a52")
-		if y >= 15:
-			return Color("#1b1a30") if x % 9 < 4 else Pixels.CLEAR
-		var goods := y >= 8 and y <= 10 and x >= 3 and x <= 26
-		if goods:
-			return [Color("#ffc46b"), Color("#ff6f91"), Color("#7df0db")][(x / 3) % 3]
-		return Pixels.wood(Color("#8a5a3c"), x, y, 5, false))
+## A stall cart seen from the front and a little above: a striped awning lit on
+## top and shaded toward its scalloped lip, two posts, a counter heaped with
+## goods under a warm bulb, a wooden body and two spoked wheels.
+func _cart(colour: Color) -> Texture2D:
+	return Pixels.bake("sneak|cart|%s" % colour.to_html(), Vector2i(32, 24), func(x: int, y: int) -> Color:
+		if y < 8:
+			var inset := maxi(0, 2 - y)
+			if x < inset or x > 31 - inset:
+				return Pixels.CLEAR
+			var stripe := colour if (x / 4) % 2 == 0 else Color("#fff0cd")
+			if y == 7 and x % 4 == 2:
+				return Pixels.CLEAR
+			return stripe.lightened(0.18) if y < 2 else stripe.darkened(0.05 * float(y))
+		if y < 9:
+			return Color("#2a1f30")
+		if y < 13:
+			if x == 2 or x == 29:
+				return Color("#4a3a52")
+			# Under the awning: a warm bulb glow over heaped goods.
+			if y >= 11 and x >= 4 and x <= 27:
+				return [Color("#ffc46b"), Color("#ff6f91"), Color("#7df0db"), Color("#f2e9d4")][(x / 3 + y) % 4].darkened(0.1 * float(y == 12))
+			return Color("#ffcf7a").lerp(Color("#a35a2a"), absf(x - 16.0) / 16.0)
+		if y < 20:
+			return Pixels.wood(Color("#8a5a3c"), x, y, 5, false).darkened(0.04 * float(y - 13))
+		var wheel := Vector2(float(x % 16) - 7.5, float(y) - 21.5)
+		if absf(wheel.x) < 2.6 and absf(wheel.y) < 2.6:
+			return Color("#c48f5c") if wheel.length() < 1.0 else Color("#2a1f30")
+		return Pixels.CLEAR)
 
 
 func _draw_carts() -> void:
+	var index := 0
 	for cart: Vector2 in state.get("carts", []):
-		Props.oval_shadow(self, cart + Vector2(0, 28), Vector2(64, 10), 0.4, SPRITE_SHADE)
-		stamp(_cart(), cart - CART * 0.5 + Vector2(-2, -12))
+		Props.oval_shadow(self, cart + Vector2(0, 34), Vector2(70, 12), 0.45, SPRITE_SHADE)
+		var colour: Color = AWNINGS[index % AWNINGS.size()]
+		stamp(_cart(colour), cart - Vector2(64, 50))
+		# A small lantern hanging off the awning's corner, swaying.
+		var sway := 0.0 if reduced_motion else sin(now * 1.5 + index) * 0.18
+		var hook := cart + Vector2(58, -22)
+		draw_set_transform(hook, sway)
+		draw_line(Vector2.ZERO, Vector2(0, 12), Color("#2a1f30"), 2.0)
+		draw_circle(Vector2(0, 22), 16.0, Color(Dengdeng.LANTERN_GLOW, 0.2))
+		Props.stamp(self, Dengdeng._lamp(), Vector2(-12, 10), 2.4)
+		draw_set_transform(Vector2.ZERO)
+		index += 1
 
 
 func _draw_keeper() -> void:
@@ -263,12 +412,21 @@ func _draw_player() -> void:
 ## The finale: lanterns light up along the whole street.
 func _draw_lit_street() -> void:
 	var age := now - float(state.get("phase_at", now))
+	var last := Vector2.ZERO
 	for i in 18:
 		var reveal := clampf(age * 6.0 - i * 0.35, 0.0, 1.0)
 		if reveal <= 0.0:
 			continue
 		var at := Vector2(40.0 + i * 70.0, 216.0 + 14.0 * sin(i * 0.9))
-		draw_circle(at + Vector2(0, 90), 70.0 * reveal, Color(BEAM, 0.12))
+		if i > 0 and last != Vector2.ZERO:
+			draw_line(last + Vector2(0, -2), at + Vector2(0, -2), Color("#2a1c18", 0.9), TEXEL)
+		last = at
+		# A warm pool of light on the wet cobbles, brightest under the lantern.
+		draw_set_transform(at + Vector2(0, 110), 0.0, Vector2(1.0, 0.42))
+		for ring in 4:
+			draw_circle(Vector2.ZERO, (78.0 - ring * 17.0) * reveal, Color("#ffb45e", 0.05 + ring * 0.015))
+		draw_set_transform(Vector2.ZERO)
+		draw_circle(at + Vector2(0, 22), 22.0 * reveal, Color(Dengdeng.LANTERN_GLOW, 0.16))
 		stamp(Dengdeng._lamp(), at - Vector2(20, 0), 3.0 * reveal)
 	if age > 0.8:
 		label(Vector2(640, 420), "整條街都亮了！", 36, GOLD)
