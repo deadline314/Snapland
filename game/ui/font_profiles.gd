@@ -56,6 +56,9 @@ static func refresh_context(locale: String = "") -> Font:
 	var context_locale := locale if not locale.is_empty() else TranslationServer.get_locale()
 	_active_locale = _locale_key(context_locale)
 	_active_font = _font_for_key(_active_locale, _style)
+	# Anything drawn with the engine default (ThemeDB.fallback_font, or a Control
+	# outside the Paper theme) gets the game's face too, never an OS font (ART-74).
+	ThemeDB.fallback_font = _active_font
 	return _active_font
 
 static func font_for_locale(locale_id: String, style: String = "") -> Font:
