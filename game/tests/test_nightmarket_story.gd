@@ -61,8 +61,10 @@ func _run() -> void:
 	if is_instance_valid(story_marker):
 		story_marker.visibility_changed.connect(func() -> void: marker_states.append(story_marker.visible))
 	main.world.interact()
-	_check(main.modal_kind == "dialogue" and main.dialogue[0].speaker == "阿浪" and str(main.dialogue[2].text).contains("幕幕"),
+	_check(main.modal_kind == "dialogue" and main.dialogue[0].speaker == "阿浪" and main.dialogue.any(func(line: Dictionary) -> bool: return str(line.get("text", "")).contains("幕幕")),
 		"real world interaction opens the on-duty story")
+	_check(main.cue_pantomime and is_instance_valid(main.stage_cues) and Visit.lines(Visit.NIGHTMARKET).all(func(line: Dictionary) -> bool: return main.Story.cue_valid(line)),
+		"the greeting opens on 阿浪's wordless shout, and every staged line is a valid cue")
 	if main.modal_kind != "dialogue":
 		await _finish()
 		return

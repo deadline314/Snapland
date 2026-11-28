@@ -57,8 +57,9 @@ func _run() -> void:
 	place.operate_train()
 	await _frames(15)
 	world.interact()
-	if not _check(_main.modal_kind == "dialogue" and _main.dialogue[0].speaker == "阿浪" and str(_main.dialogue[2].text).contains("幕幕"),
-		"physical interaction opens the short mechanic dialogue"):
+	if not _check(_main.modal_kind == "dialogue" and _main.dialogue[0].speaker == "阿浪" and _main.dialogue.any(func(line: Dictionary) -> bool: return str(line.get("text", "")).contains("幕幕"))
+		and _main.cue_pantomime and Visit.lines(Visit.TOY).all(func(line: Dictionary) -> bool: return _main.Story.cue_valid(line)),
+		"physical interaction opens the short mechanic dialogue on 阿浪 facing the wrong way"):
 		await _finish()
 		return
 	var train: Dictionary = place.train_state()

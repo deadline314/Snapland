@@ -136,7 +136,7 @@ func _validate_story_data() -> Array[String]:
 					errors.append("mission '%s' step %d has invalid kind, target_id or goal" % [quest_id, index])
 	return errors
 
-const CUE_KEYS := ["frame", "zoom", "emote", "emote_on", "action", "action_on", "hold", "prop", "prop_on", "exit"]
+const CUE_KEYS := ["frame", "zoom", "emote", "emote_on", "action", "action_on", "hold", "prop", "prop_on", "exit", "turn"]
 const StageCues = preload("res://game/story/stage_cues.gd")
 
 ## A staging cue only names known keys and emotes; a pantomime line must carry one.
@@ -147,7 +147,7 @@ static func cue_valid(line: Dictionary) -> bool:
 	for key in cue:
 		if not CUE_KEYS.has(str(key)): return false
 	if cue.has("emote") and not StageCues.MARKS.has(str(cue.emote)): return false
-	if cue.has("prop") and not StageCues.PROPS.has(str(cue.prop)): return false
+	if cue.has("prop") and not (StageCues.PROPS.has(str(cue.prop)) or str(cue.prop) == "none"): return false
 	if cue.has("hold") and not (float(cue.hold) >= 0.0 and float(cue.hold) <= 2.5): return false
 	return true
 

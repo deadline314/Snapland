@@ -10,7 +10,8 @@ extends Node3D
 ##   "emote": "!", "?", "!?", "…", "♪", "♥" or "sweat"; "emote_on": actor id
 ##   "action": authored NPC action ("greet", "interact", …); "action_on": actor id (default the speaker)
 ##   "hold": seconds of stillness before the text (a comedic beat)
-##   "prop": "bowtie"; "prop_on": actor id holding it (one prop at a time)
+##   "prop": "bowtie", "note", "bell" or "leaf_seat" ("none" puts it away); "prop_on": actor id holding it
+##   "turn": actor id who looks the other way for this beat
 ##   "exit": a stage double leaves the shot (with any prop it holds)
 ## An actor id "<role>_mirror" is a stage-made reflection of that role: a flipped,
 ## cool-tinted copy beside it. It strikes a pose only on the beat that asks and
@@ -26,7 +27,7 @@ const SUBTITLE_LIFT := 0.16
 ## Orthographic framing only needs the focus in front of the near plane; this is room to spare.
 const MIN_DEPTH := 20.0
 const MARKS := ["!", "?", "!?", "…", "♪", "♥", "sweat"]
-const PROPS := ["bowtie"]
+const PROPS := ["bowtie", "note", "bell", "leaf_seat"]
 const MIRROR_TINT := Color(0.74, 0.86, 1.0, 0.82)
 ## A reflection stands this far to the screen-right of its role.
 const MIRROR_GAP := 1.7
@@ -38,6 +39,7 @@ var pose_lookup: Callable
 ## (role, action) -> bool: plays the role's authored action; false when nothing played.
 var react: Callable
 var _posed: Dictionary = {}
+var _turned: Dictionary = {}
 var _doubles: Dictionary = {}
 var _prop: Sprite3D
 var _prop_holder: Node3D
@@ -110,9 +112,18 @@ func apply(cue: Dictionary, speaker_id: String) -> float:
 				_posed[sprite] = [sprite.texture, material.get_shader_parameter("texture_albedo") if material != null else null, material.get_shader_parameter("uv_rect") if material != null else null]
 				_show_pose(sprite, pose, Vector4(0, 0, 1, 1))
 	var prop := str(cue.get("prop", ""))
-	if PROPS.has(prop):
+	if prop == "none":
+		_clear_prop()
+	elif PROPS.has(prop):
 		var holder := _actor(str(cue.get("prop_on", speaker_id)))
 		if holder != null: _show_prop(prop, holder)
+	var turning := str(cue.get("turn", ""))
+	if not turning.is_empty():
+		# Faces the other way for this beat only (a look over the shoulder).
+		var sprite := _actor(turning) as Sprite3D
+		if sprite != null:
+			_turned[sprite] = sprite.flip_h
+			sprite.flip_h = not sprite.flip_h
 	return clampf(float(cue.get("hold", 0.0)), 0.0, 2.5)
 
 func _actor(id: String) -> Node3D:
@@ -149,7 +160,7 @@ func _show_prop(kind: String, holder: Node3D) -> void:
 	_prop = Sprite3D.new()
 	_prop.name = "StageProp"
 	_prop.texture = _prop_texture(kind)
-	_prop.pixel_size = 0.022
+	_prop.pixel_size = 0.034
 	_prop.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	_prop.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
 	_prop.shaded = false
@@ -163,6 +174,9 @@ func _show_prop(kind: String, holder: Node3D) -> void:
 	_prop_holder = holder
 
 func _restore_poses() -> void:
+	for sprite in _turned:
+		if is_instance_valid(sprite): sprite.flip_h = _turned[sprite]
+	_turned.clear()
 	for sprite in _posed:
 		if not is_instance_valid(sprite): continue
 		var saved: Array = _posed[sprite]
@@ -302,19 +316,55 @@ static var _props: Dictionary = {}
 ## A small pixel bowtie: two inked wings and a knot.
 static func _prop_texture(kind: String) -> Texture2D:
 	if _props.has(kind): return _props[kind]
-	var w := 30
-	var h := 18
+	# Every prop: an ink outline, a lit upper-left and a shaded lower-right.
+	var sizes := {"bowtie": Vector2i(30, 18), "note": Vector2i(26, 22), "bell": Vector2i(24, 26), "leaf_seat": Vector2i(30, 24)}
+	var size: Vector2i = sizes.get(kind, Vector2i(30, 18))
+	var w := size.x
+	var h := size.y
 	var image := Image.create(w, h, false, Image.FORMAT_RGBA8)
 	var inside := func(x: int, y: int) -> bool:
+		if x < 0 or y < 0 or x >= w or y >= h: return false
+		match kind:
+			"note":
+				# A paper slip with its top-right corner folded down.
+				return x >= 2 and x <= 23 and y >= 2 and y <= 19 and not (x > 17 and y < 8 and x - 17 > y - 2)
+			"bell":
+				var cx := absf(x - 11.5)
+				return (y >= 3 and y <= 19 and cx <= 3.0 + (y - 3) * 0.42) or (y >= 19 and y <= 21 and cx <= 10.5) or (y >= 0 and y <= 3 and cx <= 1.5) or (y >= 21 and y <= 24 and cx <= 2.0)
+			"leaf_seat":
+				var u := (x - 14.5) / 13.0
+				var v := (y - 11.5) / 10.0
+				return u * u + v * v * 1.6 <= 1.0 or (y >= 18 and absf(x - 14.5) <= 1.0)
 		var dx := absf(x - 14.5)
 		var dy := absf(y - 8.5)
 		return (dx <= 13.5 and dy <= dx * 0.55 + 2.0) or (dx <= 2.5 and dy <= 4.5)
+	var tones := {
+		"bowtie": [Color("#f27a8f"), Color("#e0546f"), Color("#a8324f")],
+		"note": [Color("#fffaf0"), Color("#f4e8cc"), Color("#d8c59c")],
+		"bell": [Color("#ffe9a0"), Color("#e8bd52"), Color("#a9782a")],
+		"leaf_seat": [Color("#a8e07c"), Color("#6fbf5a"), Color("#3f8a44")],
+	}
+	var tone: Array = tones.get(kind, tones.bowtie)
 	for y in range(h):
 		for x in range(w):
 			if not inside.call(x, y): continue
 			var edge: bool = not (inside.call(x - 1, y) and inside.call(x + 1, y) and inside.call(x, y - 1) and inside.call(x, y + 1))
-			var knot: bool = absf(x - 14.5) <= 2.5
-			image.set_pixel(x, y, Color("#3b2a44") if edge else (Color("#a8324f") if knot else Color("#e0546f")))
+			# Light falls from the upper left: lit, mid and shade bands across the diagonal.
+			var light := float(x) / w * 0.6 + float(y) / h * 0.4
+			var color: Color = tone[0] if light < 0.33 else (tone[1] if light < 0.68 else tone[2])
+			match kind:
+				"bowtie":
+					if absf(x - 14.5) <= 2.5: color = tone[2]
+				"note":
+					if x > 17 and y < 9 and x - 17 <= y - 2 + 1: color = tone[2]
+					elif y in [8, 12, 16] and x >= 5 and x <= 19 - (y % 3): color = Color("#c9584f")
+				"bell":
+					if y == 20 or (y >= 21 and absf(x - 11.5) <= 2.0): color = Color("#7a5320")
+					elif absf(x - 9.0) <= 0.6 and y >= 6 and y <= 15: color = Color("#fff6d4")
+				"leaf_seat":
+					if absf(x - 14.5) <= 0.5 and y >= 4 and y <= 19: color = tone[2]
+					elif y >= 8 and y <= 12 and x >= 18 and x <= 23: color = Color("#fff6d4")
+			image.set_pixel(x, y, Color("#3b2a44") if edge else color)
 	var texture := ImageTexture.create_from_image(image)
 	_props[kind] = texture
 	return texture

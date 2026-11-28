@@ -48,8 +48,10 @@ func _opening_then_cancel(world: Node, mark: Dictionary) -> bool:
 	if not await _choose_bed(world, 1) or not await _reach_host(world):
 		return false
 	world.interact()
-	if not _check(_main.modal_kind == "dialogue" and _main.dialogue[0].speaker == "票票"
-		and _main.dialogue[0].text.contains("盆栽先坐到頭排") and _main.dialogue[2].text.contains("首演"),
+	var spoken: Array = _main.dialogue.filter(func(line: Dictionary) -> bool: return not bool(line.get("pantomime", false)))
+	if not _check(_main.modal_kind == "dialogue" and _main.dialogue[0].speaker == "票票" and _main.cue_pantomime
+		and spoken[0].text.contains("盆栽先坐到頭排") and spoken[2].text.contains("首演")
+		and Visit.lines(Visit.GARDEN).all(func(line: Dictionary) -> bool: return _main.Story.cue_valid(line)),
 		"physical greeting opens the localized greenhouse joke and premiere clue"):
 		return false
 	var before_light := _light_state(world)

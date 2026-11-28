@@ -21,11 +21,17 @@ const VISITS := {
 		"saved_notice": "夜市造訪已登記，合照收進本子裡。",
 		"title": "倒數先吃宵夜",
 		"instructions": "到夜市入口找阿浪，在燈牌下合照。",
+		# 阿浪 shouts the wrong word, then the market's silence lands on him; the
+		# opening lines he is holding vanish with the delivery a beat later.
 		"lines": [
-			{"speaker": "阿浪", "text": "我把『最後一份宵夜』喊成『最後一場宵夜』，全攤都抬頭等開演。"},
-			{"speaker": "主角", "text": "那我先吃完，再鼓掌。"},
-			{"speaker": "阿浪", "text": "幕幕倒是真的在籌備首演。他把開場白寫在點心紙上，差點跟著外送走。"},
-			{"speaker": "阿浪", "text": "來燈牌下合張照。等他開演，就拿這張當我們的報到照！"},
+			{"speaker": "阿浪", "text": "", "pantomime": true, "cue": {"frame": "announcer", "zoom": 0.55, "action": "greet", "emote": "!", "hold": 1.0}},
+			{"speaker": "阿浪", "text": "", "pantomime": true, "cue": {"emote": "…", "hold": 1.0}},
+			{"speaker": "阿浪", "text": "我把『最後一份宵夜』喊成『最後一場宵夜』，全攤都抬頭等開演。", "cue": {"emote": "sweat"}},
+			{"speaker": "主角", "text": "那我先吃完，再鼓掌。", "cue": {"frame": "two", "zoom": 0.7, "emote": "♪", "emote_on": "player"}},
+			{"speaker": "阿浪", "text": "幕幕倒是真的在籌備首演。他把開場白寫在點心紙上，差點跟著外送走。", "cue": {"frame": "announcer", "zoom": 0.6, "prop": "note"}},
+			{"speaker": "阿浪", "text": "", "pantomime": true, "cue": {"prop": "none", "emote": "!?", "hold": 1.0}},
+			{"speaker": "阿浪", "text": "來燈牌下合張照。等他開演，就拿這張當我們的報到照！", "cue": {"frame": "two", "zoom": 0.75, "action": "greet"}},
+			{"speaker": "阿浪", "text": "", "pantomime": true, "cue": {"frame": "two", "zoom": 0.8, "emote": "♪", "hold": 0.9}},
 		],
 	},
 	CIRCUS: {
@@ -52,10 +58,14 @@ const VISITS := {
 		"saved_notice": "玩具城造訪已登記，合照收進本子裡。",
 		"title": "列車倒著報到",
 		"instructions": "往玩具城入口東側找阿浪，在車站前合照。",
+		# 阿浪 faces the wrong way, notices a beat late, and turns back.
 		"lines": [
-			{"speaker": "阿浪", "text": "我在車頭貼了『請向前看』。列車倒回來時，只有我在倒著看。"},
-			{"speaker": "主角", "text": "難怪車長的帽子要兩面都能戴。"},
-			{"speaker": "阿浪", "text": "幕幕想借車站的鈴當首演提示。來合張照，幫他認認是哪一站！"},
+			{"speaker": "阿浪", "text": "", "pantomime": true, "cue": {"frame": "announcer", "zoom": 0.55, "turn": "announcer", "emote": "?", "hold": 1.1}},
+			{"speaker": "阿浪", "text": "", "pantomime": true, "cue": {"emote": "!", "hold": 0.7}},
+			{"speaker": "阿浪", "text": "我在車頭貼了『請向前看』。列車倒回來時，只有我在倒著看。", "cue": {"emote": "sweat"}},
+			{"speaker": "主角", "text": "難怪車長的帽子要兩面都能戴。", "cue": {"frame": "two", "zoom": 0.7}},
+			{"speaker": "阿浪", "text": "幕幕想借車站的鈴當首演提示。來合張照，幫他認認是哪一站！", "cue": {"frame": "announcer", "zoom": 0.6, "prop": "bell", "emote": "♪"}},
+			{"speaker": "阿浪", "text": "", "pantomime": true, "cue": {"frame": "two", "zoom": 0.8, "emote": "♪", "hold": 0.9}},
 		],
 	},
 	GARDEN: {
@@ -65,10 +75,15 @@ const VISITS := {
 		"saved_notice": "溫室造訪已登記，合照收進本子裡。",
 		"title": "盆栽先坐頭排",
 		"instructions": "到日照窗東南側找票票，和亮著的植床合照。",
+		# 票票 proudly shows the leaf seat card, then deflates; the line about the
+		# lit seat for latecomers gets a held pause before it.
 		"lines": [
-			{"speaker": "票票", "text": "幕幕借了三張葉形座位牌。我照順序排好，光一轉，盆栽先坐到頭排。"},
-			{"speaker": "主角", "text": "那三盆要各買一張票嗎？"},
-			{"speaker": "票票", "text": "它們算布景。幕幕說，首演要留一個亮著的座位給晚到的人。來，把今天亮著的那一床拍進去。"},
+			{"speaker": "票票", "text": "", "pantomime": true, "cue": {"frame": "ticket", "zoom": 0.55, "action": "greet", "prop": "leaf_seat", "emote": "♪", "hold": 1.1}},
+			{"speaker": "票票", "text": "", "pantomime": true, "cue": {"emote": "…", "hold": 0.9}},
+			{"speaker": "票票", "text": "幕幕借了三張葉形座位牌。我照順序排好，光一轉，盆栽先坐到頭排。", "cue": {"emote": "sweat"}},
+			{"speaker": "主角", "text": "那三盆要各買一張票嗎？", "cue": {"frame": "two", "zoom": 0.7, "emote": "?", "emote_on": "player"}},
+			{"speaker": "票票", "text": "它們算布景。幕幕說，首演要留一個亮著的座位給晚到的人。來，把今天亮著的那一床拍進去。", "cue": {"frame": "ticket", "zoom": 0.6, "prop": "none", "hold": 0.5}},
+			{"speaker": "票票", "text": "", "pantomime": true, "cue": {"frame": "two", "zoom": 0.8, "emote": "♪", "hold": 0.9}},
 		],
 	},
 }
