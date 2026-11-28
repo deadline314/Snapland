@@ -218,5 +218,25 @@
       "bench",
       "sign"
     ]
+  },
+  {
+    "id": "game-072",
+    "mode": "music_box",
+    "zone": "toy",
+    "local_index": 12,
+    "arcade": true,
+    "name": "音盒補拍",
+    "goal": "音盒的圓筒轉動時，有些音針掉了；空的針孔轉到音梳的那一刻按下，把缺的音補上，讓曲子完整播完。",
+    "instructions": "空白鍵、↓ 或手把 A 鈕：空的針孔轉到音梳時按下補上音針。點一下畫面也可以。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助把曲子補完拿到金牌",
+    "ordinary": "針孔轉到音梳時按下補上音針，拿到銅牌",
+    "attraction_tag": "發條音樂盒",
+    "island_invitation": "空的針孔轉到音梳時按下去！漏太多拍，盒子裡的小丑會彈出來給你一拳。",
+    "retake_props": [
+      "mascot",
+      "lantern",
+      "sign"
+    ]
   }
 ]

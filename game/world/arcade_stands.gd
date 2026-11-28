@@ -33,6 +33,8 @@ const STANDS := {
 			"stand": Vector3(-6.0, 0.2, 1.6), "point": Vector3(-4.95, 0.2, 3.0), "prop": "soldier", "paint": Color("#5b6f9a")},
 		{"id": "game-071", "title": "紙盒變車", "prompt": "紙盒變車 · 空中扶正紙箱車",
 			"stand": Vector3(-2.6, 0.2, 7.9), "point": Vector3(-1.5, 0.2, 6.6), "prop": "kart", "paint": Color("#c99a62")},
+		{"id": "game-072", "title": "音盒補拍", "prompt": "音盒補拍 · 針孔到音梳時按下",
+			"stand": Vector3(2.6, 0.2, 7.9), "point": Vector3(1.5, 0.2, 6.6), "prop": "musicbox", "paint": Color("#6e4630")},
 	],
 	"garden": [
 		{"id": "game-073", "title": "螢火蟲長曝光", "prompt": "螢火蟲長曝光 · 忍住別按",
@@ -91,6 +93,7 @@ static func build(world: Node3D, region: String) -> void:
 			"puppet": _puppet_prop(sculpt)
 			"dice": _dice_prop(sculpt)
 			"kart": _kart_prop(sculpt)
+			"musicbox": _musicbox_prop(sculpt)
 			"camera": _camera_prop(sculpt)
 			"lily": _lily_prop(sculpt)
 			"mushroom": _mushroom_prop(sculpt)
@@ -574,3 +577,22 @@ static func _bubble_prop(sculpt: Kit.Sculpt) -> void:
 	sculpt.box(Vector3(-0.26, 1.02, 0.1), Vector3(0.36, 0.1, 0.24), Color("#f3ecfa"))
 	sculpt.tube(Vector3(0.28, 1.06, 0.1), 0.12, 0.02, 0.24, Color("#4f6f9a"), 8)
 	sculpt.ball(Vector3(0.3, 1.2, 0.1), 0.04, Color("#ffd166"), Color.TRANSPARENT, 6, 3)
+
+
+## A big wind-up music box on the roof with its lid open and a clown on a
+## spring popping out, and a little brass cylinder and comb on the counter.
+static func _musicbox_prop(sculpt: Kit.Sculpt) -> void:
+	var walnut := Color("#6e4630")
+	var brass := Color("#c9953e")
+	sculpt.box(Vector3(-0.1, 2.62, -0.3), Vector3(0.62, 0.3, 0.36), walnut)
+	sculpt.box(Vector3(-0.1, 2.62, -0.115), Vector3(0.4, 0.14, 0.02), brass)
+	sculpt.box(Vector3(-0.1, 2.9, -0.46), Vector3(0.62, 0.32, 0.04), walnut.lightened(0.1), Basis(Vector3.RIGHT, -0.5))
+	sculpt.box(Vector3(0.24, 2.85, -0.3), Vector3(0.03, 0.22, 0.03), Color("#c3c8cf"), Basis(Vector3.BACK, -0.3))
+	sculpt.box(Vector3(0.3, 2.98, -0.3), Vector3(0.12, 0.12, 0.1), Color("#f7f1e3"))
+	sculpt.box(Vector3(0.3, 3.06, -0.3), Vector3(0.14, 0.05, 0.11), Color("#c0503f"))
+	sculpt.box(Vector3(0.36, 2.98, -0.24), Vector3(0.04, 0.04, 0.03), Color("#c0503f"))
+	sculpt.box(Vector3(-0.48, 2.62, -0.3), Vector3(0.04, 0.04, 0.04), brass)
+	sculpt.box(Vector3(-0.52, 2.62, -0.3), Vector3(0.03, 0.16, 0.06), brass)
+	sculpt.tube(Vector3(0.0, 1.05, 0.1), 0.07, 0.07, 0.34, brass, 10, Basis(Vector3.BACK, PI * 0.5))
+	for tooth in 5:
+		sculpt.box(Vector3(-0.12 + tooth * 0.06, 1.0, 0.22), Vector3(0.03, 0.02, 0.14), Color("#c3c8cf"))
