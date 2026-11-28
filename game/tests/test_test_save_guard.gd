@@ -100,6 +100,8 @@ func _build_fixture_project(project_dir: String) -> bool:
 	for directory: String in FIXTURE_RESOURCE_DIRS:
 		if not _stage_fixture_resources(project_dir, directory, FIXTURE_RESOURCE_DIRS[directory]):
 			return false
+	if not _stage_script_dependencies(project_dir, "res://game/core/progress.gd", {}):
+		return false
 	if not _make_fixture_dir(project_dir.path_join("game/tests")):
 		return false
 	var child := "game/tests/test_save_guard_child.gd"
@@ -129,6 +131,37 @@ func _stage_fixture_resources(project_dir: String, relative_dir: String, extensi
 		if not _check(not source.is_link(name), "Fixture resource is a link: " + source_path):
 			return false
 		if not _copy_fixture_file(source_path, target.path_join(name)):
+			return false
+	return true
+
+## Progress may preload scripts outside the staged directories (render_quality.gd since MAIN-51).
+## Copy every script dependency it reaches so the probe fails only on real save-guard problems.
+func _stage_script_dependencies(project_dir: String, script_path: String, seen: Dictionary) -> bool:
+	if seen.has(script_path):
+		return true
+	seen[script_path] = true
+	# ResourceLoader.get_dependencies does not list a script's preloads, so read them from the source.
+	var pattern := RegEx.create_from_string('(?:pre)?load[(] *"(res://[^"]+)"')
+	for found: RegExMatch in pattern.search_all(FileAccess.get_file_as_string(script_path)):
+		var dependency := found.get_string(1)
+		if not _check(FileAccess.file_exists(dependency), "Progress dependency '%s' (from %s) is missing" % [dependency, script_path]):
+			return false
+		var target := project_dir.path_join(dependency.trim_prefix("res://"))
+		if not FileAccess.file_exists(target):
+			if not DirAccess.dir_exists_absolute(target.get_base_dir()) and not _make_fixture_tree(project_dir, target.get_base_dir()):
+				return false
+			if not _copy_fixture_file(dependency, target):
+				return false
+		if dependency.get_extension() == "gd" and not _stage_script_dependencies(project_dir, dependency, seen):
+			return false
+	return true
+
+func _make_fixture_tree(project_dir: String, directory: String) -> bool:
+	var relative := directory.trim_prefix(project_dir).trim_prefix("/")
+	var current := project_dir
+	for part: String in relative.split("/", false):
+		current = current.path_join(part)
+		if not DirAccess.dir_exists_absolute(current) and not _make_fixture_dir(current):
 			return false
 	return true
 
