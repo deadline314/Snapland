@@ -50,6 +50,8 @@ const FLY_SECONDS := 0.3
 const LEAF_SECONDS := 0.26
 const LIFT_SECONDS := 0.14
 const SWEEP_SECONDS := 0.28
+## Stamped headlines print at multiples of this size (see _draw_headline).
+const HEADLINE_SIZE_STEP := 8.0
 ## Idle life per kind: [degrees of sway, pivot as a fraction of the item,
 ## breath (scale amplitude)]. Tags hang from their eyelet, cards from their tape.
 const SWAY := {
@@ -468,6 +470,8 @@ class Item extends Control:
 		set(value):
 			lift = value
 			queue_redraw()
+	## The headline's printed font size (see _draw_headline).
+	var _printed := 0.0
 	var wiggle := 0.0:
 		set(value):
 			wiggle = value
@@ -945,10 +949,18 @@ class Item extends Control:
 		if side_room > 0.0:
 			big = minf(big, side_room / (per.x * cos(angle)))
 		big = minf(cap, maxf(least, floorf(big)))
-		var text_size := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, int(big))
+		# Every font size gets its own glyph pages in video memory, and the fitted
+		# size follows the entrance and the sway frame by frame. Keep printing at
+		# one size (a step with a tenth of headroom) while the fit stays within a
+		# quarter below it, and scale the print down to the fit.
+		if _printed < big or _printed > big * 1.25:
+			_printed = ceilf(big * 1.1 / HEADLINE_SIZE_STEP) * HEADLINE_SIZE_STEP
+		var printed := _printed
+		var fit := big / printed
+		var text_size := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, int(printed))
 		var away := 1.0 - enter
 		var slam := 1.0 + 0.7 * away
-		draw_set_transform(origin, angle, Vector2(slam, slam))
+		draw_set_transform(origin, angle, Vector2(slam, slam) * fit)
 		var tall := text_size.y
 		# Halftone burst and a cut-paper strip behind the letters.
 		var burst: PackedVector2Array = Kit.burst_shape(Vector2(text_size.x * 0.7, -tall * 0.62), Vector2(text_size.x * 0.66, tall * (1.1 if bleed > 0.0 else 0.8)), 13, salt)
@@ -956,22 +968,22 @@ class Item extends Control:
 		var strip: PackedVector2Array = Kit.torn(Rect2(-16.0, -tall * 0.6, text_size.x + 34.0, tall * 0.68), salt, 4.0, 9.0)
 		draw_colored_polygon(strip, swatch)
 		Kit.fill(self, strip, Kit.halftone(0), Color(Props.deepen(swatch, 0.35), 0.5))
-		var weight := clampf(roundf(big / 9.0), 6.0, 14.0)
+		var weight := clampf(roundf(printed / 9.0), 6.0, 14.0)
 		var baseline := Vector2(0.0, -tall * 0.14)
-		draw_string(font, baseline + Vector2(weight * 0.7, weight * 0.8), text, HORIZONTAL_ALIGNMENT_LEFT, -1, int(big), Color(INK, 0.85))
-		draw_string_outline(font, baseline, text, HORIZONTAL_ALIGNMENT_LEFT, -1, int(big), int(weight), INK)
+		draw_string(font, baseline + Vector2(weight * 0.7, weight * 0.8), text, HORIZONTAL_ALIGNMENT_LEFT, -1, int(printed), Color(INK, 0.85))
+		draw_string_outline(font, baseline, text, HORIZONTAL_ALIGNMENT_LEFT, -1, int(printed), int(weight), INK)
 		# Off-register sea print under the cream face, like a cheap ticket press.
-		draw_string(font, baseline + Vector2(-weight * 0.4, -weight * 0.35), text, HORIZONTAL_ALIGNMENT_LEFT, -1, int(big), SEA)
-		draw_string(font, baseline, text, HORIZONTAL_ALIGNMENT_LEFT, -1, int(big), CREAM)
+		draw_string(font, baseline + Vector2(-weight * 0.4, -weight * 0.35), text, HORIZONTAL_ALIGNMENT_LEFT, -1, int(printed), SEA)
+		draw_string(font, baseline, text, HORIZONTAL_ALIGNMENT_LEFT, -1, int(printed), CREAM)
 		_draw_stamp_frame(Rect2(-12.0, -tall * 0.98, text_size.x + 26.0, tall * 1.06))
 		# Small stickers: the place name and the eyebrow line, slapped on askew.
-		var sticker_x := text_size.x + 30.0
+		var sticker_x := text_size.x * fit + 30.0
 		for entry in [[note, RIM, -4.0], [shown_caption, CREAM, 3.0]]:
 			var words: String = entry[0]
 			if words.is_empty():
 				continue
 			var extent := font.get_string_size(words, HORIZONTAL_ALIGNMENT_LEFT, -1, small)
-			draw_set_transform(origin + Vector2(sticker_x, -tall * 0.3).rotated(angle) * slam, deg_to_rad(float(entry[2])), Vector2(slam, slam))
+			draw_set_transform(origin + Vector2(sticker_x, -tall * fit * 0.3).rotated(angle) * slam, deg_to_rad(float(entry[2])), Vector2(slam, slam))
 			var box := Rect2(Vector2(0, -extent.y * 0.5 - 4.0), extent + Vector2(14, 8))
 			draw_rect(Rect2(box.position + Vector2(3, 3), box.size), Color(Paper.SHADOW, 0.45))
 			draw_rect(box, entry[1])
