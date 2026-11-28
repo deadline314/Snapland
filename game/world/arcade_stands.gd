@@ -55,6 +55,8 @@ const STANDS := {
 			"stand": Vector3(2.6, 0.2, -7.7), "point": Vector3(1.55, 0.2, -6.35), "prop": "code", "paint": Color("#3a3f5c")},
 		{"id": "game-081", "title": "根系蓄水", "prompt": "根系蓄水 · 按住澆到刻線",
 			"stand": Vector3(8.45, 0.86, -3.1), "point": Vector3(7.75, 0.86, -1.95), "prop": "roots", "paint": Color("#4f7f6a")},
+		{"id": "game-082", "title": "葉舟搬家", "prompt": "葉舟搬家 · 左右划槳載螞蟻",
+			"stand": Vector3(8.45, 1.12, -7.0), "point": Vector3(8.1, 1.12, -5.6), "prop": "leafboat", "paint": Color("#3f7f8a")},
 	],
 	# Hotel stands use the kept sites in hotel_world.STAND_SITES (stand and point copied).
 	"hotel": [
@@ -122,6 +124,7 @@ static func build(world: Node3D, region: String) -> void:
 			"post": _post_prop(sculpt)
 			"bee": _bee_prop(sculpt)
 			"roots": _roots_prop(sculpt)
+			"leafboat": _leafboat_prop(sculpt)
 			"book": _book_prop(sculpt)
 			"lift": _lift_prop(sculpt)
 			"window": _window_prop(sculpt)
@@ -561,6 +564,23 @@ static func _roots_prop(sculpt: Kit.Sculpt) -> void:
 		sculpt.box(at + Vector3(0, 0.12, 0), Vector3(0.02, 0.1, 0.02), leaf.darkened(0.2))
 		for side: float in [-1.0, 1.0]:
 			sculpt.ball(at + Vector3(side * 0.04, 0.17, 0), 0.035, leaf, Color.TRANSPARENT, 5, 2, 0.6)
+
+
+## A curled green leaf boat with a little paddle across it on the roof, a
+## blue ribbon of stream under it, and a pink petal with ants on the counter.
+static func _leafboat_prop(sculpt: Kit.Sculpt) -> void:
+	var leaf := Color("#5fa04a")
+	sculpt.box(Vector3(0, 2.44, -0.3), Vector3(1.2, 0.04, 0.4), Color("#3f8fa8"))
+	sculpt.ball(Vector3(0, 2.6, -0.3), 0.42, leaf, leaf.lightened(0.2), 10, 4, 0.35)
+	sculpt.box(Vector3(0, 2.68, -0.3), Vector3(0.72, 0.03, 0.03), leaf.darkened(0.3))
+	sculpt.box(Vector3(0.05, 2.8, -0.28), Vector3(0.7, 0.04, 0.04), Color("#8a6640"), Basis(Vector3.BACK, 0.35))
+	sculpt.box(Vector3(0.36, 2.92, -0.28), Vector3(0.16, 0.1, 0.03), Color("#b5884e"), Basis(Vector3.BACK, 0.35))
+	for ant in 3:
+		sculpt.ball(Vector3(-0.22 + ant * 0.16, 2.72, -0.12), 0.035, Color("#2a2020"), Color.TRANSPARENT, 5, 2)
+	sculpt.ball(Vector3(0.28, 1.0, 0.12), 0.15, Color("#f2a7b8"), Color("#ffd166"), 8, 3, 0.3)
+	for ant in 2:
+		sculpt.ball(Vector3(0.22 + ant * 0.12, 1.06, 0.12), 0.03, Color("#2a2020"), Color.TRANSPARENT, 5, 2)
+	sculpt.box(Vector3(-0.3, 1.0, 0.1), Vector3(0.34, 0.06, 0.26), CREAM)
 
 
 ## A big open book on the roof with its two pages swinging up to clap, a

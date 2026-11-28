@@ -178,5 +178,25 @@
       "hat",
       "bench"
     ]
+  },
+  {
+    "id": "game-082",
+    "mode": "leaf_boat",
+    "zone": "garden",
+    "local_index": 10,
+    "arcade": true,
+    "name": "葉舟搬家",
+    "goal": "左右交替划槳，讓葉子小船順著溪流載上漂在花瓣上的螞蟻；撞上石頭或捲進漩渦就翻船，一群螞蟻把濕淋淋的主角扛走。",
+    "instructions": "←、→ 或手把十字鍵、左搖桿：往那一邊划一槳。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助載螞蟻拿到金牌",
+    "ordinary": "划葉舟載上螞蟻，拿到銅牌",
+    "attraction_tag": "苔石小溪",
+    "island_invitation": "一群螞蟻困在花瓣上等人來載。左右交替划槳最快，撞到石頭的話，換螞蟻扛你回家！",
+    "retake_props": [
+      "flower_horn",
+      "hat",
+      "bench"
+    ]
   }
 ]
