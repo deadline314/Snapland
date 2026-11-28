@@ -87,21 +87,76 @@ func _draw() -> void:
 # --- Backdrop ---------------------------------------------------------------
 
 func _draw_backdrop() -> void:
-	# The inverted sky: deepest blue up by the hanging avenue, pale at the water.
+	# The inverted sky: deep blue up by the hanging avenue, warm haze and a low
+	# sun just above the water, the far avenue hanging upside down in silhouette.
 	stamp(_sky(), Vector2.ZERO)
+	stamp(_skyline(), Vector2(0, 112))
 	_draw_clouds()
 	_draw_hanging_avenue()
 	_draw_pool()
 	_draw_rim()
 
 
+## Twelve dithered bands from deep blue to sky to a warm haze, with the sun's
+## glow sitting low over the water (the mirror world's horizon is the pool).
 func _sky() -> Texture2D:
 	return Pixels.cached("premiere|sky", func() -> Image:
 		var image := Image.create(320, 124, false, Image.FORMAT_RGBA8)
+		var stops: Array[Color] = [Color("#3f68b4"), Color("#6fa6dc"), Color("#a9d8f0"), Color("#f2e2c4")]
 		for y in 124:
 			for x in 320:
-				var u := float(y) / 123.0 + (Pixels.BAYER[(y % 4) * 4 + x % 4] / 16.0 - 0.5) * 0.08
-				var tone := SKY_DEEP.lerp(SKY, floorf(clampf(u, 0.0, 1.0) * 6.0) / 6.0)
+				var u := clampf(float(y) / 123.0 + (Pixels.BAYER[(y % 4) * 4 + x % 4] / 16.0 - 0.5) * 0.06, 0.0, 1.0)
+				var band := floorf(u * 12.0) / 12.0
+				var leg := minf(2.0, floorf(band * 3.0))
+				var tone: Color = stops[int(leg)].lerp(stops[int(leg) + 1], band * 3.0 - leg)
+				var sun := Vector2(x - 246.0, (y - 112.0) * 1.6).length()
+				if sun < 46.0:
+					var glow := floorf((1.0 - sun / 46.0) * 4.0 + Pixels.BAYER[(y % 4) * 4 + x % 4] / 32.0) / 4.0
+					tone = tone.lerp(Color("#fff3d6"), glow * 0.7)
+				image.set_pixel(x, y, tone)
+		return image)
+
+
+## The far avenue upside down: rooftops, the welcome arch, palms and lamps
+## hanging from the lawn, hazed blue and lit along their lower edges by the pool.
+func _skyline() -> Texture2D:
+	return Pixels.cached("premiere|skyline", func() -> Image:
+		var size := Vector2i(320, 48)
+		var image := Image.create(size.x, size.y, false, Image.FORMAT_RGBA8)
+		var depth := PackedFloat32Array()
+		depth.resize(size.x)
+		for x in size.x:
+			# Rooftops: blocks of varied width and drop, gables pointing down.
+			var block := x / 26
+			var drop := 10.0 + 12.0 * Pixels.noise(block, 1, 31)
+			var inside := float(x % 26)
+			depth[x] = drop + minf(inside, 25.0 - inside) * (0.5 if Pixels.noise(block, 2, 31) > 0.5 else 0.0)
+		for x in size.x:
+			# Palms: a trunk down to a crown of fronds.
+			for palm: float in [42.0, 98.0, 214.0, 278.0]:
+				if absf(x - palm) < 1.5:
+					depth[x] = maxf(depth[x], 34.0)
+				elif absf(x - palm) < 8.0:
+					depth[x] = maxf(depth[x], 34.0 + 6.0 * (1.0 - absf(x - palm) / 8.0) - 2.0 * float(x % 3 == 0))
+		for y in size.y:
+			for x in size.x:
+				var reach := depth[x]
+				# The welcome arch upside down: pillars hanging from the lawn and
+				# the bow curving below them like a smile.
+				var dx := absf(x - 150.0)
+				var curve := 30.0 + 15.0 * sqrt(maxf(0.0, 1.0 - (dx / 34.0) * (dx / 34.0)))
+				var arch := (dx >= 30.0 and dx < 36.0 and y <= 32) or (dx < 36.0 and absf(float(y) - curve) < 2.0)
+				if arch:
+					reach = maxf(reach, float(y) + 1.5)
+				elif dx < 30.0 and float(y) > 12.0:
+					continue
+				if float(y) > reach:
+					continue
+				var tone := Color("#46609c").lerp(Color("#7894c8"), float(y) / size.y * 0.7)
+				if float(y) > reach - 1.5:
+					tone = Color("#d9e9f6")
+				elif (x + y) % 9 == 0 and y > 4 and y < reach - 3:
+					tone = tone.lightened(0.12)
 				image.set_pixel(x, y, tone)
 		return image)
 
@@ -112,10 +167,13 @@ func _draw_clouds() -> void:
 		if float(y) < 8.0 - bump or (x < 2 or x > 31) and y < 5:
 			return Pixels.CLEAR
 		return Pixels.grainy(Color("#f4fbff").darkened(0.06 * float(y > 6)), x, y, 0.04))
-	for i in 5:
-		var speed := 0.0 if reduced_motion else 9.0 + i * 3.0
-		var x := fposmod(i * 290.0 + now * speed, 1500.0) - 180.0
-		stamp(cloud, Vector2(x, 250.0 + (i % 3) * 52.0), TEXEL, Color(1, 1, 1, 0.9))
+	# Two depths: small hazy clouds far off drift slowly, big near ones faster.
+	for i in 9:
+		var near := i % 3 == 0
+		var speed := 0.0 if reduced_motion else (14.0 if near else 6.0) + i * 1.5
+		var x := fposmod(i * 197.0 + now * speed, 1560.0) - 200.0
+		var y := 236.0 + (i * 53) % 170
+		stamp(cloud, Vector2(x, y), TEXEL * (1.0 if near else 0.5), Color(1, 1, 1, 0.92 if near else 0.6))
 
 
 ## The avenue turned upside down: paving and lawn along the top, flowerbeds and
@@ -189,11 +247,92 @@ func _draw_pool() -> void:
 		var at := Vector2(250.0 + i * 340.0, 662.0)
 		draw_rect(Rect2(at, Vector2(120, 20)), Color("#2f6f80", 0.45))
 		draw_rect(Rect2(at + Vector2(8, -14), Vector2(104, 14)), Color("#5f9a6a", 0.35))
+	# Light caustics: two webs of bright lines sliding against each other.
+	var web := _caustics()
+	for layer in 2:
+		var drift := 0.0 if reduced_motion else now * (7.0 if layer == 0 else -5.0)
+		var x0 := fposmod(drift + layer * 140.0, 320.0) - 320.0
+		for row in 2:
+			for column in 6:
+				stamp(web, Vector2(x0 + column * 320.0, RIM_BOTTOM + row * 108.0 + layer * 50.0), TEXEL, Color(1, 1, 1, 0.22 if layer == 0 else 0.14))
+	# Sun shimmer: sparkles on the water near the rim under the low sun.
+	if not reduced_motion:
+		for i in 18:
+			var phase := fposmod(now * 1.3 + i * 0.37, 1.0)
+			if phase < 0.5:
+				var at := Vector2(860.0 + Pixels.noise(i, int(now * 1.3 + i * 0.37), 41) * 300.0, RIM_BOTTOM + 8.0 + Pixels.noise(i, 3, 41) * 60.0)
+				draw_rect(Rect2((at / TEXEL).floor() * TEXEL, Vector2(TEXEL * (2.0 if phase < 0.25 else 1.0), TEXEL)), Color("#fff7dc", 0.85))
 	if not reduced_motion:
 		for i in 14:
 			var y := RIM_BOTTOM + 18.0 + fposmod(i * 37.0 + now * 6.0, 196.0)
 			var x := fposmod(i * 163.0 + sin(now * 0.7 + i) * 20.0, 1280.0)
 			draw_rect(Rect2(x, roundf(y / TEXEL) * TEXEL, 36.0 + (i % 3) * 16.0, TEXEL), Color("#a9dcef", 0.35))
+
+
+## A tileable web of caustic light: bright where two warped wave fields cross.
+func _caustics() -> Texture2D:
+	return Pixels.cached("premiere|caustics", func() -> Image:
+		var image := Image.create(80, 27, false, Image.FORMAT_RGBA8)
+		for y in 27:
+			for x in 80:
+				var u := TAU * x / 80.0
+				var v := TAU * y / 27.0
+				var a := sin(u * 2.0 + sin(v) * 1.4) + sin(v * 2.0 + sin(u * 3.0) * 0.9)
+				var b := sin(u * 3.0 - v + sin(u + v * 2.0))
+				var line := minf(absf(a), absf(b))
+				if line < 0.16:
+					image.set_pixel(x, y, Color("#e9fbff"))
+				elif line < 0.3:
+					image.set_pixel(x, y, Color("#bfeefa", 0.55))
+		return image)
+
+
+## The welcome crowd watching from the near side of the pool: dark silhouettes
+## with a rim of sky light that bob while they wait, hop and cheer at a photo
+## (arms up and stars for a great one), wince at a bump and stand for the bow.
+func _draw_audience() -> void:
+	var shapes: Array[Texture2D] = []
+	for kind in 4:
+		shapes.append(Pixels.bake("premiere|fan|%d" % kind, Vector2i(18, 20), func(x: int, y: int) -> Color:
+			var head := Vector2((x + 0.5 - 9.0) / 4.8, (y + 0.5 - 6.5) / 5.0)
+			var body := y >= 12 and absf(x + 0.5 - 9.0) < minf(8.5, 3.0 + (y - 11) * 2.2)
+			var hat := false
+			match kind:
+				1: hat = y >= 0 and y < 3 and absf(x + 0.5 - 9.0) < 4.0 or y == 3 and absf(x + 0.5 - 9.0) < 7.0
+				2: hat = y < 5 and (Vector2(x + 0.5 - 4.0, y + 0.5 - 3.0).length() < 2.6 or Vector2(x + 0.5 - 14.0, y + 0.5 - 3.0).length() < 2.6)
+				3: hat = y < 3 and absf(x + 0.5 - 9.0 - (y - 1) * 1.5) < 1.2
+			if head.length_squared() > 1.0 and not body and not hat:
+				return Pixels.CLEAR
+			var tone := Color("#2c2342")
+			# Sky light rims the tops of heads, hats and shoulders.
+			if y < 3 or head.y < -0.7 or (body and y == 12 + int(absf(x + 0.5 - 9.0) > 5.0)):
+				tone = Color("#6d6a9c")
+			return tone))
+	var capture := now - float(state.get("capture_at", -99.0))
+	var great := int(state.get("last_quality", 0)) >= 180
+	var bump := now - float(state.get("bump_at", -99.0))
+	var bow := str(state.get("phase", "")) == "curtain"
+	var seats: Array[float] = [34, 96, 150, 214, 270, 334, 392, 896, 952, 1012, 1074, 1130, 1192, 1246]
+	for i in seats.size():
+		var x := seats[i]
+		var lift := 0.0
+		if not reduced_motion:
+			lift = 2.0 * sin(now * 1.7 + i * 1.3)
+			var delay := capture - (0.04 * (i % 5))
+			if delay >= 0.0 and delay < 0.7:
+				lift -= (34.0 if great else 20.0) * sin(PI * delay / 0.7)
+			elif bump >= 0.0 and bump < 0.6:
+				lift += 6.0 * sin(PI * bump / 0.6)
+			elif bow:
+				lift -= 10.0 + 8.0 * absf(sin(now * 5.0 + i))
+		var at := Vector2(x - 36.0, 650.0 + lift).round()
+		var cheering := bow or (capture >= 0.0 and capture < 0.9 and (great or i % 2 == 0))
+		if cheering:
+			for side: float in [-1.0, 1.0]:
+				draw_rect(Rect2(at + Vector2(36.0 + side * 26.0 - 4.0, 34.0), Vector2(TEXEL * 2.0, 30)), Color("#2c2342"))
+		stamp(shapes[(i * 7) % 4], at)
+		if great and capture >= 0.0 and capture < 1.0 and i % 3 == 0:
+			label(at + Vector2(36, -16.0 - 20.0 * capture), "★", 26, GOLD, 1.0, 1.0 - capture)
 
 
 func _draw_rim() -> void:
@@ -218,6 +357,7 @@ func _draw_scene() -> void:
 	_draw_confetti()
 	_draw_viewfinder()
 	_draw_hero()
+	_draw_audience()
 	_draw_balloon_count()
 	_draw_act_banner()
 	_draw_curtains()
