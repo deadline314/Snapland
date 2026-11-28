@@ -85,6 +85,8 @@ var cue_pantomime := false
 var dialogue_done := Callable()
 var dialogue_cancelled := Callable()
 var reveal := 0.0
+## Seconds the typewriter still rests after the punctuation it just revealed.
+var reveal_hold := 0.0
 ## Game-time clock that paces dialogue beeps; only advances while text reveals.
 var dialogue_clock_msec := 100000
 var definitions: Array=[]
@@ -453,7 +455,7 @@ func _quit_game() -> void:
 
 func _build_ui() -> void:
 	Paper.set_text_scale(float(Progress.settings.get("ui_scale",1.0)))
-	Paper.set_font_style(str(Progress.settings.get("font_style", "pixel")))
+	Paper.set_font_style(str(Progress.settings.get("font_style", "rounded")))
 	var canvas := CanvasLayer.new()
 	add_child(canvas)
 	ui=Control.new()
@@ -875,7 +877,7 @@ func _refresh() -> void:
 		world.blocked=true
 		_replace_region.call_deferred(Progress.current_region)
 		return
-	Paper.set_font_style(str(Progress.settings.get("font_style", "pixel")))
+	Paper.set_font_style(str(Progress.settings.get("font_style", "rounded")))
 	Paper.set_reduced_motion(bool(Progress.settings.get("reduced_motion",false)))
 	Paper.set_text_scale(float(Progress.settings.get("ui_scale",1.0)))
 	if is_instance_valid(ui): ui.theme=Paper.theme()
@@ -948,9 +950,18 @@ func _process(delta: float) -> void:
 			PaperMotion.flash(context_action,PaperMotion.GAIN_TINT,0.3)
 	if modal_kind=="dialogue" and is_instance_valid(dialogue_label) and dialogue_label.visible_characters>=0:
 		var previous_count := dialogue_label.visible_characters
-		reveal+=delta*34.0*float(Progress.settings.get("text_speed",1.0))
+		if reveal_hold>0.0: reveal_hold=maxf(0.0,reveal_hold-delta)
+		else: reveal+=delta*34.0*float(Progress.settings.get("text_speed",1.0))
 		dialogue_clock_msec+=int(round(delta*1000.0))
 		var next_count := mini(int(reveal), dialogue_label.text.length())
+		# Rest after punctuation inside the line (never after its last character).
+		for char_index in range(previous_count, next_count):
+			var pause := DialoguePanelScript.pause_after(dialogue_label.text.substr(char_index, 1))
+			if pause>0.0 and char_index<dialogue_label.text.length()-1:
+				next_count=char_index+1
+				reveal=float(next_count)
+				reveal_hold=pause/maxf(0.25,float(Progress.settings.get("text_speed",1.0)))
+				break
 		dialogue_label.visible_characters=next_count
 		for char_index in range(previous_count, next_count):
 			var current_speaker := str(dialogue[dialogue_index].get("speaker", "")) if dialogue_index < dialogue.size() else ""
@@ -1435,6 +1446,7 @@ func _render_dialogue() -> void:
 	dialogue_label=dialogue_panel.text_label
 	call_deferred("_dialogue_panel_resized")
 	reveal=0
+	reveal_hold=0.0
 	modal_kind="dialogue"
 	_stage_line(line, speaker)
 
@@ -1488,6 +1500,7 @@ func _next_dialogue() -> void:
 	if not is_instance_valid(dialogue_label): return
 	if dialogue_label.visible_characters>=0 and dialogue_label.visible_characters<dialogue_label.text.length():
 		reveal=dialogue_label.text.length()
+		reveal_hold=0.0
 		dialogue_panel.reveal_all()
 	else:
 		dialogue_index+=1

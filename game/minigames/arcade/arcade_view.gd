@@ -14,6 +14,8 @@ const Pixels = preload("res://game/minigames/arcade/arcade_pixels.gd")
 const Props = preload("res://game/ui/pixel_props.gd")
 const Collage = preload("res://game/ui/collage_kit.gd")
 const HudArt = preload("res://game/ui/hud_collage.gd")
+## Shared feedback-word lettering (two-tone outline, pop and squash).
+const Caption = preload("res://game/ui/caption_style.gd")
 const DESIGN := Vector2(1280, 720)
 ## Dusky plum the circus sprites' shadows lean toward.
 const SPRITE_SHADE := Color(0.05, 0.02, 0.09)
@@ -42,6 +44,9 @@ var now := 0.0
 ## Where feedback words pop; a game may move it next to the action.
 var word_anchor := Vector2(640, 236)
 var _font: Font
+## Title/caption role and chunky digits role (font_profiles.gd).
+var _display: Font
+var _digits: Font
 var _paper_shapes: Dictionary = {}
 
 
@@ -62,6 +67,8 @@ func _draw() -> void:
 	if state.is_empty():
 		return
 	_font = Paper.font()
+	_display = Paper.display_font()
+	_digits = Paper.numeral_font()
 	_draw_backdrop()
 	_draw_scene()
 	draw_set_transform(Vector2.ZERO)
@@ -218,16 +225,18 @@ func ground_shadow(center: Vector2, radii: Vector2, strength := 0.34) -> void:
 
 
 ## Centred text with a dark pixel outline; `scale_factor` pops it around its
-## centre. Pass `outlined` false for dark ink on a light plate.
-func label(center: Vector2, content: String, font_size: int, color := CREAM, scale_factor := 1.0, alpha := 1.0, outlined := true) -> void:
-	if _font == null or content.is_empty():
+## centre. Pass `outlined` false for dark ink on a light plate, and `face` to
+## use a role font (`_display`, `_digits`) instead of the body face.
+func label(center: Vector2, content: String, font_size: int, color := CREAM, scale_factor := 1.0, alpha := 1.0, outlined := true, face: Font = null) -> void:
+	var font := face if face != null else _font
+	if font == null or content.is_empty():
 		return
-	var extent := _font.get_string_size(content, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
+	var extent := font.get_string_size(content, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
 	draw_set_transform(center, 0.0, Vector2.ONE * scale_factor)
 	var origin := Vector2(-extent.x * 0.5, extent.y * 0.32)
 	if outlined:
-		draw_string_outline(_font, origin, content, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, clampi(int(font_size * 0.22), 3, 12), Color(INK, alpha))
-	draw_string(_font, origin, content, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(color, alpha))
+		draw_string_outline(font, origin, content, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, clampi(int(font_size * 0.22), 3, 12), Color(INK, alpha))
+	draw_string(font, origin, content, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(color, alpha))
 	draw_set_transform(Vector2.ZERO)
 
 
@@ -291,7 +300,7 @@ func _draw_medal_strip() -> void:
 		Medal.paint(self, at + Vector2(0, 2), 2.0, index + 1, lit)
 		if lit:
 			glint(at + Vector2(0, 2), 12.0, 3.2, index * 0.4)
-		label(at + Vector2(36, -14), str(lines[index]), 15, Medal.FACES[index + 1] if lit else Color("#b9b2c8"))
+		label(at + Vector2(36, -14), str(lines[index]), 16, Medal.FACES[index + 1] if lit else Color("#b9b2c8"), 1.0, 1.0, true, _digits)
 
 
 func _draw_hint() -> void:
@@ -381,13 +390,9 @@ func _draw_word() -> void:
 		return
 	var good := bool(state.get("word_good", true))
 	var fade := 1.0 - smoothstep(WORD_SECONDS - 0.25, WORD_SECONDS, elapsed)
-	var rise := 0.0 if reduced_motion else -26.0 * smoothstep(0.0, WORD_SECONDS, elapsed)
-	var face := GOLD if good else ROSE
-	var grow := pop_in(elapsed, 0.2)
-	# Darker copies underneath give the word a chunky, extruded body.
-	for depth: float in [6.0, 3.0]:
-		label(word_anchor + Vector2(0, rise + depth * grow), word, 58, face.darkened(0.5).lerp(Pixels.SHADOW_HUE, 0.3), grow, fade)
-	label(word_anchor + Vector2(0, rise), word, 58, face, grow, fade)
+	# The letters pop in and settle, then the word drifts up as it fades.
+	var rise := 0.0 if reduced_motion else -18.0 * smoothstep(0.4, WORD_SECONDS, elapsed)
+	Caption.draw(self, word_anchor + Vector2(0, rise), word, 54, good, elapsed, reduced_motion, fade)
 
 
 func _draw_ready_banner() -> void:
@@ -401,7 +406,7 @@ func _draw_ready_banner() -> void:
 	draw_rect(Rect2(band.position + Vector2(0, 12), band.size), Color(0.06, 0.02, 0.08, 0.4 * enter))
 	panel(band, "velvet", VELVET, Color(0, 0, 0, 0), TEXEL, fade)
 	gilt_frame(Rect2(band.position - Vector2(16, 0), band.size + Vector2(32, 0)), 16.0, GILT, TEXEL, fade)
-	label(Vector2(560, band.position.y + 42.0), str(state.get("verb", "")), 38, CREAM, pop_in(stage_time, 0.3))
+	label(Vector2(560, band.position.y + 42.0), str(state.get("verb", "")), 36, CREAM, pop_in(stage_time, 0.3), 1.0, true, _display)
 	var variant_label := str(state.get("variant_label", ""))
 	if not variant_label.is_empty():
 		label(Vector2(560, band.position.y + 86.0), "本回合變奏：" + variant_label, 20, GOLD)
@@ -411,7 +416,7 @@ func _draw_ready_banner() -> void:
 	var beat_age := fmod(stage_time, beat)
 	var disc := Vector2(1090, band.get_center().y)
 	_medallion(disc, 58.0)
-	label(disc, str(count), 64, CREAM, 0.7 + 0.3 * pop_in(beat_age, 0.22))
+	label(disc, str(count), 64, CREAM, 0.7 + 0.3 * pop_in(beat_age, 0.22), 1.0, true, _digits)
 
 
 func _draw_closing_card() -> void:
@@ -438,13 +443,15 @@ func _draw_closing_card() -> void:
 	draw_set_transform(Vector2.ZERO)
 	for side: float in [-1.0, 1.0]:
 		Collage.tape(self, centre + Vector2(side * 196.0, -128.0).rotated(angle), 92.0, angle + side * 0.55)
-	_card_text(centre, angle, Vector2(64, -84), "時間到！", 40, CREAM, pop_in(elapsed, 0.24), true)
-	_card_text(centre, angle, Vector2(121, -7), Medal.NAMES[earned], 30, INK, 1.0, false)
+	_card_text(centre, angle, Vector2(64, -84), "時間到！", 40, CREAM, pop_in(elapsed, 0.24), true, _display)
+	_card_text(centre, angle, Vector2(121, -7), Medal.NAMES[earned], 30, INK, 1.0, false, _display)
 	# The score counts up once the card has landed.
 	var shown := int(state.get("score", 0))
 	if not reduced_motion:
 		shown = roundi(shown * smoothstep(0.35, 0.8, elapsed))
-	_card_text(centre, angle, Vector2(121, 62), "%d 分" % shown, 34, INK, 1.0, false)
+	# While it counts, each new number nudges the digits up, like an odometer clicking over.
+	var tick := 0.0 if reduced_motion or shown >= int(state.get("score", 0)) else 0.07 * absf(sin(shown * 0.9))
+	_card_text(centre, angle, Vector2(121, 62), "%d 分" % shown, 36, INK, 1.0 + tick, false, _digits)
 	# The medal drops in after a beat and squashes as it lands.
 	var drop_age := elapsed - 0.3
 	var fall := 0.0 if reduced_motion else -220.0 * (1.0 - smoothstep(0.0, 0.26, drop_age))
@@ -460,15 +467,16 @@ func _draw_closing_card() -> void:
 
 
 ## Text on the tilted closing card, centred on `offset` in card space.
-func _card_text(centre: Vector2, angle: float, offset: Vector2, content: String, font_size: int, color: Color, scale_factor: float, outlined: bool) -> void:
-	if _font == null:
+func _card_text(centre: Vector2, angle: float, offset: Vector2, content: String, font_size: int, color: Color, scale_factor: float, outlined: bool, face: Font = null) -> void:
+	var font := face if face != null else _font
+	if font == null:
 		return
-	var extent := _font.get_string_size(content, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
+	var extent := font.get_string_size(content, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
 	draw_set_transform(centre + offset.rotated(angle), angle, Vector2.ONE * scale_factor)
 	var origin := Vector2(-extent.x * 0.5, extent.y * 0.32)
 	if outlined:
-		draw_string_outline(_font, origin, content, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, clampi(int(font_size * 0.22), 3, 12), INK)
-	draw_string(_font, origin, content, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, color)
+		draw_string_outline(font, origin, content, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, clampi(int(font_size * 0.22), 3, 12), INK)
+	draw_string(font, origin, content, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, color)
 	draw_set_transform(Vector2.ZERO)
 
 

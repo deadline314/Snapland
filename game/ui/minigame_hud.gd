@@ -51,6 +51,8 @@ var _header_face: StyleBoxEmpty
 var _title_art: Control
 var _ticket_art: Control
 var _shown_score := 0
+## The score the ticket is counting toward; -1 until the first state arrives.
+var _target_score := -1
 var _shown_second := -1
 var _time_readout: HBoxContainer
 var _feedback: PanelContainer
@@ -111,7 +113,7 @@ func set_state(state: Dictionary) -> void:
 	_title.tooltip_text = _objective.text
 	_progress.text = str(state.get("progress_text", "準備中"))
 	_progress.tooltip_text = _progress.text
-	_score.text = "%04d" % int(state.get("score", 0))
+	_show_score(int(state.get("score", 0)))
 	_time.text = str(state.get("time_text", "01:00"))
 	var badge_text := ""
 	if bool(state.get("assisted", false)):
@@ -151,6 +153,18 @@ func set_state(state: Dictionary) -> void:
 	else:
 		_feedback.modulate.a = 1.0
 	_layout()
+
+## A new score rolls up digit by digit on the ticket (PaperMotion.count_up);
+## without motion, a drop, or the first state, it is shown at once.
+func _show_score(score: int) -> void:
+	if score == _target_score:
+		return
+	var from := _target_score
+	_target_score = score
+	if from >= 0 and score > from and is_instance_valid(_ticket_art):
+		PaperMotion.count_up(_score, score, "%04d", 0.36, from, _ticket_art.queue_redraw)
+	else:
+		_score.text = "%04d" % score
 
 ## Redraw the collage only when its print changed, and play the short beats:
 ## score bump, red clock in the last five seconds, medal stamp.
@@ -263,6 +277,8 @@ func _build_header() -> void:
 	_score_label.name = "ScoreLabel"
 	score_col.add_child(_score_label)
 	_score = _label("0000", 19, Color("#3a2410"))
+	# Score and clock print in the chunky numeral role (font_profiles.gd).
+	_score.add_theme_font_override("font", FontProfiles.role_font("numeral"))
 	_score.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	score_col.add_child(_score)
 	_time_readout = HBoxContainer.new()
@@ -274,6 +290,7 @@ func _build_header() -> void:
 	_time_label = _label("時間", 14, TICKET_LABEL)
 	_time_readout.add_child(_time_label)
 	_time = _label("01:00", 19, Paper.TICKET_INK)
+	_time.add_theme_font_override("font", FontProfiles.role_font("numeral"))
 	_time_readout.add_child(_time)
 	# The practice/assist record is stamped on the ticket instead of competing
 	# with progress for left-header width.

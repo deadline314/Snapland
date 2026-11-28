@@ -194,17 +194,46 @@ static func page_turn(control: Control, seconds := TURN_SECONDS) -> void:
 	tween.tween_property(control, "modulate:a", 1.0, seconds * 0.6)
 
 
-## Count a label up to `value` (formatted with `template`); the final text is set
-## first so readers of the label never see a stale number when motion is off.
-static func count_up(label: Label, value: int, template := "%d", seconds := COUNT_SECONDS) -> void:
+## Count a label up to `value` (formatted with `template`) from `from`; the final
+## text is set first so readers of the label never see a stale number when motion
+## is off. `on_tick` runs each time the shown number changes (a redraw, a click).
+static func count_up(label: Label, value: int, template := "%d", seconds := COUNT_SECONDS, from := 0, on_tick := Callable()) -> void:
 	if not is_instance_valid(label):
 		return
 	_stop(label, _COUNT_TWEEN)
 	label.text = template % value
-	if not enabled() or not label.is_inside_tree() or value == 0:
+	if not enabled() or not label.is_inside_tree() or value == from:
 		return
+	label.text = template % from
+	var show_number := func(shown: float) -> void:
+		var next: String = template % roundi(shown)
+		if label.text != next:
+			label.text = next
+			if on_tick.is_valid():
+				on_tick.call()
 	var tween := _start(label, _COUNT_TWEEN)
-	tween.tween_method(func(shown: float) -> void: label.text = template % roundi(shown), 0.0, float(value), seconds).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.tween_method(show_number, float(from), float(value), seconds).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+
+
+const POP_SQUASH_SECONDS := 0.42
+const _POP_GROW := 0.2
+
+## Scale of a caption letter `elapsed` seconds after it was stamped: it shoots up
+## tall and thin, slams down wide and flat, then wobbles to rest. Pure, so a
+## state-driven view can call it every frame. Before its moment a letter is
+## hidden (Vector2.ZERO); with reduced motion or no display it is always ONE.
+static func pop_squash(elapsed: float, reduced := false) -> Vector2:
+	if reduced or not enabled() or elapsed >= POP_SQUASH_SECONDS:
+		return Vector2.ONE
+	if elapsed < 0.0:
+		return Vector2.ZERO
+	var t := elapsed / POP_SQUASH_SECONDS
+	if t < _POP_GROW:
+		var grow := lerpf(0.25, 1.15, sin(t / _POP_GROW * PI * 0.5))
+		return Vector2(grow * 0.86, grow * 1.18)
+	var settle := (t - _POP_GROW) / (1.0 - _POP_GROW)
+	var push := 0.26 * (1.0 - settle) * cos(settle * TAU * 1.25)
+	return Vector2(1.0 + push, 1.0 - push)
 
 
 ## Give a button hover, focus and press feedback. Safe to call once per button.

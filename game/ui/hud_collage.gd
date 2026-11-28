@@ -18,6 +18,7 @@ const ENTER_SECONDS := 0.32
 const STAMP_SECONDS := 0.4
 const SHAKE_SECONDS := 0.3
 const BUMP_SECONDS := 0.28
+const PULSE_SECONDS := 0.3
 ## Width of the coloured band at the tag's eyelet end.
 const TAG_BAND := 30.0
 ## Room the pinned medal takes at the tag's right end.
@@ -63,6 +64,11 @@ var stamp := 0.0:
 	set(value):
 		stamp = value
 		queue_redraw()
+## 1 -> 0 each new second of the alarm: the clock stub swells and settles (ART-64).
+var pulse := 0.0:
+	set(value):
+		pulse = value
+		queue_redraw()
 var _shapes: Dictionary = {}
 var _closed: Dictionary = {}
 var _fitted: Dictionary = {}
@@ -104,6 +110,7 @@ func set_alarm(value: bool, new_second: bool) -> void:
 		queue_redraw()
 	if alarm and new_second:
 		PaperMotion.swing(self, &"shake", 1.0, SHAKE_SECONDS)
+		PaperMotion.ease_property(self, &"pulse", 0.0, PULSE_SECONDS, 0.0, Tween.TRANS_BACK, 1.0)
 
 
 ## A newly earned medal is stamped down onto the tag.
@@ -210,9 +217,10 @@ func _draw_ticket() -> void:
 		var pivot := time_rect.get_center() + Vector2(3.0 * shake, 0.0)
 		var angle := deg_to_rad(-tilt + 6.0 * shake) + _swing()
 		var local := Rect2(-time_rect.size * 0.5, time_rect.size)
+		var swell := Vector2.ONE * (1.0 + 0.16 * pulse)
 		var tag: PackedVector2Array = _shape("time", local.size, func() -> PackedVector2Array: return tag_shape(local, 10.0, 31, true))
-		_paper(tag, pivot + _drop(), angle, ALARM_PAPER if alarm else Kit.CREAM)
-		_caption_band("time_caption", local, pivot, angle, Vector2.ONE, ALARM_BAND if alarm else Kit.SEA)
+		_paper(tag, pivot + _drop(), angle, ALARM_PAPER if alarm else Kit.CREAM, swell)
+		_caption_band("time_caption", local, pivot, angle, swell, ALARM_BAND if alarm else Kit.SEA)
 		_print("time_caption", ALARM_CAPTION if alarm else CAPTION_INK, pivot)
 		_print("time", ALARM_INK if alarm else DIGIT_INK, pivot)
 	var badge: Label = prints.get("badge")
