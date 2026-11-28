@@ -98,5 +98,25 @@
       "mascot",
       "lantern"
     ]
+  },
+  {
+    "id": "game-106",
+    "mode": "star_net",
+    "zone": "sky",
+    "local_index": 10,
+    "arcade": true,
+    "name": "落星接網",
+    "goal": "黃昏的拍照點上星星一顆顆掉下來；左右跑用頭上的網子接住，星星會自己彈進旁邊的籃子，夾在裡面的雷雲球要躲開。",
+    "instructions": "← →、A D 或手把十字鍵、左搖桿：左右跑。星星落進網子就會彈進籃子，大星會彈起來要再接一次；雷雲球別去接。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助接星躲雷拿到金牌",
+    "ordinary": "左右跑用網子接住星星，拿到銅牌",
+    "attraction_tag": "拍照點接星星",
+    "island_invitation": "黃昏時雲上拍照點會掉星星！拿網子去接，裝滿兩邊的籃子。小心混在裡面的雷雲球，接到的話頭髮會全部豎起來冒煙。",
+    "retake_props": [
+      "sign",
+      "lantern",
+      "mascot"
+    ]
   }
 ]

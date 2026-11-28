@@ -87,6 +87,8 @@ const STANDS := {
 			"stand": Vector3(0.6, 1.80, 5.8), "point": Vector3(1.55, 1.80, 7.15), "prop": "ropebridge", "paint": Color("#6e4c32")},
 		{"id": "game-105", "title": "風箏追風", "prompt": "風箏追風 · 跟著箭頭拉風箏",
 			"stand": Vector3(-7.6, 1.85, 12.0), "point": Vector3(-6.65, 1.85, 13.35), "prop": "windkite", "paint": Color("#ff8a6b")},
+		{"id": "game-106", "title": "落星接網", "prompt": "落星接網 · 左右跑接星星",
+			"stand": Vector3(7.0, 2.35, 11.4), "point": Vector3(7.95, 2.35, 12.75), "prop": "starnet", "paint": Color("#3a2f6e")},
 	],
 }
 const FOOTPRINT := Vector3(1.5, 2.0, 1.0)
@@ -137,6 +139,7 @@ static func build(world: Node3D, region: String) -> void:
 			"shuttle": _shuttle_prop(sculpt)
 			"ropebridge": _rope_bridge_prop(sculpt)
 			"windkite": _wind_kite_prop(sculpt)
+			"starnet": _star_net_prop(sculpt)
 			"lock": _lock_prop(sculpt)
 			"slide": _slide_prop(sculpt)
 			"cloudhop": _cloudhop_prop(sculpt)
@@ -836,3 +839,17 @@ static func _sleeper_prop(sculpt: Kit.Sculpt) -> void:
 	sculpt.box(Vector3(0.2, 3.03, -0.22), Vector3(0.03, 0.18, 0.02), Color("#d8d2ff"), Basis(Vector3.BACK, -0.7))
 	sculpt.box(Vector3(0.24, 1.02, 0.1), Vector3(0.36, 0.1, 0.24), Color("#f3ecfa"))
 	sculpt.box(Vector3(-0.28, 1.0, 0.1), Vector3(0.3, 0.06, 0.22), Color("#5b3f74"))
+
+
+## A big hoop net on a pole over the roof with a gold star caught in it, and a
+## woven basket of little stars on the counter.
+static func _star_net_prop(sculpt: Kit.Sculpt) -> void:
+	var wood := Color("#a87a4f")
+	var gold := Color("#ffd35c")
+	sculpt.box(Vector3(0.25, 2.85, -0.3), Vector3(0.04, 0.5, 0.04), Color("#6e4c32"))
+	sculpt.tube(Vector3(0.0, 3.08, -0.3), 0.24, 0.24, 0.04, wood, 14)
+	sculpt.tube(Vector3(0.0, 2.98, -0.3), 0.22, 0.08, 0.18, Color("#e8f1fa"), 12)
+	sculpt.ball(Vector3(0.0, 3.0, -0.3), 0.08, gold, Color.TRANSPARENT, 5, 3)
+	sculpt.tube(Vector3(-0.15, 1.02, 0.12), 0.12, 0.09, 0.1, Color("#c99a5b"), 10)
+	for star in 3:
+		sculpt.ball(Vector3(-0.2 + star * 0.05, 1.09, 0.12), 0.03, gold, Color.TRANSPARENT, 5, 3)
