@@ -50,6 +50,8 @@ var cloth_velocity := Vector2.ZERO
 ## Fog per cell, row by row across the whole window.
 var fog: PackedFloat32Array = PackedFloat32Array()
 var grid := Vector2i.ZERO
+## Fog cell indices inside each pane; the panes never move, so this is built once per round.
+var _pane_cells: Array[PackedInt32Array] = []
 ## Ghosts now peeking: {pane, at (clock when he arrived), stay, hop_at (clock
 ## of a blink to another pane, negative for none), from (pane before a hop)}.
 var ghosts: Array[Dictionary] = []
@@ -170,15 +172,11 @@ func pane_rect(pane: int) -> Rect2:
 
 ## Share of a pane wiped clear, 0..1.
 func clear_share(pane: int) -> float:
-	var rect := pane_rect(pane)
+	var cells := _pane_cells[pane]
 	var total := 0.0
-	var count := 0
-	for y in grid.y:
-		for x in grid.x:
-			if rect.has_point(_cell_centre(x, y)):
-				total += 1.0 - fog[y * grid.x + x]
-				count += 1
-	return total / maxf(1.0, count)
+	for index in cells:
+		total += 1.0 - fog[index]
+	return total / maxf(1.0, cells.size())
 
 
 func fog_rate() -> float:
@@ -349,11 +347,8 @@ func _scare(pane: int) -> void:
 
 
 func _fog_pane(pane: int) -> void:
-	var rect := pane_rect(pane)
-	for y in grid.y:
-		for x in grid.x:
-			if rect.has_point(_cell_centre(x, y)):
-				fog[y * grid.x + x] = 1.0
+	for index in _pane_cells[pane]:
+		fog[index] = 1.0
 
 
 func _reset_window() -> void:
@@ -361,6 +356,15 @@ func _reset_window() -> void:
 	fog = PackedFloat32Array()
 	fog.resize(grid.x * grid.y)
 	fog.fill(1.0)
+	_pane_cells.clear()
+	for pane in COLUMNS * ROWS:
+		var rect := pane_rect(pane)
+		var cells := PackedInt32Array()
+		for y in grid.y:
+			for x in grid.x:
+				if rect.has_point(_cell_centre(x, y)):
+					cells.append(y * grid.x + x)
+		_pane_cells.append(cells)
 	cloth = WINDOW.get_center() + Vector2(0, WINDOW.size.y * 0.25)
 	cloth_velocity = Vector2.ZERO
 	ghosts.clear()
