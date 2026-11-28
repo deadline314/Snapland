@@ -10,6 +10,7 @@
 - [128款小遊戲目錄](02-minigames/catalog.md)、[修訂與研究](02-minigames/revision-notes.md)、[六款原型順序](02-minigames/prototype-order.md)、[SG-1驗收](../pm/Snapland-small-game/[SG-1]重設小遊戲樂趣目錄.md)
 - [劇情框架](03-story/story.md)
 - [支線與探索事件](03-story/quest-guide.md)
+- [演出研究與主線提案](03-story/staging-research.md)
 - [Steam相容物品定義](04-items/itemdefs.json)
 - [決策與試玩問題](06-roadmap/open-questions.md)
 - [驗證與CI](06-roadmap/verification.md)
