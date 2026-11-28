@@ -98,5 +98,25 @@
       "lantern",
       "sign"
     ]
+  },
+  {
+    "id": "game-090",
+    "mode": "lift_brake",
+    "zone": "hotel",
+    "local_index": 6,
+    "arcade": true,
+    "name": "電梯借重",
+    "goal": "旅館的老電梯一直上上下下，按住鍵剎車讓它剛好停在有客人的樓層；客人越多電梯越重、越難停。停在兩層中間的話，門會夾住你的帽子。",
+    "instructions": "空白鍵、E、↓ 或手把 A 鈕：按住剎車。電梯會滑一段才停，客人越多滑越遠，要提早按。",
+    "devil_hint": "不開輔助，一回合拿到金牌。",
+    "devil": "不開輔助開電梯拿到金牌",
+    "ordinary": "剎車讓電梯停在樓層載送客人，拿到銅牌",
+    "attraction_tag": "電梯借重",
+    "island_invitation": "幫幽幽旅館開老電梯！它一直上上下下，按住剎車讓它剛好停在樓層。客人越多越重越難停。停歪的話，客人的腳懸在半空，門還會夾走你的帽子。",
+    "retake_props": [
+      "mascot",
+      "sign",
+      "lantern"
+    ]
   }
 ]

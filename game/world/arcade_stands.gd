@@ -68,6 +68,8 @@ const STANDS := {
 			"stand": Vector3(14.8, 0.2, 3.6), "point": Vector3(15.75, 0.2, 4.95), "prop": "bubble", "paint": Color("#4f6f9a")},
 		{"id": "game-089", "title": "鬼影擦窗", "prompt": "鬼影擦窗 · 把小鬼擦出來",
 			"stand": Vector3(3.6, 0.2, 3.4), "point": Vector3(4.55, 0.2, 4.75), "prop": "window", "paint": Color("#4f8f86")},
+		{"id": "game-090", "title": "電梯借重", "prompt": "電梯借重 · 剎車停在樓層",
+			"stand": Vector3(-11.0, 0.2, 5.6), "point": Vector3(-10.05, 0.2, 6.95), "prop": "lift", "paint": Color("#8a6030")},
 	],
 	# Sky stands use the kept sites in sky_world.STAND_SITES (stand and point copied).
 	"sky": [
@@ -119,6 +121,7 @@ static func build(world: Node3D, region: String) -> void:
 			"bee": _bee_prop(sculpt)
 			"roots": _roots_prop(sculpt)
 			"book": _book_prop(sculpt)
+			"lift": _lift_prop(sculpt)
 			"window": _window_prop(sculpt)
 			"bubble": _bubble_prop(sculpt)
 			"shuttle": _shuttle_prop(sculpt)
@@ -734,3 +737,21 @@ static func _rope_bridge_prop(sculpt: Kit.Sculpt) -> void:
 		sculpt.box(Vector3(-0.05, 2.82, z), Vector3(0.74, 0.015, 0.015), rope)
 	sculpt.tube(Vector3(-0.18, 1.01, 0.12), 0.1, 0.1, 0.05, rope, 10)
 	sculpt.box(Vector3(0.22, 1.0, 0.14), Vector3(0.3, 0.02, 0.08), wood)
+
+
+## A little brass cage lift on the roof with its cable, an arrow dial above
+## and a ghost riding inside, and a red bellhop cap on the counter.
+static func _lift_prop(sculpt: Kit.Sculpt) -> void:
+	sculpt.box(Vector3(0, 2.8, -0.3), Vector3(0.56, 0.7, 0.46), Color("#2a2034"))
+	for side: float in [-1.0, 1.0]:
+		sculpt.box(Vector3(side * 0.27, 2.8, -0.08), Vector3(0.04, 0.7, 0.04), BRASS)
+	for bar in 4:
+		sculpt.box(Vector3(-0.18 + bar * 0.12, 2.8, -0.06), Vector3(0.02, 0.64, 0.02), BRASS.darkened(0.15))
+	sculpt.box(Vector3(0, 3.18, -0.3), Vector3(0.6, 0.06, 0.5), BRASS)
+	sculpt.box(Vector3(0, 3.5, -0.3), Vector3(0.03, 0.6, 0.03), Color("#3a3040"))
+	sculpt.tube(Vector3(0, 3.34, -0.04), 0.12, 0.12, 0.03, BRASS, 10, Basis(Vector3.RIGHT, PI * 0.5))
+	sculpt.box(Vector3(0.04, 3.38, -0.02), Vector3(0.1, 0.02, 0.01), Color("#2a2034"), Basis(Vector3.BACK, 0.7))
+	sculpt.ball(Vector3(0.06, 2.72, -0.2), 0.12, Color("#eef0ff"), Color.TRANSPARENT, 8, 4)
+	sculpt.tube(Vector3(-0.26, 1.02, 0.1), 0.1, 0.1, 0.1, Color("#c0485e"), 10)
+	sculpt.box(Vector3(-0.26, 0.99, 0.18), Vector3(0.12, 0.02, 0.06), Color("#2a2034"))
+	sculpt.box(Vector3(0.28, 1.0, 0.1), Vector3(0.18, 0.05, 0.14), BRASS)
