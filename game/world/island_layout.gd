@@ -106,7 +106,7 @@ const GROVES := [
 	Vector4(-74,-56,7,4), Vector4(42,2,8,5), Vector4(-22,-22,7,4), Vector4(24,-22,7,4), Vector4(34,-140,6,4), Vector4(-40,-48,7,4),
 ]
 ## Flower meadows: x, z, radius.
-const MEADOWS := [Vector3(-58,-50,9), Vector3(34,-98,7), Vector3(-14,-70,7), Vector3(26,-50,7), Vector3(-44,-72,6), Vector3(62,-22,7), Vector3(-30,2,7), Vector3(16,-142,5)]
+const MEADOWS := [Vector3(-58,-50,9), Vector3(34,-98,7), Vector3(-14,-70,7), Vector3(26,-50,7), Vector3(-44,-72,6), Vector3(62,-22,7), Vector3(-30,2,7), Vector3(16,-142,5), Vector3(52,-12,5), Vector3(66,-10,5)]
 ## Rock outcrops with a grass cap: x, z. They break long views; none sits on a path.
 const RIDGES := [Vector2(-50,-40), Vector2(8,-134), Vector2(52,-74), Vector2(16,-54), Vector2(48,10), Vector2(-32,-78), Vector2(20,-78), Vector2(-48,10)]
 const RIDGE_CLEARANCE := 6.5

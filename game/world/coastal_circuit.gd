@@ -68,15 +68,12 @@ static func build(world: Node3D) -> void:
 static func _build_rocks(world: Node3D) -> void:
 	# Separate ridges interrupt long views across the lawns without sealing a path.
 	# A few shared shapes, turned and stretched per site, stand in for unique meshes.
-	var heights: Array[float] = []
 	for variant in RIDGE_VARIANTS:
 		var height := 3.2 + float(variant) * 1.5
-		heights.append(height)
 		if _ridge_shapes.size() > variant: continue
 		var profile: Array[Vector2] = [Vector2(0,0),Vector2(3.1,0),Vector2(3.4,0.35),Vector2(2.8,height*0.45),Vector2(3.1,height*0.57),Vector2(1.7,height),Vector2(0,height+0.12)]
-		_ridge_shapes.append(_profile_mesh(profile,7,variant,true))
+		_ridge_shapes.append(_profile_mesh(profile,9,variant,true,height))
 	var shapes := _ridge_shapes
-	var cap_mesh := _profile_mesh([Vector2(0,0),Vector2(1.75,0),Vector2(1.6,0.22),Vector2(0,0.22)],7,0)
 	for index in IslandLayout.RIDGES.size():
 		var site: Vector2 = IslandLayout.RIDGES[index]
 		var p := Vector3(site.x,0,site.y)
@@ -87,11 +84,6 @@ static func _build_rocks(world: Node3D) -> void:
 		rock.rotation.y = float(index)*0.9
 		rock.name = "CoastalRidge%02d" % index
 		rock.create_convex_collision()
-		# A low grass cap catches the sunlight; the faceted side remains stone.
-		var cap: MeshInstance3D = world._mesh(cap_mesh,p+Vector3(0,heights[variant],0),world._mat(Color("#385b37")))
-		cap.scale = rock.scale
-		cap.rotation.y = rock.rotation.y
-		cap.name = "RidgeGrass%02d" % index
 		world.occlusion_controller.finish_building(rock.get_child(0) as StaticBody3D)
 	# Far islets create a horizon beyond the playable shoreline.
 	for index in ISLETS.size():
@@ -99,15 +91,30 @@ static func _build_rocks(world: Node3D) -> void:
 		var profile: Array[Vector2] = [Vector2(0,0),Vector2(5.0,0),Vector2(4.0,1.4),Vector2(1.8,3.6),Vector2(0,3.9)]
 		world._mesh(_profile_mesh(profile,7,index+31),p,world._mat(Color("#6f8b83")))
 
-static func _profile_mesh(profile: Array[Vector2], sides: int, seed_value := 0, mineral := false) -> ArrayMesh:
+## `mineral` lathes weathered stone: an uneven outline, a damp dark foot and
+## lighter shoulders under a mossy top. A `cap_height` of zero or more adds a
+## low grass cap at that height in the same mesh, so a ridge is one draw (ART-71).
+static func _profile_mesh(profile: Array[Vector2], sides: int, seed_value := 0, mineral := false, cap_height := -1.0) -> ArrayMesh:
 	var tool := SurfaceTool.new()
 	tool.begin(Mesh.PRIMITIVE_TRIANGLES)
+	_lathe_into(tool, profile, sides, seed_value, mineral)
+	if cap_height >= 0.0:
+		var cap: Array[Vector2] = [Vector2(0,cap_height),Vector2(1.95,cap_height),Vector2(1.7,cap_height+0.24),Vector2(0,cap_height+0.26)]
+		_lathe_into(tool, cap, sides, seed_value + 5, false, Color("#4a6e3f"))
+	tool.generate_normals()
+	return tool.commit()
+
+static func _lathe_into(tool: SurfaceTool, profile: Array[Vector2], sides: int, seed_value: int, mineral: bool, tint := Color.WHITE) -> void:
+	var top := profile[profile.size()-1].y
 	for row in range(profile.size()-1):
 		for side in sides:
 			var points: Array[Vector3] = []
 			for pair in [Vector2i(row,side),Vector2i(row,side+1),Vector2i(row+1,side),Vector2i(row+1,side+1)]:
 				var angle := TAU*float(pair.y)/float(sides)
 				var shape := 1.0 + sin(float(pair.y%sides)*2.7+float(seed_value))*0.055
+				if mineral and pair.x > 0 and pair.x < profile.size()-1:
+					# Bulges and notches per ring, so the outline reads as rock, not a prism.
+					shape += (fposmod(sin(float(pair.x*13+(pair.y%sides)*7+seed_value*3))*43758.5453,1.0)-0.5)*0.34
 				points.append(Vector3(cos(angle)*profile[pair.x].x*shape,profile[pair.x].y,sin(angle)*profile[pair.x].x*shape))
 			var divisions := 8 if mineral else 1
 			for x in divisions:
@@ -117,18 +124,20 @@ static func _profile_mesh(profile: Array[Vector2], sides: int, seed_value := 0, 
 						var across: float = float(uv.x)/float(divisions)
 						patch.append(points[0].lerp(points[1],across).lerp(points[2].lerp(points[3],across),uv.y/float(divisions)))
 					var center := (patch[0]+patch[3])*0.5
-					var pigment := Color.WHITE
+					var pigment := tint
 					if mineral:
 						var grain := sin(float(x*73+y*179+side*31+seed_value*17))*0.035
 						var stratum := sin(center.y*8.5+sin(center.x*1.9)*0.6)*0.045
-						pigment = Color("#617564")*(0.86+grain+stratum)
+						var facet := (fposmod(sin(float(row*29+side*11+seed_value))*43758.5453,1.0)-0.5)*0.14
+						var rise := clampf(center.y/maxf(top,0.01),0.0,1.0)
+						pigment = Color("#4a5a4f").lerp(Color("#8a9580"),rise)*(0.9+grain+stratum+facet)
+						if rise > 0.82: pigment = pigment.lerp(Color("#5a7445"),(rise-0.82)*3.0)
 					for triangle in [Vector3i(0,1,2),Vector3i(1,3,2)]:
 						for vertex in [triangle.x,triangle.y,triangle.z]:
-							tool.set_color(pigment)
+							# The vertex-colour materials read colours as linear.
+							tool.set_color(pigment.srgb_to_linear())
 							tool.set_uv(Vector2(atan2(patch[vertex].z,patch[vertex].x)/TAU,patch[vertex].y*0.35))
 							tool.add_vertex(patch[vertex])
-	tool.generate_normals()
-	return tool.commit()
 
 static func _lathe(world: Node3D, p: Vector3, profile: Array[Vector2], color: Color, sides := 12) -> MeshInstance3D:
 	return world._mesh(_profile_mesh(profile,sides),p,world._mat(color))

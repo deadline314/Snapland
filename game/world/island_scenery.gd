@@ -5,6 +5,7 @@ extends RefCounted
 
 const IslandShape = preload("res://game/world/island_shape.gd")
 const IslandLayout = preload("res://game/world/island_layout.gd")
+const SceneryKit = preload("res://game/world/scenery_kit.gd")
 
 const SEA_SIZE := Vector2(480, 480)
 const SEA_Y := -0.42
@@ -199,6 +200,8 @@ static func build_shore_rocks(world: Node3D) -> void:
 					buds.append(Transform3D(Basis().scaled(Vector3.ONE * 0.24), foot + Vector3(0, 0.82, 0)))
 					bud_colors.append(Color("#da705c"))
 		cluster += 1
+	_dress_sand_spit(blades, blade_colors, buds, bud_colors)
+	_build_sand_castle(world)
 	var blade_mesh := BoxMesh.new()
 	var bud_mesh := SphereMesh.new()
 	bud_mesh.radial_segments = 8
@@ -206,12 +209,78 @@ static func build_shore_rocks(world: Node3D) -> void:
 	world._multi_mesh(blade_mesh, Vector3.ZERO, blades, blade_colors, world._vertex_color_material("sea-grass")).name = "IslandSeaGrass"
 	world._multi_mesh(bud_mesh, Vector3.ZERO, buds, bud_colors, world._vertex_color_material("sea-grass")).name = "IslandSeaGrassBuds"
 
+const LAWN_SHRUBS := [Vector2(51, -13), Vector2(55, -10), Vector2(67, -12), Vector2(64, -8), Vector2(47, -3)]
+
+## The lagoon's sand spit: the widest bare sand on the island (ART-71).
+const SAND_SPIT := Vector3(80, -135, 14)
+const CASTLE_SPOTS := [Vector2(76, -132), Vector2(72, -133), Vector2(79, -131), Vector2(70, -140)]
+
+static func _on_open_sand(spot: Vector2) -> bool:
+	return IslandShape.lawn_inset(spot) < -0.3 and IslandShape.distance_to_coast(spot) > 0.8 and not IslandLayout.on_path(spot, 0.6) 		and IslandLayout.district_surface_y(spot) < 0.0 and not IslandLayout.keeps_clear(spot) and not IslandShape.DistrictSites.claims(spot)
+
+## Beachcombing on the spit: shells, bleached driftwood and sea-grass tufts,
+## added to the shore's two batched draws instead of new nodes.
+static func _dress_sand_spit(blades: Array[Transform3D], blade_colors: Array[Color], buds: Array[Transform3D], bud_colors: Array[Color]) -> void:
+	# Instance colours are linear; convert so the shells keep their painted tones.
+	var shells: Array[Color] = [Color("#f4e6d2").srgb_to_linear(), Color("#e89a86").srgb_to_linear(), Color("#e2c48f").srgb_to_linear(), Color("#c9705f").srgb_to_linear()]
+	var attempts := 90
+	for index in attempts:
+		var angle := float(index) * 2.39996
+		var spot := Vector2(SAND_SPIT.x, SAND_SPIT.y) + Vector2.from_angle(angle) * SAND_SPIT.z * sqrt((float(index) + 0.5) / float(attempts))
+		if not _on_open_sand(spot): continue
+		var foot := Vector3(spot.x, IslandLayout.BEACH_TOP_Y, spot.y)
+		var turn := Basis(Vector3.UP, angle * 1.7)
+		match index % 6:
+			0, 2, 4:
+				var size := 0.8 + _hash(index * 5) * 0.6
+				buds.append(Transform3D(turn.scaled(Vector3(0.32, 0.09, 0.24) * size), foot + Vector3(0, 0.04, 0)))
+				bud_colors.append(shells[index % shells.size()])
+			1:
+				var length := 1.3 + _hash(index * 13) * 1.0
+				blades.append(Transform3D(turn.rotated(Vector3.FORWARD, 0.05).scaled(Vector3(length, 0.16, 0.2)), foot + Vector3(0, 0.08, 0)))
+				blade_colors.append(Color("#8b7355").srgb_to_linear())
+			3:
+				for blade in 3:
+					blades.append(Transform3D(Basis(Vector3.BACK, float(blade - 1) * 0.25).scaled(Vector3(0.08, 0.6, 0.06)), foot + Vector3(float(blade - 1) * 0.11, 0.3, 0)))
+					blade_colors.append(Color("#5f7f52").srgb_to_linear())
+
+## A half-finished sand castle someone left by the water: one small draw that
+## gives the spit something to walk over and look at.
+static func _build_sand_castle(world: Node3D) -> void:
+	for spot: Vector2 in CASTLE_SPOTS:
+		if not _on_open_sand(spot): continue
+		var castle := SceneryKit.Sculpt.new()
+		var sand := Color("#e2c48a")
+		var wet := Color("#c9a46b")
+		castle.tube(Vector3(0, 0.08, 0), 1.05, 0.95, 0.16, wet, 12)
+		castle.box(Vector3(0, 0.36, 0), Vector3(0.9, 0.44, 0.9), sand)
+		for corner: Vector2 in [Vector2(-1, -1), Vector2(1, -1), Vector2(-1, 1), Vector2(1, 1)]:
+			var at := Vector3(corner.x * 0.48, 0, corner.y * 0.48)
+			castle.tube(at + Vector3(0, 0.36, 0), 0.24, 0.2, 0.56, sand, 8)
+			castle.tube(at + Vector3(0, 0.74, 0), 0.2, 0.0, 0.2, wet, 8)
+		# Battlements: two merlons on each side of the keep's top.
+		for side: Vector2 in [Vector2(1, 0), Vector2(-1, 0), Vector2(0, 1), Vector2(0, -1)]:
+			for step in [-0.18, 0.18]:
+				var along: Vector2 = Vector2(-side.y, side.x) * float(step)
+				castle.box(Vector3(side.x * 0.4 + along.x, 0.63, side.y * 0.4 + along.y), Vector3(0.12, 0.1, 0.12), sand)
+		# A driftwood stick and a coral rag for a flag on the keep.
+		castle.box(Vector3(0, 0.88, 0), Vector3(0.04, 0.6, 0.04), Color("#8a6f52"))
+		castle.sheet(Vector3(0.02, 1.16, 0), Vector3(0.36, 1.08, 0), Vector3(0.02, 0.98, 0), Color("#e0705c"))
+		var foot := Vector3(spot.x, IslandLayout.BEACH_TOP_Y, spot.y)
+		var mesh: MeshInstance3D = world._mesh(castle.mesh(), foot, world._vertex_color_material("sand-castle"))
+		mesh.name = "SpitSandCastle"
+		mesh.rotation.y = 0.5
+		return
+
 ## Groves, trees beside the walkways and flower meadows. Every site is checked
 ## against paths, courts, ponds and the shore, so the tables can stay loose.
 static func build_planting(world: Node3D) -> void:
 	for site in _tree_sites():
 		world._tree(Vector3(site.x, 0, site.y), int(site.z), true)
 	_build_meadows(world)
+	# Flowering shrubs give the open lawn east of the plaza something to walk between (ART-71).
+	for spot: Vector2 in LAWN_SHRUBS:
+		if IslandLayout.tree_site_clear(spot): world._shrub_cluster(Vector3(spot.x, IslandLayout.LAWN_Y, spot.y), spot.x * 0.37)
 
 ## Every tree as x, z, seed. The search runs once per process: the tables and
 ## the shore never change, so every Welcome world plants the same trees.
