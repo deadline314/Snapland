@@ -646,15 +646,34 @@ func _build_sites() -> void:
 		var fold := cloth.darkened(0.12)
 		var turn := Basis(Vector3.UP, (fposmod(float(index) * 0.618, 1.0) - 0.5) * 0.3)
 		structure.box(at + Vector3(0, 0.06, 0), Vector3(1.4, 0.12, 0.9), Color("#6e6478"), turn)
-		structure.box(at + Vector3(0, 0.48, 0), Vector3(1.24, 0.72, 0.8), cloth, turn)
-		structure.ball(at + Vector3(0, 0.84, 0), 0.66, cloth, cloth.darkened(0.04), 10, 3, 0.36, true)
+		# Each sheet hides a different piece of old hotel furniture (ART-84):
+		# a crate, a tall wardrobe or a high-backed armchair.
+		var face := 0.41
+		var eyes := 0.72
+		match index % 3:
+			0:
+				structure.box(at + Vector3(0, 0.48, 0), Vector3(1.24, 0.72, 0.8), cloth, turn)
+				structure.ball(at + Vector3(0, 0.84, 0), 0.66, cloth, cloth.darkened(0.04), 10, 3, 0.36, true)
+			1:
+				structure.box(at + Vector3(0, 0.86, 0), Vector3(0.92, 1.5, 0.72), cloth, turn)
+				structure.ball(at + Vector3(0, 1.6, 0), 0.5, cloth, cloth.darkened(0.04), 10, 3, 0.3, true)
+				face = 0.37
+				eyes = 1.3
+			2:
+				structure.box(at + turn * Vector3(0, 0.36, 0.08), Vector3(1.2, 0.5, 0.64), cloth, turn)
+				structure.box(at + turn * Vector3(0, 0.9, -0.24), Vector3(1.1, 1.1, 0.3), cloth, turn)
+				structure.ball(at + turn * Vector3(0, 1.44, -0.24), 0.56, cloth, cloth.darkened(0.04), 10, 3, 0.28, true)
+				for arm: float in [-0.52, 0.52]:
+					structure.box(at + turn * Vector3(arm, 0.72, 0.08), Vector3(0.22, 0.3, 0.62), cloth.darkened(0.03), turn)
+				eyes = 1.06
+				face = 0.11
 		for crease in 4:
-			structure.box(at + turn * Vector3(-0.42 + float(crease) * 0.28, 0.46, 0.41), Vector3(0.05, 0.62, 0.02), fold, turn)
+			structure.box(at + turn * Vector3(-0.42 + float(crease) * 0.28, 0.46, face), Vector3(0.05, 0.62, 0.02), fold, turn)
 		for hem in 5:
 			structure.box(at + turn * Vector3(-0.5 + float(hem) * 0.25, 0.15, 0.42), Vector3(0.2, 0.1, 0.04), cloth if hem % 2 == 0 else fold, turn * Basis(Vector3.BACK, 0.3 * (1.0 if hem % 2 == 0 else -1.0)))
 		# Sleepy eyes: the sheet dozes like a ghost until its game arrives.
 		for eye: float in [-0.2, 0.2]:
-			structure.box(at + turn * Vector3(eye, 0.72, 0.41), Vector3(0.16, 0.035, 0.02), INK, turn * Basis(Vector3.BACK, 0.25 * signf(eye)))
+			structure.box(at + turn * Vector3(eye, eyes, face), Vector3(0.16, 0.035, 0.02), INK, turn * Basis(Vector3.BACK, 0.25 * signf(eye)))
 		var tag := at + turn * Vector3(0.45, 0, 0.62)
 		structure.box(tag + Vector3(0, 0.36, 0), Vector3(0.05, 0.72, 0.05), WOOD)
 		structure.box(tag + Vector3(0, 0.78, 0), Vector3(0.6, 0.3, 0.05), MOON.darkened(0.06))
