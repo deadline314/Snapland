@@ -24,7 +24,8 @@ func _run() -> void:
 	var baseline: Dictionary = _world.map_snapshot()
 	check(Routes.supports("nightmarket") and Routes.threshold("nightmarket") == 6 and not Routes.supports("moon"),
 		"same-batch access uses six cards and preserves later gates")
-	check(baseline.region == "nightmarket" and baseline.operating and baseline.points.size() == 7 + Catalog.definitions("nightmarket").size()
+	# Seven fixed points (with the 午夜移動市 gate) plus one per game.
+	check(baseline.region == "nightmarket" and baseline.operating and baseline.points.size() == 8 + Catalog.definitions("nightmarket").size()
 		and baseline.land.size() == 7 and not baseline.covered, "world declares its real terrain and uses a stable set of points")
 	check(baseline.points.any(func(point: Dictionary) -> bool: return point.id == "game-038"), "real skewer stand appears on east street chart")
 	_check_paving()

@@ -97,6 +97,40 @@ static func scatter(seed_value: float) -> float:
 static func buzzing(color: Color, seed_value: float) -> Color:
 	return Color(color.r, color.g, color.b, 0.05 + 0.9 * scatter(seed_value))
 
+## The 午夜移動市 gate: a gate that could roll away at midnight. Each post stands
+## on a cart wheel, a clock above the beam sits at twelve, the name glows in
+## neon and paper lanterns sway from the beam. `wide` is the clear span.
+func rift_gate(at: Vector3, wide: float) -> Label3D:
+	var detail := kit.detail
+	for side: float in [-1.0, 1.0]:
+		var foot := at + Vector3(side * wide * 0.5, 0, 0)
+		# A cart wheel under each post: rim, hub and spokes.
+		detail.tube(foot + Vector3(0, 0.42, 0.0), 0.42, 0.42, 0.12, DARK_WOOD, 12, Basis(Vector3.RIGHT, PI * 0.5))
+		detail.tube(foot + Vector3(0, 0.42, 0.07), 0.1, 0.1, 0.06, BRASS, 8, Basis(Vector3.RIGHT, PI * 0.5))
+		for spoke in 4:
+			detail.box(foot + Vector3(0, 0.42, 0.04), Vector3(0.05, 0.74, 0.03), PALE_WOOD, Basis(Vector3.BACK, spoke * PI * 0.25))
+		detail.box(foot + Vector3(0, 2.1, -0.14), Vector3(0.22, 3.4, 0.22), DARK_WOOD)
+		detail.box(foot + Vector3(0, 0.9, -0.14), Vector3(0.3, 0.1, 0.3), BRASS)
+		neon.box(foot + Vector3(0, 2.1, -0.02), Vector3(0.05, 2.6, 0.03), buzzing(MINT if side < 0.0 else CORAL, side + 3.0))
+		kit.blocker(foot + Vector3(0, 1.0, -0.14), Vector3(0.36, 2.0, 0.36))
+	detail.box(at + Vector3(0, 3.82, -0.14), Vector3(wide + 0.8, 0.3, 0.34), DARK_WOOD.lightened(0.1))
+	detail.box(at + Vector3(0, 3.98, -0.14), Vector3(wide + 1.0, 0.06, 0.42), BRASS)
+	# The midnight clock on the beam: both hands up.
+	detail.tube(at + Vector3(0, 4.42, -0.1), 0.38, 0.38, 0.1, PAPER, 14, Basis(Vector3.RIGHT, PI * 0.5))
+	detail.tube(at + Vector3(0, 4.42, -0.12), 0.44, 0.44, 0.06, BRASS, 14, Basis(Vector3.RIGHT, PI * 0.5))
+	detail.box(at + Vector3(0, 4.55, -0.03), Vector3(0.05, 0.26, 0.02), INK)
+	detail.box(at + Vector3(0.02, 4.52, -0.02), Vector3(0.04, 0.2, 0.02), ROSE)
+	# The name board, edged in neon.
+	detail.box(at + Vector3(0, 3.36, -0.02), Vector3(wide - 0.3, 0.5, 0.08), NIGHT)
+	for edge: float in [-1.0, 1.0]:
+		neon.box(at + Vector3(0, 3.36 + edge * 0.27, 0.03), Vector3(wide - 0.2, 0.04, 0.03), buzzing(VIOLET, edge + 7.0))
+	for i in 4:
+		lantern(at + Vector3(-wide * 0.36 + i * wide * 0.24, 3.66, 0.12), LANTERN_COLORS[i % LANTERN_COLORS.size()], 0.8)
+	var label: Label3D = world._local_label("午夜移動市", at + Vector3(0, 3.36, 0.08), 22)
+	label.modulate = PAPER
+	return label
+
+
 ## Paper lantern hanging from `hook`; it sways and dims when the market closes.
 func lantern(hook: Vector3, color: Color, size := 1.0) -> void:
 	var batch := kit.batch("lanterns", _lantern_mesh(), lantern_material)

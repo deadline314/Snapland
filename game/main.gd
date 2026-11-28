@@ -96,6 +96,12 @@ const RIFTS := {
 		"intro": "門後是反重力糖廠，糖往天花板落。果凍主廚啵啵分裂成好幾個分身換來換去。\\n分身一起抖，只有真身慢半拍：盯住牠，把牠舀進模子裡。",
 		"won": "果凍蛋糕完成！", "lost": "被果凍包住了", "kept": "啵啵的果凍蛋糕照收進相簿的小惡魔頁了。", "again": "又做好一個果凍蛋糕。",
 		"fail_kept": "你被做成果凍了，這張照片也收進相簿。", "retry": "看誰晃得慢半拍，再舀一次吧。"},
+	"nightmarket": {"id": "rift-nightmarket", "mode": "lantern_sneak", "arcade": true, "name": "燈籠捉迷藏", "zone": "nightmarket",
+		"goal": "躲過燈燈的燈光，從背後拍牠三次", "instructions": "方向鍵移動，空白鍵拍肩", "devil_hint": "", "devil": "", "ordinary": "",
+		"place": "午夜移動市", "music": "game-039", "assist": "輔助進入（燈光掃得慢、照到也送得不遠）",
+		"intro": "門後是午夜移動市，攤車照著時刻表滑來滑去，燈燈提著燈籠巡夜。\n躲在攤車後面別被燈光照到，繞到牠背後拍拍牠的肩。",
+		"won": "燈燈點亮了整條街！", "lost": "被燈籠照個正著", "kept": "整條街亮起來的照片收進相簿的小惡魔頁了。", "again": "夜市又亮了一次。",
+		"fail_kept": "你被掛成一盞燈籠了，這張照片也收進相簿。", "retry": "等燈光掃過去再走，躲在攤車的影子裡。"},
 }
 ## The finale's closing picture (curtain call or keepsake of a loss), grabbed while it is on screen.
 var rift_shot: Image
@@ -1790,6 +1796,8 @@ func _interact(id: String, title: String) -> void:
 					_notice("屋頂餐桌。順斜坡回去即可接回攤街環路。")
 				"nightmarket:signs":
 					_notice("招牌顯示" + world.market_status() + "。可在入口旁反覆切換。")
+				"nightmarket:rift":
+					_open_rift("nightmarket",title)
 				"nightmarket:reset":
 					place.reset_to_entry()
 					_notice("已免費回到夜市入口。")

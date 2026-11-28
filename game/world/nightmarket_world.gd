@@ -142,6 +142,9 @@ func _build_entries() -> void:
 	_point("nightmarket:rooftop", "屋頂餐桌 · 看夜市", Vector3(0, ROOF_Y, -11.65))
 	_point("nightmarket:signs", "招牌維修台 · 看營業燈", Vector3(9.6, GROUND_Y, -0.2))
 	_point("nightmarket:reset", "安全返回夜市入口", Vector3(-9.6, GROUND_Y, 1.0))
+	_point("nightmarket:rift", "查看午夜移動市", Vector3(-10.0, GROUND_Y, 3.6))
+	# The gate stands just behind its point on the west side street.
+	props.rift_gate(Vector3(-10.0, GROUND_Y, 2.4), 2.4)
 	for index in range(STANDS.size()):
 		var stand: Array = STANDS[index]
 		_point(stand[0], stand[1], stand[2])
