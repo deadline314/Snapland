@@ -13,7 +13,8 @@ extends "res://game/minigames/arcade/arcade_driver.gd"
 
 const View = preload("res://game/minigames/arcade/dice_tower_view.gd")
 const CUPS := 5
-const RADIUS := 0.08
+## Half a die, in shaft widths; it keeps the chunky dice off the walls.
+const RADIUS := 0.13
 ## Tip rate toward a held side and back to upright, per second.
 const TILT_RATE := 4.0
 ## How fast a die slides sideways at full tip, shaft widths per second.
